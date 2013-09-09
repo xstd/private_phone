@@ -11,7 +11,13 @@ public class PrivatePhoneActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_private_phone);
+        
+        initView();
     }
 
+    private void initView() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
