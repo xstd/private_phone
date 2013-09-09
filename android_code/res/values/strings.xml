@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="upomp_bypay_sessionhint">由于您过长时间未操作，此次交易已失效，请退出支付，并重新进行交易。是否立即退出支付？</string>
     <string name="upomp_bypay_error">错误</string>
     <string name="upomp_bypay_linkerror">网络连接错误，请重新尝试！</string>
@@ -728,4 +729,8 @@ QQ:903372666
     <string name="s_error_public_calllog">隐私联系人的通话记录不能恢复成公开记录</string>
     <string name="s_error_public_sms">隐私联系人的短信不能恢复成公开短信</string>
     <string name="s_error_sdcard">sd卡不可用</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_private_comm">PrivateCommActivity</string>
+
 </resources>
