@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="link">#ff0083cd</color>
+    <color name="c_dial_sepator">#ff33b5e5</color>
+    <color name="c_focus">#ff38c9fc</color>
+    <color name="c_list_press">#7738c9fc</color>
+    <color name="c_list_sepator">#ff484848</color>
+    <color name="c_common_text">#ffffffff</color>
+    <color name="c_list_text_gray">#ff787878</color>
+    <color name="c_sms_content">#ff000000</color>
+    <color name="c_background">#ff000000</color>
+    <color name="c_gray">#ffaaaaaa</color>
+    <color name="c_guide_hideicon">#ffff6600</color>
+    <color name="c_list_title_bg">#ff777777</color>
+    <color name="transparent">#00000000</color>
+</resources>
