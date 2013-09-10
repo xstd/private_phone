@@ -18,17 +18,21 @@
             android:excludeFromRecents="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity android:name="com.xstd.pirvatephone.activity.BaseActivity" />
         <activity
             android:name="com.xstd.pirvatephone.activity.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+        <!--
         <activity
             android:name="com.xstd.pirvatephone.activity.HomeActivity"
             android:label="@string/title_activity_home"
@@ -36,11 +40,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="BaseActivity" />
-        </activity>
+        </activity>
+        -->
         <activity
             android:name="com.xstd.pirvatephone.activity.PrivateCommActivity"
             android:label="@string/title_activity_private_comm" >
         </activity>
+        <activity android:name=".activity.PrivacySpaceActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.PrivacyShowActivity" >
+        </activity>
+        <activity android:name=".activity.ShowSDCardFilesActivity"></activity>
     </application>
 
 </manifest>
