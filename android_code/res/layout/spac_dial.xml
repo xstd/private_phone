@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/dial_rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/adblock_list_head_bg"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip" >
+
+        <ImageButton
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/shield_checkbox_alert_unchecked" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:text="全选"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/dial_ll_remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/block_btn_selected"
+        android:orientation="horizontal"
+        android:padding="5dip" >
+
+        <Button
+            android:id="@+id/bt_delete_dial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="删除通话记录"
+            android:textColor="@color/sms_text_content_unseleted" />
+    </LinearLayout>
+
+
+</RelativeLayout>

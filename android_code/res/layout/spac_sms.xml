@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/sms_rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/adblock_list_head_bg"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip" >
+
+        <ImageButton
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/shield_checkbox_alert_unchecked" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:text="全选"
+            android:textSize="15sp" />
+    </RelativeLayout>
+    
+     <LinearLayout
+        android:id="@+id/sms_ll_remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/block_btn_selected"
+        android:padding="5dip"
+         >
+
+        <Button
+            android:id="@+id/bt_recover"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="恢复"
+            android:textColor="@color/sms_text_content_unseleted" />
+        
+         <Button
+            android:id="@+id/bt_delete"
+           android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="删除"
+            android:textColor="@color/sms_text_content_unseleted" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sms_ll_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/sms_rl_select"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/sms_lv_cont"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/sms_tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="选择隐私联系人"
+            android:gravity="center"
+            android:textColor="@color/sms_text_content_seleted" />
+    </LinearLayout>
+
+   
+
+</RelativeLayout>

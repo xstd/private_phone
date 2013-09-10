@@ -62,4 +62,12 @@
         <item name="android:layout_weight">1.0</item>
         <item name="android:soundEffectsEnabled">false</item>
     </style>
+    
+     <style name="text_title_style_sms">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dip</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

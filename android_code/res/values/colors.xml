@@ -13,4 +13,8 @@
     <color name="c_guide_hideicon">#ffff6600</color>
     <color name="c_list_title_bg">#ff777777</color>
     <color name="transparent">#00000000</color>
+    
+    <color name="text_title_style_select_color">#ffffff</color>
+    <color name="sms_text_content_seleted">#00FF2A</color>
+    <color name="sms_text_content_unseleted">#000000</color>
 </resources>

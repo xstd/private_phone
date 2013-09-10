@@ -13,7 +13,7 @@ import com.xstd.pirvatephone.R;
  */
 public class DialActivity extends BaseActivity {
 
-	private int delay = 2;
+	private int delay = 200;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
