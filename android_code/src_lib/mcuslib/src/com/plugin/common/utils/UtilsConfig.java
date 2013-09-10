@@ -23,7 +23,7 @@ public class UtilsConfig {
     public static final boolean DEBUG_NETWORK_ST = false & UTILS_DEBUG;
     public static final boolean RELEASE_UPLOAD_CRASH_LOG = true;
 
-    public static final String CURRENT_PACKAGE_NAME = "com.photo_message.mobile.android";
+    public static final String CURRENT_PACKAGE_NAME = "com.xstd.pirvatephone";
 
     public static final int BITMAP_COMPRESS_LOW = 80;
     public static final int BITMAP_COMPRESS_MEDIUM = 90;
