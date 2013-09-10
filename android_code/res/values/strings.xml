@@ -732,5 +732,7 @@ QQ:903372666
     <string name="title_activity_home">HomeActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_private_comm">PrivateCommActivity</string>
+    <string name="ll_turn_back">返回</string>
+    <string name="ll_title_text">隐私保护</string>
 
 </resources>
