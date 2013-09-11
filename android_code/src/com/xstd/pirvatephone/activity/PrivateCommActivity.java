@@ -1,55 +1,53 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
-import com.xstd.privatephone.view.MyScrollView;
-import com.xstd.privatephone.view.MyScrollView.IMyScrollListener;
+import com.xstd.privatephone.tools.Tools;
+import com.xstd.privatephone.view.MyViewPagerAdapter;
 
 import android.os.Bundle;
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class PrivateCommActivity extends BaseActivity {
 
-	private MyScrollView myScrollView;
-
-	private LinearLayout body_layout;
-
-	private Button btn_sms;
-	private Button btn_phone;
-	private Button btn_contacts;
-	
-	private boolean isEidting = false;
-
-	private int currentView = 0;
+	private com.xstd.privatephone.view.MyViewPager viewPager;// é¡µå¡å†…å®¹
+	private ImageView imageView;// åŠ¨ç”»å›¾ç‰‡
+	private Button textView1, textView2, textView3;
+	private List<View> views;// Tabé¡µé¢åˆ—è¡¨
+	private int offset = 0;// åŠ¨ç”»å›¾ç‰‡åç§»é‡
+	private int currIndex = 0;// å½“å‰é¡µå¡ç¼–å·
+	private int bmpW;// åŠ¨ç”»å›¾ç‰‡å®½åº¦
+	private View view1, view2, view3;// å„ä¸ªé¡µå¡
 
 	private Button ib_back;
-
 	private Button edit;
 
-	private RelativeLayout sms_rl_select;
-	private RelativeLayout contact_rl_select;
-	private RelativeLayout dial_rl_select;
-	
-	private LinearLayout sms_ll_remove;
-	private LinearLayout dial_ll_lv;
-	private LinearLayout contact_ll_lv;
-
-
-	private ListView sms_lv_cont;
-
-	private TextView sms_tv_empty;
-
-	
+	private int smsPageNum = 0;
+	private int dialPageNum = 1;
+	private int contactPageNum = 2;
+	private ListView lv_cont;
+	private Button contact_add_contacts;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,218 +57,151 @@ public class PrivateCommActivity extends BaseActivity {
 
 		initView();
 
+		InitImageView();
+		InitTextView();
+		InitViewPager();
+	}
+
+	private void InitViewPager() {
+		viewPager = (com.xstd.privatephone.view.MyViewPager) findViewById(R.id.vPager);
+		views = new ArrayList<View>();
+		LayoutInflater inflater = getLayoutInflater();
+		view1 = inflater.inflate(R.layout.spac_sms, null);
+		view2 = inflater.inflate(R.layout.spac_dial, null);
+		view3 = inflater.inflate(R.layout.spac_contact, null);
+		views.add(view1);
+		views.add(view2);
+		views.add(view3);
+		viewPager.setAdapter(new MyViewPagerAdapter(views));
+		viewPager.setCurrentItem(0);
+		viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
+	}
+
+	/**
+	 * åˆå§‹åŒ–å¤´æ ‡
+	 */
+
+	private void InitTextView() {
+		textView1 = (Button) findViewById(R.id.text1);
+		textView2 = (Button) findViewById(R.id.text2);
+		textView3 = (Button) findViewById(R.id.text3);
+
+		textView1.setOnClickListener(new MyOnClickListener(0));
+		textView2.setOnClickListener(new MyOnClickListener(1));
+		textView3.setOnClickListener(new MyOnClickListener(2));
+	}
+
+	/**
+	 * 2 * åˆå§‹åŒ–åŠ¨ç”»ï¼Œè¿™ä¸ªå°±æ˜¯é¡µå¡æ»‘åŠ¨æ—¶ï¼Œä¸‹é¢çš„æ¨ªçº¿ä¹Ÿæ»‘åŠ¨çš„æ•ˆæœï¼Œåœ¨è¿™é‡Œéœ€è¦è®¡ç®—ä¸€äº›æ•°æ® 3
+	 */
+
+	private void InitImageView() {
+		imageView = (ImageView) findViewById(R.id.cursor);
+		bmpW = BitmapFactory.decodeResource(getResources(),
+				R.drawable.ic_launcher).getWidth();// è·å–å›¾ç‰‡å®½åº¦
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int screenW = dm.widthPixels;// è·å–åˆ†è¾¨ç‡å®½åº¦
+		offset = (screenW / 3 - bmpW) / 2;// è®¡ç®—åç§»é‡
+		Matrix matrix = new Matrix();
+		matrix.postTranslate(offset, 0);
+		imageView.setImageMatrix(matrix);// è®¾ç½®åŠ¨ç”»åˆå§‹ä½ç½®
 	}
 
 	private void initView() {
-		
-		//1¡¢titleÀ¸
+
+		// 1ã€titleæ 
 		edit = (Button) findViewById(R.id.edit);
 		ib_back = (Button) findViewById(R.id.ib_back);
 
-		btn_sms = (Button) findViewById(R.id.btn_sms);
-		btn_phone = (Button) findViewById(R.id.btn_phone);
-		btn_contacts = (Button) findViewById(R.id.btn_contacts);
-
-		//2¡¢ scrollviewÀ¸
-		myScrollView = new MyScrollView(this);
-
-		View smsView = getLayoutInflater().inflate(R.layout.spac_sms, null);
-		myScrollView.addView(smsView, 0);
-
-		View dialView = getLayoutInflater().inflate(R.layout.spac_dial, null);
-		myScrollView.addView(dialView, 1);
-
-		View contaceView = getLayoutInflater().inflate(R.layout.spac_contact,
-				null);
-		myScrollView.addView(contaceView, 2);
-
-		body_layout = (LinearLayout) findViewById(R.id.body_layout);
-		body_layout.addView(myScrollView);
-
-		//ListView
-		sms_lv_cont = (ListView) findViewById(R.id.sms_lv_cont);
-		sms_tv_empty = (TextView) findViewById(R.id.sms_tv_empty);
-		sms_lv_cont.setEmptyView(sms_tv_empty);
-		
 		ib_back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});
-		
-		// ÓÉÆäËüÒ³Ãæ½øÈë¸ÃÒ³ÃæÊ±¡£³õÊ¼»¯Ê±ÏÔÊ¾sms
-		initSpacButton(btn_sms);
 
-		btn_sms.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if(currentView!=0){
-				initSpacButton(btn_sms);
-				myScrollView.moveToDest(0);
-				}
-			}
-		});
-		btn_phone.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if(currentView!=1){
-				initSpacButton(btn_phone);
-				myScrollView.moveToDest(1);
-				}
-			}
-		});
-		btn_contacts.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if(currentView!=2){
-				initSpacButton(btn_contacts);
-				myScrollView.moveToDest(2);
-				}
-			}
-		});
-
-		//viewpager¹ö¶¯Ê±
-		myScrollView.setMyScrollListener(new IMyScrollListener() {
-
-			@Override
-			public void moveToDest(int destId) {
-				switch (destId) {
-				case 0:
-					initSpacButton(btn_sms);
-					initEdit();
-					break;
-				case 1:
-					initSpacButton(btn_phone);
-					initEdit();
-					break;
-				case 2:
-					initSpacButton(btn_contacts);
-					initEdit();
-					break;
-				}
-			}
-		});
-		
-		//±à¼­Ñ¡Ïî(ÉÏ)
-		sms_rl_select = (RelativeLayout) findViewById(R.id.sms_rl_select);
-		contact_rl_select = (RelativeLayout) findViewById(R.id.contact_rl_select);
-		dial_rl_select = (RelativeLayout) findViewById(R.id.dial_rl_select);
-		//±à¼­Ñ¡Ïî(ÏÂ)
-		sms_ll_remove = (LinearLayout) findViewById(R.id.sms_ll_remove);
-		dial_ll_lv = (LinearLayout) findViewById(R.id.dial_ll_remove);
-		contact_ll_lv = (LinearLayout) findViewById(R.id.contact_ll_add);
-		
-		
-		// µã»÷±à¼­Ê±¡£
-		edit.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				//µÚÒ»´Îµã»÷Ê±£ºisEidting=false
-				isEidting = !isEidting;//isEidting=true
-				showEdit(isEidting);
-				
-			}
-		});
-		
-		initEdit();
 	}
-	
-	/**
-	 * Ê¹±à¼­½øÈë³õÊ¼»¯×´Ì¬
-	 */
-	private void initEdit(){
-		sms_rl_select.setVisibility(View.GONE);
-		sms_ll_remove.setVisibility(View.GONE);
-		dial_rl_select.setVisibility(View.GONE);
-		dial_ll_lv.setVisibility(View.GONE);
-		contact_rl_select.setVisibility(View.GONE);
-		contact_ll_lv.setVisibility(View.GONE);
-	}
-	
-	
-	/**
-	 * ¿ØÖÆspac°´Å¥ÊÇ·ñ¿ÉÒÔµã»÷,viewpagerÊÇ·ñ¿ÉÒÔ»¬¶¯
-	 * @param b
-	 */
-	private void controlSpacButton(boolean b){
-		btn_sms.setClickable(b);
-		btn_phone.setClickable(b);
-		btn_contacts.setClickable(b);
-		
-	}
-	
-	/**
-	 * ÏÔÊ¾±à¼­À¸,Ã¿´ÎÇĞ»»½çÃæºó¶¼½øÈë³õÊ¼»¯×´Ì¬
-	 * @param isEidting
-	 */
-	private void showEdit(boolean isEidting) {
-		
-		
-		if(currentView==0){
 
-			if(isEidting){//ÓÉÎ´±à¼­-¡·±à¼­
-				sms_rl_select.setVisibility(View.VISIBLE);
-				sms_ll_remove.setVisibility(View.VISIBLE);
-				//²»ÈÃÓÃ»§½øĞĞ¹ö¶¯ºÍ»ª¶«ÆÁÄ»²Ù×÷
-				
-			}else{
-				sms_rl_select.setVisibility(View.GONE);
-				sms_ll_remove.setVisibility(View.GONE);
-				//ÈÃÓÃ»§½øĞĞ¹ö¶¯ºÍ»ª¶«ÆÁÄ»²Ù×÷
-			}
-		}else if(currentView ==1){
-			
-			if(!isEidting){//ÓÉÎ´±à¼­-¡·±à¼­
-				dial_rl_select.setVisibility(View.VISIBLE);
-				dial_ll_lv.setVisibility(View.VISIBLE);
-				//²»ÈÃÓÃ»§½øĞĞ¹ö¶¯ºÍ»ª¶«ÆÁÄ»²Ù×÷
-			}else{
-				dial_rl_select.setVisibility(View.GONE);
-				dial_ll_lv.setVisibility(View.GONE);
-				//ÈÃÓÃ»§½øĞĞ¹ö¶¯ºÍ»ª¶«ÆÁÄ»²Ù×÷
-			}
-			
-		}else if(currentView ==2){
-			if(!isEidting){//ÓÉÎ´±à¼­-¡·±à¼­
-				contact_rl_select.setVisibility(View.VISIBLE);
-				contact_ll_lv.setVisibility(View.VISIBLE);
-				//²»ÈÃÓÃ»§½øĞĞ¹ö¶¯ºÍ»ª¶«ÆÁÄ»²Ù×÷
-			}else{
-				contact_rl_select.setVisibility(View.GONE);
-				contact_ll_lv.setVisibility(View.GONE);
-				//ÈÃÓÃ»§½øĞĞ¹ö¶¯ºÍ»ª¶«ÆÁÄ»²Ù×÷
-			}
+	private class MyOnClickListener implements OnClickListener {
+		private int index = 0;
+
+		public MyOnClickListener(int i) {
+			index = i;
 		}
-	}
-	
-	//sms,dial,contactÏÔÊ¾¿ØÖÆÆ÷
-	private void initSpacButton(Button btn){
-		btn_sms.setSelected(false);
-		btn_phone.setSelected(false);
-		btn_contacts.setSelected(false);
-		
-		btn_sms.setTextColor(getResources().getColor(R.color.sms_text_content_unseleted));
-		btn_phone.setTextColor(getResources().getColor(R.color.sms_text_content_unseleted));
-		btn_contacts.setTextColor(getResources().getColor(R.color.sms_text_content_unseleted));
-		
-		btn.setSelected(true);
-		btn.setTextColor(getResources().getColor(R.color.sms_text_content_seleted));
-		
-		//¼ÇÂ¼µ±Ç°ÏÔÊ¾Ò³Ãæ
-		if(btn.equals(btn_sms)){
-			currentView = 0;
-		}else if(btn.equals(btn_phone)){
-			currentView = 1;
-		}else if(btn.equals(btn_contacts)){
-			currentView = 2;
+
+		public void onClick(View v) {
+			viewPager.setCurrentItem(index);
+
 		}
+
+	}
+
+	public class MyOnPageChangeListener implements OnPageChangeListener {
+
+		int one = offset * 2 + bmpW;// é¡µå¡1 -> é¡µå¡2 åç§»é‡
+		int two = one * 2;// é¡µå¡1 -> é¡µå¡3 åç§»é‡
+
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+
+		public void onPageSelected(int arg0) {
+
+			Animation animation = new TranslateAnimation(one * currIndex, one
+					* arg0, 0, 0);// æ˜¾ç„¶è¿™ä¸ªæ¯”è¾ƒç®€æ´ï¼Œåªæœ‰ä¸€è¡Œä»£ç ã€‚
+			currIndex = arg0;
+			animation.setFillAfter(true);// True:å›¾ç‰‡åœåœ¨åŠ¨ç”»ç»“æŸä½ç½®
+			animation.setDuration(300);
+			imageView.startAnimation(animation);
+			/*
+			 * Toast.makeText(PrivateCommActivity.this, "æ‚¨é€‰æ‹©äº†" +
+			 * viewPager.getCurrentItem() + "é¡µå¡", Toast.LENGTH_SHORT).show();
+			 */
+
+			// åŠ è½½æ•°æ®
+			fillData();
+
+			Tools.logSh("å½“å‰é¡µé¢" + currIndex);
+		}
+
+	}
+
+	/**
+	 * æ ¹æ®å½“å‰é¡µé¢åŠ è½½ä¸åŒçš„æ§ä»¶
+	 */
+	private void fillData() {
+
+		if (currIndex == smsPageNum) {
+			return;
+		}
+		if (currIndex == dialPageNum) {
+			return;
+		}
+		if (currIndex == contactPageNum) {
+			lv_cont = (ListView) findViewById(R.id.contact_lv_cont);
+			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
+
+			contact_add_contacts.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// show dialog
+
+					Tools.logSh("æ¥æ”¶åˆ°å¢åŠ è”ç³»äººç‚¹å‡»" + currIndex);
+					Intent intent = new Intent(PrivateCommActivity.this,
+							ContactActivity.class);
+					startActivity(intent);
+
+				}
+			});
+		}
+
 	}
 
 	@Override

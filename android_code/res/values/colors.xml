@@ -314,4 +314,9 @@
     <color name="security_level_legal_version">#ff119bea</color>
     <color name="security_level_safe_use">#ff3fb000</color>
     <color name="roottips_title_color">#ff36a518</color>
+    
+    <!--swj  -->
+    <color name="white">#ffffff</color>
+    <color name="dark">#000000</color>
+    
 </resources>

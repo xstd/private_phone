@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/edit_btn_selected"
             android:layout_marginRight="10dip"
+            android:background="@drawable/edit_btn_selected"
             android:text="编辑"
             android:textColor="@color/text_title_style_select_color"
             android:textSize="14sp" />
@@ -43,54 +43,71 @@
             android:text="返回"
             android:textColor="@color/text_title_style_select_color"
             android:textSize="14sp" />
-
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_spec"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btn_sms"
-            android:layout_height="match_parent"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:background="@drawable/block_btn_selected"
-            android:text="信息"
-            android:textColor="@color/sms_text_content_unseleted" />
-
-        <Button
-            android:id="@+id/btn_phone"
-            android:layout_height="match_parent"
-             android:layout_width="0dip"
-            android:layout_weight="1"
-            android:background="@drawable/block_btn_selected"
-            android:text="电话"
-            android:textColor="@color/sms_text_content_unseleted" />
-
-        <Button
-            android:id="@+id/btn_contacts"
-            android:layout_height="match_parent"
-             android:layout_width="0dip"
-            android:layout_weight="1"
-            android:background="@drawable/block_btn_selected"
-            android:text="联系人"
-            android:textColor="@color/sms_text_content_unseleted" />
-    </LinearLayout>
-
-    
     <LinearLayout
         android:id="@+id/body_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/background_light" >
-        
+        android:background="@android:color/background_light"
+        android:orientation="vertical" >
 
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:background="#FFFFFF" >
+
+            <Button
+                android:id="@+id/text1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/block_btn_selected"
+                android:gravity="center"
+                android:text="信息"
+                android:textColor="#000000"
+                android:textSize="20.0dip" />
+
+            <Button
+                android:id="@+id/text2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/block_btn_selected"
+                android:gravity="center"
+                android:text="电话"
+                android:textColor="#000000"
+                android:textSize="20.0dip" />
+
+            <Button
+                android:id="@+id/text3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/block_btn_selected"
+                android:gravity="center"
+                android:text="联系人"
+                android:textColor="#000000"
+                android:textSize="20.0dip" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/cursor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="matrix"
+            android:src="@drawable/private_comm_spac" />
+
+        <com.xstd.privatephone.view.MyViewPager
+            android:id="@+id/vPager"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:background="#ffffffff"
+            android:flipInterval="30"
+            android:persistentDrawingCache="animation" />
     </LinearLayout>
-    
-   
 
 </LinearLayout>

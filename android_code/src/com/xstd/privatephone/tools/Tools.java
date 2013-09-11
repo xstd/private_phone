@@ -8,7 +8,7 @@ public class Tools {
 	
 	public static void logSh(String msg){
 		if(isShow){
-			Log.w("sh", msg);
+			Log.i("sh", msg);
 		}
 	}
 }

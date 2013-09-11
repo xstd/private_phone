@@ -1,5 +1,7 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,9 +19,8 @@ public class HomeActivity extends BaseActivity {
 	private GridView gv_home;
 	private MyGridViewAdapter adapter;
 
-	private String[] menus = new String[] { "隐私通讯", "私密微信", "文件隐藏", "模拟通讯",
-			"服务大厅", "用户中心" };
-
+	private ArrayList<String> titles = new ArrayList<String>();
+	
 	private int[] pics = new int[] { R.drawable.home_privacy_comm,
 			R.drawable.home_privacy_mincomm, R.drawable.home_privacy_file,
 			R.drawable.home_moni_conm, R.drawable.home_privacy_service,
@@ -30,9 +31,24 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		initData();
+		
 		initView();
-
+		
 	}
+
+	private void initData() {
+		titles.add(getResources().getString(R.string.private_c_home_first));
+		titles.add(getResources().getString(R.string.private_c_home_two));
+		titles.add(getResources().getString(R.string.private_c_home_three));
+		titles.add(getResources().getString(R.string.private_c_home_four));
+		titles.add(getResources().getString(R.string.private_c_home_five));
+		titles.add(getResources().getString(R.string.private_c_home_six));
+		
+	}
+
+
+
 
 	private void initView() {
 		gv_home = (GridView) findViewById(R.id.gv_home);
@@ -48,17 +64,18 @@ public class HomeActivity extends BaseActivity {
 					Intent intent = new Intent(HomeActivity.this,
 							PrivateCommActivity.class);
 					startActivity(intent);
-					return ;
+					return;
 				}
 				if (position == 2) {
 					Intent intent = new Intent(HomeActivity.this,
 							PrivacySpaceActivity.class);
 					startActivity(intent);
-					return ;
+					return;
 				}
-				
+
 			}
 		});
+
 	}
 
 	private class MyGridViewAdapter extends BaseAdapter {
@@ -98,7 +115,7 @@ public class HomeActivity extends BaseActivity {
 			holder = (ViewHolder) convertView.getTag();
 
 			holder.iv_pic.setBackgroundResource(pics[position]);
-			holder.tv_text.setText(menus[position]);
+			holder.tv_text.setText(titles.get(position));
 
 			return convertView;
 		}

@@ -19,7 +19,6 @@ public class DialActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.emergency_dialer);
-
 		goHomeActicity();
 	}
 

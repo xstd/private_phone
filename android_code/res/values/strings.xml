@@ -735,4 +735,13 @@ QQ:903372666
     <string name="ll_turn_back">返回</string>
     <string name="ll_title_text">隐私保护</string>
 
+    <!-- swj -->
+    <string name="private_c_home_first">隐私通讯</string>
+    <string name="private_c_home_two">私密微信</string>
+    <string name="private_c_home_three">文件隐藏</string>
+    <string name="private_c_home_four">模拟通讯</string>
+    <string name="private_c_home_five">服务大厅</string>
+    <string name="private_c_home_six">用户中心</string>
+    <string name="title_activity_contact">ContactActivity</string>
+
 </resources>

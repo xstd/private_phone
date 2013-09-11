@@ -3,8 +3,8 @@
 
     <!-- 获得焦点但未按下时的背景图片 -->
     <item android:drawable="@drawable/block_indicator_unselected" android:state_enabled="true" android:state_focused="true" android:state_pressed="false"/>
-    <!--选中时的图片背景-->
-    <item android:state_selected="true" android:drawable="@drawable/block_indicator_selected" />
+    <!-- 选中时的图片背景 -->
+    <item android:drawable="@drawable/block_indicator_selected" android:state_selected="true"/>
     <!-- 按下时的背景图片 -->
     <item android:drawable="@drawable/block_indicator_selected" android:state_enabled="true" android:state_pressed="true"/>
     <!-- 默认时的背景图片 -->
