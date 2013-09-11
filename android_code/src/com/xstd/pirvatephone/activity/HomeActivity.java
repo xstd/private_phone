@@ -48,7 +48,15 @@ public class HomeActivity extends BaseActivity {
 					Intent intent = new Intent(HomeActivity.this,
 							PrivateCommActivity.class);
 					startActivity(intent);
+					return ;
 				}
+				if (position == 2) {
+					Intent intent = new Intent(HomeActivity.this,
+							PrivacySpaceActivity.class);
+					startActivity(intent);
+					return ;
+				}
+				
 			}
 		});
 	}
