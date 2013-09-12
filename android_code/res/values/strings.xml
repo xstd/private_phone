@@ -766,4 +766,16 @@ QQ:903372666
     <string name="private_comm_recover_contact">恢复</string>
     <string name="private_comm_delete">删除</string>
 
+    <!-- 入口 -->
+    <string name="enter_no_password_tips">提示</string>
+    <string name="enter_no_password_msg">请输入进入密码:</string>
+    <string name="enter_password_text">密码:</string>
+    <string name="enter_password_confirm_text">密码确认:</string>
+    <string name="enter_tips_password_empty">密码不能为空!</string>
+    <string name="enter_tips_password_not_same">密码和确认密码不一致!</string>
+    <string name="enter_tips_password_too_short">密码太短，请输入6位以上密码!</string>
+    <string name="enter_tips_password_number_only">密码只能是数字!</string>
+    <string name="enter_btn_ok">确认</string>
+    <string name="enter_btn_cancel">取消</string>
+
 </resources>

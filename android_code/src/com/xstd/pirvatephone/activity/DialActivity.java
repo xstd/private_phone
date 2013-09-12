@@ -2,15 +2,24 @@ package com.xstd.pirvatephone.activity;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.plugin.common.utils.StringUtils;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.setting.SettingManager;
+import com.xstd.privatephone.tools.Toasts;
 
 /**
  * Created with IntelliJ IDEA. User: michael Date: 13-9-9 Time: PM3:11 To change
@@ -18,40 +27,40 @@ import com.xstd.pirvatephone.R;
  */
 public class DialActivity extends BaseActivity implements View.OnClickListener {
 
-    @ViewMapping(ID=R.id.number)
+    @ViewMapping(ID = R.id.number)
     public TextView mNumber;
 
-    @ViewMapping(ID=R.id.b1)
+    @ViewMapping(ID = R.id.b1)
     public ImageView mB1;
 
-    @ViewMapping(ID=R.id.b2)
+    @ViewMapping(ID = R.id.b2)
     public ImageView mB2;
 
-    @ViewMapping(ID=R.id.b3)
+    @ViewMapping(ID = R.id.b3)
     public ImageView mB3;
 
-    @ViewMapping(ID=R.id.b4)
+    @ViewMapping(ID = R.id.b4)
     public ImageView mB4;
 
-    @ViewMapping(ID=R.id.b5)
+    @ViewMapping(ID = R.id.b5)
     public ImageView mB5;
 
-    @ViewMapping(ID=R.id.b6)
+    @ViewMapping(ID = R.id.b6)
     public ImageView mB6;
 
-    @ViewMapping(ID=R.id.b7)
+    @ViewMapping(ID = R.id.b7)
     public ImageView mB7;
 
-    @ViewMapping(ID=R.id.b8)
+    @ViewMapping(ID = R.id.b8)
     public ImageView mB8;
 
-    @ViewMapping(ID=R.id.b9)
+    @ViewMapping(ID = R.id.b9)
     public ImageView mB9;
 
-    @ViewMapping(ID=R.id.b0)
+    @ViewMapping(ID = R.id.b0)
     public ImageView mB0;
 
-    @ViewMapping(ID=R.id.del)
+    @ViewMapping(ID = R.id.del)
     public ImageView mDel;
 
     private String mNumberStr = "";
@@ -62,6 +71,7 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.emergency_dialer);
 
         initUI();
+        checkEnterPassword();
     }
 
     private void initUI() {
@@ -79,6 +89,64 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
         mB9.setOnClickListener(this);
         mB0.setOnClickListener(this);
         mDel.setOnClickListener(this);
+    }
+
+    private void checkEnterPassword() {
+        if (TextUtils.isEmpty(SettingManager.getInstance().getKeyEnterPassword())) {
+            View v = getLayoutInflater().inflate(R.layout.enter_password_dialog, null);
+            final EditText passwd = (EditText) v.findViewById(R.id.password);
+            final EditText passwdCheck = (EditText) v.findViewById(R.id.password_confirm);
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                                        .setTitle(R.string.enter_no_password_tips)
+                                        .setView(v)
+                                        .setPositiveButton(R.string.enter_btn_ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                String passwdStr = passwd.getEditableText().toString();
+                                                String passwdCheckStr = passwdCheck.getEditableText().toString();
+                                                if (TextUtils.isEmpty(passwdStr) || TextUtils.isEmpty(passwdCheckStr)) {
+                                                    Toasts.getInstance(DialActivity.this).show(R.string.enter_tips_password_empty,
+                                                                                                  Toast.LENGTH_LONG);
+                                                    checkEnterPassword();
+                                                    return;
+                                                }
+                                                if (!passwdStr.equals(passwdCheckStr)) {
+                                                    Toasts.getInstance(DialActivity.this).show(R.string.enter_tips_password_not_same,
+                                                                                                  Toast.LENGTH_LONG);
+                                                    checkEnterPassword();
+                                                    return;
+                                                }
+
+                                                if (!isNumeric(passwdStr)) {
+                                                    Toasts.getInstance(DialActivity.this).show(R.string.enter_tips_password_number_only,
+                                                                                                  Toast.LENGTH_LONG);
+                                                    checkEnterPassword();
+                                                    return;
+                                                }
+
+                                                if (passwdStr.length() < 6) {
+                                                    Toasts.getInstance(DialActivity.this).show(R.string.enter_tips_password_too_short,
+                                                                                                  Toast.LENGTH_LONG);
+                                                    checkEnterPassword();
+                                                    return;
+                                                }
+
+                                                String md5 = StringUtils.MD5Encode(passwdCheckStr);
+                                                if (!TextUtils.isEmpty(md5)) {
+                                                    SettingManager.getInstance().setKeyEnterPassword(md5);
+                                                }
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.enter_btn_cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                finish();
+                                            }
+                                        })
+                                        .create();
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
     }
 
     @Override
@@ -134,10 +202,19 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
         mNumber.setText(mNumberStr);
 
         //Do action
-        if (mNumberStr.equals("123456")) {
-            Intent intent = new Intent(DialActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+        if (!TextUtils.isEmpty(mNumberStr)) {
+            String check = StringUtils.MD5Encode(mNumberStr);
+            if (check.equals(SettingManager.getInstance().getKeyEnterPassword())) {
+                Intent intent = new Intent(DialActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
+
+    }
+
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        return pattern.matcher(str).matches();
     }
 }
