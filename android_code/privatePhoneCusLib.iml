@@ -35,7 +35,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src_lib/mcuslib/gen" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Android 4.1.2 Platform" jdkType="Android SDK" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library name="android-support-v4.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/src_lib/mcuslib/libs/android-support-v4.jar!/" />
@@ -44,7 +44,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library name="gson-2.2.4.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/src_lib/mcuslib/libs/gson-2.2.4.jar!/" />
