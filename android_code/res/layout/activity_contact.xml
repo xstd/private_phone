@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/tv_title"
-            style="@style/text_title_style_sms"
+            style="@style/private_comm_title_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="16dp"
-            android:background="@drawable/back_btn_selected"
+            android:background="@drawable/private_comm_backbtn_selector"
             android:text="@string/private_comm_btn_back"
             android:textColor="@color/text_title_style_select_color"
             android:textSize="14sp" />
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/block_btn_selected"
+            android:background="@drawable/private_comm_spacbtn_selector"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:padding="5dip" >
