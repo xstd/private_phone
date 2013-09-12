@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.privatephone.adapter.MyViewPagerAdapter;
 import com.xstd.privatephone.tools.Tools;
-import com.xstd.privatephone.view.MyViewPagerAdapter;
 
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PrivateCommActivity extends BaseActivity {
@@ -194,14 +197,43 @@ public class PrivateCommActivity extends BaseActivity {
 					// show dialog
 
 					Tools.logSh("接收到增加联系人点击" + currIndex);
-					Intent intent = new Intent(PrivateCommActivity.this,
-							ContactActivity.class);
-					startActivity(intent);
+					
+					showDialog();
+					
 
 				}
 			});
 		}
 
+	}
+	
+	private void showDialog() {
+		 final Builder builder = new AlertDialog.Builder(this);
+		 builder.setIcon(R.drawable.ic_launcher);
+			builder.setTitle("添加新的联系人");
+			builder.setItems(new String[]{"从联系人添加" , "手工输入号码" }, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+					TextView textView = (TextView)findViewById(R.id.text);
+					switch(which){
+					case 0:
+						Intent intent = new Intent(PrivateCommActivity.this,
+								ContactActivity.class);
+						startActivity(intent);
+						break;
+					case 1:
+						Intent intent2 = new Intent(PrivateCommActivity.this,
+								HandInputActivity.class);
+						startActivity(intent2);
+						break;
+					}
+				}
+			});
+			builder.create().show();
+
+		
 	}
 
 	@Override

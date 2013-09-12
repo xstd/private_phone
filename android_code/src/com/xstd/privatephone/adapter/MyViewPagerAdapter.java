@@ -1,4 +1,4 @@
-package com.xstd.privatephone.view;
+package com.xstd.privatephone.adapter;
 
 import java.util.List;
 

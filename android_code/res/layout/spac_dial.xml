@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
-            android:text="全选"
+            android:text="@string/private_comm_select_all"
             android:textSize="15sp" />
     </RelativeLayout>
 
@@ -43,7 +43,7 @@
             android:id="@+id/bt_delete_dial"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="删除通话记录"
+            android:text="@string/private_comm_delete_comm"
             android:textColor="@color/sms_text_content_unseleted" />
     </LinearLayout>
 

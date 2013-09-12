@@ -28,7 +28,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
-            android:text="全选"
+            android:text="@string/private_comm_select_all"
             android:textSize="15sp" />
     </RelativeLayout>
 
@@ -45,7 +45,7 @@
             android:id="@+id/contact_add_contacts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="添加隐私联系人"
+            android:text="@string/private_comm_select_contact"
             android:textColor="@color/sms_text_content_unseleted" />
     </LinearLayout>
 
@@ -65,7 +65,7 @@
             android:id="@+id/contact_tv_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="选择隐私联系人"
+            android:text="@string/private_comm_select_privatecontact"
             android:textColor="@color/sms_text_content_unseleted" />
     </LinearLayout>
 

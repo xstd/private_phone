@@ -4,11 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-   <!-- 读取联系人权限 --> 
-   <uses-permission android:name="android.permission.READ_CONTACTS"/>
-   <!-- 拨打电话权限 -->
-   <uses-permission android:name="android.permission.CALL_PHONE"/>  
-    
+    <!-- 读取联系人权限 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 拨打电话权限 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="14" />
@@ -47,6 +47,10 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.ContactActivity"
             android:label="@string/title_activity_contact" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.HandInputActivity"
+            android:label="@string/title_activity_hand_input" >
         </activity>
     </application>
 

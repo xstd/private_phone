@@ -743,5 +743,27 @@ QQ:903372666
     <string name="private_c_home_five">服务大厅</string>
     <string name="private_c_home_six">用户中心</string>
     <string name="title_activity_contact">ContactActivity</string>
+    <string name="title_activity_hand_input">HandInputActivity</string>
+    <string name="private_comm_btn_back">返回</string>
+    <string name="private_comm_btn_sure">确定</string>
+    <string name="private_comm_btn_cancle">取消</string>
+    <string name="private_comm_addfrom_contact">从联系人添加</string>
+    <string name="private_comm_text_name">名称</string>
+    <string name="private_comm_text_phonenum">电话号码(必填)</string>
+    <string name="private_comm_radio_normal">正常接听</string>
+    <string name="private_comm_radio_stop">立即挂断</string>
+    <string name="private_comm_no_contact">您还没有联系人</string>
+    <string name="private_comm_add_contact">新建隐私联系人</string>
+    <string name="private_comm_sms">信息</string>
+    <string name="private_comm_dial">电话</string>
+    <string name="private_comm_contact">联系人</string>
+    <string name="private_comm_btn_edit">编辑</string>
+    <string name="private_comm_title_privatesms">隐私短信</string>
+    <string name="private_comm_select_all">全选</string>
+    <string name="private_comm_select_contact">添加隐私联系人</string>
+    <string name="private_comm_select_privatecontact">选择隐私联系人</string>
+    <string name="private_comm_delete_comm">删除通话记录</string>
+    <string name="private_comm_recover_contact">恢复</string>
+    <string name="private_comm_delete">删除</string>
 
 </resources>
