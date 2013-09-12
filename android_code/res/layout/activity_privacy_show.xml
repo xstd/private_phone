@@ -23,7 +23,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text="隐私保险箱，保护您的隐私文件。" />
+                android:text="@string/privacy_hint" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="请勿卸载隐私保护或者清楚数据，否则隐私文件将会丢失，无法恢复！"
+                android:text="@string/privacy_describe"
                 android:textColor="#D99743" />
 
             <ImageView
@@ -44,6 +44,13 @@
                 android:layout_marginBottom="20dp"
                 android:src="@drawable/privacy_focus" />
         </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+        </ListView>
     </FrameLayout>
 
     <LinearLayout
@@ -53,10 +60,9 @@
 
         <Button
             android:id="@+id/add_privacy"
-            android:onClick="add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="添加图片" />
+            android:onClick="add" />
     </LinearLayout>
 
 </LinearLayout>

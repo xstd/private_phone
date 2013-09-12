@@ -1,12 +1,9 @@
 package com.xstd.pirvatephone.activity;
 
-import com.xstd.pirvatephone.R;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -16,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.xstd.pirvatephone.R;
 
 public class PrivacySpaceActivity extends BaseActivity {
 
@@ -33,14 +32,13 @@ public class PrivacySpaceActivity extends BaseActivity {
 	}
 
 	/**
-	 * 设置控件的监听事件
+	 * 璁剧疆鎺т欢鐩戝惉
 	 */
 	private void setListener() {
 		return_bt.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "按了返回按钮");
 				finish();
 			}
 		});
@@ -59,7 +57,7 @@ public class PrivacySpaceActivity extends BaseActivity {
 	}
 
 	/**
-	 * 初始化控件
+	 * 鍒濆鍖杤iew
 	 */
 	private void initViews() {
 		return_bt = (TextView) findViewById(R.id.ll_return_btn);
@@ -74,9 +72,13 @@ public class PrivacySpaceActivity extends BaseActivity {
 			R.drawable.home_user_center, R.drawable.privacy_mainview_ic_video,
 			R.drawable.privacy_mainview_ic_file };
 
-	static String[] home_privacy_title = new String[] { "图片", "录音", "视频", "文件" };
+	static String[] home_privacy_title;
 
 	private class PrivacySpaceAdapter extends BaseAdapter {
+
+		public PrivacySpaceAdapter() {
+			home_privacy_title = getResources().getStringArray(R.array.privacy_category);
+		}
 
 		@Override
 		public int getCount() {

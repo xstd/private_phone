@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,6 +22,9 @@ public class PrivacyShowActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_privacy_show);
+		item_pic = getResources().getStringArray(R.array.privacy_pic);
+		item_audio = getResources().getStringArray(R.array.privacy_audio);
+		item_vedio = getResources().getStringArray(R.array.privacy_vedio);
 		privacy_type = getIntent().getIntExtra("privacy_type", 0);
 		initViews();
 		setListener();
@@ -33,7 +35,6 @@ public class PrivacyShowActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "按了返回按钮");
 				finish();
 			}
 		});
@@ -42,26 +43,25 @@ public class PrivacyShowActivity extends BaseActivity {
 	private void initViews() {
 		return_bt = (TextView) findViewById(R.id.ll_return_btn);
 		title_text = (TextView) findViewById(R.id.ll_title_text);
-		title_text.setText("隐私"
+		title_text.setText(getString(R.string.privacy)
 				+ PrivacySpaceActivity.home_privacy_title[privacy_type]);
 		add_privacy = (Button) findViewById(R.id.add_privacy);
-		add_privacy.setText("添加"
+		add_privacy.setText(getString(R.string.privacy_add_msg)
 				+ PrivacySpaceActivity.home_privacy_title[privacy_type]);
 	}
 
-	CharSequence[] item_pic = new String[] { "添加相机图片", "自动扫描图片", "手动选择片图片" };
-	CharSequence[] item_audio = new String[] { "添加录音", "自动扫描录音", "手动选择录音" };
-	CharSequence[] item_vedio = new String[] { "添加视频", "自动扫描视频", "手动选择视频" };
+	CharSequence[] item_pic;
+	CharSequence[] item_audio;
+	CharSequence[] item_vedio;
 	private Button add_privacy;
 
 	/**
-	 * 底部添加按钮监听事件
+	 * 涓嬫柟娣诲姞鎸夐挳
 	 * 
 	 * @param view
 	 */
 	public void add(View view) {
 		CharSequence[] items = null;
-		// 如果隐私类型为图片、音频、视频则弹出上下文菜单选择；如果隐私类型为文件，则跳到列出sd卡文件的activity。
 		switch (privacy_type) {
 		case 0:
 			items = item_pic;
