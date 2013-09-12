@@ -1,26 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="vertical" android:id="@id/top" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
-        <FrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
-            <Button android:textSize="14.0sp" android:textColor="#ffffffff" android:id="@id/tabDialer" android:background="@drawable/action_bar" android:padding="8.0dip" android:paddingTop="4.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/dial_action_bar_dialer" android:drawableTop="@drawable/call_dial_tab_dailer_focused" />
-            <View android:layout_gravity="bottom" android:background="#ff43add4" android:layout_width="fill_parent" android:layout_height="4.0dip" />
+<LinearLayout
+    android:orientation="vertical"
+    android:id="@id/top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+
+        <FrameLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+            <Button
+                android:textSize="14.0sp"
+                android:textColor="#ffffffff"
+                android:id="@id/tabDialer"
+                android:background="@drawable/action_bar"
+                android:padding="8.0dip"
+                android:paddingTop="4.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dial_action_bar_dialer"
+                android:drawableTop="@drawable/call_dial_tab_dailer_focused"/>
+
+            <View
+                android:layout_gravity="bottom"
+                android:background="#ff43add4"
+                android:layout_width="fill_parent"
+                android:layout_height="4.0dip"/>
         </FrameLayout>
-        <FrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
-            <Button android:textSize="14.0sp" android:textColor="#ffc5ced4" android:id="@id/tabCall" android:background="@drawable/action_bar" android:padding="8.0dip" android:paddingTop="4.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/dial_action_bar_call" android:drawableTop="@drawable/call_dial_tab_call" />
-            <View android:layout_gravity="left|center" android:background="#ff64788c" android:layout_width="1.0dip" android:layout_height="40.0dip" />
+
+        <FrameLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+            <Button
+                android:textSize="14.0sp"
+                android:textColor="#ffc5ced4"
+                android:id="@id/tabCall"
+                android:background="@drawable/action_bar"
+                android:padding="8.0dip"
+                android:paddingTop="4.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dial_action_bar_call"
+                android:drawableTop="@drawable/call_dial_tab_call"/>
+
+            <View
+                android:layout_gravity="left|center"
+                android:background="#ff64788c"
+                android:layout_width="1.0dip"
+                android:layout_height="40.0dip"/>
         </FrameLayout>
-        <FrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
-            <Button android:textSize="14.0sp" android:textColor="#ffc5ced4" android:id="@id/tabFavorites" android:background="@drawable/action_bar" android:padding="8.0dip" android:paddingTop="4.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/dial_action_bar_favorites" android:drawableTop="@drawable/call_dial_tab_favorites" />
-            <View android:layout_gravity="left|center" android:background="#ff64788c" android:layout_width="1.0dip" android:layout_height="40.0dip" />
+
+        <FrameLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+            <Button
+                android:textSize="14.0sp"
+                android:textColor="#ffc5ced4"
+                android:id="@id/tabFavorites"
+                android:background="@drawable/action_bar"
+                android:padding="8.0dip"
+                android:paddingTop="4.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dial_action_bar_favorites"
+                android:drawableTop="@drawable/call_dial_tab_favorites"/>
+
+            <View
+                android:layout_gravity="left|center"
+                android:background="#ff64788c"
+                android:layout_width="1.0dip"
+                android:layout_height="40.0dip"/>
         </FrameLayout>
-        <FrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
-            <Button android:textSize="14.0sp" android:textColor="#ffc5ced4" android:id="@id/tabContact" android:background="@drawable/action_bar" android:padding="8.0dip" android:paddingTop="4.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/dial_action_bar_contact" android:drawableTop="@drawable/call_dial_tab_contact" />
-            <View android:layout_gravity="left|center" android:background="#ff64788c" android:layout_width="1.0dip" android:layout_height="40.0dip" />
+
+        <FrameLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+            <Button
+                android:textSize="14.0sp"
+                android:textColor="#ffc5ced4"
+                android:id="@id/tabContact"
+                android:background="@drawable/action_bar"
+                android:padding="8.0dip"
+                android:paddingTop="4.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dial_action_bar_contact"
+                android:drawableTop="@drawable/call_dial_tab_contact"/>
+
+            <View
+                android:layout_gravity="left|center"
+                android:background="#ff64788c"
+                android:layout_width="1.0dip"
+                android:layout_height="40.0dip"/>
         </FrameLayout>
     </LinearLayout>
-    <TextView android:textSize="40.0dip" android:textColor="#ffffffff" android:gravity="center" android:id="@id/number" android:layout_width="fill_parent" android:layout_height="0.0dip" android:singleLine="true" android:layout_weight="3.0" />
-    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_marginLeft="10.0dip" android:layout_marginRight="10.0dip" android:layout_marginBottom="10.0dip" android:layout_weight="5.0">
-        <include layout="@layout/emergency_dialpad" />
+
+    <TextView
+        android:textSize="40.0dip"
+        android:textColor="#ffffffff"
+        android:gravity="center"
+        android:id="@id/number"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:singleLine="true"
+        android:layout_weight="3.0"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginBottom="10.0dip"
+        android:layout_weight="5.0">
+
+        <include layout="@layout/emergency_dialpad"/>
     </LinearLayout>
 </LinearLayout>
