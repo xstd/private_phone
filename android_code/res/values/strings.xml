@@ -778,4 +778,13 @@ QQ:903372666
     <string name="enter_btn_ok">确认</string>
     <string name="enter_btn_cancel">取消</string>
 
+    <!-- 文件隐藏 -->
+    <string name="privacy">隐私</string>
+    <string name="privacy_add_msg">添加</string>
+    <string name="privacy_hint">隐私保险箱，保护您的隐私文件。</string>
+    <string name="privacy_describe">请勿卸载隐私保护或者清楚数据，否则隐私文件将会丢失，无法恢复！</string>
+    <string name="show_sdcardfile_title">选择要隐藏的文件</string>
+    <string name="privacy_selectfile_move">隐藏</string>
+    <string name="privacy_selectfile_add">全选</string>
+
 </resources>
