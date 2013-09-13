@@ -786,5 +786,6 @@ QQ:903372666
     <string name="show_sdcardfile_title">选择要隐藏的文件</string>
     <string name="privacy_selectfile_move">隐藏</string>
     <string name="privacy_selectfile_add">全选</string>
+    <string name="privacy_permission_denied">您不能打开此文件夹。</string>
 
 </resources>

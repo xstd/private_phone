@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.xstd.pirvatephone.R;
-
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +15,9 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.xstd.pirvatephone.R;
 
 public class ShowSDFilesAdapter extends BaseAdapter {
 
@@ -30,17 +30,39 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 		mContext = context;
 		this.files = new ArrayList<FileInfo>();
 		df = DateFormat.getDateTimeInstance();
-		File[] files = Environment.getExternalStorageDirectory().listFiles();
-		for (File file : files) {
-			if (!file.isHidden()) {
+		updateFiles("/");
+	}
+
+	/**
+	 * 更新文件夹
+	 * 
+	 * @param path
+	 */
+	public void updateFiles(String path) {
+		File file = new File(path);
+		if (file == null || file.isFile())
+			return;
+		File[] files = file.listFiles();
+		if (files == null) {
+			Toast.makeText(
+					mContext,
+					mContext.getResources().getString(
+							R.string.privacy_permission_denied),
+					Toast.LENGTH_SHORT).show();
+		}
+		this.files.clear();
+		for (File f : files) {
+			if (!f.isHidden()) {
 				FileInfo fileInfo = new FileInfo();
-				fileInfo.name = file.getName();
-				fileInfo.lasstModify = file.lastModified();
-				fileInfo.isFolder = file.isDirectory();
+				fileInfo.name = f.getName();
+				fileInfo.absolutePath = f.getAbsolutePath();
+				fileInfo.lasstModify = f.lastModified();
+				fileInfo.isFolder = f.isDirectory();
 				fileInfo.isChecked = false;
 				this.files.add(fileInfo);
 			}
 		}
+		notifyDataSetChanged();
 	}
 
 	@Override
@@ -88,7 +110,7 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 				} else {
 					fileInfo.isChecked = true;
 				}
-				Log.v(TAG, fileInfo.isChecked+"");
+				Log.v(TAG, fileInfo.isChecked + "");
 			}
 		});
 		return convertView;
@@ -103,6 +125,7 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 
 	public class FileInfo {
 		public String name;
+		public String absolutePath;
 		public long lasstModify;
 		public boolean isChecked;
 		public boolean isFolder;
