@@ -59,7 +59,6 @@
     <color name="btn_text_pressed">#ff945700</color>
     <color name="btn_text_dialog">#ff0ca800</color>
     <color name="btn_black_disable">#ffa5da90</color>
-    <color name="white">#ffffffff</color>
     <color name="btn_shadow">#ffffffff</color>
     <color name="btn_black_shadow">#ff211e1f</color>
     <color name="btn_bottom_grey">#ff646e76</color>
@@ -71,7 +70,6 @@
     <color name="tab_text">#ff808885</color>
     <color name="tab_text_selected">#ffffffff</color>
     <color name="grey_main_view_text">#ff9b9b9b</color>
-    <color name="dark">#ff535353</color>
     <color name="margin_bg_bottom_text">#ff333333</color>
     <color name="dark_main_view_text">#ff1d1d1d</color>
     <color name="black">#ff000000</color>

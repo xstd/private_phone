@@ -15,8 +15,12 @@ public class BaseActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    
+    
 
     public void onDestroy() {
         super.onDestroy();
     }
 }
+
+
