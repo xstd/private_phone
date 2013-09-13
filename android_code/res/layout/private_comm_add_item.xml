@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/rl_contact"
     android:layout_width="match_parent"
     android:layout_height="55dip"
     android:background="@android:color/background_light"
     android:padding="10dip"
+    android:clickable="true"
     android:gravity="center_vertical" >
 
     <LinearLayout
@@ -25,12 +27,12 @@
             />
     </LinearLayout>
 
-    <Button
+    <CheckBox
         android:id="@+id/btn_check"
-        android:layout_width="30dip"
-        android:layout_height="30dip"
-        android:layout_alignBottom="@+id/linearLayout1"
+        style="@style/private_comm_checkbox_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/private_comm_checkbox_uncheck" />
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

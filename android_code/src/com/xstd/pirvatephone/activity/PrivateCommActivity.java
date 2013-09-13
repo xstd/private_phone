@@ -195,16 +195,11 @@ public class PrivateCommActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 					// show dialog
-
 					Tools.logSh("接收到增加联系人点击" + currIndex);
-					
 					showDialog();
-					
-
 				}
 			});
 		}
-
 	}
 	
 	private void showDialog() {
