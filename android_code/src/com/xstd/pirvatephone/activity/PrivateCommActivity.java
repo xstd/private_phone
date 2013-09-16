@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.MyViewPagerAdapter;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -27,10 +31,8 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PrivateCommActivity extends BaseActivity {
 
@@ -51,6 +53,9 @@ public class PrivateCommActivity extends BaseActivity {
 	private int contactPageNum = 2;
 	private ListView lv_cont;
 	private Button contact_add_contacts;
+
+	private TextView contact_empty;
+	private Cursor cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -199,36 +204,65 @@ public class PrivateCommActivity extends BaseActivity {
 					showDialog();
 				}
 			});
+
+			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
+
+			// 从我们的数据库读取隐私联系人，展示到页面上
+			getContact();
+
 		}
 	}
-	
+
+	/**
+	 * 获取我们数据库联系人
+	 */
+	private void getContact() {
+
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(getApplicationContext());
+		SQLiteDatabase database = contactInfoDao.getDatabase();
+
+		cursor = database.query("CONTACT_INFO", null, null, null, null, null,
+				null);
+		if (cursor.getCount() == 0) {
+			lv_cont.setEmptyView(contact_empty);
+		} else {
+			// 通知数据获取完成
+			Tools.logSh("cursor的长度为："+cursor.getCount());
+			lv_cont.setAdapter(new ContactAdapter(getApplicationContext(),
+					cursor));
+		}
+	}
+
 	private void showDialog() {
-		 final Builder builder = new AlertDialog.Builder(this);
-		 builder.setIcon(R.drawable.ic_launcher);
-			builder.setTitle("添加新的联系人");
-			builder.setItems(new String[]{"从联系人添加" , "手工输入号码" }, new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(R.drawable.ic_launcher);
+		builder.setTitle("添加新的联系人");
+		builder.setItems(new String[] { "从联系人添加", "手工输入号码" },
+				new DialogInterface.OnClickListener() {
 
-					TextView textView = (TextView)findViewById(R.id.text);
-					switch(which){
-					case 0:
-						Intent intent = new Intent(PrivateCommActivity.this,
-								ContactActivity.class);
-						startActivity(intent);
-						break;
-					case 1:
-						Intent intent2 = new Intent(PrivateCommActivity.this,
-								HandInputActivity.class);
-						startActivity(intent2);
-						break;
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						TextView textView = (TextView) findViewById(R.id.text);
+						switch (which) {
+						case 0:
+							Intent intent = new Intent(
+									PrivateCommActivity.this,
+									ContactActivity.class);
+							startActivity(intent);
+							break;
+						case 1:
+							Intent intent2 = new Intent(
+									PrivateCommActivity.this,
+									HandInputActivity.class);
+							startActivity(intent2);
+							break;
+						}
 					}
-				}
-			});
-			builder.create().show();
+				});
+		builder.create().show();
 
-		
 	}
 
 	@Override

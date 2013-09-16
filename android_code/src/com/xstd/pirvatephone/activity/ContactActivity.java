@@ -2,20 +2,31 @@ package com.xstd.pirvatephone.activity;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.UUID;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.R.layout;
 import com.xstd.pirvatephone.R.menu;
+import com.xstd.pirvatephone.dao.contact.ContactInfo;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.privatephone.adapter.AddContactAdapter;
+import com.xstd.privatephone.tools.Tools;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.app.Activity;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -30,6 +41,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +54,8 @@ public class ContactActivity extends Activity {
 	private Button bt_cancle;
 	private ListView lv_contact;
 	private TextView tv_empty;
+
+	private ContactInfo contactInfo = new ContactInfo();
 
 	/** 获取库Phon表字段 **/
 	private static final String[] PHONES_PROJECTION = new String[] {
@@ -70,36 +85,56 @@ public class ContactActivity extends Activity {
 
 	ListView mListView = null;
 
-	public Handler handler = new Handler(){
+	public Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			lv_contact.setEmptyView(tv_empty);
-			lv_contact.setAdapter(new AddContactAdapter(getApplicationContext(), mContactsName, mContactsNumber));
-			lv_contact.setOnItemClickListener(new OnItemClickListener() {
-				
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					// 保存已选择联系人。
-					CheckBox btn_check = (CheckBox) view.findViewById(R.id.btn_check);
-					btn_check.setChecked(!btn_check.isChecked());
-					selectContactsNumber.add(mContactsNumber.get(position));//string
-					
-				}
-			});
+
+			switch (msg.what) {
+			case 1:
+				Tools.logSh("接受到消息");
+				lv_contact.setEmptyView(tv_empty);
+				lv_contact
+						.setAdapter(new AddContactAdapter(
+								getApplicationContext(), mContactsName,
+								mContactsNumber));
+				lv_contact.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						// 保存已选择联系人。
+						Tools.logSh("条目被点击了");
+						CheckBox btn_check = (CheckBox) view
+								.findViewById(R.id.btn_check);
+
+						// 记录选项
+						if (!btn_check.isChecked()) {
+							selectContactsNumber.add(mContactsNumber
+									.get(position));
+						} else {
+							selectContactsNumber.remove(mContactsNumber
+									.get(position));
+						}
+
+						btn_check.setChecked(!btn_check.isChecked());
+						Tools.logSh(selectContactsNumber.size() + "");
+					}
+				});
+				break;
+			}
+
 		};
 	};
-	
+	private GetContactTast task;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
-		
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contact);
 
 		initView();
-		
-		GetContactTast task = new GetContactTast(getApplicationContext());
+
+		task = new GetContactTast(getApplicationContext());
 		task.execute();
 	}
 
@@ -109,9 +144,9 @@ public class ContactActivity extends Activity {
 	private void getContact() {
 
 		// 未优化方式
-		/**得到手机SIM卡联系人人信息**/
+		/** 得到手机SIM卡联系人人信息 **/
 		getSIMContacts();
-		
+
 		/** 得到手机通讯录联系人信息 **/
 		getPhoneContacts();
 
@@ -124,7 +159,6 @@ public class ContactActivity extends Activity {
 
 		lv_contact = (ListView) findViewById(R.id.lv_contact);
 		tv_empty = (TextView) findViewById(R.id.tv_empty);
-		
 
 		bt_back.setOnClickListener(new OnClickListener() {
 
@@ -133,7 +167,7 @@ public class ContactActivity extends Activity {
 				finish();
 			}
 		});
-		
+
 		bt_cancle.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -141,16 +175,111 @@ public class ContactActivity extends Activity {
 				finish();
 			}
 		});
-		
+
 		bt_sure.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// 选择的隐私联系人信息导入我们的数据库。
-				
-				
+				// 查询联系人信息添加到我们的数据库。
+				removeContact();
+
 			}
+
 		});
+	}
+
+	/**
+	 * 指定联系人的移动包含联系人、通话记录、短信
+	 */
+	private void removeContact() {
+
+		Tools.logSh("removeContact");
+		Tools.logSh(selectContactsNumber.size() + "");
+		String[] s = new String[selectContactsNumber.size()];
+		Object[] obj = selectContactsNumber.toArray();
+		for (int i = 0; i < obj.length; i++) {
+			s[i] = (String) obj[i];
+			Tools.logSh(s[i]);
+		}
+
+		ContactInfoDao db = ContactInfoDaoUtils
+				.getContactInfoDao(getApplicationContext());
+
+		ContentResolver resolver = getContentResolver();
+
+		// 获取手机联系人
+		Cursor phoneCursor = resolver.query(Phone.CONTENT_URI, new String[] {
+				Phone.CONTACT_ID, Phone.DISPLAY_NAME, Phone.NUMBER },
+				Phone.NUMBER + "=?", s, null);
+
+		if (phoneCursor != null) {
+			while (phoneCursor.moveToNext()) {
+
+				// 得到手机号码
+				String contactName = phoneCursor.getString(1);
+
+				// 得到联系人名称
+				String number = phoneCursor.getString(2);
+
+				Tools.logSh(number + contactName);
+				// 得到联系人ID
+				// Long contactid =
+				// phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
+				String number2 = number.replace(" ", "");
+				String phoneNumber = number2.replace("-", "");
+
+				contactInfo.setPhone_number(Long.valueOf(phoneNumber));
+				contactInfo.setDisplay_name(contactName);
+
+				// 添加到我们数据库
+				db.insert(contactInfo);
+				Tools.logSh("插入了一条数据");
+
+			}
+
+			phoneCursor.close();
+		}
+		
+		//获取通话记录
+		
+		//获取短信纪录
+
+		// 删除系统库中的联系人。
+		delContact(s);
+		
+		//跟新listview
+	}
+
+	private void delContact(String[] str) {
+		Tools.logSh("删除了系统数据库的一条数据");
+		Cursor cursor = getContentResolver().query(Data.CONTENT_URI,
+				new String[] { Data.RAW_CONTACT_ID }, Phone.NUMBER + "=?", str,
+				null);
+
+		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+		if (cursor.moveToFirst()) {
+
+			do {
+
+				long Id = cursor.getLong(cursor
+						.getColumnIndex(Data.RAW_CONTACT_ID));
+				ops.add(ContentProviderOperation
+						.newDelete(
+								ContentUris.withAppendedId(
+										RawContacts.CONTENT_URI, Id)).build());
+				try {
+					getContentResolver().applyBatch(ContactsContract.AUTHORITY,
+							ops);
+				} catch (Exception e) {
+				}
+			} while (cursor.moveToNext());
+
+			cursor.close();
+		}
+
+		// 跟新界面UI
 	}
 
 	@Override
@@ -160,75 +289,79 @@ public class ContactActivity extends Activity {
 		return true;
 	}
 
-	public  class GetContactTast extends AsyncTask<Void,Integer,Integer>{
-        private Context context;
-       public GetContactTast(Context context) {
-            this.context = context;
-        }
+	public class GetContactTast extends AsyncTask<Void, Integer, Integer> {
+		private Context context;
 
-        /**
-         * 运行在UI线程中，在调用doInBackground()之前执行
-         */
-        @Override
-        public void onPreExecute() {
-            Toast.makeText(context,"开始执行",Toast.LENGTH_SHORT).show();
-        }
-        /**
-         * 后台运行的方法，可以运行非UI线程，可以执行耗时的方法
-         */
-        @Override
-        protected Integer doInBackground(Void... params) {
-        	getContact();
-        	
-        	return null;
-        }
+		public GetContactTast(Context context) {
+			this.context = context;
+		}
 
-        /**
-         * 运行在ui线程中，在doInBackground()执行完毕后执行
-         */
-        @Override
-        public void onPostExecute(Integer integer) {
-            Toast.makeText(context,"执行完毕",Toast.LENGTH_SHORT).show();
-            handler.sendEmptyMessage(0);
-        }
+		/**
+		 * 运行在UI线程中，在调用doInBackground()之前执行
+		 */
+		@Override
+		public void onPreExecute() {
+			Toast.makeText(context, "开始执行", Toast.LENGTH_SHORT).show();
+		}
 
-        /**
-         * 在publishProgress()被调用以后执行，publishProgress()用于更新进度
-         */
-        @Override
-        public void onProgressUpdate(Integer... values) {
-        }
-    }
-	
-    /**得到手机SIM卡联系人人信息**/
-    private void getSIMContacts() {
-        ContentResolver resolver = getContentResolver();
-        // 获取Sims卡联系人
-        Uri uri = Uri.parse("content://icc/adn");
-        Cursor phoneCursor = resolver.query(uri, PHONES_PROJECTION, null, null,
-                null);
+		/**
+		 * 后台运行的方法，可以运行非UI线程，可以执行耗时的方法
+		 */
+		@Override
+		protected Integer doInBackground(Void... params) {
+			getContact();
 
-        if (phoneCursor != null) {
-            while (phoneCursor.moveToNext()) {
+			return null;
+		}
 
-                // 得到手机号码
-                String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);
-                // 当手机号码为空的或者为空字段 跳过当前循环
-                if (TextUtils.isEmpty(phoneNumber))
-                    continue;
-                // 得到联系人名称
-                String contactName = phoneCursor
-                        .getString(PHONES_DISPLAY_NAME_INDEX);
+		/**
+		 * 运行在ui线程中，在doInBackground()执行完毕后执行
+		 */
+		@Override
+		public void onPostExecute(Integer integer) {
+			Toast.makeText(context, "执行完毕", Toast.LENGTH_SHORT).show();
+			Message msg = new Message();
+			msg.what = 1;
+			handler.sendMessage(msg);
+		}
 
-                //Sim卡中没有联系人头像
-                
-                mContactsName.add(contactName);
-                mContactsNumber.add(phoneNumber);
-            }
+		/**
+		 * 在publishProgress()被调用以后执行，publishProgress()用于更新进度
+		 */
+		@Override
+		public void onProgressUpdate(Integer... values) {
+		}
+	}
 
-            phoneCursor.close();
-        }
-    }
+	/** 得到手机SIM卡联系人人信息 **/
+	private void getSIMContacts() {
+		ContentResolver resolver = getContentResolver();
+		// 获取Sims卡联系人
+		Uri uri = Uri.parse("content://icc/adn");
+		Cursor phoneCursor = resolver.query(uri, PHONES_PROJECTION, null, null,
+				null);
+
+		if (phoneCursor != null) {
+			while (phoneCursor.moveToNext()) {
+
+				// 得到手机号码
+				String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);
+				// 当手机号码为空的或者为空字段 跳过当前循环
+				if (TextUtils.isEmpty(phoneNumber))
+					continue;
+				// 得到联系人名称
+				String contactName = phoneCursor
+						.getString(PHONES_DISPLAY_NAME_INDEX);
+
+				// Sim卡中没有联系人头像
+
+				mContactsName.add(contactName);
+				mContactsNumber.add(phoneNumber);
+			}
+
+			phoneCursor.close();
+		}
+	}
 
 	/** 得到手机通讯录联系人信息 **/
 	private void getPhoneContacts() {
@@ -279,7 +412,6 @@ public class ContactActivity extends Activity {
 
 			phoneCursor.close();
 		}
-		
-	
+
 	}
 }

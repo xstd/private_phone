@@ -24,15 +24,13 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/btn_check"
-        style="@style/private_comm_checkbox_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+    <Button
+        android:id="@+id/btn_dail"
+        android:layout_width="35dip"
+        android:layout_height="35dip"
+         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:background="@drawable/private_dial_normal"
+        />
 
 </RelativeLayout>

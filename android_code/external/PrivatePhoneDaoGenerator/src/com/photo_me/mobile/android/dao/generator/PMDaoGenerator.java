@@ -14,7 +14,7 @@ public class PMDaoGenerator {
     
     
     private static void generateMQTTDaoModel() {
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
+       /* Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
 
         Entity note = schema.addEntity("PMProtocal");
         note.addLongProperty("time").primaryKeyAsc();
@@ -24,13 +24,35 @@ public class PMDaoGenerator {
         note.addLongProperty("localId");
         note.addIntProperty("ownerId");
 
-        Entity userNote = schema.addEntity("PushUserInfo");
-        userNote.addLongProperty("id").primaryKey();
-        userNote.addLongProperty("lastLoginTime");
-        userNote.addStringProperty("generateId");
-        userNote.addStringProperty("ticket");
-        userNote.addStringProperty("secret_key");
-        userNote.addStringProperty("server");
+        Entity contactNote = schema.addEntity("PushUserInfo");
+        contactNote.addLongProperty("id").primaryKey();
+        contactNote.addLongProperty("lastLoginTime");
+        contactNote.addStringProperty("generateId");
+        contactNote.addStringProperty("ticket");
+        contactNote.addStringProperty("secret_key");
+        contactNote.addStringProperty("server");
+
+        try {
+            new DaoGenerator().generateAll(schema, "../../src");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.phone");
+
+        Entity contactNote = schema.addEntity("phone_record");
+        contactNote.addIdProperty();
+        contactNote.addLongProperty("phone_number");
+        contactNote.addIntProperty("type");
+        contactNote.addIntProperty("count");
+        contactNote.addLongProperty("start_time");
+        
+        Entity contactNote2 = schema.addEntity("phone_detail");
+        contactNote2.addIdProperty();
+        contactNote2.addLongProperty("phone_number");
+        contactNote2.addIntProperty("type");
+        contactNote2.addLongProperty("start_time");
+        contactNote2.addLongProperty("end_time");
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");
