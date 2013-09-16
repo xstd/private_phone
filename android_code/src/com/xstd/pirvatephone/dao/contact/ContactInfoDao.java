@@ -62,9 +62,9 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
             stmt.bindLong(1, id);
         }
  
-        Long phone_number = entity.getPhone_number();
+        String phone_number = entity.getPhone_number();
         if (phone_number != null) {
-            stmt.bindLong(2, phone_number);
+            stmt.bindString(2, phone_number);
         }
  
         String display_name = entity.getDisplay_name();
@@ -84,7 +84,7 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
     public ContactInfo readEntity(Cursor cursor, int offset) {
         ContactInfo entity = new ContactInfo( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // phone_number
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // phone_number
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // display_name
         );
         return entity;
@@ -94,7 +94,7 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
     @Override
     public void readEntity(Cursor cursor, ContactInfo entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setPhone_number(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setPhone_number(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setDisplay_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     

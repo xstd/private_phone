@@ -51,7 +51,7 @@ public class PrivateCommActivity extends BaseActivity {
 	private int smsPageNum = 0;
 	private int dialPageNum = 1;
 	private int contactPageNum = 2;
-	private ListView lv_cont;
+	private ListView contact_lv_cont;
 	private Button contact_add_contacts;
 
 	private TextView contact_empty;
@@ -189,10 +189,14 @@ public class PrivateCommActivity extends BaseActivity {
 			return;
 		}
 		if (currIndex == dialPageNum) {
+			
+			
+			
+			
 			return;
 		}
 		if (currIndex == contactPageNum) {
-			lv_cont = (ListView) findViewById(R.id.contact_lv_cont);
+			contact_lv_cont = (ListView) findViewById(R.id.contact_lv_cont);
 			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
 
 			contact_add_contacts.setOnClickListener(new OnClickListener() {
@@ -225,11 +229,11 @@ public class PrivateCommActivity extends BaseActivity {
 		cursor = database.query("CONTACT_INFO", null, null, null, null, null,
 				null);
 		if (cursor.getCount() == 0) {
-			lv_cont.setEmptyView(contact_empty);
+			contact_lv_cont.setEmptyView(contact_empty);
 		} else {
 			// 通知数据获取完成
 			Tools.logSh("cursor的长度为："+cursor.getCount());
-			lv_cont.setAdapter(new ContactAdapter(getApplicationContext(),
+			contact_lv_cont.setAdapter(new ContactAdapter(getApplicationContext(),
 					cursor));
 		}
 	}

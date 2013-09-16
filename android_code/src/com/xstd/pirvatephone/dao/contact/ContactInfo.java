@@ -11,7 +11,7 @@ public class ContactInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Long id;
-    private Long phone_number;
+    private String phone_number;
     private String display_name;
 
     public ContactInfo() {
@@ -21,7 +21,7 @@ public class ContactInfo implements Serializable {
         this.id = id;
     }
 
-    public ContactInfo(Long id, Long phone_number, String display_name) {
+    public ContactInfo(Long id, String phone_number, String display_name) {
         this.id = id;
         this.phone_number = phone_number;
         this.display_name = display_name;
@@ -35,11 +35,11 @@ public class ContactInfo implements Serializable {
         this.id = id;
     }
 
-    public Long getPhone_number() {
+    public String getPhone_number() {
         return phone_number;
     }
 
-    public void setPhone_number(Long phone_number) {
+    public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 

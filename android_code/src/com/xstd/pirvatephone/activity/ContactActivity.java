@@ -12,6 +12,9 @@ import com.xstd.pirvatephone.R.menu;
 import com.xstd.pirvatephone.dao.contact.ContactInfo;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneRecord;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.privatephone.adapter.AddContactAdapter;
 import com.xstd.privatephone.tools.Tools;
 
@@ -20,6 +23,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.CallLog;
+import android.provider.CallLog.Calls;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
@@ -56,6 +61,7 @@ public class ContactActivity extends Activity {
 	private TextView tv_empty;
 
 	private ContactInfo contactInfo = new ContactInfo();
+	private PhoneRecord phoneRecord = new PhoneRecord();
 
 	/** 获取库Phon表字段 **/
 	private static final String[] PHONES_PROJECTION = new String[] {
@@ -203,7 +209,7 @@ public class ContactActivity extends Activity {
 			Tools.logSh(s[i]);
 		}
 
-		ContactInfoDao db = ContactInfoDaoUtils
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(getApplicationContext());
 
 		ContentResolver resolver = getContentResolver();
@@ -216,39 +222,74 @@ public class ContactActivity extends Activity {
 		if (phoneCursor != null) {
 			while (phoneCursor.moveToNext()) {
 
-				// 得到手机号码
+				// 得到联系人名称
 				String contactName = phoneCursor.getString(1);
 
-				// 得到联系人名称
+				// 得到手机号码
 				String number = phoneCursor.getString(2);
 
 				Tools.logSh(number + contactName);
 				// 得到联系人ID
 				// Long contactid =
 				// phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
-				String number2 = number.replace(" ", "");
-				String phoneNumber = number2.replace("-", "");
 
-				contactInfo.setPhone_number(Long.valueOf(phoneNumber));
+				contactInfo.setPhone_number(number);
 				contactInfo.setDisplay_name(contactName);
 
 				// 添加到我们数据库
-				db.insert(contactInfo);
+				contactInfoDao.insert(contactInfo);
 				Tools.logSh("插入了一条数据");
 
 			}
-
 			phoneCursor.close();
 		}
-		
-		//获取通话记录
-		
-		//获取短信纪录
 
+		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
+				.getPhoneRecordDao(getApplicationContext());
+
+		// 获取通话记录
+		Cursor recordCursor = resolver.query(CallLog.Calls.CONTENT_URI, null,
+				Calls.NUMBER+"=?", s, null);
+
+		if (recordCursor != null) {
+			while (recordCursor.moveToNext()) {
+
+				// 得到手机号码
+				String number = recordCursor.getString(1);
+				// 得到联系人名称
+				Long start_time = recordCursor.getLong(2);
+				// 通话持续时间
+				Long duration = recordCursor.getLong(3);
+				// 通话类型
+				Integer type = recordCursor.getInt(4);
+				// 通化人姓名
+				String name = recordCursor.getString(6);
+
+				Tools.logSh(number + start_time + duration + type + name);
+
+				phoneRecord.setPhone_number(number);
+				phoneRecord.setStart_time(start_time);
+				phoneRecord.setDuration(duration);
+				phoneRecord.setType(type);
+				phoneRecord.setName(name);
+
+				// 添加到我们数据库
+				phoneRecordDao.insert(phoneRecord);
+				Tools.logSh("向phoneRecord插入了一条数据");
+
+			}
+			recordCursor.close();
+		}
+		
+		// 获取短信纪录
+		
+
+		
 		// 删除系统库中的联系人。
 		delContact(s);
 		
-		//跟新listview
+
+		// 跟新listview
 	}
 
 	private void delContact(String[] str) {
