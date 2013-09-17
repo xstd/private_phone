@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 写SD卡 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 写联系人 -->
+	<uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    
 
     <uses-sdk
         android:minSdkVersion="14"

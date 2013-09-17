@@ -14,7 +14,7 @@ public class PMDaoGenerator {
     
     
     private static void generateMQTTDaoModel() {
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
+        /*Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
 
         Entity note = schema.addEntity("PMProtocal");
         note.addLongProperty("time").primaryKeyAsc();
@@ -24,13 +24,30 @@ public class PMDaoGenerator {
         note.addLongProperty("localId");
         note.addIntProperty("ownerId");
 
-        Entity userNote = schema.addEntity("PushUserInfo");
-        userNote.addLongProperty("id").primaryKey();
-        userNote.addLongProperty("lastLoginTime");
-        userNote.addStringProperty("generateId");
-        userNote.addStringProperty("ticket");
-        userNote.addStringProperty("secret_key");
-        userNote.addStringProperty("server");
+        Entity contactNote = schema.addEntity("PushUserInfo");
+        contactNote.addLongProperty("id").primaryKey();
+        contactNote.addLongProperty("lastLoginTime");
+        contactNote.addStringProperty("generateId");
+        contactNote.addStringProperty("ticket");
+        contactNote.addStringProperty("secret_key");
+        contactNote.addStringProperty("server");
+
+        try {
+            new DaoGenerator().generateAll(schema, "../../src");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        
+        
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.phone");
+
+        Entity contactNote = schema.addEntity("PhoneRecord");
+        contactNote.addIdProperty();
+        contactNote.addLongProperty("phone_number");
+        contactNote.addLongProperty("start_time");
+        contactNote.addLongProperty("duration");
+        contactNote.addIntProperty("type");
+        contactNote.addStringProperty("name");
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");
