@@ -11,10 +11,13 @@ public class PMDaoGenerator {
     public static void main(String[] args) throws Exception {
         generateMQTTDaoModel();
     }
-    
-    
+
     private static void generateMQTTDaoModel() {
+<<<<<<< Updated upstream
         /*Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
+=======
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.privacy");
+>>>>>>> Stashed changes
 
         Entity note = schema.addEntity("PMProtocal");
         note.addLongProperty("time").primaryKeyAsc();
@@ -24,6 +27,7 @@ public class PMDaoGenerator {
         note.addLongProperty("localId");
         note.addIntProperty("ownerId");
 
+<<<<<<< Updated upstream
         Entity contactNote = schema.addEntity("PushUserInfo");
         contactNote.addLongProperty("id").primaryKey();
         contactNote.addLongProperty("lastLoginTime");
@@ -49,6 +53,15 @@ public class PMDaoGenerator {
         contactNote.addIntProperty("type");
         contactNote.addStringProperty("name");
 
+=======
+        Entity userNote = schema.addEntity("PushUserInfo");
+        userNote.addLongProperty("id").primaryKey();
+        userNote.addLongProperty("lastLoginTime");
+        userNote.addStringProperty("generateId");
+        userNote.addStringProperty("ticket");
+        userNote.addStringProperty("secret_key");
+        userNote.addStringProperty("server");
+>>>>>>> Stashed changes
         try {
             new DaoGenerator().generateAll(schema, "../../src");
         } catch (Exception e) {
