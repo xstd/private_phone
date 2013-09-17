@@ -14,7 +14,7 @@ import com.xstd.pirvatephone.dao.privacy.SrcToDestMapping;
 /** 
  * DAO for table SRC_TO_DEST_MAPPING.
 */
-public class SrcToDestMappingDao extends AbstractDao<SrcToDestMapping, Void> {
+public class SrcToDestMappingDao extends AbstractDao<SrcToDestMapping, Long> {
 
     public static final String TABLENAME = "SRC_TO_DEST_MAPPING";
 
@@ -23,10 +23,12 @@ public class SrcToDestMappingDao extends AbstractDao<SrcToDestMapping, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property SrcName = new Property(0, String.class, "srcName", false, "SRC_NAME");
-        public final static Property DestName = new Property(1, String.class, "destName", false, "DEST_NAME");
-        public final static Property SrcPath = new Property(2, String.class, "srcPath", false, "SRC_PATH");
-        public final static Property Misstime = new Property(3, Long.class, "misstime", false, "MISSTIME");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property SrcName = new Property(1, String.class, "srcName", false, "SRC_NAME");
+        public final static Property DestName = new Property(2, String.class, "destName", false, "DEST_NAME");
+        public final static Property SrcPath = new Property(3, String.class, "srcPath", false, "SRC_PATH");
+        public final static Property Misstime = new Property(4, java.util.Date.class, "misstime", false, "MISSTIME");
+        public final static Property Type = new Property(5, Integer.class, "type", false, "TYPE");
     };
 
 
@@ -42,10 +44,12 @@ public class SrcToDestMappingDao extends AbstractDao<SrcToDestMapping, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'SRC_TO_DEST_MAPPING' (" + //
-                "'SRC_NAME' TEXT NOT NULL ," + // 0: srcName
-                "'DEST_NAME' TEXT UNIQUE ," + // 1: destName
-                "'SRC_PATH' TEXT NOT NULL ," + // 2: srcPath
-                "'MISSTIME' INTEGER);"); // 3: misstime
+                "'_id' INTEGER PRIMARY KEY ," + // 0: id
+                "'SRC_NAME' TEXT NOT NULL ," + // 1: srcName
+                "'DEST_NAME' TEXT NOT NULL ," + // 2: destName
+                "'SRC_PATH' TEXT NOT NULL ," + // 3: srcPath
+                "'MISSTIME' INTEGER," + // 4: misstime
+                "'TYPE' INTEGER);"); // 5: type
     }
 
     /** Drops the underlying database table. */
@@ -58,34 +62,42 @@ public class SrcToDestMappingDao extends AbstractDao<SrcToDestMapping, Void> {
     @Override
     protected void bindValues(SQLiteStatement stmt, SrcToDestMapping entity) {
         stmt.clearBindings();
-        stmt.bindString(1, entity.getSrcName());
  
-        String destName = entity.getDestName();
-        if (destName != null) {
-            stmt.bindString(2, destName);
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
         }
-        stmt.bindString(3, entity.getSrcPath());
+        stmt.bindString(2, entity.getSrcName());
+        stmt.bindString(3, entity.getDestName());
+        stmt.bindString(4, entity.getSrcPath());
  
-        Long misstime = entity.getMisstime();
+        java.util.Date misstime = entity.getMisstime();
         if (misstime != null) {
-            stmt.bindLong(4, misstime);
+            stmt.bindLong(5, misstime.getTime());
+        }
+ 
+        Integer type = entity.getType();
+        if (type != null) {
+            stmt.bindLong(6, type);
         }
     }
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public SrcToDestMapping readEntity(Cursor cursor, int offset) {
         SrcToDestMapping entity = new SrcToDestMapping( //
-            cursor.getString(offset + 0), // srcName
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // destName
-            cursor.getString(offset + 2), // srcPath
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // misstime
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.getString(offset + 1), // srcName
+            cursor.getString(offset + 2), // destName
+            cursor.getString(offset + 3), // srcPath
+            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // misstime
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // type
         );
         return entity;
     }
@@ -93,23 +105,29 @@ public class SrcToDestMappingDao extends AbstractDao<SrcToDestMapping, Void> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, SrcToDestMapping entity, int offset) {
-        entity.setSrcName(cursor.getString(offset + 0));
-        entity.setDestName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setSrcPath(cursor.getString(offset + 2));
-        entity.setMisstime(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setSrcName(cursor.getString(offset + 1));
+        entity.setDestName(cursor.getString(offset + 2));
+        entity.setSrcPath(cursor.getString(offset + 3));
+        entity.setMisstime(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
+        entity.setType(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
      }
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(SrcToDestMapping entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(SrcToDestMapping entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(SrcToDestMapping entity) {
-        return null;
+    public Long getKey(SrcToDestMapping entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

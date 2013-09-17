@@ -2,14 +2,14 @@ package com.xstd.pirvatephone.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -19,11 +19,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.plugin.common.utils.UtilsConfig;
-import com.plugin.common.utils.files.FileOperatorHelper;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.privacy.PrivacyDaoUtils;
 import com.xstd.pirvatephone.dao.privacy.SrcToDestMapping;
 import com.xstd.pirvatephone.dao.privacy.SrcToDestMappingDao;
+import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.privatephone.adapter.ShowSDFilesAdapter;
 import com.xstd.privatephone.adapter.ShowSDFilesAdapter.FileInfo;
 
@@ -39,11 +39,13 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 	private Button btn_add;
 	private List<FileInfo> willMoves = new ArrayList<FileInfo>();
 	private ShowSDFilesAdapter adapter;
+	private int count = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_sdcardfile);
+		privacy_type = getIntent().getIntExtra("privacy_type", 0);
 		initViews();
 		setListener();
 	}
@@ -61,6 +63,7 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 				if (fileInfo.isFolder) {
 					adapter.updateFiles(fileInfo.absolutePath);
 					current_path.setText(fileInfo.absolutePath);
+					count++;
 				} else {
 					fileInfo.isChecked = !fileInfo.isChecked;
 					adapter.notifyDataSetChanged();
@@ -87,7 +90,10 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		if (v == return_btn) {
-			finish();
+			if (count <= 0)
+				finish();
+			else
+				exitsCurrentFolder();
 		} else if (v == btn_add) {
 			selectAll();
 		} else if (v == btn_move) {
@@ -95,21 +101,48 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 		}
 	}
 
-	private void selectAll() {
-		Log.i(TAG, "全选按钮，");
-		com.plugin.common.utils.files.FileInfo fileInfo = new com.plugin.common.utils.files.FileInfo();
-		File file = new File("/sdcard/abc");
-		fileInfo.filePath = file.getAbsolutePath();
-		fileInfo.fileName = file.getName();
-		Log.i(TAG, fileInfo.fileName);
-		FileOperatorHelper.copyFile(fileInfo, "/sdcard/def");
-		Log.i(TAG, "全选按钮jieshu，");
+	/**
+	 * 返回上级目录
+	 */
+	private void exitsCurrentFolder() {
+		String path = current_path.getText().toString().trim();
+		String lastPath = path.substring(0, path.lastIndexOf(File.separator));
+		adapter.updateFiles(lastPath);
+		current_path.setText(lastPath);
+		count--;
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && count > 0) {
+			exitsCurrentFolder();
+			return true;// 终止返回按钮事件
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	/**
+	 * 全选
+	 */
+	private void selectAll() {
+		for (int i = 0; i < adapter.getCount(); i++) {
+			FileInfo fileInfo = (FileInfo) adapter.getItem(i);
+			fileInfo.isChecked = true;
+		}
+		adapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * 文件隐藏的位置
+	 */
 	public static final String PRIVACY_SAPCE_PATH = UtilsConfig.DISK_DIR_PATH
 			+ "MISSFolder" + File.separator;
 	ProgressDialog dialog;
+	private int privacy_type;
 
+	/**
+	 * 移动文件
+	 */
 	private void missingFile() {
 		for (int i = 0; i < adapter.getCount(); i++) {
 			FileInfo fileInfo = (FileInfo) adapter.getItem(i);
@@ -129,17 +162,17 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 				SrcToDestMappingDao dao = PrivacyDaoUtils
 						.getPrivacyDao(ShowSDCardFilesActivity.this);
 				for (FileInfo fileInfo : willMoves) {
-					long currentTimeMillis = System.currentTimeMillis();
-					String destName = UUID.randomUUID().toString();
+					// String destName = UUID.randomUUID().toString();
 					com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
 					info.fileName = fileInfo.name;
 					info.filePath = fileInfo.absolutePath;
-					FileOperatorHelper.copyFile(info, PRIVACY_SAPCE_PATH
-							+ destName);
-					Log.i(TAG, "begin insert ------");
-					dao.insert(new SrcToDestMapping(fileInfo.name, destName,
-							fileInfo.absolutePath, currentTimeMillis));
-					FileOperatorHelper.DeleteFile(info);
+					// FileUtils.copyFile(info, PRIVACY_SAPCE_PATH);
+					FileUtils.moveFile(fileInfo.absolutePath,
+							PRIVACY_SAPCE_PATH + fileInfo.name);
+					dao.insert(new SrcToDestMapping(null, fileInfo.name,
+							fileInfo.name, fileInfo.absolutePath, new Date(),
+							privacy_type));
+					FileUtils.DeleteFile(info);
 				}
 
 				return null;
@@ -147,6 +180,7 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 
 			protected void onPostExecute(Void result) {
 				dialog.dismiss();
+				finish();
 			};
 
 		}.execute();

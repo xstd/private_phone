@@ -787,5 +787,7 @@ QQ:903372666
     <string name="privacy_selectfile_move">隐藏</string>
     <string name="privacy_selectfile_add">全选</string>
     <string name="privacy_permission_denied">您不能打开此文件夹。</string>
+    <string name="privacy_backfile_success_msg">文件恢复成功。</string>
+    <string name="privacy_backfile_failed_msg">文件恢复成功。</string>
 
 </resources>
