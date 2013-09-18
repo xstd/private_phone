@@ -1,16 +1,11 @@
 package com.xstd.pirvatephone.dao.sms;
 
-
-
-
-
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public class SmsRecordDaoUtils {
 
-	private static final String DATABASE_NAME = "phone_record.db";
+	private static final String DATABASE_NAME = "sms.db";
 
     private static DaoSession sDaoSession;
 

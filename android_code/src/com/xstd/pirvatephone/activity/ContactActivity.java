@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.UUID;
 
 import com.xstd.pirvatephone.R;
@@ -262,15 +263,12 @@ public class ContactActivity extends Activity {
 
 				// 添加到我们数据库
 				contactInfoDao.insert(contactInfo);
-				Tools.logSh("插入了一条数据");
+				Tools.logSh("phoneCursor插入了一条数据");
 
 			}
 			phoneCursor.close();
 		}
 
-		
-		
-		
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(getApplicationContext());
 		
@@ -308,9 +306,11 @@ public class ContactActivity extends Activity {
 				phoneRecord.setType(type);
 				phoneRecord.setName(name);
 
+				
+				
 				// 添加到我们数据库
 				phoneRecordDao.insert(phoneRecord);
-				Tools.logSh("向phoneRecord插入了一条数据");
+				Tools.logSh("向recordCursor插入了一条数据");
 
 			}
 			recordCursor.close();
@@ -320,7 +320,7 @@ public class ContactActivity extends Activity {
 		
 		// 获取短信纪录
 		SmsDetailDao smsdetailDao = SmsDetailDaoUtils.getSmsDetailDao(getApplicationContext());
-
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
 		/**
 	     * 查询短信的数据
 	     * 1.先查询sms表出每条短信的发送时间和内容
@@ -332,7 +332,7 @@ public class ContactActivity extends Activity {
 			while (detailCursor.moveToNext()) {
 				
 				//thread_id
-				int thread_id = detailCursor.getInt(detailCursor.getColumnIndex("thread_id"));
+				Integer thread_id = detailCursor.getInt(detailCursor.getColumnIndex("thread_id"));
 				//phone_number
 				String phone_number = detailCursor.getString(detailCursor.getColumnIndex("address"));
 				//lasted date
@@ -340,6 +340,8 @@ public class ContactActivity extends Activity {
 				
 				String body = detailCursor.getString(detailCursor.getColumnIndex("body"));
 				
+				
+				map.put(thread_id, phone_number);
 				smsDetail.setThread_id(thread_id);
 				smsDetail.setPhone_number(phone_number);
 				smsDetail.setDate(date);
@@ -354,22 +356,28 @@ public class ContactActivity extends Activity {
 		}
 		
 		
-	/*	String[] s3 = new String[thread_ids.size()];
+		String[] s3 = new String[thread_ids.size()];
 		Object[] obj3 = thread_ids.toArray();
 		for (int i = 0; i < obj3.length; i++) {
-			s3[i] = (String) obj3[i];
-			Tools.logSh(s3[i]);
+			s3[i] = ""+obj3[i];
+			Tools.logSh("++++++"+s3[i]);
 		}
 		
 		SmsRecordDao smsRecordDao = SmsRecordDaoUtils.getSmsRecordDao(getApplicationContext());
 		
-		Cursor smsCursor = resolver.query(Uri.parse("content://sms/"),  
-				new String[]{"* from threads --"}, "_id=?", s3, null);  
-
 		
+		Tools.logSh("--------"+1);
+		/*Cursor smsCursor = resolver.query(Uri.parse("content://sms/"),  
+				new String[]{ "* from threads--" }, "_id=?", s3, null); */ 
+		Cursor smsCursor = resolver.query(Uri.parse("content://sms/"),  
+				new String[] { "* from threads--" }, null, null, null);  
+
+		Tools.logSh(""+smsCursor.getCount());
 		if (smsCursor != null) {
 			while (smsCursor.moveToNext()) {
-
+				Tools.logSh("--------"+3);
+				//_id
+				int _id = smsCursor.getInt(smsCursor.getColumnIndex("_id"));
 				// 通信次数
 				int count = smsCursor.getInt(smsCursor.getColumnIndex("message_count"));
 				// 最近一次通信时间
@@ -379,19 +387,22 @@ public class ContactActivity extends Activity {
 				// 是否已读
 				Integer type = smsCursor.getInt(smsCursor.getColumnIndex("read"));
 
-				Tools.logSh(count + lasted_date + data + type);
+				String number = map.get(_id);
 				
-
-				smsRecord.set
+				Tools.logSh(count +"::" +lasted_date +"::"+ data + "::"+type+"::"+number);
 				
+				smsRecord.setPhone_number(number);
+				smsRecord.setCount(count);
+				smsRecord.setLasted_contact(lasted_date);
+				smsRecord.setLasted_data(data);
 
 				// 添加到我们数据库
-				smsRecordDao.insert(phoneRecord);
-				Tools.logSh("向phoneRecord插入了一条数据");
+				smsRecordDao.insert(smsRecord);
+				Tools.logSh("向smsRecord插入了一条数据");
 
 			}
-			recordCursor.close();
-		}*/
+			smsCursor.close();
+		}
 		
 		// 删除系统库中的联系人。
 	//	delContact(s);

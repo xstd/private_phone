@@ -8,9 +8,12 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.MyViewPagerAdapter;
 import com.xstd.privatephone.adapter.PhoneRecordAdapter;
+import com.xstd.privatephone.adapter.SmsRecordAdapter;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
@@ -58,8 +61,11 @@ public class PrivateCommActivity extends BaseActivity {
 	private Button contact_add_contacts;
 
 	private TextView contact_empty;
-	private Cursor cursor;
+	private Cursor contactCursor;
 	private ListView dial_lv_cont;
+	private ListView sms_lv_cont;
+	private TextView sms_tv_empty;
+	private TextView dial_tv_empty;
 	
 	/* getContentResolver().delete(Uri.parse("content://sms/"+ sms.getId()), null, null);*/
 
@@ -193,17 +199,25 @@ public class PrivateCommActivity extends BaseActivity {
 	private void fillData() {
 
 		if (currIndex == smsPageNum) {
+			sms_lv_cont = (ListView) findViewById(R.id.sms_lv_cont);
+			sms_tv_empty = (TextView) findViewById(R.id.sms_tv_empty);
+			
+			Tools.logSh("接收到增加联系人点击" + currIndex);
+			getSmsRecord();
+			
 			return;
 		}
 		if (currIndex == dialPageNum) {
 			dial_lv_cont = (ListView) findViewById(R.id.dial_lv_cont);
+			dial_tv_empty = (TextView) findViewById(R.id.dial_tv_empty);
 			
-			getDialRecord();
+			getPhoneDialRecord();
 			
 			return;
 		}
 		if (currIndex == contactPageNum) {
 			contact_lv_cont = (ListView) findViewById(R.id.contact_lv_cont);
+			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
 			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
 
 			contact_add_contacts.setOnClickListener(new OnClickListener() {
@@ -216,15 +230,32 @@ public class PrivateCommActivity extends BaseActivity {
 				}
 			});
 
-			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
-
 			// 从我们的数据库读取隐私联系人，展示到页面上
 			getContact();
-
 		}
 	}
 
-	private void getDialRecord() {
+	private void getSmsRecord() {
+		SmsRecordDao smsRecordDao = SmsRecordDaoUtils.getSmsRecordDao(getApplicationContext());
+		SQLiteDatabase database = smsRecordDao.getDatabase();
+		Tools.logSh("getSmsRecord()执行了");
+		Cursor smsRecordCursor = database.query("SMS_RECORD", null, null, null, null, null,
+				null);
+		
+		Tools.logSh("getSmsRecord()执行了+"+smsRecordCursor.getCount());
+		if(smsRecordCursor.getCount() == 0){
+			Tools.logSh("没有数据");
+			sms_lv_cont.setEmptyView(sms_tv_empty);
+			
+		}else{
+			Tools.logSh("cursor的长度为："+smsRecordCursor.getCount());
+			sms_lv_cont.setAdapter(new SmsRecordAdapter(getApplicationContext(),
+					smsRecordCursor));
+		}
+		
+	}
+
+	private void getPhoneDialRecord() {
 		// TODO Auto-generated method stub
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils.getPhoneRecordDao(getApplicationContext());
 		SQLiteDatabase database = phoneRecordDao.getDatabase();
@@ -233,8 +264,7 @@ public class PrivateCommActivity extends BaseActivity {
 				null);
 		
 		if(recordCursor.getCount() == 0){
-			
-			
+			dial_lv_cont.setEmptyView(dial_tv_empty);
 		}else{
 			Tools.logSh("cursor的长度为："+recordCursor.getCount());
 			dial_lv_cont.setAdapter(new PhoneRecordAdapter(getApplicationContext(),
@@ -251,15 +281,15 @@ public class PrivateCommActivity extends BaseActivity {
 				.getContactInfoDao(getApplicationContext());
 		SQLiteDatabase database = contactInfoDao.getDatabase();
 
-		cursor = database.query("CONTACT_INFO", null, null, null, null, null,
+		contactCursor = database.query("CONTACT_INFO", null, null, null, null, null,
 				null);
-		if (cursor.getCount() == 0) {
+		if (contactCursor.getCount() == 0) {
 			contact_lv_cont.setEmptyView(contact_empty);
 		} else {
 			// 通知数据获取完成
-			Tools.logSh("cursor的长度为："+cursor.getCount());
+			Tools.logSh("cursor的长度为："+contactCursor.getCount());
 			contact_lv_cont.setAdapter(new ContactAdapter(getApplicationContext(),
-					cursor));
+					contactCursor));
 		}
 	}
 

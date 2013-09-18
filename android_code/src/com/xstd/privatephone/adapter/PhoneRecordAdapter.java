@@ -46,7 +46,10 @@ public class PhoneRecordAdapter extends CursorAdapter {
 			phoneType = "拨入电话";
 			picId = R.drawable.privacy_outgoing;
 		}
-		if(name==null){
+		
+		
+		
+		if(name==null || name==""){
 			views.tv_phone_num.setText(phone_number);
 		}else{
 			views.tv_phone_num.setText(name);
@@ -62,8 +65,8 @@ public class PhoneRecordAdapter extends CursorAdapter {
 
 	@Override
 	public View newView(Context arg0, Cursor arg1, ViewGroup arg2) {
-		// TODO Auto-generated method stub
-		View view = LayoutInflater.from(mContext).inflate(R.layout.private_record_item, null);
+		// TODO Auto-generated method 
+		View view = LayoutInflater.from(mContext).inflate(R.layout.private_dailrecord_item, null);
 		ViewHold views = new ViewHold();
 		
 		views.inorout = (ImageView) view.findViewById(R.id.dial_iv_inorout);
