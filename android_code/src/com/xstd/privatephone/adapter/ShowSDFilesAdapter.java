@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +31,7 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 		mContext = context;
 		this.files = new ArrayList<FileInfo>();
 		df = DateFormat.getDateTimeInstance();
-		updateFiles("/");
+		updateFiles(Environment.getExternalStorageDirectory().getAbsolutePath());
 	}
 
 	/**

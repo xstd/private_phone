@@ -10,21 +10,38 @@ public class SrcToDestMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+    private Long id;
     /** Not-null value. */
     private String srcName;
+    /** Not-null value. */
     private String destName;
     /** Not-null value. */
     private String srcPath;
-    private Long misstime;
+    private java.util.Date misstime;
+    private Integer type;
 
     public SrcToDestMapping() {
     }
 
-    public SrcToDestMapping(String srcName, String destName, String srcPath, Long misstime) {
+    public SrcToDestMapping(Long id) {
+        this.id = id;
+    }
+
+    public SrcToDestMapping(Long id, String srcName, String destName, String srcPath, java.util.Date misstime, Integer type) {
+        this.id = id;
         this.srcName = srcName;
         this.destName = destName;
         this.srcPath = srcPath;
         this.misstime = misstime;
+        this.type = type;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /** Not-null value. */
@@ -37,10 +54,12 @@ public class SrcToDestMapping implements Serializable {
         this.srcName = srcName;
     }
 
+    /** Not-null value. */
     public String getDestName() {
         return destName;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setDestName(String destName) {
         this.destName = destName;
     }
@@ -55,17 +74,25 @@ public class SrcToDestMapping implements Serializable {
         this.srcPath = srcPath;
     }
 
-    public Long getMisstime() {
+    public java.util.Date getMisstime() {
         return misstime;
     }
 
-    public void setMisstime(Long misstime) {
+    public void setMisstime(java.util.Date misstime) {
         this.misstime = misstime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        return "[SrcToDestMapping]" + "srcName = " + srcName + ", " + "destName = " + destName + ", " + "srcPath = " + srcPath + ", " + "misstime = " + misstime + "\r\n";
+        return "[SrcToDestMapping]" + "id = " + id + ", " + "srcName = " + srcName + ", " + "destName = " + destName + ", " + "srcPath = " + srcPath + ", " + "misstime = " + misstime + ", " + "type = " + type + "\r\n";
     }
 
 }

@@ -15,11 +15,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
-
+/**
+ * 文件隐藏模块主界面
+ * @author Chrain
+ *
+ */
 public class PrivacySpaceActivity extends BaseActivity {
 
 	protected static final String TAG = "PrivacySpaceActivity";
+	/**
+	 * 左上角返回按钮
+	 */
 	private TextView return_bt;
+	/**
+	 * 文件隐藏模块几大类的listview
+	 */
 	private ListView lv_privacy;
 	private PrivacySpaceAdapter adapter;
 
@@ -49,7 +59,7 @@ public class PrivacySpaceActivity extends BaseActivity {
 					int position, long id) {
 				Intent intent = new Intent(PrivacySpaceActivity.this,
 						PrivacyShowActivity.class);
-				intent.putExtra("privacy_type", position);
+				intent.putExtra("privacy_type", position);//把类型带过去
 				startActivity(intent);
 			}
 
@@ -68,21 +78,27 @@ public class PrivacySpaceActivity extends BaseActivity {
 		lv_privacy.setAdapter(adapter);
 	}
 
+	/**
+	 * 文件隐藏分类的图片
+	 */
 	int[] home_privacy_pic = new int[] { R.drawable.privacy_mainview_ic_image,
 			R.drawable.home_user_center, R.drawable.privacy_mainview_ic_video,
-			R.drawable.privacy_mainview_ic_file };
+			R.drawable.privacy_mainview_ic_file,R.drawable.privacy_mainview_ic_pwd };
 
 	static String[] home_privacy_title;
 
 	private class PrivacySpaceAdapter extends BaseAdapter {
 
 		public PrivacySpaceAdapter() {
+			/**
+			 * 加载分类
+			 */
 			home_privacy_title = getResources().getStringArray(R.array.privacy_category);
 		}
 
 		@Override
 		public int getCount() {
-			return 4;
+			return home_privacy_pic.length;
 		}
 
 		@Override
