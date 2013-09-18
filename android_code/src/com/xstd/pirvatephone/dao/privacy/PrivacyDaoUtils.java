@@ -5,29 +5,37 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class PrivacyDaoUtils {
 
-	private static final String DATABASE_NAME = "privacy_mapping.db";
+	private static final String DATABASE_NAME = "privacy.db";
 
-    private static DaoSession sDaoSession;
+	private static DaoSession sDaoSession;
 
-    public static DaoSession getDaoSession(Context context) {
+	public static DaoSession getDaoSession(Context context) {
 
-        if (sDaoSession == null) {
+		if (sDaoSession == null) {
 
-            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DATABASE_NAME, null);
-            SQLiteDatabase database = helper.getWritableDatabase();
-            DaoMaster m = new DaoMaster(database);
+			DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(
+					context, DATABASE_NAME, null);
+			SQLiteDatabase database = helper.getWritableDatabase();
+			DaoMaster m = new DaoMaster(database);
 
-            sDaoSession = m.newSession();
+			sDaoSession = m.newSession();
 
-        }
+		}
 
-        return sDaoSession;
-    }
-    
-    public static SrcToDestMappingDao getPrivacyDao(Context context) {
-    	if(sDaoSession == null) {
-    		return getDaoSession(context).getSrcToDestMappingDao();
-    	}
-    	return sDaoSession.getSrcToDestMappingDao();
-    }
+		return sDaoSession;
+	}
+
+	public static PrivacyFileDao getFileDao(Context context) {
+		if (sDaoSession == null) {
+			return getDaoSession(context).getPrivacyFileDao();
+		}
+		return sDaoSession.getPrivacyFileDao();
+	}
+
+	public static PrivacyPwdDao getPwdDao(Context context) {
+		if (sDaoSession == null) {
+			return getDaoSession(context).getPrivacyPwdDao();
+		}
+		return sDaoSession.getPrivacyPwdDao();
+	}
 }

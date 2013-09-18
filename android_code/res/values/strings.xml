@@ -790,5 +790,15 @@ QQ:903372666
     <string name="privacy_permission_denied">您不能打开此文件夹。</string>
     <string name="privacy_backfile_success_msg">文件恢复成功。</string>
     <string name="privacy_backfile_failed_msg">文件恢复成功。</string>
+    <string name="add_pwd_title">添加密码本</string>
+    <string name="add_pwd_name">名称：</string>
+    <string name="add_pwd_site">网站：</string>
+    <string name="add_pwd_msg2">选填</string>
+    <string name="add_pwd_msg1">必填</string>
+    <string name="add_pwd_number">账号：</string>
+    <string name="add_pwd_pwd">密码：</string>
+    <string name="error_empty_name">名称和密码为必选项！</string>
+    <string name="success_empty_name">添加成功！</string>
+    <string name="delete_pwd_alert">您确定要删除这条记录吗！</string>
 
 </resources>

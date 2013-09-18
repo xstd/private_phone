@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.dao.privacy.SrcToDestMapping;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
 
 public class PrivacyFileAdapter extends BaseAdapter {
 
 	private Context mContext;
-	private List<SrcToDestMapping> datas;
+	private List<PrivacyFile> datas;
+	@SuppressLint("SimpleDateFormat")
 	private DateFormat df = new SimpleDateFormat();
 
-	public PrivacyFileAdapter(Context context, List<SrcToDestMapping> result) {
+	public PrivacyFileAdapter(Context context, List<PrivacyFile> result) {
 		mContext = context;
 		datas = result;
 	}
@@ -56,7 +58,7 @@ public class PrivacyFileAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		SrcToDestMapping mapping = datas.get(position);
+		PrivacyFile mapping = datas.get(position);
 		holder.fileName.setText(mapping.getSrcName());
 		holder.lastModify.setText(df.format(mapping.getMisstime()));
 		return convertView;

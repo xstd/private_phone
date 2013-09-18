@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,8 +22,8 @@ import android.widget.TextView;
 import com.plugin.common.utils.UtilsConfig;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.privacy.PrivacyDaoUtils;
-import com.xstd.pirvatephone.dao.privacy.SrcToDestMapping;
-import com.xstd.pirvatephone.dao.privacy.SrcToDestMappingDao;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFileDao;
 import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.privatephone.adapter.ShowSDFilesAdapter;
 import com.xstd.privatephone.adapter.ShowSDFilesAdapter.FileInfo;
@@ -159,8 +160,8 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				SrcToDestMappingDao dao = PrivacyDaoUtils
-						.getPrivacyDao(ShowSDCardFilesActivity.this);
+				PrivacyFileDao dao = PrivacyDaoUtils
+						.getFileDao(ShowSDCardFilesActivity.this);
 				for (FileInfo fileInfo : willMoves) {
 					// String destName = UUID.randomUUID().toString();
 					com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
@@ -169,7 +170,8 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 					// FileUtils.copyFile(info, PRIVACY_SAPCE_PATH);
 					FileUtils.moveFile(fileInfo.absolutePath,
 							PRIVACY_SAPCE_PATH + fileInfo.name);
-					dao.insert(new SrcToDestMapping(null, fileInfo.name,
+					Log.w(TAG, privacy_type+"");
+					dao.insert(new PrivacyFile(null, fileInfo.name,
 							fileInfo.name, fileInfo.absolutePath, new Date(),
 							privacy_type));
 					FileUtils.DeleteFile(info);

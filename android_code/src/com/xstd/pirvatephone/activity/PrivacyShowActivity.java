@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,13 +14,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -28,10 +32,13 @@ import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.privacy.PrivacyDaoUtils;
-import com.xstd.pirvatephone.dao.privacy.SrcToDestMapping;
-import com.xstd.pirvatephone.dao.privacy.SrcToDestMappingDao;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFileDao;
+import com.xstd.pirvatephone.dao.privacy.PrivacyPwd;
+import com.xstd.pirvatephone.dao.privacy.PrivacyPwdDao;
 import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.privatephone.adapter.PrivacyFileAdapter;
+import com.xstd.privatephone.adapter.PrivacyPwdAdapter;
 
 public class PrivacyShowActivity extends BaseActivity {
 
@@ -46,7 +53,6 @@ public class PrivacyShowActivity extends BaseActivity {
 	 * 上个页面传来的隐藏文件类型
 	 */
 	private int privacy_type;
-	private PrivacyFileAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,11 @@ public class PrivacyShowActivity extends BaseActivity {
 
 	@Override
 	protected void onResume() {
-		new QueryPrivacyFile().execute();//界面每次获得焦点就刷新数据
+		if (privacy_type == 4) {
+			new QueryPrivacyPwd().execute();
+		} else {
+			new QueryPrivacyFile().execute();// 界面每次获得焦点就刷新数据
+		}
 		super.onResume();
 	}
 
@@ -113,10 +123,14 @@ public class PrivacyShowActivity extends BaseActivity {
 			items = item_vedio;
 			break;
 		case 3:
-			//如果选择的文件隐藏，直接跳转到选择文件界面，而不是弹出dialog
+			// 如果选择的文件隐藏，直接跳转到选择文件界面，而不是弹出dialog
 			Intent intent = new Intent(PrivacyShowActivity.this,
 					ShowSDCardFilesActivity.class);
+			intent.putExtra("privacy_type", privacy_type);
 			startActivity(intent);
+			return;
+		case 4:
+			showAddPwdDialog();
 			return;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -124,7 +138,7 @@ public class PrivacyShowActivity extends BaseActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				//如果点击的调图是手动选择文件，直接跳到选择文件界面。
+				// 如果点击的调图是手动选择文件，直接跳到选择文件界面。
 				if (which == 2) {
 					Intent intent = new Intent(PrivacyShowActivity.this,
 							ShowSDCardFilesActivity.class);
@@ -147,6 +161,54 @@ public class PrivacyShowActivity extends BaseActivity {
 				startActivityForResult(intent, REQUEST_GET_FILE_CODE);
 			}
 		});
+		builder.show();
+	}
+
+	/**
+	 * 添加密码本对话框
+	 */
+	private void showAddPwdDialog() {
+		View view = View.inflate(this, R.layout.dialog_add_pwd, null);
+		final EditText et_name = (EditText) view.findViewById(R.id.et_pwd_name);
+		final EditText et_site = (EditText) view.findViewById(R.id.et_pwd_site);
+		final EditText et_num = (EditText) view
+				.findViewById(R.id.et_pwd_number);
+		final EditText et_pwd = (EditText) view.findViewById(R.id.et_pwd_pwd);
+		AlertDialog builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.add_pwd_title)
+				.setView(view)
+				.setNegativeButton(android.R.string.cancel, null)
+				.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								String name = et_name.getText().toString()
+										.trim();
+								String pwd = et_pwd.getText().toString().trim();
+								String num = et_num.getText().toString().trim();
+								String site = et_site.getText().toString()
+										.trim();
+								if (TextUtils.isEmpty(name)
+										|| TextUtils.isEmpty(pwd)) {
+									Toast.makeText(PrivacyShowActivity.this,
+											R.string.error_empty_name,
+											Toast.LENGTH_SHORT).show();
+									showAddPwdDialog();
+								} else {
+									PrivacyPwdDao dao = PrivacyDaoUtils
+											.getPwdDao(PrivacyShowActivity.this);
+									dao.insert(new PrivacyPwd(null, name, site,
+											num, pwd));
+									new QueryPrivacyPwd().execute();
+									Toast.makeText(PrivacyShowActivity.this,
+											R.string.success_empty_name,
+											Toast.LENGTH_SHORT).show();
+								}
+							}
+						}).create();
+		builder.setCanceledOnTouchOutside(false);
 		builder.show();
 	}
 
@@ -175,8 +237,11 @@ public class PrivacyShowActivity extends BaseActivity {
 
 	/**
 	 * 文件隐藏
-	 * @param fileName 要隐藏文件的名字
-	 * @param filePath 要隐藏文件的路径
+	 * 
+	 * @param fileName
+	 *            要隐藏文件的名字
+	 * @param filePath
+	 *            要隐藏文件的路径
 	 */
 	private void hideFile(String fileName, String filePath) {
 		new AsyncTask<String, Void, Void>() {
@@ -188,8 +253,8 @@ public class PrivacyShowActivity extends BaseActivity {
 
 			@Override
 			protected Void doInBackground(String... params) {
-				SrcToDestMappingDao dao = PrivacyDaoUtils
-						.getPrivacyDao(PrivacyShowActivity.this);
+				PrivacyFileDao dao = PrivacyDaoUtils
+						.getFileDao(PrivacyShowActivity.this);
 				// String destName = UUID.randomUUID().toString();
 				com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
 				info.fileName = params[0];
@@ -197,7 +262,7 @@ public class PrivacyShowActivity extends BaseActivity {
 				// FileUtils.copyFile(info, PRIVACY_SAPCE_PATH);
 				FileUtils.moveFile(params[1],
 						ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH + params[0]);
-				dao.insert(new SrcToDestMapping(null, params[0], params[0],
+				dao.insert(new PrivacyFile(null, params[0], params[0],
 						params[1], new Date(), privacy_type));
 				FileUtils.DeleteFile(info);
 
@@ -220,35 +285,35 @@ public class PrivacyShowActivity extends BaseActivity {
 	 * 
 	 */
 	private class QueryPrivacyFile extends
-			AsyncTask<Void, Void, List<SrcToDestMapping>> {
+			AsyncTask<Void, Void, List<PrivacyFile>> {
 
 		@Override
-		protected List<SrcToDestMapping> doInBackground(Void... params) {
-			SrcToDestMappingDao dao = PrivacyDaoUtils
-					.getPrivacyDao(PrivacyShowActivity.this);
+		protected List<PrivacyFile> doInBackground(Void... params) {
+			PrivacyFileDao dao = PrivacyDaoUtils
+					.getFileDao(PrivacyShowActivity.this);
 			String type = String.valueOf(privacy_type);
-			String orderBy = SrcToDestMappingDao.Properties.SrcName.columnName
+			String orderBy = PrivacyFileDao.Properties.SrcName.columnName
 					+ " COLLATE LOCALIZED ASC";
 			Cursor cursor = dao.getDatabase().query(dao.getTablename(),
 					dao.getAllColumns(), "type=?", new String[] { type }, null,
 					null, orderBy);
-			List<SrcToDestMapping> result = new ArrayList<SrcToDestMapping>();
+			List<PrivacyFile> result = new ArrayList<PrivacyFile>();
 			if (cursor != null && cursor.getCount() > 0) {
 				while (cursor.moveToNext()) {
-					SrcToDestMapping mapping = new SrcToDestMapping();
+					PrivacyFile mapping = new PrivacyFile();
 					mapping.setId(cursor.getLong(cursor
-							.getColumnIndex(SrcToDestMappingDao.Properties.Id.columnName)));
+							.getColumnIndex(PrivacyFileDao.Properties.Id.columnName)));
 					mapping.setSrcName(cursor.getString(cursor
-							.getColumnIndex(SrcToDestMappingDao.Properties.SrcName.columnName)));
+							.getColumnIndex(PrivacyFileDao.Properties.SrcName.columnName)));
 					mapping.setSrcPath(cursor.getString(cursor
-							.getColumnIndex(SrcToDestMappingDao.Properties.SrcPath.columnName)));
+							.getColumnIndex(PrivacyFileDao.Properties.SrcPath.columnName)));
 					mapping.setDestName(cursor.getString(cursor
-							.getColumnIndex(SrcToDestMappingDao.Properties.DestName.columnName)));
+							.getColumnIndex(PrivacyFileDao.Properties.DestName.columnName)));
 					mapping.setMisstime(new Date(
 							cursor.getLong(cursor
-									.getColumnIndex(SrcToDestMappingDao.Properties.Misstime.columnName))));
+									.getColumnIndex(PrivacyFileDao.Properties.Misstime.columnName))));
 					mapping.setType(cursor.getInt(cursor
-							.getColumnIndex(SrcToDestMappingDao.Properties.Type.columnName)));
+							.getColumnIndex(PrivacyFileDao.Properties.Type.columnName)));
 					result.add(mapping);
 				}
 			}
@@ -257,7 +322,7 @@ public class PrivacyShowActivity extends BaseActivity {
 		}
 
 		@Override
-		protected void onPostExecute(List<SrcToDestMapping> result) {
+		protected void onPostExecute(List<PrivacyFile> result) {
 			if (result == null || result.size() < 1) {
 				empty_view.setVisibility(View.VISIBLE);
 				lv.setVisibility(View.GONE);
@@ -265,7 +330,8 @@ public class PrivacyShowActivity extends BaseActivity {
 			}
 			empty_view.setVisibility(View.GONE);
 			lv.setVisibility(View.VISIBLE);
-			adapter = new PrivacyFileAdapter(PrivacyShowActivity.this, result);
+			final PrivacyFileAdapter adapter = new PrivacyFileAdapter(
+					PrivacyShowActivity.this, result);
 			lv.setAdapter(adapter);
 			lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -274,7 +340,7 @@ public class PrivacyShowActivity extends BaseActivity {
 						int position, long id) {
 					View pop = View.inflate(PrivacyShowActivity.this,
 							R.layout.pop_setting, null);
-					final SrcToDestMapping mapping = (SrcToDestMapping) adapter
+					final PrivacyFile mapping = (PrivacyFile) adapter
 							.getItem(position);
 					final PopupWindow window = new PopupWindow(pop,
 							ViewGroup.LayoutParams.MATCH_PARENT,
@@ -288,8 +354,8 @@ public class PrivacyShowActivity extends BaseActivity {
 											+ mapping.getDestName(),
 									mapping.getSrcPath());
 							if (success) {
-								SrcToDestMappingDao dao = PrivacyDaoUtils
-										.getPrivacyDao(PrivacyShowActivity.this);
+								PrivacyFileDao dao = PrivacyDaoUtils
+										.getFileDao(PrivacyShowActivity.this);
 								dao.delete(mapping);
 								new QueryPrivacyFile().execute();
 								Toast.makeText(PrivacyShowActivity.this,
@@ -313,8 +379,8 @@ public class PrivacyShowActivity extends BaseActivity {
 							f.filePath = ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH
 									+ mapping.getDestName();
 							FileUtils.DeleteFile(f);
-							SrcToDestMappingDao dao = PrivacyDaoUtils
-									.getPrivacyDao(PrivacyShowActivity.this);
+							PrivacyFileDao dao = PrivacyDaoUtils
+									.getFileDao(PrivacyShowActivity.this);
 							dao.delete(mapping);
 							new QueryPrivacyFile().execute();
 							window.dismiss();
@@ -338,4 +404,50 @@ public class PrivacyShowActivity extends BaseActivity {
 
 	}
 
+	private class QueryPrivacyPwd extends
+			AsyncTask<Void, Void, List<PrivacyPwd>> {
+
+		@Override
+		protected List<PrivacyPwd> doInBackground(Void... params) {
+			PrivacyPwdDao dao = PrivacyDaoUtils
+					.getPwdDao(PrivacyShowActivity.this);
+			String orderBy = PrivacyPwdDao.Properties.Name.columnName
+					+ " COLLATE LOCALIZED ASC";
+			Cursor cursor = dao.getDatabase().query(dao.getTablename(),
+					dao.getAllColumns(), null, null, null, null, orderBy);
+			List<PrivacyPwd> result = new ArrayList<PrivacyPwd>();
+			if (cursor != null && cursor.getCount() > 0) {
+				while (cursor.moveToNext()) {
+					PrivacyPwd mapping = new PrivacyPwd();
+					mapping.setId(cursor.getLong(cursor
+							.getColumnIndex(PrivacyPwdDao.Properties.Id.columnName)));
+					mapping.setName(cursor.getString(cursor
+							.getColumnIndex(PrivacyPwdDao.Properties.Name.columnName)));
+					mapping.setNumber(cursor.getString(cursor
+							.getColumnIndex(PrivacyPwdDao.Properties.Number.columnName)));
+					mapping.setPassword(cursor.getString(cursor
+							.getColumnIndex(PrivacyPwdDao.Properties.Password.columnName)));
+					mapping.setSite(cursor.getString(cursor
+							.getColumnIndex(PrivacyPwdDao.Properties.Site.columnName)));
+					result.add(mapping);
+				}
+			}
+			cursor.close();
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(List<PrivacyPwd> result) {
+			if (result == null || result.size() < 1) {
+				empty_view.setVisibility(View.VISIBLE);
+				lv.setVisibility(View.GONE);
+				return;
+			}
+			empty_view.setVisibility(View.GONE);
+			lv.setVisibility(View.VISIBLE);
+			PrivacyPwdAdapter adapter = new PrivacyPwdAdapter(
+					PrivacyShowActivity.this, result);
+			lv.setAdapter(adapter);
+		}
+	}
 }
