@@ -5,6 +5,7 @@ import com.xstd.pirvatephone.R;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ public class ContactAdapter extends CursorAdapter {
 		String phone_number = cursor.getString(cursor.getColumnIndex("PHONE_NUMBER"));
 		String name = cursor.getString(cursor.getColumnIndex("DISPLAY_NAME"));
 		
+		if(TextUtils.isEmpty(name)){
+			name = phone_number;
+		}
 		
 		views.tv_name.setText(name);
 		views.tv_phone_num.setText(phone_number.replace(" ", "").replace("-", ""));

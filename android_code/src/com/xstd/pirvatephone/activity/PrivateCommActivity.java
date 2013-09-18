@@ -35,10 +35,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PrivateCommActivity extends BaseActivity {
 
@@ -68,6 +72,9 @@ public class PrivateCommActivity extends BaseActivity {
 	private TextView dial_tv_empty;
 	
 	/* getContentResolver().delete(Uri.parse("content://sms/"+ sms.getId()), null, null);*/
+	boolean showEdit = false;
+	private RelativeLayout contact_content;
+	private RelativeLayout contact_rl_content;
 
 
 	@Override
@@ -130,9 +137,49 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void initView() {
-
 		// 1、title栏
 		edit = (Button) findViewById(R.id.edit);
+		edit.setOnClickListener(new OnClickListener() {
+			private ListView contact_listview_up;
+
+			@Override
+			public void onClick(View v) {
+			
+				if(currIndex == 0){
+					
+				}else if(currIndex == 1){
+					
+				}else if(currIndex == 2){
+					
+					Tools.logSh("currIndex=="+currIndex);
+					if(contact_content==null){
+						contact_content = (RelativeLayout) findViewById(R.id.contact_edit_content);
+						contact_rl_content.setVisibility(View.VISIBLE);
+						showEdit = true;//显示编辑栏。
+						
+						contact_listview_up = (ListView) findViewById(R.id.contact_edit_list_gone);
+						//展示数据
+						getContact(contact_listview_up,contact_empty);
+						Tools.logSh("进入编辑模式");
+					}else{
+						if(showEdit){
+							contact_content.setVisibility(View.GONE);
+							contact_rl_content.setVisibility(View.VISIBLE);
+							Tools.logSh("退出编辑模式");
+						}else{
+							contact_content.setVisibility(View.VISIBLE);
+							contact_rl_content.setVisibility(View.GONE);
+							getContact(contact_listview_up,contact_empty);
+							Tools.logSh("再次进入编辑模式2");
+						}
+						showEdit = !showEdit;
+					}
+					
+				}
+			}
+		});
+		
+		
 		ib_back = (Button) findViewById(R.id.ib_back);
 
 		ib_back.setOnClickListener(new OnClickListener() {
@@ -219,7 +266,8 @@ public class PrivateCommActivity extends BaseActivity {
 			contact_lv_cont = (ListView) findViewById(R.id.contact_lv_cont);
 			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
 			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
-
+			contact_rl_content = (RelativeLayout) findViewById(R.id.contact_rl_content);
+			
 			contact_add_contacts.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -231,7 +279,7 @@ public class PrivateCommActivity extends BaseActivity {
 			});
 
 			// 从我们的数据库读取隐私联系人，展示到页面上
-			getContact();
+			getContact(contact_lv_cont,contact_empty);
 		}
 	}
 
@@ -275,7 +323,7 @@ public class PrivateCommActivity extends BaseActivity {
 	/**
 	 * 获取我们数据库联系人
 	 */
-	private void getContact() {
+	private void getContact(ListView lv,TextView tv) {
 
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(getApplicationContext());
@@ -284,12 +332,21 @@ public class PrivateCommActivity extends BaseActivity {
 		contactCursor = database.query("CONTACT_INFO", null, null, null, null, null,
 				null);
 		if (contactCursor.getCount() == 0) {
-			contact_lv_cont.setEmptyView(contact_empty);
+			lv.setEmptyView(tv);
 		} else {
 			// 通知数据获取完成
 			Tools.logSh("cursor的长度为："+contactCursor.getCount());
-			contact_lv_cont.setAdapter(new ContactAdapter(getApplicationContext(),
+			lv.setAdapter(new ContactAdapter(getApplicationContext(),
 					contactCursor));
+			lv.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					//讲电话号码传递给系统拨号服务，开启电话
+					Toast.makeText(getApplicationContext(), "开启电话"+position, Toast.LENGTH_SHORT).show();
+				}
+			});
 		}
 	}
 

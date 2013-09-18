@@ -761,6 +761,7 @@ QQ:903372666
     <string name="private_comm_title_privatesms">隐私短信</string>
     <string name="private_comm_select_all">全选</string>
     <string name="private_comm_select_contact">添加隐私联系人</string>
+    <string name="private_comm_unselect_contact">删除隐私联系人</string>
     <string name="private_comm_select_privatecontact">选择隐私联系人</string>
     <string name="private_comm_delete_comm">删除通话记录</string>
     <string name="private_comm_recover_contact">恢复</string>

@@ -28,7 +28,7 @@
         android:id="@+id/btn_dail"
         android:layout_width="35dip"
         android:layout_height="35dip"
-        android:layout_toLeftOf="@id/btn_check"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@drawable/private_dial_normal"
         />
