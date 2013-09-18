@@ -54,6 +54,27 @@
             android:text="@string/private_comm_delete_comm"
             android:textColor="@color/sms_text_content_unseleted" />
     </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/dial_ll_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/contact_rl_select"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/dial_lv_cont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             />
+
+        <TextView
+            android:id="@+id/dial_tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/private_comm_select_privatecontact"
+            android:textColor="@color/sms_text_content_unseleted" />
+    </LinearLayout>
 
 
 </RelativeLayout>

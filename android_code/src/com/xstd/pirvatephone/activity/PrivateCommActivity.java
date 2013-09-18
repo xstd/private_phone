@@ -6,8 +6,11 @@ import java.util.List;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.MyViewPagerAdapter;
+import com.xstd.privatephone.adapter.PhoneRecordAdapter;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
@@ -56,6 +59,10 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private TextView contact_empty;
 	private Cursor cursor;
+	private ListView dial_lv_cont;
+	
+	/* getContentResolver().delete(Uri.parse("content://sms/"+ sms.getId()), null, null);*/
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -189,9 +196,9 @@ public class PrivateCommActivity extends BaseActivity {
 			return;
 		}
 		if (currIndex == dialPageNum) {
+			dial_lv_cont = (ListView) findViewById(R.id.dial_lv_cont);
 			
-			
-			
+			getDialRecord();
 			
 			return;
 		}
@@ -214,6 +221,24 @@ public class PrivateCommActivity extends BaseActivity {
 			// 从我们的数据库读取隐私联系人，展示到页面上
 			getContact();
 
+		}
+	}
+
+	private void getDialRecord() {
+		// TODO Auto-generated method stub
+		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils.getPhoneRecordDao(getApplicationContext());
+		SQLiteDatabase database = phoneRecordDao.getDatabase();
+		
+		Cursor recordCursor = database.query("PHONE_RECORD", null, null, null, null, null,
+				null);
+		
+		if(recordCursor.getCount() == 0){
+			
+			
+		}else{
+			Tools.logSh("cursor的长度为："+recordCursor.getCount());
+			dial_lv_cont.setAdapter(new PhoneRecordAdapter(getApplicationContext(),
+					recordCursor));
 		}
 	}
 

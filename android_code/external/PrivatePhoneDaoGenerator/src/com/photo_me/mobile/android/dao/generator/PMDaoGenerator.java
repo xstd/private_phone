@@ -39,16 +39,22 @@ public class PMDaoGenerator {
         }*/
         
         
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.phone");
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.sms");
 
-        Entity contactNote = schema.addEntity("PhoneRecord");
-        contactNote.addIdProperty();
-        contactNote.addLongProperty("phone_number");
-        contactNote.addLongProperty("start_time");
-        contactNote.addLongProperty("duration");
-        contactNote.addIntProperty("type");
-        contactNote.addStringProperty("name");
-
+        Entity smsNote = schema.addEntity("SmsRecord");
+        smsNote.addIdProperty();
+        smsNote.addStringProperty("phone_number");
+        smsNote.addLongProperty("lasted_contact");
+        smsNote.addStringProperty("lasted_data");
+        smsNote.addIntProperty("count");
+        
+        Entity smsNote2 = schema.addEntity("SmsDetail");
+        smsNote2.addIdProperty();
+        smsNote2.addStringProperty("phone_number");
+        smsNote2.addLongProperty("date");
+        smsNote2.addStringProperty("data");
+        smsNote2.addIntProperty("thread_id");
+        
         try {
             new DaoGenerator().generateAll(schema, "../../src");
         } catch (Exception e) {

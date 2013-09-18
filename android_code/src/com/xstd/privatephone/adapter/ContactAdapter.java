@@ -23,13 +23,13 @@ public class ContactAdapter extends CursorAdapter {
 	public void bindView(View view, Context arg1, Cursor cursor) {
 		ViewHold views = (ViewHold) view.getTag();
 		
-		int id = cursor.getInt(0);
-		long phone_number = cursor.getLong(1);
-		String name = cursor.getString(2);
+		int id = cursor.getInt(cursor.getColumnIndex("_id"));
+		String phone_number = cursor.getString(cursor.getColumnIndex("PHONE_NUMBER"));
+		String name = cursor.getString(cursor.getColumnIndex("DISPLAY_NAME"));
 		
 		
 		views.tv_name.setText(name);
-		views.tv_phone_num.setText(phone_number+"");
+		views.tv_phone_num.setText(phone_number.replace(" ", "").replace("-", ""));
 		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 		
 	}
