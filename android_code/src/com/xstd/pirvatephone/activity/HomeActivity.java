@@ -60,18 +60,21 @@ public class HomeActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (position == 0) {
-					Intent intent = new Intent(HomeActivity.this,
-							PrivateCommActivity.class);
-					startActivity(intent);
-					return;
-				}
-				if (position == 2) {
-					Intent intent = new Intent(HomeActivity.this,
-							PrivacySpaceActivity.class);
-					startActivity(intent);
-					return;
-				}
+                Intent intent = null;
+                switch (position) {
+                    case 0:
+                        intent = new Intent(HomeActivity.this, PrivateCommActivity.class);
+                        startActivity(intent);
+                        return;
+                    case 2:
+                        intent = new Intent(HomeActivity.this, PrivacySpaceActivity.class);
+                        startActivity(intent);
+                        return;
+                    case 4:
+                        intent = new Intent(HomeActivity.this, ServiceActivity.class);
+                        startActivity(intent);
+                        return;
+                }
 
 			}
 		});

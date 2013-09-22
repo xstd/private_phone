@@ -59,6 +59,7 @@
             android:name="com.xstd.pirvatephone.activity.HandInputActivity"
             android:label="@string/title_activity_hand_input" >
         </activity>
+        <activity android:name=".activity.ServiceActivity"/>
     </application>
     
 </manifest>
