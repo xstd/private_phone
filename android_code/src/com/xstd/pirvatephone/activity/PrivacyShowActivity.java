@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -265,7 +263,6 @@ public class PrivacyShowActivity extends BaseActivity {
 				dao.insert(new PrivacyFile(null, params[0], params[0],
 						params[1], new Date(), privacy_type));
 				FileUtils.DeleteFile(info);
-
 				return null;
 			}
 
@@ -349,25 +346,40 @@ public class PrivacyShowActivity extends BaseActivity {
 					btn1.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							boolean success = FileUtils.moveFile(
-									ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH
-											+ mapping.getDestName(),
-									mapping.getSrcPath());
-							if (success) {
-								PrivacyFileDao dao = PrivacyDaoUtils
-										.getFileDao(PrivacyShowActivity.this);
-								dao.delete(mapping);
-								new QueryPrivacyFile().execute();
-								Toast.makeText(PrivacyShowActivity.this,
-										R.string.privacy_backfile_success_msg,
-										Toast.LENGTH_SHORT).show();
 
-							} else {
-								Toast.makeText(PrivacyShowActivity.this,
-										R.string.privacy_backfile_failed_msg,
-										Toast.LENGTH_SHORT).show();
-							}
-							window.dismiss();
+							new AsyncTask<Void, Void, Boolean>() {
+
+								@Override
+								protected Boolean doInBackground(Void... params) {
+									return FileUtils
+											.moveFile(
+													ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH
+															+ mapping
+																	.getDestName(),
+													mapping.getSrcPath());
+								}
+
+								protected void onPostExecute(Boolean result) {
+									if (result) {
+										PrivacyFileDao dao = PrivacyDaoUtils
+												.getFileDao(PrivacyShowActivity.this);
+										dao.delete(mapping);
+										new QueryPrivacyFile().execute();
+										Toast.makeText(
+												PrivacyShowActivity.this,
+												R.string.privacy_backfile_success_msg,
+												Toast.LENGTH_SHORT).show();
+									} else {
+										Toast.makeText(
+												PrivacyShowActivity.this,
+												R.string.privacy_backfile_failed_msg,
+												Toast.LENGTH_SHORT).show();
+									}
+									FileUtils.updateSystemFile(PrivacyShowActivity.this);
+									window.dismiss();
+								};
+
+							}.execute();
 						}
 					});
 					Button btn2 = (Button) pop.findViewById(R.id.btn2);
@@ -400,8 +412,8 @@ public class PrivacyShowActivity extends BaseActivity {
 					window.showAsDropDown(view);
 				}
 			});
+			FileUtils.updateSystemFile(PrivacyShowActivity.this);
 		}
-
 	}
 
 	private class QueryPrivacyPwd extends
