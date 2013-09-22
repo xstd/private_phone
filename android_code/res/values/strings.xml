@@ -801,4 +801,10 @@ QQ:903372666
     <string name="success_empty_name">添加成功！</string>
     <string name="delete_pwd_alert">您确定要删除这条记录吗！</string>
 
+    <!-- 服务大厅 -->
+    <string name="service_title">服务大厅</string>
+    <string name="service_dailiao">代聊服务</string>
+    <string name="service_jipiao">机票凭据服务</string>
+    <string name="service_liwu">代送礼物</string>
+
 </resources>
