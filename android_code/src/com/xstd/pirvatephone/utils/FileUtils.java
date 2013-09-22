@@ -304,6 +304,10 @@ public class FileUtils {
 		return ret;
 	}
 
+	/**
+	 * 通知系统sd卡加载，更新文件
+	 * @param ctx
+	 */
 	public static void updateSystemFile(Context ctx) {
 		ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri
 				.parse("file://" + Environment.getExternalStorageDirectory())));
