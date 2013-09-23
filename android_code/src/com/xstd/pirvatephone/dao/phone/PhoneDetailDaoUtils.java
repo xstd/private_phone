@@ -3,9 +3,9 @@ package com.xstd.pirvatephone.dao.phone;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-public class PhoneRecordDaoUtils {
+public class PhoneDetailDaoUtils {
 
-	private static final String DATABASE_NAME = "phone_record.db";
+	private static final String DATABASE_NAME = "phone_detail.db";
 
     private static DaoSession sDaoSession;
 
@@ -24,10 +24,10 @@ public class PhoneRecordDaoUtils {
         return sDaoSession;
     }
     
-    public static PhoneRecordDao getPhoneRecordDao(Context context) {
+    public static PhoneDetailDao getPhoneDetailDao(Context context) {
     	if(sDaoSession == null) {
-    		return getDaoSession(context).getPhoneRecordDao();
+    		return getDaoSession(context).getPhoneDetailDao();
     	}
-    	return sDaoSession.getPhoneRecordDao();
+    	return sDaoSession.getPhoneDetailDao();
     }
 }

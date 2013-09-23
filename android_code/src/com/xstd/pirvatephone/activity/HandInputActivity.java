@@ -4,8 +4,8 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfo;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 
 import android.os.Bundle;
 import android.app.Activity;

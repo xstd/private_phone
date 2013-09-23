@@ -30,11 +30,10 @@ public class PhoneRecordAdapter extends CursorAdapter {
 	public void bindView(View view, Context arg1, Cursor cursor) {
 		ViewHold views = (ViewHold) view.getTag();
 		
-		Integer id = cursor.getInt(cursor.getColumnIndex("_id"));
+		int count = cursor.getInt(cursor.getColumnIndex("contact_times"));
+		int type = cursor.getInt(cursor.getColumnIndex("type"));
 		String phone_number = cursor.getString(cursor.getColumnIndex("PHONE_NUMBER"));
-		Long date = cursor.getLong(cursor.getColumnIndex("START_TIME"));
-		Long duration = cursor.getLong(cursor.getColumnIndex("DURATION"));
-		int type = cursor.getInt(cursor.getColumnIndex("TYPE"));
+		Long date = cursor.getLong(cursor.getColumnIndex("date"));
 		String name = cursor.getString(cursor.getColumnIndex("NAME"));
 		
 		phoneType = "";
@@ -48,7 +47,6 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		}
 		
 		
-		
 		if(name==null || name==""){
 			views.tv_phone_num.setText(phone_number);
 		}else{
@@ -57,7 +55,12 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		
 		views.inorout.setBackgroundResource(picId);
 		views.tv_type.setText(phoneType);
-		views.tv_count.setText("(10)");
+		if(count!=0){
+			views.tv_count.setText("("+count+")");
+		}else{
+			views.tv_count.setText("(0)");
+		}
+		
 		views.tv_date.setText(new Date(date).toLocaleString());
 		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 		

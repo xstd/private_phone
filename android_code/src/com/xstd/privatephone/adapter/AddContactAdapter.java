@@ -26,6 +26,10 @@ public class AddContactAdapter extends BaseAdapter {
 		mContactsNumber = contactsNumber;
 
 	}
+	
+	public void updateUI(){
+		notifyDataSetChanged();
+	}
 
 	public int getCount() {
 		// 设置绘制数量

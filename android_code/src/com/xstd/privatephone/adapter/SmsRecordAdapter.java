@@ -8,6 +8,8 @@ import com.xstd.privatephone.tools.Tools;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,14 @@ public class SmsRecordAdapter extends CursorAdapter {
 	private static Context mContext;
 	private String phoneType;
 	private int picId;
+	
+	//联系人字段
+		private String[] CONTACT_PROJECTION = new String[]{
+				PhoneLookup._ID,
+				PhoneLookup.DISPLAY_NAME
+		};
 
+		private static final int DISPLAY_NAME_COLUMN_INDEX = 1;
 	public SmsRecordAdapter(Context context, Cursor c) {
 		super(context, c);
 		mContext = context;
@@ -32,17 +41,44 @@ public class SmsRecordAdapter extends CursorAdapter {
 		ViewHold views = (ViewHold) view.getTag();
 		
 		String phone_number = cursor.getString(cursor.getColumnIndex("PHONE_NUMBER"));
-		int count = cursor.getInt(cursor.getColumnIndex("COUNT"));
+		int msg_count = cursor.getInt(cursor.getColumnIndex("COUNT"));
 		Long lastedContact = cursor.getLong(cursor.getColumnIndex("LASTED_CONTACT"));
 		String lasted_data = cursor.getString(cursor.getColumnIndex("LASTED_DATA"));
 		
-		Tools.logSh(phone_number+"::"+count+"::"+lastedContact+"::"+lasted_data);
+		//根据电话号码  查询联系人信息
+		String name = null;
+		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone_number));
+		Cursor contactCursor = mContext.getContentResolver().query(uri, CONTACT_PROJECTION, null, null, null);
+		if(contactCursor.moveToFirst()){
+			//查询到了联系人
+			name = contactCursor.getString(DISPLAY_NAME_COLUMN_INDEX);
+		}
+		contactCursor.close();
+		
+		//适配数据到控件
+		
+		if(name != null){
+			//查询到了联系人
+			if(msg_count > 1){
+				views.sms_tv_count.setText(name + "("+ msg_count +")");
+			} else {
+				views.sms_tv_count.setText(name);
+			}
+			
+		} else {
+			//没有查询到联系人
+			if(msg_count > 1){
+				views.sms_tv_count.setText(phone_number + "("+ msg_count +")");
+			} else {
+				views.sms_tv_count.setText(phone_number);
+			}
+		}
+		
 		
 		views.isopen.setBackgroundResource(R.drawable.private_sms_read);
 		views.tv_phone_num.setText(phone_number);
 		views.sms_tv_date.setText(new Date(lastedContact).toLocaleString());
 		views.sms_tv_content.setText(lasted_data);
-		views.sms_tv_count.setText(count+"");
 		
 	}
 
