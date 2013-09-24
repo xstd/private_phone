@@ -70,6 +70,10 @@ public class HomeActivity extends BaseActivity {
                         intent = new Intent(HomeActivity.this, PrivacySpaceActivity.class);
                         startActivity(intent);
                         return;
+                    case 3:
+                    	intent = new Intent(HomeActivity.this, SimulaCommActivity.class);
+                        startActivity(intent);
+                    	return;
                     case 4:
                         intent = new Intent(HomeActivity.this, ServiceActivity.class);
                         startActivity(intent);

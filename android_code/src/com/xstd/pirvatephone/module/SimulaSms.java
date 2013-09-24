@@ -14,7 +14,7 @@ public class SimulaSms extends SimulaComm {
 	 * 短信模拟中的短信内容
 	 */
 	private String content;
-	private SimulaComm instance;
+	private static SimulaComm instance;
 
 	public String getContent() {
 		return content;
@@ -25,15 +25,15 @@ public class SimulaSms extends SimulaComm {
 	}
 
 	@Override
-	public List<SimulaComm> getSimulaCommByType(int type) {
+	public List<SimulaComm> getSimulaCommByType() {
 		return null;
 	}
 
-	@Override
-	public synchronized SimulaComm getInstance(Context ctx) {
+	public static synchronized SimulaComm getInstance(Context ctx) {
 		if (instance == null) {
 			instance = new SimulaSms();
 		}
+		mCtx = ctx;
 		return instance;
 	}
 

@@ -10,18 +10,18 @@ public class SimulaPhone extends SimulaComm {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private SimulaComm instance;
+	private static SimulaComm instance;
 
 	@Override
-	public List<SimulaComm> getSimulaCommByType(int type) {
+	public List<SimulaComm> getSimulaCommByType() {
 		return null;
 	}
 
-	@Override
-	public synchronized SimulaComm getInstance(Context ctx) {
+	public static synchronized SimulaComm getInstance(Context ctx) {
 		if (instance == null) {
 			instance = new SimulaPhone();
 		}
+		mCtx = ctx;
 		return instance;
 	}
 

@@ -65,6 +65,10 @@
         </activity>
 
         <activity android:name=".activity.ServiceActivity"/>
+        
+        <activity android:name=".activity.SimulaCommActivity"></activity>
+        <activity android:name=".activity.AddSimulaSmsActivity"></activity>
+        <activity android:name=".activity.AddSimulaPhoneActivity"></activity>
     </application>
     
 </manifest>

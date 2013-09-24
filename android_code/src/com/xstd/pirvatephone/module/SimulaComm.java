@@ -22,9 +22,7 @@ public abstract class SimulaComm implements Serializable {
 	 * 将来的某一时刻
 	 */
 	private Date futuretime;
-	protected Context mCtx;
-
-	public abstract SimulaComm getInstance(Context ctx);
+	protected static Context mCtx;
 
 	protected SimulaComm() {
 	}
@@ -51,6 +49,6 @@ public abstract class SimulaComm implements Serializable {
 	 * @param type
 	 * @return
 	 */
-	public abstract List<SimulaComm> getSimulaCommByType(int type);
+	public abstract List<SimulaComm> getSimulaCommByType();
 
 }
