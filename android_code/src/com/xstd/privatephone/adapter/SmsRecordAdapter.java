@@ -85,7 +85,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context arg0, Cursor arg1, ViewGroup arg2) {
 		// TODO Auto-generated method stub
-		View view = LayoutInflater.from(mContext).inflate(R.layout.private_smsrecord_item, null);
+		View view = LayoutInflater.from(mContext).inflate(R.layout.private_sms_record_item, null);
 		ViewHold hold = new ViewHold();
 		
 		hold.isopen = (ImageView) view.findViewById(R.id.sms_iv_inorout);

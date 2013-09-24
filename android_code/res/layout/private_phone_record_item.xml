@@ -47,6 +47,7 @@
         android:id="@+id/dial_btn_dail"
         android:layout_width="35dip"
         android:layout_height="35dip"
+        android:focusable="false"
          android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@drawable/private_dial_normal"

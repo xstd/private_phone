@@ -33,6 +33,7 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -63,8 +64,11 @@
             android:name="com.xstd.pirvatephone.activity.SmsDetailActivity"
             android:label="@string/title_activity_sms_detail" >
         </activity>
-
-        <activity android:name=".activity.ServiceActivity"/>
+        <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.PhoneDetailActivity"
+            android:label="@string/title_activity_phone_detail" >
+        </activity>
     </application>
-    
+
 </manifest>

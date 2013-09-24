@@ -358,8 +358,6 @@ public class ContactActivity extends Activity {
 		 */
 
 		for (int i = 0; i < selectPhones.length; i++) {
-			Tools.logSh("i====="+i);
-			Tools.logSh("selectPhones====="+selectPhones[0]+selectPhones[1]);
 			String phone = selectPhones[i];
 
 			Tools.logSh("phone====="+phone);
@@ -432,7 +430,7 @@ public class ContactActivity extends Activity {
 					null, "address=?", new String[] { phone }, null);
 			if (detailCursor != null) {
 				while (detailCursor.moveToNext()) {
-
+					detail = new SmsDetail();
 					// thread_id
 					Integer type = detailCursor.getInt(detailCursor
 							.getColumnIndex("type"));
@@ -446,15 +444,13 @@ public class ContactActivity extends Activity {
 					String body = detailCursor.getString(detailCursor
 							.getColumnIndex("body"));
 
-					detail = new SmsDetail();
-
 					detail.setThread_id(type);
 					detail.setPhone_number(phone_number);
 					detail.setDate(date);
 					detail.setData(body);
 
 
-					Tools.logSh("thread_id" + type + "::" + "phone_number"
+					Tools.logSh("短信详细"+"thread_id" + type + "::" + "phone_number"
 							+ phone_number + "::" + "date" + date + "::"
 							+ "body" + body);
 					smsdetailDao.insert(detail);

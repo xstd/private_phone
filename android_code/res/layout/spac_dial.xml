@@ -12,12 +12,13 @@
         android:paddingBottom="8dip"
         android:paddingTop="8dip" >
 
-        <ImageButton
+        <Button
             android:id="@+id/iv_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dip"
+            android:focusable="false"
             android:background="@drawable/shield_checkbox_alert_unchecked" />
 
         <TextView
@@ -31,14 +32,6 @@
     </RelativeLayout>
     
     <LinearLayout
-        android:id="@+id/dial_ll_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/dial_ll_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +44,7 @@
             android:id="@+id/bt_delete_dial"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="false"
             android:text="@string/private_comm_delete_comm"
             android:textColor="@color/sms_text_content_unseleted" />
     </LinearLayout>
