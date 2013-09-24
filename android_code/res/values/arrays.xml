@@ -422,5 +422,10 @@
         <item>自动扫描视频</item>
         <item>手动选择视频</item>
     </string-array>
+    <string-array name="privacy_pwd_setting">
+        <item>查看</item>
+        <item>编辑</item>
+        <item>删除</item>
+    </string-array>
 
 </resources>

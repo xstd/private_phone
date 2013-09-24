@@ -12,10 +12,14 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.text.TextUtils;
+
 import com.plugin.common.utils.files.FileInfo;
 import com.plugin.common.utils.files.FileUtil;
-
-import android.text.TextUtils;
 
 public class FileUtils {
 
@@ -298,6 +302,16 @@ public class FileUtils {
 			}
 		}
 		return ret;
+	}
+
+	/**
+	 * 通知系统sd卡加载，更新文件
+	 * @param ctx
+	 */
+	public static void updateSystemFile(Context ctx) {
+		ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri
+				.parse("file://" + Environment.getExternalStorageDirectory())));
+
 	}
 
 }

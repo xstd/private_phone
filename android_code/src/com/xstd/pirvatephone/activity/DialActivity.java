@@ -1,25 +1,23 @@
 package com.xstd.pirvatephone.activity;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Pattern;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.plugin.common.utils.StringUtils;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.setting.SettingManager;
 import com.xstd.privatephone.tools.Toasts;
+
+import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA. User: michael Date: 13-9-9 Time: PM3:11 To change
@@ -60,8 +58,23 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
     @ViewMapping(ID = R.id.b0)
     public ImageView mB0;
 
+    @ViewMapping(ID = R.id.star)
+    public ImageView mBStar;
+
+    @ViewMapping(ID = R.id.bj)
+    public ImageView mBj;
+
     @ViewMapping(ID = R.id.del)
     public ImageView mDel;
+
+    @ViewMapping(ID = R.id.dial)
+    public ImageView mDial;
+
+    @ViewMapping(ID = R.id.tabCall)
+    public Button mCallBtn;
+
+    @ViewMapping(ID = R.id.tabContact)
+    public Button mContactBtn;
 
     private String mNumberStr = "";
 
@@ -89,6 +102,11 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
         mB9.setOnClickListener(this);
         mB0.setOnClickListener(this);
         mDel.setOnClickListener(this);
+        mDial.setOnClickListener(this);
+        mCallBtn.setOnClickListener(this);
+        mContactBtn.setOnClickListener(this);
+        mBStar.setOnClickListener(this);
+        mBj.setOnClickListener(this);
     }
 
     private void checkEnterPassword() {
@@ -151,48 +169,73 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        int curPressData = -1;
+        String curPressData = "-1";
         switch (view.getId()) {
             case R.id.b0:
-                curPressData = 0;
+                curPressData = "0";
                 break;
             case R.id.b1:
-                curPressData = 1;
+                curPressData = "1";
                 break;
             case R.id.b2:
-                curPressData = 2;
+                curPressData = "2";
                 break;
             case R.id.b3:
-                curPressData = 3;
+                curPressData = "3";
                 break;
             case R.id.b4:
-                curPressData = 4;
+                curPressData = "4";
                 break;
             case R.id.b5:
-                curPressData = 5;
+                curPressData = "5";
                 break;
             case R.id.b6:
-                curPressData = 6;
+                curPressData = "6";
                 break;
             case R.id.b7:
-                curPressData = 7;
+                curPressData = "7";
                 break;
             case R.id.b8:
-                curPressData = 8;
+                curPressData = "8";
                 break;
             case R.id.b9:
-                curPressData = 9;
+                curPressData = "9";
+                break;
+            case R.id.star:
+                curPressData = "*";
+                break;
+            case R.id.bj:
+                curPressData = "#";
                 break;
             case R.id.del:
-                curPressData = -2;
+                curPressData = "-2";
                 break;
+            case R.id.dial:
+                if (!TextUtils.isEmpty(mNumberStr)) {
+                    Intent myIntentDial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + mNumberStr));
+                    startActivity(myIntentDial);
+                    return;
+                }
+                break;
+            case R.id.tabCall:
+                Intent localIntent3 = new Intent("android.intent.action.CALL_BUTTON");
+                localIntent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(localIntent3);
+                finish();
+                return;
+            case R.id.tabContact:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(ContactsContract.Contacts.CONTENT_URI);
+                startActivity(intent);
+                return;
         }
 
-        if (curPressData >= 0) {
+        if (!curPressData.equals("-1") && !curPressData.equals("-2")) {
             mNumberStr = mNumberStr + curPressData;
-        } else if (curPressData == -1) {
+        } else if (curPressData.equals("-1")) {
             //TODO:
-        } else if (curPressData == -2) {
+        } else if (curPressData.equals("-2")) {
             //del action
             if (mNumberStr.length() > 0) {
                 mNumberStr = mNumberStr.substring(0, mNumberStr.length() - 1);

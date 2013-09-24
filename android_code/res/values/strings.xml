@@ -799,7 +799,20 @@ QQ:903372666
     <string name="add_pwd_pwd">密码：</string>
     <string name="error_empty_name">名称和密码为必选项！</string>
     <string name="success_empty_name">添加成功！</string>
+    <string name="success_modify">修改成功！</string>
     <string name="delete_pwd_alert">您确定要删除这条记录吗！</string>
     <string name="title_activity_sms_detail">SmsDetailActivity</string>
+
+    <!-- 服务大厅 -->
+    <string name="service_title">服务大厅</string>
+    <string name="service_dailiao">代聊服务</string>
+    <string name="service_jipiao">机票凭据服务</string>
+    <string name="service_liwu">代送礼物</string>
+    
+    <!-- 模拟通讯 -->
+    <string name="simula_comm_sms_title">模拟短信</string>
+    <string name="simula_comm_phone_title">模拟通话</string>
+    <string name="simula_add_sms">新增模拟短信</string>
+    <string name="simula_add_phone">新增模拟通话</string>
 
 </resources>
