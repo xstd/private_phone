@@ -59,16 +59,12 @@
             android:name="com.xstd.pirvatephone.activity.HandInputActivity"
             android:label="@string/title_activity_hand_input" >
         </activity>
-<<<<<<< HEAD
         <activity
             android:name="com.xstd.pirvatephone.activity.SmsDetailActivity"
             android:label="@string/title_activity_sms_detail" >
         </activity>
-    </application>
 
-=======
         <activity android:name=".activity.ServiceActivity"/>
     </application>
     
->>>>>>> cbac3c1946faccae702966f4e8e133fbb3997bf4
 </manifest>
