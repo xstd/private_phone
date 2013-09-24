@@ -279,7 +279,7 @@ public class PrivateCommActivity extends BaseActivity {
 			dial_lv_cont = (ListView) findViewById(R.id.dial_lv_cont);
 			dial_tv_empty = (TextView) findViewById(R.id.dial_tv_empty);
 
-			getPhoneDialRecord();
+			getPhoneRecord();
 
 			return;
 		}
@@ -340,7 +340,7 @@ public class PrivateCommActivity extends BaseActivity {
 		});
 	}
 
-	private void getPhoneDialRecord() {
+	private void getPhoneRecord() {
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(getApplicationContext());
 		SQLiteDatabase database = phoneRecordDao.getDatabase();

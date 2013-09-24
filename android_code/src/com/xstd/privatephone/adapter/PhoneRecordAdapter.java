@@ -32,9 +32,9 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		
 		int count = cursor.getInt(cursor.getColumnIndex("contact_times"));
 		int type = cursor.getInt(cursor.getColumnIndex("type"));
-		String phone_number = cursor.getString(cursor.getColumnIndex("PHONE_NUMBER"));
+		String phone_number = cursor.getString(cursor.getColumnIndex("phone_number"));
 		Long date = cursor.getLong(cursor.getColumnIndex("date"));
-		String name = cursor.getString(cursor.getColumnIndex("NAME"));
+		String name = cursor.getString(cursor.getColumnIndex("name"));
 		
 		phoneType = "";
 		picId = 0; 

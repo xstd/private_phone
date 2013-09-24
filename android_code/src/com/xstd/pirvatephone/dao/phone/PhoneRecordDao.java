@@ -26,7 +26,7 @@ public class PhoneRecordDao extends AbstractDao<PhoneRecord, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Phone_number = new Property(1, String.class, "phone_number", false, "PHONE_NUMBER");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Body = new Property(3, String.class, "body", false, "BODY");
+        public final static Property Type = new Property(3, Integer.class, "type", false, "TYPE");
         public final static Property Date = new Property(4, Long.class, "date", false, "DATE");
         public final static Property Contact_times = new Property(5, Integer.class, "contact_times", false, "CONTACT_TIMES");
     };
@@ -47,7 +47,7 @@ public class PhoneRecordDao extends AbstractDao<PhoneRecord, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'PHONE_NUMBER' TEXT," + // 1: phone_number
                 "'NAME' TEXT," + // 2: name
-                "'BODY' TEXT," + // 3: body
+                "'TYPE' INTEGER," + // 3: type
                 "'DATE' INTEGER," + // 4: date
                 "'CONTACT_TIMES' INTEGER);"); // 5: contact_times
     }
@@ -78,9 +78,9 @@ public class PhoneRecordDao extends AbstractDao<PhoneRecord, Long> {
             stmt.bindString(3, name);
         }
  
-        String body = entity.getBody();
-        if (body != null) {
-            stmt.bindString(4, body);
+        Integer type = entity.getType();
+        if (type != null) {
+            stmt.bindLong(4, type);
         }
  
         Long date = entity.getDate();
@@ -107,7 +107,7 @@ public class PhoneRecordDao extends AbstractDao<PhoneRecord, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // phone_number
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // body
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // type
             cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // date
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // contact_times
         );
@@ -120,7 +120,7 @@ public class PhoneRecordDao extends AbstractDao<PhoneRecord, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPhone_number(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setBody(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setType(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setDate(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
         entity.setContact_times(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
      }
@@ -149,4 +149,3 @@ public class PhoneRecordDao extends AbstractDao<PhoneRecord, Long> {
     }
     
 }
-

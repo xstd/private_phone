@@ -13,7 +13,7 @@ public class PhoneRecord implements Serializable {
     private Long id;
     private String phone_number;
     private String name;
-    private String body;
+    private Integer type;
     private Long date;
     private Integer contact_times;
 
@@ -24,11 +24,11 @@ public class PhoneRecord implements Serializable {
         this.id = id;
     }
 
-    public PhoneRecord(Long id, String phone_number, String name, String body, Long date, Integer contact_times) {
+    public PhoneRecord(Long id, String phone_number, String name, Integer type, Long date, Integer contact_times) {
         this.id = id;
         this.phone_number = phone_number;
         this.name = name;
-        this.body = body;
+        this.type = type;
         this.date = date;
         this.contact_times = contact_times;
     }
@@ -57,12 +57,12 @@ public class PhoneRecord implements Serializable {
         this.name = name;
     }
 
-    public String getBody() {
-        return body;
+    public Integer getType() {
+        return type;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Long getDate() {
@@ -83,7 +83,7 @@ public class PhoneRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "[PhoneRecord]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "name = " + name + ", " + "body = " + body + ", " + "date = " + date + ", " + "contact_times = " + contact_times + "\r\n";
+        return "[PhoneRecord]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "name = " + name + ", " + "type = " + type + ", " + "date = " + date + ", " + "contact_times = " + contact_times + "\r\n";
     }
 
 }

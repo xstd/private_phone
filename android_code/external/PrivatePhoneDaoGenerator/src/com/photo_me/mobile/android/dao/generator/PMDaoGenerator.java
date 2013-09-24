@@ -14,7 +14,7 @@ public class PMDaoGenerator {
     
     
     private static void generateMQTTDaoModel() {
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
+       /* Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.demo");
 
         Entity note = schema.addEntity("PMProtocal");
         note.addLongProperty("time").primaryKeyAsc();
@@ -36,6 +36,30 @@ public class PMDaoGenerator {
             new DaoGenerator().generateAll(schema, "../../src");
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.phone");
+
+        Entity recordNote = schema.addEntity("PhoneRecord");
+        recordNote.addIdProperty();
+        recordNote.addStringProperty("phone_number");
+        recordNote.addStringProperty("name");
+        recordNote.addIntProperty("type");
+        recordNote.addLongProperty("date");
+        recordNote.addIntProperty("contact_times");
+
+        Entity userNote = schema.addEntity("PhoneDetail");
+        userNote.addIdProperty();
+        userNote.addStringProperty("phone_number");
+        userNote.addStringProperty("name");
+        userNote.addIntProperty("type");
+        userNote.addLongProperty("date");
+        userNote.addLongProperty("duration");
+
+        try {
+            new DaoGenerator().generateAll(schema, "../../src");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        
     }
 }

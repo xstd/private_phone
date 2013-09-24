@@ -26,9 +26,9 @@ public class PhoneDetailDao extends AbstractDao<PhoneDetail, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Phone_number = new Property(1, String.class, "phone_number", false, "PHONE_NUMBER");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Date = new Property(3, Long.class, "date", false, "DATE");
-        public final static Property Duration = new Property(4, Long.class, "duration", false, "DURATION");
-        public final static Property Type = new Property(5, Integer.class, "type", false, "TYPE");
+        public final static Property Type = new Property(3, Integer.class, "type", false, "TYPE");
+        public final static Property Date = new Property(4, Long.class, "date", false, "DATE");
+        public final static Property Duration = new Property(5, Long.class, "duration", false, "DURATION");
     };
 
 
@@ -47,9 +47,9 @@ public class PhoneDetailDao extends AbstractDao<PhoneDetail, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'PHONE_NUMBER' TEXT," + // 1: phone_number
                 "'NAME' TEXT," + // 2: name
-                "'DATE' INTEGER," + // 3: date
-                "'DURATION' INTEGER," + // 4: duration
-                "'TYPE' INTEGER);"); // 5: type
+                "'TYPE' INTEGER," + // 3: type
+                "'DATE' INTEGER," + // 4: date
+                "'DURATION' INTEGER);"); // 5: duration
     }
 
     /** Drops the underlying database table. */
@@ -78,19 +78,19 @@ public class PhoneDetailDao extends AbstractDao<PhoneDetail, Long> {
             stmt.bindString(3, name);
         }
  
+        Integer type = entity.getType();
+        if (type != null) {
+            stmt.bindLong(4, type);
+        }
+ 
         Long date = entity.getDate();
         if (date != null) {
-            stmt.bindLong(4, date);
+            stmt.bindLong(5, date);
         }
  
         Long duration = entity.getDuration();
         if (duration != null) {
-            stmt.bindLong(5, duration);
-        }
- 
-        Integer type = entity.getType();
-        if (type != null) {
-            stmt.bindLong(6, type);
+            stmt.bindLong(6, duration);
         }
     }
 
@@ -107,9 +107,9 @@ public class PhoneDetailDao extends AbstractDao<PhoneDetail, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // phone_number
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // date
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // duration
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // type
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // type
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // date
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // duration
         );
         return entity;
     }
@@ -120,9 +120,9 @@ public class PhoneDetailDao extends AbstractDao<PhoneDetail, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPhone_number(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setDate(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setDuration(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
-        entity.setType(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setType(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setDate(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setDuration(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */

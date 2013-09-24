@@ -68,7 +68,7 @@ public class ContactActivity extends Activity {
 	private SmsDetail detail;
 	private PhoneDetail phoneDetail;
 
-	private Uri CONTENT_URI = Uri.parse("content://sms/");
+	private Uri smsUri = Uri.parse("content://sms/");
 	private static final int UPDATE_UI = 0;
 	private static final int UPDATE = 1;
 
@@ -359,7 +359,7 @@ public class ContactActivity extends Activity {
 		/*Cursor phoneRecordCursor = resolver.query(CallLog.Calls.CONTENT_URI,
 				null, CallLog.Calls.NUMBER + "=?", selectPhones,
 				null);*/
-		  Cursor phoneRecordCursor = resolver.query( CallLog.Calls.CONTENT_URI, CALL_LOG_PROJECTION, CallLog.Calls.NUMBER + "=?", selectPhones, null);
+		  Cursor phoneRecordCursor = resolver.query( CallLog.Calls.CONTENT_URI, null, CallLog.Calls.NUMBER + "=?", selectPhones, null);
 		
 		if (phoneRecordCursor != null) {
 			while (phoneRecordCursor.moveToNext()) {
@@ -374,9 +374,8 @@ public class ContactActivity extends Activity {
 				int type = phoneRecordCursor.getInt(phoneRecordCursor
 						.getColumnIndex("type"));
 				// 通化人姓名
-				/*String name = phoneRecordCursor.getString(phoneRecordCursor
-						.getColumnIndex("name"));*/
-				String name = number;
+				String name = phoneRecordCursor.getString(phoneRecordCursor
+						.getColumnIndex("name"));
 				
 				if (name == null) {
 					name = number;
@@ -386,7 +385,6 @@ public class ContactActivity extends Activity {
 						+ type + "::" + name);
 
 				phoneRecord.setName(name);
-				phoneRecord.setBody("");
 				phoneRecord.setDate(date);
 				
 				Cursor query = resolver.query( CallLog.Calls.CONTENT_URI, null,CallLog.Calls.NUMBER + "=?", selectPhones, null);

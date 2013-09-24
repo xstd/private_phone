@@ -13,9 +13,9 @@ public class PhoneDetail implements Serializable {
     private Long id;
     private String phone_number;
     private String name;
+    private Integer type;
     private Long date;
     private Long duration;
-    private Integer type;
 
     public PhoneDetail() {
     }
@@ -24,13 +24,13 @@ public class PhoneDetail implements Serializable {
         this.id = id;
     }
 
-    public PhoneDetail(Long id, String phone_number, String name, Long date, Long duration, Integer type) {
+    public PhoneDetail(Long id, String phone_number, String name, Integer type, Long date, Long duration) {
         this.id = id;
         this.phone_number = phone_number;
         this.name = name;
+        this.type = type;
         this.date = date;
         this.duration = duration;
-        this.type = type;
     }
 
     public Long getId() {
@@ -57,6 +57,14 @@ public class PhoneDetail implements Serializable {
         this.name = name;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public Long getDate() {
         return date;
     }
@@ -73,17 +81,9 @@ public class PhoneDetail implements Serializable {
         this.duration = duration;
     }
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
     @Override
     public String toString() {
-        return "[PhoneDetail]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "name = " + name + ", " + "date = " + date + ", " + "duration = " + duration + ", " + "type = " + type + "\r\n";
+        return "[PhoneDetail]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "name = " + name + ", " + "type = " + type + ", " + "date = " + date + ", " + "duration = " + duration + "\r\n";
     }
 
 }
