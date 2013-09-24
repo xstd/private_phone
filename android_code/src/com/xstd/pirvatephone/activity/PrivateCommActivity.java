@@ -92,6 +92,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 		initView();
 
+		selectContactsNumber = new ArrayList();
 		InitImageView();
 		InitTextView();
 		InitViewPager();
