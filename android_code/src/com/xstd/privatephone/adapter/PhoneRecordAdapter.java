@@ -3,6 +3,7 @@ package com.xstd.privatephone.adapter;
 import java.util.Date;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -30,11 +31,11 @@ public class PhoneRecordAdapter extends CursorAdapter {
 	public void bindView(View view, Context arg1, Cursor cursor) {
 		ViewHold views = (ViewHold) view.getTag();
 		
-		int count = cursor.getInt(cursor.getColumnIndex("contact_times"));
-		int type = cursor.getInt(cursor.getColumnIndex("type"));
-		String phone_number = cursor.getString(cursor.getColumnIndex("phone_number"));
-		Long date = cursor.getLong(cursor.getColumnIndex("date"));
-		String name = cursor.getString(cursor.getColumnIndex("name"));
+		int count = cursor.getInt(cursor.getColumnIndex(PhoneRecordDao.Properties.Contact_times.columnName));
+		int type = cursor.getInt(cursor.getColumnIndex(PhoneRecordDao.Properties.Type.columnName));
+		String phone_number = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
+		Long date = cursor.getLong(cursor.getColumnIndex(PhoneRecordDao.Properties.Date.columnName));
+		String name = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Name.columnName));
 		
 		phoneType = "";
 		picId = 0; 
