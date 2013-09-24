@@ -31,6 +31,7 @@ import android.os.Message;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Contacts.Photo;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
@@ -63,7 +64,7 @@ public class ContactActivity extends Activity {
 	private ListView lv_contact;
 	private TextView tv_empty;
 
-	private ContactInfo contactInfo = new ContactInfo();
+	private ContactInfo contactInfo;
 	private GetContactTast task;
 	private SmsDetail detail;
 	private PhoneDetail phoneDetail;
@@ -111,7 +112,7 @@ public class ContactActivity extends Activity {
 	private String[] PROJECTION = new String[] { "sms.thread_id AS _id",
 			"sms.body AS snippet", "groups.msg_count AS msg_count",
 			" sms.address AS address", " sms.date AS date" };
-	
+
 	// PROJECTION[0,1,2,3,4]
 	private static final int ID_COLUMN_INDEX = 0;
 	private static final int SNIPPET_COLUMN_INDEX = 1;
@@ -125,13 +126,10 @@ public class ContactActivity extends Activity {
 	private static final int DISPLAY_NAME_COLUMN_INDEX = 1;
 	public static final Uri CONVERSATIONS_URI = Uri
 			.parse("content://sms/conversations");
-	
-	 static final String[] CALL_LOG_PROJECTION = new String[] {
-	        CallLog.Calls.DATE,
-	        CallLog.Calls.DURATION,
-	        CallLog.Calls.NUMBER,
-	        CallLog.Calls.TYPE,
-	    };
+
+	static final String[] CALL_LOG_PROJECTION = new String[] {
+			CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.NUMBER,
+			CallLog.Calls.TYPE, };
 
 	public Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -264,47 +262,43 @@ public class ContactActivity extends Activity {
 
 		ContentResolver resolver = getContentResolver();
 
-		// 获取手机联系人
-		Cursor phoneCursor = resolver.query(Phone.CONTENT_URI, new String[] {
-				Phone.CONTACT_ID, Phone.DISPLAY_NAME, Phone.NUMBER },
-				Phone.NUMBER + "=?", selectPhones, null);
+		for (int i = 0; i < selectPhones.length; i++) {
+			String num = selectPhones[i];
+			// 获取手机联系人
+			Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,
+					new String[] { Phone.CONTACT_ID, Phone.DISPLAY_NAME,
+							Phone.NUMBER }, Phone.NUMBER + "=?",
+					new String[] { num }, null);
 
-		if (phoneCursor != null) {
-			while (phoneCursor.moveToNext()) {
+			if (phoneCursor != null) {
+				while (phoneCursor.moveToNext()) {
+					contactInfo = new ContactInfo();
+					// 得到联系人名称
+					String contactName = phoneCursor.getString(1);
 
-				// 得到联系人名称
-				String contactName = phoneCursor.getString(1);
+					// 得到手机号码,可能含有特殊符号+，- “ ”
+					String number = phoneCursor.getString(2);
 
-				// 得到手机号码,可能含有特殊符号+，- “ ”
-				String number = phoneCursor.getString(2);
+					// 得到联系人ID
+					// Long contactid =
+					// phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
 
-				/*
-				 * String num1 = number.replace(" ", ""); String num2 =
-				 * num1.replace("+", ""); String num3 = num2.replace("-", "");
-				 */
-				// array.add(number);
-				selectPhones[phoneCursor.getPosition()] = number;
+					contactInfo.setPhone_number(number);
+					contactInfo.setDisplay_name(contactName);
 
-				Tools.logSh(number + "-----" + contactName);
-				// 得到联系人ID
-				// Long contactid =
-				// phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
+					// 添加到我们数据库
+					contactInfoDao.insert(contactInfo);
+					Tools.logSh("phoneCursor插入了一条数据");
 
-				contactInfo.setPhone_number(number);
-				contactInfo.setDisplay_name(contactName);
-
-				// 添加到我们数据库
-				contactInfoDao.insert(contactInfo);
-				Tools.logSh("phoneCursor插入了一条数据");
-
+				}
+				phoneCursor.close();
 			}
-			phoneCursor.close();
 		}
-
 		PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
 				.getPhoneDetailDao(getApplicationContext());
 
 		Tools.logSh("11111111111111111111111111111111111111");
+
 		
 		// 获取详细通话记录
 		Cursor phoneDetailCursor = resolver.query(CallLog.Calls.CONTENT_URI,
@@ -351,60 +345,77 @@ public class ContactActivity extends Activity {
 			}
 			phoneDetailCursor.close();
 		}
+		
+		
 		Tools.logSh("222222222222222222222222222222222222222");
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(getApplicationContext());
 
 		// 获取简单通话记录
-		/*Cursor phoneRecordCursor = resolver.query(CallLog.Calls.CONTENT_URI,
-				null, CallLog.Calls.NUMBER + "=?", selectPhones,
-				null);*/
-		  Cursor phoneRecordCursor = resolver.query( CallLog.Calls.CONTENT_URI, null, CallLog.Calls.NUMBER + "=?", selectPhones, null);
-		
-		if (phoneRecordCursor != null) {
-			while (phoneRecordCursor.moveToNext()) {
-				phoneRecord = new PhoneRecord();
-				// 得到手机号码
-				String number = phoneRecordCursor.getString(phoneRecordCursor
-						.getColumnIndex("number"));
-				// 得到时间
-				Long date = phoneRecordCursor.getLong(phoneRecordCursor
-						.getColumnIndex("date"));
-				// 通话类型
-				int type = phoneRecordCursor.getInt(phoneRecordCursor
-						.getColumnIndex("type"));
-				// 通化人姓名
-				String name = phoneRecordCursor.getString(phoneRecordCursor
-						.getColumnIndex("name"));
-				
-				if (name == null) {
-					name = number;
+		/*
+		 * Cursor phoneRecordCursor = resolver.query(CallLog.Calls.CONTENT_URI,
+		 * null, CallLog.Calls.NUMBER + "=?", selectPhones, null);
+		 */
+
+		for (int i = 0; i < selectPhones.length; i++) {
+			Tools.logSh("i====="+i);
+			Tools.logSh("selectPhones====="+selectPhones[0]+selectPhones[1]);
+			String phone = selectPhones[i];
+
+			Tools.logSh("phone====="+phone);
+			Cursor phoneRecordCursor = resolver.query(
+					CallLog.Calls.CONTENT_URI, null, CallLog.Calls.NUMBER
+							+ "=?", new String[] {phone}, null);
+			Tools.logSh("phoneRecordCursor====="+phoneRecordCursor.getCount());
+			if (phoneRecordCursor != null) {
+				while (phoneRecordCursor.moveToNext()) {
+					phoneRecord = new PhoneRecord();
+					// 得到手机号码
+					String number = phoneRecordCursor
+							.getString(phoneRecordCursor
+									.getColumnIndex(CallLog.Calls.NUMBER));
+					// 得到时间
+					Long date = phoneRecordCursor.getLong(phoneRecordCursor
+							.getColumnIndex(CallLog.Calls.DATE));
+					// 通话类型
+					int type = phoneRecordCursor.getInt(phoneRecordCursor
+							.getColumnIndex(CallLog.Calls.TYPE));
+					// 通化人姓名
+					String name = phoneRecordCursor.getString(phoneRecordCursor
+							.getColumnIndex("name"));
+
+					if (name == null) {
+						name = number;
+					}
+
+					Tools.logSh(number + "::" + date + "::" + type + "::"
+							+ name);
+
+					phoneRecord.setName(name);
+					phoneRecord.setDate(date);
+
+					Cursor query = resolver.query(CallLog.Calls.CONTENT_URI,
+							null, CallLog.Calls.NUMBER + "=?",
+							new String[] { phone }, null);
+					int count = query.getCount();
+
+					Tools.logSh(number + "::" + date + "::" + type + "::"
+							+ name + "count==" + count);
+
+					phoneRecord.setContact_times(count);
+					phoneRecord.setPhone_number(number);
+
+					// 添加到我们数据库
+					phoneRecordDao.insert(phoneRecord);
+					phoneRecord = null;
+					Tools.logSh("向phoneRecord插入了一条数据");
+					// 取第一行数据
+					phoneRecordCursor.close();
+					break;
 				}
-
-				Tools.logSh(number + "::" + date + "::"
-						+ type + "::" + name);
-
-				phoneRecord.setName(name);
-				phoneRecord.setDate(date);
-				
-				Cursor query = resolver.query( CallLog.Calls.CONTENT_URI, null,CallLog.Calls.NUMBER + "=?", selectPhones, null);
-				int count = query.getCount();
-
-				Tools.logSh(number + "::" + date + "::"
-						+ type + "::" + name+ "count=="+count);
-
-				phoneRecord.setContact_times(count);
-				phoneRecord.setPhone_number(number);
-
-				// 添加到我们数据库
-				phoneRecordDao.insert(phoneRecord);
-				phoneRecord = null;
-				Tools.logSh("向phoneRecord插入了一条数据");
 			}
-			phoneRecordCursor.close();
 		}
 
-		
 		/**
 		 * token 查询结果的唯一标示 ID cookie 传递对象 uri 查询的地址 projection 查询的字段 selection
 		 * 查询的条件 where id = ? selectionArgs查询条件参数 ? orderBy 排序
@@ -413,42 +424,46 @@ public class ContactActivity extends Activity {
 		// 获取短信详细纪录
 		SmsDetailDao smsdetailDao = SmsDetailDaoUtils
 				.getSmsDetailDao(getApplicationContext());
-		
-		Cursor detailCursor = resolver.query(Uri.parse("content://sms/"), null,
-				"address=?", selectPhones, null);
-		if (detailCursor != null) {
-			while (detailCursor.moveToNext()) {
 
-				// thread_id
-				Integer thread_id = detailCursor.getInt(detailCursor
-						.getColumnIndex("thread_id"));
-				// phone_number
-				String phone_number = detailCursor.getString(detailCursor
-						.getColumnIndex("address"));
-				// lasted date
-				Long date = detailCursor.getLong(detailCursor
-						.getColumnIndex("date"));
+		for (int i = 0; i < selectPhones.length; i++) {
+			String phone = selectPhones[i];
 
-				String body = detailCursor.getString(detailCursor
-						.getColumnIndex("body"));
+			Cursor detailCursor = resolver.query(Uri.parse("content://sms/"),
+					null, "address=?", new String[] { phone }, null);
+			if (detailCursor != null) {
+				while (detailCursor.moveToNext()) {
 
-				detail = new SmsDetail();
+					// thread_id
+					Integer thread_id = detailCursor.getInt(detailCursor
+							.getColumnIndex("thread_id"));
+					// phone_number
+					String phone_number = detailCursor.getString(detailCursor
+							.getColumnIndex("address"));
+					// lasted date
+					Long date = detailCursor.getLong(detailCursor
+							.getColumnIndex("date"));
 
-				detail.setThread_id(thread_id);
-				detail.setPhone_number(phone_number);
-				detail.setDate(date);
-				detail.setData(body);
+					String body = detailCursor.getString(detailCursor
+							.getColumnIndex("body"));
 
-				thread_ids.add(thread_id);
+					detail = new SmsDetail();
 
-				Tools.logSh("thread_id" + thread_id + "::" + "phone_number"
-						+ phone_number + "::" + "date" + date + "::" + "body"
-						+ body);
-				smsdetailDao.insert(detail);
-				detail = null;
-				Tools.logSh("向smsDetail插入了一条数据");
+					detail.setThread_id(thread_id);
+					detail.setPhone_number(phone_number);
+					detail.setDate(date);
+					detail.setData(body);
+
+					thread_ids.add(thread_id);
+
+					Tools.logSh("thread_id" + thread_id + "::" + "phone_number"
+							+ phone_number + "::" + "date" + date + "::"
+							+ "body" + body);
+					smsdetailDao.insert(detail);
+					detail = null;
+					Tools.logSh("向smsDetail插入了一条数据");
+				}
+				detailCursor.close();
 			}
-			detailCursor.close();
 		}
 
 		// 获取每个对话的最后一次信息，以及时间，次数，内容
@@ -456,38 +471,39 @@ public class ContactActivity extends Activity {
 				.getSmsRecordDao(getApplicationContext());
 
 		Tools.logSh("--------" + 1);
-		Cursor smsCursor = resolver.query(CONVERSATIONS_URI, PROJECTION,
-				"address=?", selectPhones, "date desc");
 
-		Tools.logSh("" + smsCursor.getCount());
-		if (smsCursor != null) {
-			while (smsCursor.moveToNext()) {
-				Tools.logSh("--------" + 3);
+		for (int i = 0; i < selectPhones.length; i++) {
+			String phone = selectPhones[i];
+			Cursor smsCursor = resolver.query(CONVERSATIONS_URI, PROJECTION,
+					"address=?", new String[] { phone }, null);
 
-				// String idStr = smsCursor.getString(ID_COLUMN_INDEX);
-				String body = smsCursor.getString(SNIPPET_COLUMN_INDEX);
-				int count = smsCursor
-						.getInt(MSG_COUNT_COLUMN_INDEX);
-				String phone_number = smsCursor
-						.getString(ADDRESS_COLUMN_INDEX);
-				long date = smsCursor.getLong(DATE_COLUMN_INDEX);
-					
+			Tools.logSh("" + smsCursor.getCount());
+			if (smsCursor != null) {
+				while (smsCursor.moveToNext()) {
+					Tools.logSh("--------" + 3);
 
+					// String idStr = smsCursor.getString(ID_COLUMN_INDEX);
+					String body = smsCursor.getString(SNIPPET_COLUMN_INDEX);
+					int count = smsCursor.getInt(MSG_COUNT_COLUMN_INDEX);
+					String phone_number = smsCursor
+							.getString(ADDRESS_COLUMN_INDEX);
+					long date = smsCursor.getLong(DATE_COLUMN_INDEX);
 
-				SmsRecord smsRecord = new SmsRecord();
+					SmsRecord smsRecord = new SmsRecord();
 
-				smsRecord.setPhone_number(phone_number);
-				smsRecord.setCount(count);
-				smsRecord.setLasted_contact(date);
-				smsRecord.setLasted_data(body);
+					smsRecord.setPhone_number(phone_number);
+					smsRecord.setCount(count);
+					smsRecord.setLasted_contact(date);
+					smsRecord.setLasted_data(body);
 
-				// 添加到我们数据库
-				smsRecordDao.insert(smsRecord);
-				smsRecord = null;
-				Tools.logSh("向smsRecord插入了一条数据");
+					// 添加到我们数据库
+					smsRecordDao.insert(smsRecord);
+					smsRecord = null;
+					Tools.logSh("向smsRecord插入了一条数据");
 
+				}
+				smsCursor.close();
 			}
-			smsCursor.close();
 		}
 
 		// 删除系统库中的联系人。
@@ -500,7 +516,6 @@ public class ContactActivity extends Activity {
 		// update(s3);
 		getContact();
 	}
-
 
 	private void delContact(String[] str) {
 		Tools.logSh("删除了系统联系人数据库的一条数据");
