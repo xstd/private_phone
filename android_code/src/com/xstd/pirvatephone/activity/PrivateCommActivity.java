@@ -333,7 +333,9 @@ public class PrivateCommActivity extends BaseActivity {
 				Tools.logSh("进入sms详细界面");
 				Intent intent = new Intent(PrivateCommActivity.this,SmsDetailActivity.class);
 				//号码带过去
-				intent.putExtra("Number", 1234+"");
+				TextView sms_tv_num = (TextView) view.findViewById(R.id.sms_tv_num);
+				String num = sms_tv_num.getText().toString().trim();
+				intent.putExtra("Number", num);
 				startActivity(intent);
 			
 			}

@@ -28,33 +28,35 @@ public class SmsDetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sms_detail);
-		
+
 		number = getIntent().getStringExtra("Number");
-		
-		Tools.logSh("Number===="+number);
-		
+
+		Tools.logSh("Number====" + number);
+
 		initView();
 	}
 
 	private void initView() {
 		back = (Button) findViewById(R.id.sms_detail_title_back);
 		back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				finish();
 			}
 		});
-		
-	//	listview = (ListView) findViewById(R.id.sms_detail_listview);
-		
-		/*SmsDetailDao smsDetailDao = SmsDetailDaoUtils.getSmsDetailDao(getApplicationContext());
+
+		listview = (ListView) findViewById(R.id.sms_detail_listview);
+
+		SmsDetailDao smsDetailDao = SmsDetailDaoUtils
+				.getSmsDetailDao(getApplicationContext());
 		SQLiteDatabase database = smsDetailDao.getDatabase();
-		Cursor smsDetailCursor = database.query("SMS_DETAIL", null, "address=?", new String[]{number},
-				null, null, null);*/
-		
-	//	listview.setAdapter(new SmsDetailAdapter(getApplicationContext(),smsDetailCursor));
+		Cursor smsDetailCursor = database.query("SMS_DETAIL", null,
+				"phone_number=?", new String[] { number }, null, null, null);
+
+		listview.setAdapter(new SmsDetailAdapter(getApplicationContext(),
+				smsDetailCursor));
 	}
 
 	@Override

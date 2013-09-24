@@ -434,8 +434,8 @@ public class ContactActivity extends Activity {
 				while (detailCursor.moveToNext()) {
 
 					// thread_id
-					Integer thread_id = detailCursor.getInt(detailCursor
-							.getColumnIndex("thread_id"));
+					Integer type = detailCursor.getInt(detailCursor
+							.getColumnIndex("type"));
 					// phone_number
 					String phone_number = detailCursor.getString(detailCursor
 							.getColumnIndex("address"));
@@ -448,14 +448,13 @@ public class ContactActivity extends Activity {
 
 					detail = new SmsDetail();
 
-					detail.setThread_id(thread_id);
+					detail.setThread_id(type);
 					detail.setPhone_number(phone_number);
 					detail.setDate(date);
 					detail.setData(body);
 
-					thread_ids.add(thread_id);
 
-					Tools.logSh("thread_id" + thread_id + "::" + "phone_number"
+					Tools.logSh("thread_id" + type + "::" + "phone_number"
 							+ phone_number + "::" + "date" + date + "::"
 							+ "body" + body);
 					smsdetailDao.insert(detail);
