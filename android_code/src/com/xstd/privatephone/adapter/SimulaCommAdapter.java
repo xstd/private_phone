@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.xstd.pirvatephone.activity.SimulaCommActivity;
-import com.xstd.pirvatephone.module.SimulaComm;
+import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.module.SimulaPhone;
 import com.xstd.pirvatephone.module.SimulaSms;
 
 public class SimulaCommAdapter extends BaseAdapter {
 
 	private Context mCtx;
-	private List<SimulaComm> mDatas = new ArrayList<SimulaComm>();
+	private List<SimulateComm> mDatas = new ArrayList<SimulateComm>();
 
 	public SimulaCommAdapter(Context ctx) {
 		mCtx = ctx;

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
+
 import android.content.Context;
 
 public abstract class SimulaComm implements Serializable {
@@ -49,6 +51,6 @@ public abstract class SimulaComm implements Serializable {
 	 * @param type
 	 * @return
 	 */
-	public abstract List<SimulaComm> getSimulaCommByType();
+	public abstract List<SimulateComm> getSimulaCommByType();
 
 }

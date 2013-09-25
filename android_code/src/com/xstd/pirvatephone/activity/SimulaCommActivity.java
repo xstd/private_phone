@@ -44,8 +44,8 @@ public class SimulaCommActivity extends BaseActivity {
 	private void initUI() {
 		ViewMapUtil.viewMapping(this, getWindow());
 
-		adapter = new SimulaCommAdapter(
-				getApplicationContext());
+		adapter = new SimulaCommAdapter(getApplicationContext());
+		adapter.changeDatas(type);
 		lv.setAdapter(adapter);
 	}
 
@@ -78,9 +78,9 @@ public class SimulaCommActivity extends BaseActivity {
 	 */
 	public void addSimula(View view) {
 		Intent intent = new Intent();
-		if(type == SIMULA_SMS) {
+		if (type == SIMULA_SMS) {
 			intent.setClass(this, AddSimulaSmsActivity.class);
-		}else if(type == SIMULA_PHONE) {
+		} else if (type == SIMULA_PHONE) {
 			intent.setClass(this, AddSimulaPhoneActivity.class);
 		}
 		startActivity(intent);
