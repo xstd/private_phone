@@ -26,7 +26,7 @@ public class SimulaPhone extends SimulaComm {
 		Cursor cursor = dao.getDatabase()
 				.query(dao.getTablename(),
 						dao.getAllColumns(),
-						SimulateCommDao.Properties.Type + "=?",
+						SimulateCommDao.Properties.Type.columnName + "=?",
 						new String[] { String
 								.valueOf(SimulaCommActivity.SIMULA_PHONE) },
 						null, null, null);

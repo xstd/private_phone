@@ -37,7 +37,7 @@ public class SimulaSms extends SimulaComm {
 	public List<SimulateComm> getSimulaCommByType() {
 		SimulateCommDao dao = SimulateDaoUtils.getSimulateDao(mCtx);
 		Cursor cursor = dao.getDatabase().query(dao.getTablename(),
-				dao.getAllColumns(), SimulateCommDao.Properties.Type + "=?",
+				dao.getAllColumns(), SimulateCommDao.Properties.Type.columnName + "=?",
 				new String[] { String.valueOf(SimulaCommActivity.SIMULA_SMS) },
 				null, null, null);
 		List<SimulateComm> results = new ArrayList<SimulateComm>();
