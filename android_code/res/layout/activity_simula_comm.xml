@@ -32,10 +32,23 @@
         android:onClick="addSimula"
         android:text="@string/simula_add_phone" />
 
-    <ListView
-        android:id="@+id/lv"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    </ListView>
+
+        <ListView
+            android:id="@+id/lv_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+        </ListView>
+
+        <ListView
+            android:id="@+id/lv_sms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+        </ListView>
+    </FrameLayout>
 
 </LinearLayout>

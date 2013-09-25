@@ -68,12 +68,16 @@
             android:name="com.xstd.pirvatephone.activity.PhoneDetailActivity"
             android:label="@string/title_activity_phone_detail" >
         </activity>
-
-        <activity android:name=".activity.ServiceActivity"/>
-        
-        <activity android:name=".activity.SimulaCommActivity"></activity>
-        <activity android:name=".activity.AddSimulaSmsActivity"></activity>
-        <activity android:name=".activity.AddSimulaPhoneActivity"></activity>
+        <activity android:name=".activity.ServiceActivity" />
+        <activity android:name=".activity.SimulaCommActivity" >
+        </activity>
+        <activity
+            android:name=".activity.AddSimulaSmsActivity"
+            android:theme="@android:style/Theme.DeviceDefault" >
+        </activity>
+        <activity android:name=".activity.AddSimulaPhoneActivity" >
+>
+        </activity>
     </application>
 
 </manifest>

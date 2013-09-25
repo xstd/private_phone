@@ -5,9 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,16 +18,22 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
+import com.xstd.pirvatephone.dao.simulacomm.SimulateDaoUtils;
 import com.xstd.privatephone.view.MyDatePickerDialog;
+import com.xstd.privatephone.view.MyTimePickerDialog;
 
 public class AddSimulaPhoneActivity extends BaseActivity implements
 		OnClickListener {
 
 	private static final String TAG = "AddSimulaPhoneActivity";
+
+	private static final int CHOOSE_CONTACT = 1;
 
 	@ViewMapping(ID = R.id.back)
 	public ImageView back;
@@ -85,19 +93,46 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 		if (v == back) {
 			finish();
 		} else if (v == chooseContact) {
-			Log.w(TAG, "选择联系人");
+			Intent intent = new Intent(Intent.ACTION_PICK,
+					ContactsContract.Contacts.CONTENT_URI);
+			startActivityForResult(intent, CHOOSE_CONTACT);
 		} else if (v == phoneDate) {
 			showDatePicker();
 		} else if (v == phoneTime) {
 			showTimePicker();
 		} else if (v == save) {
-
+			checkData();
 		}
 
 	}
 
+	private void checkData() {
+		String phone = phoneNumber.getText().toString().trim();
+		if (TextUtils.isEmpty(phone)) {
+			Toast.makeText(this, R.string.s_phonenumber_empty,
+					Toast.LENGTH_LONG).show();
+			return;
+		} else if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+			Toast.makeText(this, R.string.s_not_passby, Toast.LENGTH_LONG)
+					.show();
+			return;
+		}
+		SimulateComm entity = new SimulateComm(null, Long.valueOf(phone),
+				calendar.getTime(), null, SimulaCommActivity.SIMULA_PHONE);
+		SimulateDaoUtils.getSimulateDao(this).insert(entity);
+		finish();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == CHOOSE_CONTACT && resultCode == RESULT_OK) {
+			Log.w(TAG, data.toString());
+		}
+	}
+
 	private void showTimePicker() {
-		TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+		MyTimePickerDialog timePickerDialog = new MyTimePickerDialog(this,
 				new OnTimeSetListener() {
 
 					@Override

@@ -23,15 +23,20 @@ public class SimulaCommActivity extends BaseActivity {
 	 */
 	public final static int SIMULA_PHONE = 2;
 
-	@ViewMapping(ID = R.id.lv)
-	public ListView lv;
+	@ViewMapping(ID = R.id.lv_phone)
+	public ListView lv_phone;
+
+	@ViewMapping(ID = R.id.lv_sms)
+	public ListView lv_sms;
 
 	@ViewMapping(ID = R.id.btn_add)
 	public Button btn_add;
 
 	private int type = SIMULA_PHONE;
 
-	private SimulaCommAdapter adapter;
+	private SimulaCommAdapter adapter_phone;
+
+	private SimulaCommAdapter adapter_sms;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,9 +49,30 @@ public class SimulaCommActivity extends BaseActivity {
 	private void initUI() {
 		ViewMapUtil.viewMapping(this, getWindow());
 
-		adapter = new SimulaCommAdapter(getApplicationContext());
-		adapter.changeDatas(type);
-		lv.setAdapter(adapter);
+		adapter_phone = new SimulaCommAdapter(this, SIMULA_PHONE);
+		lv_phone.setAdapter(adapter_phone);
+		adapter_sms = new SimulaCommAdapter(this, SIMULA_SMS);
+		lv_sms.setAdapter(adapter_sms);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (type == SIMULA_PHONE)
+			adapter_phone.changeDatas();
+		else if (type == SIMULA_SMS)
+			adapter_sms.changeDatas();
+		displayWhich();
+	}
+
+	private void displayWhich() {
+		if (type == SIMULA_PHONE) {
+			lv_phone.setVisibility(View.VISIBLE);
+			lv_sms.setVisibility(View.GONE);
+		} else if (type == SIMULA_SMS) {
+			lv_phone.setVisibility(View.GONE);
+			lv_sms.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/**
@@ -57,7 +83,8 @@ public class SimulaCommActivity extends BaseActivity {
 	public void simulaSms(View view) {
 		btn_add.setText(R.string.simula_add_sms);
 		type = SIMULA_SMS;
-		adapter.changeDatas(type);
+		adapter_sms.changeDatas();
+		displayWhich();
 	}
 
 	/**
@@ -68,7 +95,8 @@ public class SimulaCommActivity extends BaseActivity {
 	public void simulaPhone(View view) {
 		btn_add.setText(R.string.simula_add_phone);
 		type = SIMULA_PHONE;
-		adapter.changeDatas(type);
+		adapter_phone.changeDatas();
+		displayWhich();
 	}
 
 	/**
