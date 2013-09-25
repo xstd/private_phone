@@ -37,10 +37,14 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.RawContacts;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -173,7 +177,6 @@ public class ContactActivity extends BaseActivity {
 				pb_empty.setVisibility(View.GONE);
 				break;
 			}
-
 		};
 	};
 
@@ -283,7 +286,6 @@ public class ContactActivity extends BaseActivity {
 					// 得到联系人名称
 					String contactName = phoneCursor.getString(1);
 
-					// 得到手机号码,可能含有特殊符号+，- “ ”
 					String number = phoneCursor.getString(2);
 
 					// 得到联系人ID
@@ -366,7 +368,7 @@ public class ContactActivity extends BaseActivity {
 		// 获取简单通话记录
 		/*
 		 * Cursor phoneRecordCursor = resolver.query(CallLog.Calls.CONTENT_URI,
-		 * null, CallLog.Calls.NUMBER + "=?", selectPhones, null);
+		 * null, CallLog.Calls.NUMBER + "=? ", selectPhones, null);
 		 */
 
 		for (int i = 0; i < selectPhones.length; i++) {
@@ -512,43 +514,70 @@ public class ContactActivity extends BaseActivity {
 			}
 		}
 
-		// 删除系统库中的联系人。
-		// delContact(s);
-		// deletePhoneRecord(s);
-		// deleteSmsRecord(s);
+		// 显示选择对话框
+		showDeleteDialog(selectPhones);
 
-		// 跟新界面UI
-
-		// update(s3);
-		getContact();
 	}
 
-	private void delContact(String[] str) {
-		Tools.logSh("删除了系统联系人数据库的一条数据");
-		Cursor cursor = getContentResolver().query(Data.CONTENT_URI,
-				new String[] { Data.RAW_CONTACT_ID }, Phone.NUMBER + "=?", str,
-				null);
+	public void showDeleteDialog(final String[] str) {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅移动联系人" },
+				new DialogInterface.OnClickListener() {
 
-		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
 
-		if (cursor.moveToFirst()) {
+						TextView textView = (TextView) findViewById(R.id.text);
+						switch (which) {
+						case 0:
+							// 删除系统库中的联系人。
+							delContact(str);
+							deletePhoneRecord(str);
+							deleteSmsRecord(str);
+							break;
+						case 1:
+							break;
+						}
+					}
+				});
+		builder.create().show();
 
-			do {
+	}
 
-				long Id = cursor.getLong(cursor
-						.getColumnIndex(Data.RAW_CONTACT_ID));
-				ops.add(ContentProviderOperation
-						.newDelete(
-								ContentUris.withAppendedId(
-										RawContacts.CONTENT_URI, Id)).build());
-				try {
-					getContentResolver().applyBatch(ContactsContract.AUTHORITY,
-							ops);
-				} catch (Exception e) {
-				}
-			} while (cursor.moveToNext());
+	private void delContact(String[] phoneNumbers) {
 
-			cursor.close();
+		for (int i = 0; i < phoneNumbers.length; i++) {
+			String number = phoneNumbers[i];
+			Cursor cursor = getContentResolver().query(Data.CONTENT_URI,
+					new String[] { Data.RAW_CONTACT_ID }, Phone.NUMBER + "=?",
+					new String[] { number }, null);
+
+			ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+			if (cursor.moveToFirst()) {
+
+				do {
+
+					long id = cursor.getLong(cursor
+							.getColumnIndex(Data.RAW_CONTACT_ID));
+					ops.add(ContentProviderOperation.newDelete(
+							ContentUris.withAppendedId(RawContacts.CONTENT_URI,
+									id)).build());
+					if (id > 0) {
+						Tools.logSh("成功删除了系统联系人数据库的一条数据");
+					} else {
+						Tools.logSh("删除系统联系人数据库的一条数据失败");
+					}
+
+					try {
+						getContentResolver().applyBatch(
+								ContactsContract.AUTHORITY, ops);
+					} catch (Exception e) {
+					}
+				} while (cursor.moveToNext());
+
+				cursor.close();
+			}
 		}
 
 	}
@@ -556,34 +585,43 @@ public class ContactActivity extends BaseActivity {
 	// 删除通话记录
 	public void deletePhoneRecord(String[] phoneNumbers) {
 
-		/*
-		 * Cursor cursor = getContentResolver().query(CallLog.Calls.CONTENT_URI,
-		 * new String[] { "_id" }, "number=?", new String[] { phoneNumber },
-		 * "_id desc limit 1");
-		 * 
-		 * if (cursor.moveToFirst()) { int id = cursor.getInt(0);
-		 * getContentResolver().delete(CallLog.Calls.CONTENT_URI, "_id=?", new
-		 * String[] { id + "" }); }
-		 */
+		for (int i = 0; i < phoneNumbers.length; i++) {
+			String number = phoneNumbers[i];
 
-		getContentResolver().delete(CallLog.Calls.CONTENT_URI, "number=?",
-				phoneNumbers);
-		Tools.logSh("删除电话通话记录成功");
-
+			int deletePhone = getContentResolver().delete(
+					CallLog.Calls.CONTENT_URI, "number=?",
+					new String[] { number });
+			if (deletePhone > 0) {
+				Tools.logSh("成功删除了系统通话记录数据库的一条数据");
+			} else {
+				Tools.logSh("删除系统通话记录数据库的一条数据失败");
+			}
+		}
 	}
 
 	// 删除短信记录
 	public void deleteSmsRecord(String[] phoneNumbers) {
-		getContentResolver().delete(Uri.parse("content://sms/"),
-				"address=? or address = ?", phoneNumbers);
-		// new String[] { phoneNumber,"+86" +phoneNumber }
-		getContentResolver().delete(Uri.parse("content://sms/"),
-				"address in (?, ?)", phoneNumbers);
-		// new String[] {phoneNumber, "+86" +phoneNumber }
-		Tools.logSh("删除短信通话记录成功");
 
-		// 跟新界面
-		update(phoneNumbers);
+		for (int i = 0; i < phoneNumbers.length; i++) {
+			String number = phoneNumbers[i];
+			int deleteSms = getContentResolver().delete(
+					Uri.parse("content://sms/"), "address=? or address = ?",
+					new String[] { number, "+86" + number });
+
+			if (deleteSms > 0) {
+				Tools.logSh("成功删除了系统sms数据库的一条数据");
+			} else {
+				Tools.logSh("删除系统sms数据库的一条数据失败");
+			}
+			int deleteSms2 = getContentResolver().delete(
+					Uri.parse("content://sms/"), "address in (?, ?)",
+					new String[] { number, "+86" + number });
+			if (deleteSms2 > 0) {
+				Tools.logSh("成功删除了系统deleteSms2数据库的一条数据");
+			} else {
+				Tools.logSh("删除系统deleteSms2数据库的一条数据失败");
+			}
+		}
 	}
 
 	public void update(String[] str) {

@@ -404,12 +404,10 @@ public class PrivateCommActivity extends BaseActivity {
 				Tools.logSh("进入电话详细界面");
 				Intent intent = new Intent(PrivateCommActivity.this,
 						PhoneDetailActivity.class);
-				// 号码带过去,取出的额可能是姓名
+				// 号码带过去,取出来的额可能是姓名
 				TextView sms_tv_num = (TextView) view
 						.findViewById(R.id.dial_tv_phone_num);
 				String num = sms_tv_num.getText().toString().trim();
-				
-				
 				intent.putExtra("Number", num);
 				startActivity(intent);
 			}
