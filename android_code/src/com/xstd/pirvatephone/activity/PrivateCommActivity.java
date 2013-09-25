@@ -5,11 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfo;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
 import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
+import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
@@ -19,10 +23,16 @@ import com.xstd.privatephone.adapter.PhoneRecordAdapter;
 import com.xstd.privatephone.adapter.SmsRecordAdapter;
 import com.xstd.privatephone.tools.Tools;
 
+import de.greenrobot.dao.AbstractDao;
+
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -74,21 +84,44 @@ public class PrivateCommActivity extends BaseActivity {
 	private TextView sms_tv_empty;
 	private TextView dial_tv_empty;
 
-	/*
-	 * getContentResolver().delete(Uri.parse("content://sms/"+ sms.getId()),
-	 * null, null);
-	 */
 	boolean showEdit = false;
 	private RelativeLayout contact_edit_content;
 	private RelativeLayout contact_rl_content;
 
-	private ArrayList selectContactsNumber;
+	private ArrayList<String> selectContactsNumber;
 	private Button sms_btn_recover;
 	private RelativeLayout contact_edit_select;
 	private ListView edit_listview;
 	private CheckBox edit_btn_check;
 	private Button edit_btn_remove;
+
 	private ImageView edit_empty_bg;
+	private RelativeLayout edit_select;
+	private CheckBox edit_btn_allcheck;
+
+	private RestoreContactTast restoreContactTast;
+	private String[] selectNumbers;
+
+	private static final int REMOVE_FINISH = 0;
+
+	public Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+			case REMOVE_FINISH:
+				// 移除联系人后关闭edit选项
+				contact_edit_content.setVisibility(View.GONE);
+				contact_rl_content.setVisibility(View.VISIBLE);
+				showEdit = false;
+				Tools.logSh("退出编辑模式");
+
+				break;
+
+			default:
+				break;
+			}
+		};
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +130,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 		initView();
 
-		selectContactsNumber = new ArrayList();
+		selectContactsNumber = new ArrayList<String>();
 		InitImageView();
 		InitTextView();
 		InitViewPager();
@@ -153,7 +186,6 @@ public class PrivateCommActivity extends BaseActivity {
 		// 1、title栏
 		edit = (Button) findViewById(R.id.edit);
 		edit.setOnClickListener(new OnClickListener() {
-			
 
 			@Override
 			public void onClick(View v) {
@@ -165,9 +197,7 @@ public class PrivateCommActivity extends BaseActivity {
 				} else if (currIndex == 2) {
 
 					Tools.logSh("currIndex==" + currIndex);
-					
-					
-					//firstClick
+
 					if (showEdit) {
 						contact_edit_content.setVisibility(View.GONE);
 						contact_rl_content.setVisibility(View.VISIBLE);
@@ -179,8 +209,6 @@ public class PrivateCommActivity extends BaseActivity {
 						editContact(edit_listview, edit_empty_bg);
 					}
 					showEdit = !showEdit;
-					// 展示数据
-
 				}
 			}
 		});
@@ -279,22 +307,20 @@ public class PrivateCommActivity extends BaseActivity {
 			return;
 		}
 		if (currIndex == contactPageNum) {
-			//正常模式下视图
+			// 正常模式下视图
 			contact_lv_cont = (ListView) findViewById(R.id.contact_lv_cont);
 			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
 			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
 			contact_rl_content = (RelativeLayout) findViewById(R.id.contact_rl_content);
-			
-			//编辑模式下的视图
+
+			// 编辑模式下的视图
 			contact_edit_content = (RelativeLayout) findViewById(R.id.contact_edit_content);
 			edit_listview = (ListView) findViewById(R.id.contact_edit_list_gone);
 			contact_edit_select = (RelativeLayout) findViewById(R.id.contact_edit_select);
 			edit_btn_check = (CheckBox) findViewById(R.id.contact_edit_btn_check);
 			edit_btn_remove = (Button) findViewById(R.id.contact_edit_btn_remove);
 			edit_empty_bg = (ImageView) findViewById(R.id.contact_edit_empty_bg);
-			
-			
-			
+
 			contact_add_contacts.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -307,8 +333,8 @@ public class PrivateCommActivity extends BaseActivity {
 
 			// 从我们的数据库读取隐私联系人，展示到页面上
 			Cursor cursor = getContact();
-			
-			updateContact(cursor,contact_lv_cont, contact_empty);
+
+			updateContact(cursor, contact_lv_cont, contact_empty);
 		}
 	}
 
@@ -378,31 +404,38 @@ public class PrivateCommActivity extends BaseActivity {
 				Tools.logSh("进入电话详细界面");
 				Intent intent = new Intent(PrivateCommActivity.this,
 						PhoneDetailActivity.class);
-				// 号码带过去
+				// 号码带过去,取出的额可能是姓名
 				TextView sms_tv_num = (TextView) view
 						.findViewById(R.id.dial_tv_phone_num);
 				String num = sms_tv_num.getText().toString().trim();
+				
+				
 				intent.putExtra("Number", num);
 				startActivity(intent);
 			}
 		});
 	}
 
-	private void editContact(ListView lv, ImageView tv) {
+	private void editContact(final ListView mListView, ImageView tv) {
 
 		Tools.logSh("进入了editContact界面");
+
+		// 获取通讯录联系人cursor
 		Cursor cursor = getContact();
 		if (cursor == null || cursor.getCount() == 0) {
-			lv.setEmptyView(tv);
+			mListView.setEmptyView(tv);
 
 			Tools.logSh("listview没有数据");
 
 		} else {
 			Tools.logSh("listview有数据" + cursor.getCount());
+			// 全选栏
+			edit_select = (RelativeLayout) findViewById(R.id.contact_edit_select);
+			edit_btn_allcheck = (CheckBox) findViewById(R.id.contact_edit_btn_check);
 
-			lv.setAdapter(new EditContactAdapter(getApplicationContext(),
-					cursor));
-			lv.setOnItemClickListener(new OnItemClickListener() {
+			mListView.setAdapter(new EditContactAdapter(
+					getApplicationContext(), cursor));
+			mListView.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
@@ -418,10 +451,13 @@ public class PrivateCommActivity extends BaseActivity {
 					String phone = phoneNumber.getText().toString().trim();
 
 					// 记录选项
-					if (!btn_check.isChecked()) {
-						selectContactsNumber.add(position);
+					if (!btn_check.isChecked()) {// &&
+													// !selectContactsNumber.contains(phone)
+
+						selectContactsNumber.add(phone);
 					} else {
-						selectContactsNumber.remove(position);
+
+						selectContactsNumber.remove(phone);
 					}
 
 					btn_check.setChecked(!btn_check.isChecked());
@@ -429,8 +465,220 @@ public class PrivateCommActivity extends BaseActivity {
 							+ "::" + phone);
 				}
 			});
+
+			edit_select.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if (edit_btn_allcheck.isChecked()) {
+						// 反选所有的item
+						for (int index = 0; index < mListView.getChildCount(); index++) {
+							RelativeLayout layout = (RelativeLayout) mListView
+									.getChildAt(index);
+							CheckBox checkBox = (CheckBox) layout
+									.findViewById(R.id.checkbox);
+							checkBox.setChecked(false);
+
+							// 清空选中号码
+							selectContactsNumber.clear();
+						}
+
+					} else {
+						// 全部选中所有的item
+						for (int index = 0; index < mListView.getChildCount(); index++) {
+							RelativeLayout layout = (RelativeLayout) mListView
+									.getChildAt(index);
+							CheckBox checkBox = (CheckBox) layout
+									.findViewById(R.id.checkbox);
+							TextView tv_phone_num = (TextView) layout
+									.findViewById(R.id.tv_phone_num);
+							String number = tv_phone_num.getText().toString()
+									.trim();
+
+							checkBox.setChecked(true);
+
+							// 将所有号码添加到选中号码。
+							selectContactsNumber.add(number);
+
+						}
+
+					}
+					edit_btn_allcheck.setChecked(!edit_btn_allcheck.isChecked());
+				}
+			});
+
+			// 删除选中联系人
+			edit_btn_remove.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Tools.logSh("正在删除选定联系人");
+
+					restoreContactTast = new RestoreContactTast(
+							getApplicationContext());
+					restoreContactTast.execute();
+				}
+			});
 		}
 	}
+
+	public class RestoreContactTast extends AsyncTask<Void, Integer, Integer> {
+
+		private Context mContext;
+
+		public RestoreContactTast(Context context) {
+			this.mContext = context;
+		}
+
+		/**
+		 * 运行在UI线程中，在调用doInBackground()之前执行
+		 */
+		@Override
+		public void onPreExecute() {
+			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
+		}
+
+		/**
+		 * 后台运行的方法，可以运行非UI线程，可以执行耗时的方法
+		 */
+		@Override
+		protected Integer doInBackground(Void... params) {
+			restoreContact();
+			return null;
+		}
+
+		/**
+		 * 运行在ui线程中，在doInBackground()执行完毕后执行
+		 */
+		@Override
+		public void onPostExecute(Integer integer) {
+
+			Message msg = new Message();
+			msg.what = REMOVE_FINISH;
+			handler.sendMessage(msg);
+			selectContactsNumber.clear();
+			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
+		}
+
+		/**
+		 * 在publishProgress()被调用以后执行，publishProgress()用于更新进度
+		 */
+		@Override
+		public void onProgressUpdate(Integer... values) {
+
+		}
+	}
+
+	/**
+	 * 将选定联系人信息移除我们数据库，返回到系统数据库中
+	 */
+	public void restoreContact() {
+
+		Tools.logSh("selectContactsNumber===" + selectContactsNumber);
+
+		selectNumbers = new String[selectContactsNumber.size()];
+		for (int i = 0; i < selectContactsNumber.size(); i++) {
+			selectNumbers[i] = selectContactsNumber.get(i);
+			Tools.logSh("selectNumber===" + selectNumbers[i]);
+		}
+
+		//联系人信息移除
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(getApplicationContext());
+		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+
+		for (int i = 0; i < selectNumbers.length; i++) {
+
+			String number = selectNumbers[i];
+			int isDelete = contactDatabase.delete(ContactInfoDao.TABLENAME,
+					ContactInfoDao.Properties.Phone_number.columnName + "=?",
+					new String[] { number });
+
+			if (isDelete == 0) {
+				Tools.logSh("删除联系人失败！");
+			} else {
+				Tools.logSh("删除联系人成功！");
+			}
+		}
+		
+		//record短信息移除
+		SmsRecordDao smsRecordDao = SmsRecordDaoUtils
+				.getSmsRecordDao(getApplicationContext());
+		SQLiteDatabase smsRecordDatabase = smsRecordDao.getDatabase();
+
+		for (int i = 0; i < selectNumbers.length; i++) {
+
+			String number = selectNumbers[i];
+			int isDelete = smsRecordDatabase.delete(SmsRecordDao.TABLENAME,
+					SmsRecordDao.Properties.Phone_number.columnName + "=?",
+					new String[] { number });
+
+			if (isDelete == 0) {
+				Tools.logSh("删除record短信失败！");
+			} else {
+				Tools.logSh("删除record短信成功！");
+			}
+		}
+		
+		//detail短信息移除
+		SmsDetailDao smsDetailDao = SmsDetailDaoUtils
+				.getSmsDetailDao(getApplicationContext());
+		SQLiteDatabase smsDetailDatabase = smsDetailDao.getDatabase();
+
+		for (int i = 0; i < selectNumbers.length; i++) {
+
+			String number = selectNumbers[i];
+			int isDelete = smsDetailDatabase.delete(SmsDetailDao.TABLENAME,
+					SmsDetailDao.Properties.Phone_number.columnName + "=?",
+					new String[] { number });
+
+			if (isDelete == 0) {
+				Tools.logSh("删除detail短信失败！");
+			} else {
+				Tools.logSh("删除detail短信成功！");
+			}
+		}
+		
+		//通话记录移除
+		
+		PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils.getPhoneDetailDao(getApplicationContext());
+		SQLiteDatabase phoneDetailDatebase = phoneDetailDao.getDatabase();
+		for (int i = 0; i < selectNumbers.length; i++) {
+
+			String number = selectNumbers[i];
+			int isDelete = phoneDetailDatebase.delete(PhoneDetailDao.TABLENAME,
+					PhoneDetailDao.Properties.Phone_number.columnName + "=?",
+					new String[] { number });
+
+			if (isDelete == 0) {
+				Tools.logSh("删除通话记录detail失败！");
+			} else {
+				Tools.logSh("删除联系人通话记录detail成功！");
+			}
+		}
+		
+		
+		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils.getPhoneRecordDao(getApplicationContext());
+		SQLiteDatabase phoneRecordDatebase = phoneRecordDao.getDatabase();
+		for (int i = 0; i < selectNumbers.length; i++) {
+
+			String number = selectNumbers[i];
+			int isDelete = phoneRecordDatebase.delete(PhoneRecordDao.TABLENAME,
+					PhoneRecordDao.Properties.Phone_number.columnName + "=?",
+					new String[] { number });
+
+			if (isDelete == 0) {
+				Tools.logSh("删除通话记录record失败！");
+			} else {
+				Tools.logSh("删除通话记录record成功！");
+			}
+		}
+		
+		
+	}
+
 
 	/**
 	 * 获取我们数据库联系人
@@ -441,21 +689,21 @@ public class PrivateCommActivity extends BaseActivity {
 				.getContactInfoDao(getApplicationContext());
 		SQLiteDatabase database = contactInfoDao.getDatabase();
 
-		Cursor contactCursor = database.query(ContactInfoDao.TABLENAME, null, null, null,
-				null, null, null);
+		Cursor contactCursor = database.query(ContactInfoDao.TABLENAME, null,
+				null, null, null, null, null);
 		return contactCursor;
 	}
 
-	public void updateContact(Cursor mCursor, ListView lv, TextView tv) {
+	public void updateContact(Cursor mCursor, ListView mListView, TextView tv) {
 
 		if (mCursor.getCount() == 0) {
-			lv.setEmptyView(tv);
+			mListView.setEmptyView(tv);
 		} else {
 			// 通知数据获取完成
 			Tools.logSh("mCursor的长度为：" + mCursor.getCount());
-			lv.setAdapter(new ContactAdapter(getApplicationContext(),
+			mListView.setAdapter(new ContactAdapter(getApplicationContext(),
 					mCursor));
-			lv.setOnItemClickListener(new OnItemClickListener() {
+			mListView.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,

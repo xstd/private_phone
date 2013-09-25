@@ -188,7 +188,7 @@ public class ContactActivity extends BaseActivity {
 		task = new GetContactTast(getApplicationContext());
 		task.execute();
 	}
-	
+
 	/**
 	 * 获取联系人
 	 */
@@ -301,55 +301,62 @@ public class ContactActivity extends BaseActivity {
 				phoneCursor.close();
 			}
 		}
+
 		PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
 				.getPhoneDetailDao(getApplicationContext());
 
 		Tools.logSh("11111111111111111111111111111111111111");
 
-		// 获取详细通话记录
-		Cursor phoneDetailCursor = resolver.query(CallLog.Calls.CONTENT_URI,
-				null, CallLog.Calls.NUMBER + "=?", selectPhones, null);
+		for (int i = 0; i < selectPhones.length; i++) {
+			String phone = selectPhones[i];
 
-		if (phoneDetailCursor != null) {
-			while (phoneDetailCursor.moveToNext()) {
-				phoneDetail = new PhoneDetail();
-				// 得到手机号码
-				String number = phoneDetailCursor.getString(phoneDetailCursor
-						.getColumnIndex("number"));
-				// 得到联系人名称
-				Long start_time = phoneDetailCursor.getLong(phoneDetailCursor
-						.getColumnIndex("date"));
-				// 通话持续时间
+			Tools.logSh("phone=====" + phone);
+			// 获取详细通话记录
+			Cursor phoneDetailCursor = resolver.query(
+					CallLog.Calls.CONTENT_URI, null, CallLog.Calls.NUMBER
+							+ "=?", new String[] { phone }, null);
+			if (phoneDetailCursor != null) {
+				while (phoneDetailCursor.moveToNext()) {
+					phoneDetail = new PhoneDetail();
+					// 得到手机号码
+					String number = phoneDetailCursor
+							.getString(phoneDetailCursor
+									.getColumnIndex("number"));
+					// 得到联系人名称
+					Long start_time = phoneDetailCursor
+							.getLong(phoneDetailCursor.getColumnIndex("date"));
+					// 通话持续时间
 
-				Long duration = phoneDetailCursor.getLong(phoneDetailCursor
-						.getColumnIndex("duration"));
-				// 通话类型
-				int type = phoneDetailCursor.getInt(phoneDetailCursor
-						.getColumnIndex("type"));
-				// 通化人姓名
-				String name = phoneDetailCursor.getString(phoneDetailCursor
-						.getColumnIndex("name"));
+					Long duration = phoneDetailCursor.getLong(phoneDetailCursor
+							.getColumnIndex("duration"));
+					// 通话类型
+					int type = phoneDetailCursor.getInt(phoneDetailCursor
+							.getColumnIndex("type"));
+					// 通化人姓名
+					String name = phoneDetailCursor.getString(phoneDetailCursor
+							.getColumnIndex("name"));
 
-				Tools.logSh(number + "::" + start_time + "::" + duration + "::"
-						+ type + "::" + name);
+					Tools.logSh(number + "::" + start_time + "::" + duration
+							+ "::" + type + "::" + name);
 
-				if (name == null) {
-					name = number;
+					if (name == null) {
+						name = number;
+					}
+
+					phoneDetail.setPhone_number(number);
+					phoneDetail.setDate(start_time);
+					phoneDetail.setDuration(duration);
+					phoneDetail.setType(type);
+					phoneDetail.setName(name);
+
+					// 添加到我们数据库
+					phoneDetailDao.insert(phoneDetail);
+					phoneDetail = null;
+					Tools.logSh("向phoneDetail插入了一条数据");
+
 				}
-
-				phoneDetail.setPhone_number(number);
-				phoneDetail.setDate(start_time);
-				phoneDetail.setDuration(duration);
-				phoneDetail.setType(type);
-				phoneDetail.setName(name);
-
-				// 添加到我们数据库
-				phoneDetailDao.insert(phoneDetail);
-				phoneDetail = null;
-				Tools.logSh("向phoneDetail插入了一条数据");
-
+				phoneDetailCursor.close();
 			}
-			phoneDetailCursor.close();
 		}
 
 		Tools.logSh("222222222222222222222222222222222222222");
