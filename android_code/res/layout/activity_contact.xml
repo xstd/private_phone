@@ -45,11 +45,10 @@
             android:id="@+id/sms_ll_remove"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:background="@drawable/private_comm_spacbtn_selector"
             android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-           
             android:padding="5dip" >
 
             <Button
@@ -69,27 +68,33 @@
                 android:textColor="@color/sms_text_content_unseleted" />
         </LinearLayout>
 
-        <LinearLayout 
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-             android:layout_marginBottom="65dip"
-            >
-            <ListView
-            android:id="@+id/lv_contact"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="65dip"
+            android:gravity="center"
+            android:orientation="vertical" >
             
             <ProgressBar
-                android:id="@+id/tv_empty"
+                android:id="@+id/pb_empty"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/private_comm_no_contact"
-                />
+                android:layout_height="wrap_content" />
+
+            <ListView
+                android:id="@+id/lv_contact"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+               />
+
             
+            <ImageView
+                android:id="@+id/iv_empty_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_launcher"/>
             
         </LinearLayout>
     </RelativeLayout>
-   
 
 </RelativeLayout>

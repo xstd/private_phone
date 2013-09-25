@@ -52,11 +52,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ContactActivity extends Activity {
+public class ContactActivity extends BaseActivity {
 
 	private Button bt_back;
 	private Button bt_sure;
@@ -72,6 +74,7 @@ public class ContactActivity extends Activity {
 	private Uri smsUri = Uri.parse("content://sms/");
 	private static final int UPDATE_UI = 0;
 	private static final int UPDATE = 1;
+	private static final int FINISH_GET_CONTACT = 2;
 
 	/** 获取库Phon表字段 **/
 	private static final String[] PHONES_PROJECTION = new String[] {
@@ -79,19 +82,14 @@ public class ContactActivity extends Activity {
 
 	/** 联系人显示名称 **/
 	private static final int PHONES_DISPLAY_NAME_INDEX = 0;
-
 	/** 电话号码 **/
 	private static final int PHONES_NUMBER_INDEX = 1;
-
 	/** 头像ID **/
 	private static final int PHONES_PHOTO_ID_INDEX = 2;
-
 	/** 联系人的ID **/
 	private static final int PHONES_CONTACT_ID_INDEX = 3;
-
 	/** 联系人名称 **/
 	private ArrayList<String> mContactsName = new ArrayList<String>();
-
 	/** 联系人号码 **/
 	private ArrayList<String> mContactsNumber = new ArrayList<String>();
 
@@ -131,13 +129,17 @@ public class ContactActivity extends Activity {
 			CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.NUMBER,
 			CallLog.Calls.TYPE, };
 
+	private PhoneRecord phoneRecord;
+	private ProgressBar pb_empty;
+	private ImageView iv_empty_bg;
+
 	public Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 
 			switch (msg.what) {
 			case UPDATE:
 				Tools.logSh("接受到消息");
-				lv_contact.setEmptyView(tv_empty);
+				lv_contact.setEmptyView(iv_empty_bg);
 				mAdapter = new AddContactAdapter(getApplicationContext(),
 						mContactsName, mContactsNumber);
 				lv_contact.setAdapter(mAdapter);
@@ -166,17 +168,17 @@ public class ContactActivity extends Activity {
 				});
 				break;
 
-			case UPDATE_UI:
-
+			case FINISH_GET_CONTACT:
+				Tools.logSh("获取数据库联系人完成");
+				pb_empty.setVisibility(View.GONE);
 				break;
 			}
 
 		};
 	};
-	private PhoneRecord phoneRecord;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contact);
@@ -186,7 +188,7 @@ public class ContactActivity extends Activity {
 		task = new GetContactTast(getApplicationContext());
 		task.execute();
 	}
-
+	
 	/**
 	 * 获取联系人
 	 */
@@ -199,6 +201,10 @@ public class ContactActivity extends Activity {
 		/** 得到手机通讯录联系人信息 **/
 		getPhoneContacts();
 
+		Message msg = new Message();
+		msg.what = FINISH_GET_CONTACT;
+		handler.sendMessage(msg);
+
 	}
 
 	private void initView() {
@@ -207,7 +213,8 @@ public class ContactActivity extends Activity {
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
 
 		lv_contact = (ListView) findViewById(R.id.lv_contact);
-		tv_empty = (TextView) findViewById(R.id.tv_empty);
+		pb_empty = (ProgressBar) findViewById(R.id.pb_empty);
+		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
 
 		bt_back.setOnClickListener(new OnClickListener() {
 
@@ -299,7 +306,6 @@ public class ContactActivity extends Activity {
 
 		Tools.logSh("11111111111111111111111111111111111111");
 
-		
 		// 获取详细通话记录
 		Cursor phoneDetailCursor = resolver.query(CallLog.Calls.CONTENT_URI,
 				null, CallLog.Calls.NUMBER + "=?", selectPhones, null);
@@ -345,8 +351,7 @@ public class ContactActivity extends Activity {
 			}
 			phoneDetailCursor.close();
 		}
-		
-		
+
 		Tools.logSh("222222222222222222222222222222222222222");
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(getApplicationContext());
@@ -360,11 +365,11 @@ public class ContactActivity extends Activity {
 		for (int i = 0; i < selectPhones.length; i++) {
 			String phone = selectPhones[i];
 
-			Tools.logSh("phone====="+phone);
+			Tools.logSh("phone=====" + phone);
 			Cursor phoneRecordCursor = resolver.query(
 					CallLog.Calls.CONTENT_URI, null, CallLog.Calls.NUMBER
-							+ "=?", new String[] {phone}, null);
-			Tools.logSh("phoneRecordCursor====="+phoneRecordCursor.getCount());
+							+ "=?", new String[] { phone }, null);
+			Tools.logSh("phoneRecordCursor=====" + phoneRecordCursor.getCount());
 			if (phoneRecordCursor != null) {
 				while (phoneRecordCursor.moveToNext()) {
 					phoneRecord = new PhoneRecord();
@@ -449,10 +454,9 @@ public class ContactActivity extends Activity {
 					detail.setDate(date);
 					detail.setData(body);
 
-
-					Tools.logSh("短信详细"+"thread_id" + type + "::" + "phone_number"
-							+ phone_number + "::" + "date" + date + "::"
-							+ "body" + body);
+					Tools.logSh("短信详细" + "thread_id" + type + "::"
+							+ "phone_number" + phone_number + "::" + "date"
+							+ date + "::" + "body" + body);
 					smsdetailDao.insert(detail);
 					detail = null;
 					Tools.logSh("向smsDetail插入了一条数据");
@@ -600,6 +604,7 @@ public class ContactActivity extends Activity {
 		@Override
 		public void onPreExecute() {
 			Toast.makeText(context, "开始执行", Toast.LENGTH_SHORT).show();
+			pb_empty.setVisibility(View.VISIBLE);
 		}
 
 		/**
