@@ -21,14 +21,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class PhoneDetailActivity extends Activity {
+public class PhoneDetailActivity extends BaseActivity {
 
 	private Button back;
 	private ListView listview;
 	private String number;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_phone_detail);
 		

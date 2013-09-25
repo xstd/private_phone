@@ -4,89 +4,60 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!--
-    <RelativeLayout
-        android:id="@+id/contact_rl_select"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/adblock_list_head_bg"
-        android:clickable="true"
-        android:paddingBottom="8dip"
-        android:paddingTop="8dip" >
-
-        <ImageButton
-            android:id="@+id/iv_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dip"
-            android:background="@drawable/shield_checkbox_alert_unchecked"
-            android:clickable="false" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="18dp"
-            android:text="@string/private_comm_select_all"
-            android:textSize="15sp" />
-    </RelativeLayout>
-    -->
-
     <RelativeLayout
         android:id="@+id/contact_edit_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_bright"
         android:visibility="gone" >
 
-        <!-- android:visibility="gone" -->
-
-        <LinearLayout
-            android:id="@+id/contact_edit_remove"
+        <RelativeLayout
+            android:id="@+id/contact_edit_select"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/private_comm_spacbtn_selector"
-            android:orientation="vertical"
-            android:padding="5dip" >
+            android:gravity="center_vertical" >
 
-            <RelativeLayout
-                android:id="@+id/contact_edit_select"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
+                android:layout_alignBaseline="@+id/contact_edit_btn_check"
+                android:layout_alignBottom="@+id/contact_edit_btn_check"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="14dp"
+                android:text="全选" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:text="全选" />
+            <CheckBox
+                android:id="@+id/contact_edit_btn_check"
+                style="@style/private_comm_checkbox_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="19dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-                <CheckBox
-                    android:id="@+id/btn_check"
-                    style="@style/private_comm_checkbox_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false" />
-            </RelativeLayout>
+        </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/contact_edit_ll_gone"
+        <LinearLayout
+            android:id="@+id/contact_edit_ll_gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/contact_edit_select"
+            android:layout_marginBottom="50dip"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/contact_edit_list_gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            
+            <ImageView
+                android:id="@+id/contact_edit_empty_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="65dip"
-                android:orientation="vertical" >
-
-                <ListView
-                    android:id="@+id/contact_edit_list_gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                android:background="@drawable/ic_launcher"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +70,7 @@
             android:padding="5dip" >
 
             <Button
-                android:id="@+id/contact_btn_remove"
+                android:id="@+id/contact_edit_btn_remove"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/private_comm_btn_unselect"
@@ -107,24 +78,13 @@
                 android:textColor="@color/sms_text_content_seleted" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/contact_edit_ll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="65dip"
-            android:orientation="vertical" >
-
-            <ListView
-                android:id="@+id/contact_edit_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/contact_rl_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:visibility="visible" >
 
         <LinearLayout
             android:id="@+id/contact_ll_add"

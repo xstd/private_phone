@@ -18,14 +18,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class SmsDetailActivity extends Activity {
+public class SmsDetailActivity extends BaseActivity {
 
 	private Button back;
 	private ListView listview;
 	private String number;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sms_detail);
 
@@ -42,7 +42,6 @@ public class SmsDetailActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});
