@@ -1,0 +1,117 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="65dip"
+        android:background="@drawable/title_bg"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dip"
+        android:paddingTop="15dip" >
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/private_comm_title_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/private_comm_add_contact" />
+
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/private_comm_backbtn_selector"
+            android:text="@string/private_comm_btn_back"
+            android:textColor="@color/text_title_style_select_color"
+            android:textSize="14sp" />
+    </RelativeLayout>
+    
+     <RelativeLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_title"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/sms_ll_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@drawable/private_comm_spacbtn_selector"
+            android:orientation="horizontal"
+            android:padding="5dip" >
+
+            <Button
+                android:id="@+id/bt_sure"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/private_comm_btn_sure"
+                android:textColor="@color/sms_text_content_unseleted" />
+
+            <Button
+                android:id="@+id/bt_cancle"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/private_comm_btn_cancle"
+                android:textColor="@color/sms_text_content_unseleted" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/private_comm_text_name" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/private_comm_text_phonenum" />
+
+            <RadioGroup
+                android:id="@+id/myRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <!-- 第一個RadioButton -->
+
+                <RadioButton
+                    android:id="@+id/myRadioButton1"
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/private_comm_radio_normal"/>
+                <!-- 第二個RadioButton -->
+
+                <RadioButton
+                    android:id="@+id/myRadioButton2"
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_comm_radio_stop"/>
+            </RadioGroup>
+        </LinearLayout>
+    </RelativeLayout>
+
+    
+
+</RelativeLayout>

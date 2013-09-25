@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/sms_rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/adblock_list_head_bg"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:text="@string/private_comm_select_all"
+            android:textSize="15sp" />
+
+        <ImageButton
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="17dp"
+            android:background="@drawable/shield_checkbox_alert_unchecked" />
+
+    </RelativeLayout>
+    
+     <RelativeLayout
+        android:id="@+id/sms_ll_remove"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+         android:background="@drawable/private_comm_spacbtn_selector"
+         >
+
+        <Button
+            android:id="@+id/bt_recover"
+            android:layout_width="200dip"
+            android:layout_height="match_parent"
+            android:text="@string/private_comm_recover_contact"
+            android:textColor="@color/sms_text_content_unseleted" />
+        
+         <Button
+            android:id="@+id/bt_delete"
+           android:layout_width="200dip"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="@string/private_comm_delete"
+            android:textColor="@color/sms_text_content_unseleted" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/sms_ll_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/sms_rl_select"
+        android:layout_marginBottom="51dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/sms_tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/private_comm_select_privatecontact"
+            android:gravity="center"
+            android:textColor="@color/sms_text_content_seleted" />
+        
+        <ListView
+            android:id="@+id/sms_lv_cont"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        
+    </RelativeLayout>
+
+</RelativeLayout>

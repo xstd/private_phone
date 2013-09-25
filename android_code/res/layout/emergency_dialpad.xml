@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout android:layout_gravity="center_horizontal" android:id="@id/dialpad" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TableRow android:layout_height="0.0dip" android:layout_marginBottom="4.0dip" android:layout_weight="1.0">
+        <ImageButton android:id="@id/b1" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_1" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b2" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_2" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b3" android:src="@drawable/dial_num_3" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+    </TableRow>
+    <TableRow android:layout_height="0.0dip" android:layout_marginBottom="4.0dip" android:layout_weight="1.0">
+        <ImageButton android:id="@id/b4" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_4" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b5" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_5" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b6" android:src="@drawable/dial_num_6" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+    </TableRow>
+    <TableRow android:layout_height="0.0dip" android:layout_marginBottom="4.0dip" android:layout_weight="1.0">
+        <ImageButton android:id="@id/b7" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_7" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b8" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_8" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b9" android:src="@drawable/dial_num_9" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+    </TableRow>
+    <TableRow android:layout_height="0.0dip" android:layout_marginBottom="4.0dip" android:layout_weight="1.0">
+        <ImageButton android:id="@id/star" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_star" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/b0" android:layout_marginRight="4.0dip" android:src="@drawable/dial_num_0" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/bj" android:src="@drawable/dial_num_pound" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+    </TableRow>
+    <TableRow android:layout_height="0.0dip" android:layout_weight="1.0">
+        <ImageButton android:id="@id/searchButton" android:layout_marginRight="4.0dip" android:src="@drawable/call_contacts_icon" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/dial" android:layout_marginRight="4.0dip" android:src="@drawable/call_outgoingcall_icon" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+        <ImageButton android:id="@id/del" android:src="@drawable/call_back_icon" android:contentDescription="@string/s_image" style="@style/EmergencyDialpadButtonStyle" />
+    </TableRow>
+</TableLayout>

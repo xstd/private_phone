@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light" >
+
+    <RelativeLayout
+        android:id="@+id/sms_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="65dip"
+        android:background="@drawable/title_bg"
+        android:paddingBottom="15dip"
+        android:paddingTop="15dip" >
+
+        <TextView
+            android:id="@+id/sms_detail_title_text"
+            style="@style/private_comm_title_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/private_comm_title_privatesms" />
+
+        <Button
+            android:id="@+id/sms_detail_title_call"
+            android:layout_width="45dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/private_comm_editbtn_selector"
+            android:text="@string/private_comm_btn_edit"
+            android:textColor="@color/text_title_style_select_color"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/sms_detail_title_back"
+            android:layout_width="55dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/private_comm_backbtn_selector"
+            android:text="@string/private_comm_btn_back"
+            android:textColor="@color/text_title_style_select_color"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/sms_detail_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/sms_detail_title"
+        android:layout_marginBottom="45dip" />
+
+    <RelativeLayout
+        android:id="@+id/sms_detail_buttom"
+        android:layout_width="match_parent"
+        android:layout_height="45dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/private_comm_spacbtn_selector"
+        android:gravity="center_vertical" >
+
+        <EditText
+            android:id="@+id/sms_detail_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="75dip"
+            android:layout_marginTop="5dip" />
+
+        <Button
+            android:id="@+id/sms_detail_btn"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:layout_marginTop="5dip"
+            android:paddingLeft="20dip"
+            android:text="发送" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!--
+    <RelativeLayout
+        android:id="@+id/contact_rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/adblock_list_head_bg"
+        android:clickable="true"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip" >
+
+        <ImageButton
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/shield_checkbox_alert_unchecked"
+            android:clickable="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:text="@string/private_comm_select_all"
+            android:textSize="15sp" />
+    </RelativeLayout>
+    -->
+
+    <RelativeLayout
+        android:id="@+id/contact_edit_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_bright"
+        android:visibility="gone" >
+
+        <!-- android:visibility="gone" -->
+
+        <LinearLayout
+            android:id="@+id/contact_edit_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/private_comm_spacbtn_selector"
+            android:orientation="vertical"
+            android:padding="5dip" >
+
+            <RelativeLayout
+                android:id="@+id/contact_edit_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:text="全选" />
+
+                <CheckBox
+                    android:id="@+id/btn_check"
+                    style="@style/private_comm_checkbox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/contact_edit_ll_gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="65dip"
+                android:orientation="vertical" >
+
+                <ListView
+                    android:id="@+id/contact_edit_list_gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contact_edit_remove_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/private_comm_spacbtn_selector"
+            android:orientation="vertical"
+            android:padding="5dip" >
+
+            <Button
+                android:id="@+id/contact_btn_remove"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/private_comm_btn_unselect"
+                android:text="@string/private_comm_unselect_contact"
+                android:textColor="@color/sms_text_content_seleted" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contact_edit_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="65dip"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/contact_edit_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/contact_rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/contact_ll_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/private_comm_spacbtn_selector"
+            android:orientation="vertical"
+            android:padding="5dip" >
+
+            <Button
+                android:id="@+id/contact_add_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/private_comm_select_contact"
+                android:textColor="@color/sms_text_content_unseleted" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contact_ll_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="65dip"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/contact_lv_cont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/contact_tv_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/private_comm_select_privatecontact"
+                android:textColor="@color/sms_text_content_unseleted" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
