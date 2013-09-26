@@ -808,6 +808,18 @@ QQ:903372666
     <string name="service_dailiao">代聊服务</string>
     <string name="service_jipiao">机票凭据服务</string>
     <string name="service_liwu">代送礼物</string>
+    <string name="proxy_category">选择代聊范围</string>
+    <string name="proxy_time">选择代聊时间</string>
+    <string name="proxy_type">选择代聊方式</string>
+    <string name="proxy_reply">代聊期间回复</string>
+    <string name="proxy_self">主动</string>
+    <string name="proxy_beidong">被动</string>
+    <string name="proxy_default_text">代聊期间回复文字</string>
+    <string name="proxy_button_ok">确定</string>
+    <string name="proxy_sms">短信</string>
+    <string name="proxy_weixin">微信</string>
+    <string name="proxy_time_begin">开始时间:</string>
+    <string name="proxy_time_end">结束时间:</string>
 
     <!-- 模拟通讯 -->
     <string name="simula_comm_sms_title">模拟短信</string>

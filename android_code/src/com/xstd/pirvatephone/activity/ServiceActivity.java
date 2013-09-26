@@ -1,7 +1,9 @@
 package com.xstd.pirvatephone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +42,19 @@ public class ServiceActivity extends BaseActivity implements
 		mTitle.setText(R.string.service_title);
 
 		mListView.setAdapter(new ServiceAdapter(this.getApplicationContext()));
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent();
+                switch (i) {
+                    case 0:
+                        intent.setClass(getApplicationContext(), ProxyTalkActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });
 	}
 
 	@Override

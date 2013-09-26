@@ -79,6 +79,7 @@
         </activity>
         <activity android:name=".activity.AddSimulaPhoneActivity" >
         </activity>
+        <activity android:name=".activity.ProxyTalkActivity"/>
 
         <receiver android:name=".receiver.SimulateSendSMSReceiver" >
         </receiver>
