@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 写联系人 -->
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <!-- 震动 -->
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -76,8 +78,10 @@
             android:theme="@android:style/Theme.DeviceDefault" >
         </activity>
         <activity android:name=".activity.AddSimulaPhoneActivity" >
->
         </activity>
+
+        <receiver android:name=".receiver.SimulateSendSMSReceiver" >
+        </receiver>
     </application>
 
 </manifest>

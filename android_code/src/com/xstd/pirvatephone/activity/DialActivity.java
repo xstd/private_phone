@@ -1,23 +1,27 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.regex.Pattern;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.plugin.common.utils.StringUtils;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.setting.SettingManager;
 import com.xstd.privatephone.tools.Toasts;
-
-import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA. User: michael Date: 13-9-9 Time: PM3:11 To change

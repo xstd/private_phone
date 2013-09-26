@@ -2,6 +2,7 @@ package com.xstd.pirvatephone.dao.use.demo;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.xstd.pirvatephone.dao.demo.DaoMaster;
 import com.xstd.pirvatephone.dao.demo.DaoSession;
 

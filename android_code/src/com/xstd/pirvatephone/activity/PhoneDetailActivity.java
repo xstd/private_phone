@@ -1,25 +1,19 @@
 package com.xstd.pirvatephone.activity;
 
-import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
-import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
-import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
-import com.xstd.privatephone.adapter.PhoneDetailAdapter;
-import com.xstd.privatephone.adapter.SmsDetailAdapter;
-import com.xstd.privatephone.tools.Tools;
-
-import android.os.Bundle;
-import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
+import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
+import com.xstd.privatephone.adapter.PhoneDetailAdapter;
+import com.xstd.privatephone.tools.Tools;
 
 public class PhoneDetailActivity extends BaseActivity {
 

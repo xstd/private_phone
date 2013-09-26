@@ -1,7 +1,5 @@
 package com.xstd.privatephone.adapter;
 
-import com.xstd.pirvatephone.R;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -11,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.xstd.pirvatephone.R;
 
 public class ContactAdapter extends CursorAdapter {
 	private static Context mContext;

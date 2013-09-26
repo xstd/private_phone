@@ -4,15 +4,16 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +28,8 @@ import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateDaoUtils;
+import com.xstd.pirvatephone.module.SimpleContact;
+import com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver;
 import com.xstd.pirvatephone.utils.ContactsUtils;
 import com.xstd.privatephone.view.MyDatePickerDialog;
 import com.xstd.privatephone.view.MyTimePickerDialog;
@@ -34,10 +37,12 @@ import com.xstd.privatephone.view.MyTimePickerDialog;
 public class AddSimulaSmsActivity extends BaseActivity implements
 		OnClickListener {
 
-	private static final int CHOOSE_CONTACT = 1;
-	static final int TIME_DIALOG_ID = 0;
-	static final int DATE_DIALOG_ID = 1;
+	private static final int CHOOSE_CONTACT = 0;
+	static final int TIME_DIALOG_ID = 1;
+	static final int DATE_DIALOG_ID = 2;
+	@SuppressWarnings("unused")
 	private static final String TAG = "AddSimulaSmsActivity";
+	private static final int REQUES_REVEIVER_TCODE = 3;
 
 	@ViewMapping(ID = R.id.back)
 	public ImageView back;
@@ -85,6 +90,7 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 		updateDateTime();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -124,15 +130,25 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 					.show();
 			return;
 		}
+
 		SimulateComm entity = new SimulateComm(null, Long.valueOf(phone),
 				calendar.getTime(), content, SimulaCommActivity.SIMULA_SMS);
 		SimulateDaoUtils.getSimulateDao(this).insert(entity);
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		Intent intent = new Intent(getApplicationContext(),
+				SimulateSendSMSReceiver.class);
+		intent.putExtra("simu", entity);
+		PendingIntent pendIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), REQUES_REVEIVER_TCODE, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		long triggerAtMillis = calendar.getTimeInMillis()
+				- System.currentTimeMillis() + SystemClock.elapsedRealtime();
+		am.set(AlarmManager.ELAPSED_REALTIME, triggerAtMillis, pendIntent);
 		finish();
 	}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Log.w(TAG, "onCreateDialog");
 		switch (id) {
 		case TIME_DIALOG_ID:
 			return new MyTimePickerDialog(this, mTimeSetListener,
@@ -148,7 +164,6 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
-		Log.w(TAG, "onPrepareDialog");
 		switch (id) {
 		case TIME_DIALOG_ID:
 			((TimePickerDialog) dialog).updateTime(calendar.get(Calendar.HOUR),
@@ -165,7 +180,9 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CHOOSE_CONTACT && resultCode == RESULT_OK) {
-			ContactsUtils.readContact(this, data.getData());
+			SimpleContact contact = ContactsUtils.readContact(this,
+					data.getData());
+			phoneNumber.setText(contact.getPhone());
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}

@@ -4,32 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.dao.contact.ContactInfo;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
-import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
-import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
-import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
-import com.xstd.privatephone.adapter.ContactAdapter;
-import com.xstd.privatephone.adapter.EditContactAdapter;
-import com.xstd.privatephone.adapter.MyViewPagerAdapter;
-import com.xstd.privatephone.adapter.PhoneRecordAdapter;
-import com.xstd.privatephone.adapter.SmsRecordAdapter;
-import com.xstd.privatephone.tools.Tools;
-
-import de.greenrobot.dao.AbstractDao;
-
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -39,6 +13,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -56,6 +35,24 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
+import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
+import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
+import com.xstd.privatephone.adapter.ContactAdapter;
+import com.xstd.privatephone.adapter.EditContactAdapter;
+import com.xstd.privatephone.adapter.MyViewPagerAdapter;
+import com.xstd.privatephone.adapter.PhoneRecordAdapter;
+import com.xstd.privatephone.adapter.SmsRecordAdapter;
+import com.xstd.privatephone.tools.Tools;
 
 public class PrivateCommActivity extends BaseActivity {
 

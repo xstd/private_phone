@@ -1,12 +1,13 @@
 package com.xstd.pirvatephone.dao.use.demo;
 
+import java.util.List;
+
 import android.content.Context;
 import android.text.TextUtils;
+
 import com.xstd.pirvatephone.dao.demo.DaoSession;
 import com.xstd.pirvatephone.dao.demo.PushUserInfo;
 import com.xstd.pirvatephone.dao.demo.PushUserInfoDao;
-
-import java.util.List;
 
 class PushUser {
 

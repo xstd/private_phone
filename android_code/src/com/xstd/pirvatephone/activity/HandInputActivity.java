@@ -1,22 +1,19 @@
 package com.xstd.pirvatephone.activity;
 
-import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.dao.contact.ContactInfo;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfo;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 
 public class HandInputActivity extends Activity {
 

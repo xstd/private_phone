@@ -1,6 +1,7 @@
 package com.xstd.pirvatephone.app;
 
 import android.app.Application;
+
 import com.xstd.pirvatephone.setting.SettingManager;
 
 /**

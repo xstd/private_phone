@@ -2,8 +2,6 @@ package com.xstd.privatephone.adapter;
 
 import java.util.ArrayList;
 
-import com.xstd.pirvatephone.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.xstd.pirvatephone.R;
 
 public class AddContactAdapter extends BaseAdapter {
 

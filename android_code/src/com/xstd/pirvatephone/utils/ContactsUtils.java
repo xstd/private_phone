@@ -5,9 +5,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
+import com.xstd.pirvatephone.module.SimpleContact;
+
 public class ContactsUtils {
 
-	public static void readContact(Context ctx, Uri uri) {
+	public static SimpleContact readContact(Context ctx, Uri uri) {
+		SimpleContact contact = null;
 		Cursor cursor = ctx.getContentResolver().query(uri, null, null, null,
 				null);
 		if (cursor != null && cursor.moveToFirst()) {
@@ -23,12 +26,9 @@ public class ContactsUtils {
 				String phonenumber = phone
 						.getString(phone
 								.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-				int phonetype = phone
-						.getInt(phone
-								.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-				int restype = ContactsContract.CommonDataKinds.Phone
-						.getTypeLabelResource(phonetype);
+				contact = new SimpleContact(id, name, phonenumber);
 			}
 		}
+		return contact;
 	}
 }

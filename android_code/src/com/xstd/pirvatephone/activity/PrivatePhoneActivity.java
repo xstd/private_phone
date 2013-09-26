@@ -1,8 +1,8 @@
 package com.xstd.pirvatephone.activity;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
+
 import com.xstd.pirvatephone.R;
 
 public class PrivatePhoneActivity extends Activity {
