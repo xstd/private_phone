@@ -3,37 +3,47 @@ package com.xstd.privatephone.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.privatephone.adapter.ShowSDFilesAdapter.ViewHolder;
+import com.xstd.privatephone.bean.MyContactInfo;
+import com.xstd.privatephone.tools.Tools;
 
 public class AddContactAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private ArrayList<String> mContactsName;
 	private ArrayList<String> mContactsNumber;
-	private ViewHold hold;
+	private ArrayList<MyContactInfo> mContactsInfos;
+	private ArrayList<MyContactInfo> mSelectContactsInfos;
+	/** 选取转换为隐私联系人的号码 **/
+	private static ArrayList<String> mSelectContactsNumber = new ArrayList<String>();
 
-	public AddContactAdapter(Context context, ArrayList<String> contactsName,
-			ArrayList<String> contactsNumber) {
+	public AddContactAdapter(Context context,
+			ArrayList<MyContactInfo> contactInfos) {
 		mContext = context;
-		mContactsName = contactsName;
-		mContactsNumber = contactsNumber;
-
+		/*
+		 * mContactsName = contactsName; mContactsNumber = contactsNumber;
+		 */
+		mContactsInfos = contactInfos;
 	}
-	
-	public void updateUI(){
+
+	public void updateUI() {
 		notifyDataSetChanged();
 	}
 
 	public int getCount() {
 		// 设置绘制数量
-		return mContactsName.size();
+		return mContactsInfos.size();
 	}
 
 	@Override
@@ -42,7 +52,7 @@ public class AddContactAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
-		return position;
+		return mContactsInfos.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -50,35 +60,47 @@ public class AddContactAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		if (convertView == null || position < mContactsNumber.size()) {
-			convertView = LayoutInflater.from(mContext).inflate(
+		ViewHold hold;
+		if (convertView == null ) {
+			hold = new ViewHold();
+			convertView = View.inflate(mContext,
 					R.layout.private_comm_add_item, null);
 			hold = new ViewHold();
-			
-			hold.name =  (TextView) convertView.findViewById(R.id.tv_name);
-			hold.phone= (TextView) convertView.findViewById(R.id.tv_phone_num);
-			hold.check= (Button) convertView.findViewById(R.id.btn_check);
-			
+
+			hold.name = (TextView) convertView.findViewById(R.id.tv_name);
+			hold.phone = (TextView) convertView.findViewById(R.id.tv_phone_num);
+			hold.check = (CheckBox) convertView.findViewById(R.id.btn_check);
+
 			convertView.setTag(hold);
+		} else {
+			hold = (ViewHold) convertView.getTag();
 		}
-		
-		
-		
-		
+
+		final MyContactInfo mContactInfo = mContactsInfos.get(position);
 		// 绘制联系人名称
-		hold.name.setText(mContactsName.get(position));
+		hold.name.setText(mContactInfo.getName());
 		// 绘制联系人号码
-		hold.phone.setText(mContactsNumber.get(position));
-		hold.check.setBackgroundResource(R.drawable.private_comm_checkbox_uncheck);
-		
+		hold.phone.setText(mContactInfo.getAddress());
+		hold.check.setChecked(mContactInfo.isChecked);
+		hold.check.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mContactInfo.isChecked) {
+					mContactInfo.isChecked = false;
+				} else {
+					mContactInfo.isChecked = true;
+				}
+				Tools.logSh(mContactInfo.isChecked + "");
+			}
+		});
 		return convertView;
 	}
-	
-	static class ViewHold{
-		static TextView name;
-		static TextView phone;
-		static Button check;
+
+	static class ViewHold {
+		TextView name;
+		TextView phone;
+		CheckBox check;
 	}
 
 }
