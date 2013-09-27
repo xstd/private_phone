@@ -820,6 +820,9 @@ QQ:903372666
     <string name="proxy_weixin">微信</string>
     <string name="proxy_time_begin">开始时间:</string>
     <string name="proxy_time_end">结束时间:</string>
+    <string name="proxy_weixin_name">微信帐号:</string>
+    <string name="proxy_weixin_pwd">微信密码:</string>
+    <string name="proxy_weixin_title">微信帐号设置</string>
 
     <!-- 模拟通讯 -->
     <string name="simula_comm_sms_title">模拟短信</string>
