@@ -36,7 +36,9 @@ public class SimulaPhone extends SimulaComm {
 				SimulateComm comm = new SimulateComm();
 				comm.setId(cursor.getLong(cursor
 						.getColumnIndex(SimulateCommDao.Properties.Id.columnName)));
-				comm.setPhonenumber(cursor.getLong(cursor
+				comm.setName(cursor.getString(cursor
+						.getColumnIndex(SimulateCommDao.Properties.Name.columnName)));
+				comm.setPhonenumber(cursor.getString(cursor
 						.getColumnIndex(SimulateCommDao.Properties.Phonenumber.columnName)));
 				comm.setFuturetime(new Date(
 						cursor.getLong(cursor

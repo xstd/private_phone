@@ -4,13 +4,15 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,6 +27,9 @@ import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateDaoUtils;
+import com.xstd.pirvatephone.module.SimpleContact;
+import com.xstd.pirvatephone.receiver.SimulateSendPhoneReceiver;
+import com.xstd.pirvatephone.utils.ContactsUtils;
 import com.xstd.privatephone.view.MyDatePickerDialog;
 import com.xstd.privatephone.view.MyTimePickerDialog;
 
@@ -34,6 +39,8 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 	private static final String TAG = "AddSimulaPhoneActivity";
 
 	private static final int CHOOSE_CONTACT = 1;
+
+	private static final int REQUES_REVEIVER_CODE = 3;
 
 	@ViewMapping(ID = R.id.back)
 	public ImageView back;
@@ -56,6 +63,8 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 	private Calendar calendar;
 
 	private long time;
+
+	private SimpleContact contact;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -117,18 +126,31 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 					.show();
 			return;
 		}
-		SimulateComm entity = new SimulateComm(null, Long.valueOf(phone),
-				calendar.getTime(), null, SimulaCommActivity.SIMULA_PHONE);
+		SimulateComm entity = new SimulateComm(null, contact == null ? null
+				: contact.getName(), phone, calendar.getTime(),
+				null, SimulaCommActivity.SIMULA_PHONE);
 		SimulateDaoUtils.getSimulateDao(this).insert(entity);
+
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		Intent intent = new Intent(getApplicationContext(),
+				SimulateSendPhoneReceiver.class);
+		intent.putExtra("simu", entity);
+		PendingIntent pendIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), REQUES_REVEIVER_CODE, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		long triggerAtMillis = calendar.getTimeInMillis()
+				- System.currentTimeMillis() + SystemClock.elapsedRealtime();
+		am.set(AlarmManager.ELAPSED_REALTIME, triggerAtMillis, pendIntent);
 		finish();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == CHOOSE_CONTACT && resultCode == RESULT_OK) {
-			Log.w(TAG, data.toString());
+			contact = ContactsUtils.readContact(this, data.getData());
+			phoneNumber.setText(contact.getPhone());
 		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void showTimePicker() {

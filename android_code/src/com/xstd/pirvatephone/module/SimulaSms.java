@@ -18,7 +18,6 @@ public class SimulaSms extends SimulaComm {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final String TAG = "SimulaSms";
 	/**
 	 * 短信模拟中的短信内容
 	 */
@@ -37,18 +36,27 @@ public class SimulaSms extends SimulaComm {
 	public List<SimulateComm> getSimulaCommByType() {
 		SimulateCommDao dao = SimulateDaoUtils.getSimulateDao(mCtx);
 		Cursor cursor = dao.getDatabase().query(dao.getTablename(),
-				dao.getAllColumns(), SimulateCommDao.Properties.Type.columnName + "=?",
+				dao.getAllColumns(),
+				SimulateCommDao.Properties.Type.columnName + "=?",
 				new String[] { String.valueOf(SimulaCommActivity.SIMULA_SMS) },
 				null, null, null);
 		List<SimulateComm> results = new ArrayList<SimulateComm>();
-		if(cursor!=null) {
-			while(cursor.moveToNext()) {
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
 				SimulateComm comm = new SimulateComm();
-				comm.setId(cursor.getLong(cursor.getColumnIndex(SimulateCommDao.Properties.Id.columnName)));
-				comm.setPhonenumber(cursor.getLong(cursor.getColumnIndex(SimulateCommDao.Properties.Phonenumber.columnName)));
-				comm.setFuturetime(new Date(cursor.getLong(cursor.getColumnIndex(SimulateCommDao.Properties.Futuretime.columnName))));
-				comm.setContemt(cursor.getString(cursor.getColumnIndex(SimulateCommDao.Properties.Contemt.columnName)));
-				comm.setType(cursor.getInt(cursor.getColumnIndex(SimulateCommDao.Properties.Type.columnName)));
+				comm.setId(cursor.getLong(cursor
+						.getColumnIndex(SimulateCommDao.Properties.Id.columnName)));
+				comm.setName(cursor.getString(cursor
+						.getColumnIndex(SimulateCommDao.Properties.Name.columnName)));
+				comm.setPhonenumber(cursor.getString(cursor
+						.getColumnIndex(SimulateCommDao.Properties.Phonenumber.columnName)));
+				comm.setFuturetime(new Date(
+						cursor.getLong(cursor
+								.getColumnIndex(SimulateCommDao.Properties.Futuretime.columnName))));
+				comm.setContent(cursor.getString(cursor
+						.getColumnIndex(SimulateCommDao.Properties.Content.columnName)));
+				comm.setType(cursor.getInt(cursor
+						.getColumnIndex(SimulateCommDao.Properties.Type.columnName)));
 				results.add(comm);
 			}
 		}

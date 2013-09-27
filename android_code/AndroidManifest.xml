@@ -13,7 +13,8 @@
     <!-- 写联系人 -->
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <!-- 震动 -->
-    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" >
+    </uses-permission>
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -79,10 +80,14 @@
         </activity>
         <activity android:name=".activity.AddSimulaPhoneActivity" >
         </activity>
-        <activity android:name=".activity.ProxyTalkActivity"/>
+        <activity android:name=".activity.ProxyTalkActivity" />
 
         <receiver android:name=".receiver.SimulateSendSMSReceiver" >
         </receiver>
+        <receiver android:name=".receiver.SimulateSendPhoneReceiver" >
+        </receiver>
+        
+        <activity android:name=".activity.SimulateCallActivity"></activity>
     </application>
 
 </manifest>
