@@ -1,8 +1,11 @@
 package com.xstd.pirvatephone.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import com.plugin.common.utils.view.ViewMapUtil;
@@ -32,6 +35,9 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
     @ViewMapping(ID = R.id.weixin_check)
     public CheckBox mWeixinCheck;
 
+    @ViewMapping(ID = R.id.weixin_accout)
+    public TextView mWeixinAccount;
+
     @ViewMapping(ID = R.id.other_check)
     public CheckBox mOtherCheck;
 
@@ -53,6 +59,9 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
     private boolean mIsOtherChecked;
 
     private String mDefaultString;
+
+    private String mWXName;
+    private String mWXPasswd;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +128,12 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
                 mIsSmsChecked = b;
                 break;
             case R.id.weixin_check:
+                if (!mIsWeixinChecked && b) {
+                    showWeiXinAccountDialog();
+                }
+                if (!b) {
+                    mWeixinAccount.setText("");
+                }
                 mIsWeixinChecked = b;
                 break;
             case R.id.self_check:
@@ -134,5 +149,33 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
                 }
                 break;
         }
+    }
+
+    private void showWeiXinAccountDialog() {
+        View view = getLayoutInflater().inflate(R.layout.weixin_account, null);
+        final EditText name = (EditText) view.findViewById(R.id.weixin_account);
+        final EditText pwd = (EditText) view.findViewById(R.id.weixin_pwd);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                                    .setTitle(R.string.proxy_weixin_title)
+                                    .setView(view)
+                                    .setPositiveButton(R.string.enter_btn_ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            mWXName = name.getText().toString();
+                                            mWXPasswd = pwd.getText().toString();
+
+                                            if (TextUtils.isEmpty(mWXName) || TextUtils.isEmpty(mWXPasswd)) {
+                                                mWeixinCheck.setChecked(false);
+                                                mWeixinAccount.setText("");
+                                            } else {
+                                                mWeixinCheck.setChecked(true);
+                                                mWeixinAccount.setText(mWXName);
+                                            }
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.enter_btn_cancel, null)
+                                    .create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 }
