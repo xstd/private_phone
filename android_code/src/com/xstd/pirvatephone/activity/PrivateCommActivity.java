@@ -896,7 +896,7 @@ public class PrivateCommActivity extends BaseActivity {
 						case 0:
 							Intent intent = new Intent(
 									PrivateCommActivity.this,
-									ContactActivity.class);
+									AddContactActivity.class);
 							startActivity(intent);
 							break;
 						case 1:

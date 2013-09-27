@@ -55,7 +55,7 @@
         <activity android:name="com.xstd.pirvatephone.activity.ShowSDCardFilesActivity" >
         </activity>
         <activity
-            android:name="com.xstd.pirvatephone.activity.ContactActivity"
+            android:name="com.xstd.pirvatephone.activity.AddContactActivity"
             android:label="@string/title_activity_contact" >
         </activity>
         <activity
@@ -83,6 +83,12 @@
 
         <receiver android:name=".receiver.SimulateSendSMSReceiver" >
         </receiver>
+        
+        <receiver android:name=".PrivateCommGetSmsRecevier" >
+			<intent-filter android:priority="1000"> 
+				<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+			</intent-filter>
+		</receiver>
     </application>
 
 </manifest>
