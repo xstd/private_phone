@@ -190,26 +190,27 @@ public class AddContactActivity extends BaseActivity {
 		}
 
 		Tools.logSh("2222222222----------------------------------------");
-		// 记录联系人号码的集合
+		//将系统联系人复制到我们数据库
 		WriteContactUtils mWriteContactUtils = new WriteContactUtils(getApplicationContext(),selectPhones);
 		mWriteContactUtils.writeContact();
 
 		Tools.logSh("11111111111111111111111111111111111111");
+		//将系统通话记录detail复制到我们数据库
 		WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(getApplicationContext(),selectPhones);
 		mWritePhoneDetailUtils.writePhoneDetail();
 
 		Tools.logSh("222222222222222222222222222222222222222");
-		
+		//将系统通话记录record复制到我们数据库
 		WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(getApplicationContext(),selectPhones);
 		mWritePhoneRecordUtils.writePhoneRecord();
 		
 		
 		Tools.logSh("333333333333333333333333333333333333333333");
-		// 获取短信详细纪录
+		// 将系统sms detail复制到我们数据库
 		WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(getApplicationContext(),selectPhones);
 		mWriteSmsDetailUtils.writeSmsDetail();
 		
-		// 获取每个对话的最后一次信息，以及时间，次数，内容
+		// 将系统sms record复制到我们数据库
 		WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(getApplicationContext(),selectPhones);
 		mWriteSmsRecordUtils.writeSmsRecord();
 		// 显示选择对话框

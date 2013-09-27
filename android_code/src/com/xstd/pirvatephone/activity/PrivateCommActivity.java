@@ -16,6 +16,14 @@ import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
+import com.xstd.pirvatephone.utils.DelectOurContactUtils;
+import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
+import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
+import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
+import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemContactUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemPhoneUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.EditContactAdapter;
 import com.xstd.privatephone.adapter.MyViewPagerAdapter;
@@ -592,244 +600,44 @@ public class PrivateCommActivity extends BaseActivity {
 			Tools.logSh("selectNumber===" + selectNumbers[i]);
 		}
 
-		// 向系统联系人数据库添加联系人
+		// 联系人恢复，向系统联系人数据库添加联系人
 
-		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-				.getContactInfoDao(getApplicationContext());
-		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String phone = selectNumbers[i];
-
-			// 查询我们的数据库获取number对应的名字
-			Cursor cursor = contactDatabase.query(ContactInfoDao.TABLENAME,
-					null, ContactInfoDao.Properties.Phone_number.columnName
-							+ "=?", new String[] { phone }, null, null, null);
-
-			Tools.logSh("向系统数据库中插入数据cursor.count=" + cursor.getCount()
-					+ "::::+phone=" + phone);
-			if (cursor != null) {
-				while (cursor.moveToNext()) {
-					String name = cursor
-							.getString(cursor
-									.getColumnIndex(ContactInfoDao.Properties.Display_name.columnName));
-					Tools.logSh("向系统数据库中插入数据name====" + name);
-
-					ContentValues values = new ContentValues();
-
-					values.put(People.NAME, name);
-
-					Uri uri = getContentResolver().insert(People.CONTENT_URI,
-							values);
-
-					Uri numberUri = Uri.withAppendedPath(uri,
-							People.Phones.CONTENT_DIRECTORY);
-
-					values.clear();
-
-					values.put(Contacts.Phones.TYPE, People.Phones.TYPE_MOBILE);
-
-					values.put(People.NUMBER, phone);
-
-					getContentResolver().insert(numberUri, values);
-					Tools.logSh("成功的向系统联系人数据库插入一个联系人name+" + name + "phone="
-							+ phone);
-				}
-				cursor.close();
-			}
-
-		}
-
-		// 短信恢复
-		SmsDetailDao smsDetailDao = SmsDetailDaoUtils
-				.getSmsDetailDao(getApplicationContext());
-		SQLiteDatabase smsDetailDatabase = smsDetailDao.getDatabase();
-
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String phone = selectNumbers[i];
-			Tools.logSh("phone============" + phone);
-
-			Cursor smsDetailCursor = smsDetailDatabase.query(
-					SmsDetailDao.TABLENAME, null,
-					SmsDetailDao.Properties.Phone_number.columnName + "=?",
-					new String[] { phone }, null, null, null);
-			Tools.logSh("向系统sms数据库中插入数据cursor.count="
-					+ smsDetailCursor.getCount());
-
-			if (smsDetailCursor != null) {
-				while (smsDetailCursor.moveToNext()) {
-
-					String address = smsDetailCursor
-							.getString(smsDetailCursor
-									.getColumnIndex(SmsDetailDao.Properties.Phone_number.columnName));
-					String body = smsDetailCursor
-							.getString(smsDetailCursor
-									.getColumnIndex(SmsDetailDao.Properties.Data.columnName));
-					int type = smsDetailCursor
-							.getInt(smsDetailCursor
-									.getColumnIndex(SmsDetailDao.Properties.Thread_id.columnName));
-					Long date = smsDetailCursor
-							.getLong(smsDetailCursor
-									.getColumnIndex(SmsDetailDao.Properties.Date.columnName));
-					ContentValues values = new ContentValues();
-					/* 手机号 */
-					values.put("address", address);
-					/* 时间 */
-					values.put("date", date);
-					values.put("body", body);
-					values.put("status", -1);
-					/* 类型1为收件箱，2为发件箱 */
-					values.put("type", type);
-					/* 短信体内容 */
-					values.put("read", 1);
-					/* 插入数据库操作 */
-					Uri inserted = getContentResolver().insert(
-							Uri.parse("content://sms"), values);
-
-					Tools.logSh("成功的向系统联系人数据库插入一个联系人address+" + address
-							+ ":::body=" + body + "::type=" + type + "::date="
-							+ date + "::uri=" + inserted);
-
-				}
-				smsDetailCursor.close();
-			}
-		}
+		RestoreSystemContactUtils mRestoreSystemContactUtils = new RestoreSystemContactUtils(getApplicationContext(),selectNumbers);
+		mRestoreSystemContactUtils.restoreContacts();
+		
+		
+		// 短信恢复，向系统短信数据库添加短信
+		RestoreSystemSmsUtils mRestoreSystemSmsUtils = new RestoreSystemSmsUtils(getApplicationContext(),selectNumbers);
+		mRestoreSystemSmsUtils.restoreSms();
+		
 
 		// 通话记录恢复到手机上
-		PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
-				.getPhoneDetailDao(getApplicationContext());
-		SQLiteDatabase phoneDetailDatebase = phoneDetailDao.getDatabase();
+		RestoreSystemPhoneUtils mRestoreSystemPhoneUtils = new RestoreSystemPhoneUtils(getApplicationContext(),selectNumbers);
+		mRestoreSystemPhoneUtils.restorePhone();
 		
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String number = selectNumbers[i];
-			Cursor phoneDetailCursor = phoneDetailDatebase.query(
-					PhoneDetailDao.TABLENAME, null,
-					PhoneDetailDao.Properties.Phone_number.columnName + "=?",
-					new String[] { number }, null, null, null);
-
-			Tools.logSh("向系统通话记录数据库中插入数据cursor.count="
-					+ phoneDetailCursor.getCount());
-
-			if (phoneDetailCursor != null) {
-				while (phoneDetailCursor.moveToNext()) {
-
-					String address = phoneDetailCursor
-							.getString(phoneDetailCursor
-									.getColumnIndex(PhoneDetailDao.Properties.Phone_number.columnName));
-					int type = phoneDetailCursor
-							.getInt(phoneDetailCursor
-									.getColumnIndex(PhoneDetailDao.Properties.Type.columnName));
-					Long duration = phoneDetailCursor
-							.getLong(phoneDetailCursor
-									.getColumnIndex(PhoneDetailDao.Properties.Duration.columnName));
-					
-					Long date = phoneDetailCursor
-							.getLong(phoneDetailCursor
-									.getColumnIndex(PhoneDetailDao.Properties.Date.columnName));
-
-					Tools.logSh("通话记录：：："+address+"::::"+type+":::"+duration+"::::"+date);
-					
-					    // TODO Auto-generated method stub
-					    ContentValues values = new ContentValues(); 
-					    values.put(CallLog.Calls.NUMBER, address);
-					    values.put(CallLog.Calls.DATE, date);
-					    values.put(CallLog.Calls.DURATION, duration);
-					    values.put(CallLog.Calls.TYPE,type);//未接
-					    values.put(CallLog.Calls.NEW, 1);//0已看1未看
-						    
-					    getContentResolver().insert(CallLog.Calls.CONTENT_URI, values);
-				}
-			}
-
-		}
-
 		// 联系人信息移除
 
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String number = selectNumbers[i];
-			int isDelete = contactDatabase.delete(ContactInfoDao.TABLENAME,
-					ContactInfoDao.Properties.Phone_number.columnName + "=?",
-					new String[] { number });
-
-			if (isDelete == 0) {
-				Tools.logSh("删除联系人失败！");
-			} else {
-				Tools.logSh("删除联系人成功！");
-			}
-		}
-
+		DelectOurContactUtils mDelectOurContactUtils = new DelectOurContactUtils(getApplicationContext(),selectNumbers);
+		mDelectOurContactUtils.deleteContacts();
+		
+		
 		// record短信息移除
-		SmsRecordDao smsRecordDao = SmsRecordDaoUtils
-				.getSmsRecordDao(getApplicationContext());
-		SQLiteDatabase smsRecordDatabase = smsRecordDao.getDatabase();
-
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String number = selectNumbers[i];
-			int isDelete = smsRecordDatabase.delete(SmsRecordDao.TABLENAME,
-					SmsRecordDao.Properties.Phone_number.columnName + "=?",
-					new String[] { number });
-
-			if (isDelete == 0) {
-				Tools.logSh("删除record短信失败！");
-			} else {
-				Tools.logSh("删除record短信成功！");
-			}
-		}
-
+		DelectOurSmsRecordsUtils mDelectOurSmsRecordsUtils = new DelectOurSmsRecordsUtils(getApplicationContext(),selectNumbers);
+		mDelectOurSmsRecordsUtils.deleteSmsRecords();
+		
 		// detail短信息移除
+		DelectOurSmsDetailsUtils mDelectOurSmsDetailsUtils = new DelectOurSmsDetailsUtils(getApplicationContext(),selectNumbers);
+		mDelectOurSmsDetailsUtils.deleteSmsDetails();
+		
 
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String number = selectNumbers[i];
-			int isDelete = smsDetailDatabase.delete(SmsDetailDao.TABLENAME,
-					SmsDetailDao.Properties.Phone_number.columnName + "=?",
-					new String[] { number });
-
-			if (isDelete == 0) {
-				Tools.logSh("删除detail短信失败！");
-			} else {
-				Tools.logSh("删除detail短信成功！");
-			}
-		}
-
-		// 通话记detail录移除
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String number = selectNumbers[i];
-			int isDelete = phoneDetailDatebase.delete(PhoneDetailDao.TABLENAME,
-					PhoneDetailDao.Properties.Phone_number.columnName + "=?",
-					new String[] { number });
-
-			if (isDelete == 0) {
-				Tools.logSh("删除通话记录detail失败！");
-			} else {
-				Tools.logSh("删除联系人通话记录detail成功！");
-			}
-		}
-
-		// 通话记record录移除
-		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
-				.getPhoneRecordDao(getApplicationContext());
-		SQLiteDatabase phoneRecordDatebase = phoneRecordDao.getDatabase();
-		for (int i = 0; i < selectNumbers.length; i++) {
-
-			String number = selectNumbers[i];
-			int isDelete = phoneRecordDatebase.delete(PhoneRecordDao.TABLENAME,
-					PhoneRecordDao.Properties.Phone_number.columnName + "=?",
-					new String[] { number });
-
-			if (isDelete == 0) {
-				Tools.logSh("删除通话记录record失败！");
-			} else {
-				Tools.logSh("删除通话记录record成功！");
-			}
-		}
-
+		// 通话记details录移除
+		DelectOurPhoneDetailsUtils mDelectOurPhoneDetailsUtils = new DelectOurPhoneDetailsUtils(getApplicationContext(),selectNumbers);
+		mDelectOurPhoneDetailsUtils.deletePhoneDetails();
+		
+		//通话记录record移除
+		DelectOurPhoneRecordsUtils mDelectOurPhoneRecordsUtils = new DelectOurPhoneRecordsUtils(getApplicationContext(),selectNumbers);
+		mDelectOurPhoneRecordsUtils.deletePhoneRecords();
+	
 	}
 
 	/**
