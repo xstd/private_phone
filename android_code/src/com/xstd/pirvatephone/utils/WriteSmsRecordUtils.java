@@ -4,15 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.CallLog;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 
-import com.xstd.pirvatephone.dao.contact.ContactInfo;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneRecord;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecord;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;

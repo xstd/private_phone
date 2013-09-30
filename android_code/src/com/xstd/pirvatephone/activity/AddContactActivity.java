@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.dao.phone.PhoneRecord;
 import com.xstd.pirvatephone.utils.DelectSystemContactUtils;
 import com.xstd.pirvatephone.utils.DelectSystemPhoneUtils;
 import com.xstd.pirvatephone.utils.DelectSystemSmsUtils;

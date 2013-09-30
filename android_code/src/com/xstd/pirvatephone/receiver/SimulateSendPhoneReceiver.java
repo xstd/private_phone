@@ -8,10 +8,9 @@ import android.provider.CallLog;
 
 import com.xstd.pirvatephone.activity.SimulateCallActivity;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
+import com.xstd.pirvatephone.service.LightScreenService;
 
 public class SimulateSendPhoneReceiver extends BroadcastReceiver {
-
-	private static final String TAG = "SimulateSendPhoneReceiver";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -25,7 +24,10 @@ public class SimulateSendPhoneReceiver extends BroadcastReceiver {
 		Intent activity = new Intent();
 		activity.setClass(context, SimulateCallActivity.class);
 		activity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Intent service = new Intent();
+		service.setClass(context, LightScreenService.class);
 		context.startActivity(activity);
+		context.startService(service);
 	}
 
 }

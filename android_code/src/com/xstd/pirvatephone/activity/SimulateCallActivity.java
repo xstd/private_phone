@@ -1,6 +1,7 @@
 package com.xstd.pirvatephone.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.service.LightScreenService;
 
 public class SimulateCallActivity extends BaseActivity implements
 		OnClickListener {
@@ -48,7 +50,7 @@ public class SimulateCallActivity extends BaseActivity implements
 			mMediaPlayer.prepare();
 			mMediaPlayer.start();
 			vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			long[] pattern = { 800, 150, 400, 130 }; // OFF/ON/OFF/ON...
+			long[] pattern = { 1000, 2000, 1000, 2000 }; // OFF/ON/OFF/ON...
 			vibrator.vibrate(pattern, 2);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,6 +87,9 @@ public class SimulateCallActivity extends BaseActivity implements
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Intent intent = new Intent();
+		intent.setClass(this, LightScreenService.class);
+		stopService(intent);
 	}
 
 	@Override

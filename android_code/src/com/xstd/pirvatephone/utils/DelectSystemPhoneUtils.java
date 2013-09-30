@@ -1,7 +1,6 @@
 package com.xstd.pirvatephone.utils;
 
 import android.content.Context;
-import android.net.Uri;
 import android.provider.CallLog;
 
 import com.xstd.privatephone.tools.Tools;
