@@ -22,7 +22,7 @@
             android:textSize="15sp" />
 
         <ImageButton
-            android:id="@+id/iv_check"
+            android:id="@+id/sms_iv_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -41,14 +41,14 @@
          >
 
         <Button
-            android:id="@+id/bt_recover"
+            android:id="@+id/sms_bt_recover"
             android:layout_width="200dip"
             android:layout_height="match_parent"
             android:text="@string/private_comm_recover_contact"
             android:textColor="@color/sms_text_content_unseleted" />
         
          <Button
-            android:id="@+id/bt_delete"
+            android:id="@+id/sms_bt_delete"
            android:layout_width="200dip"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

@@ -241,6 +241,8 @@ public class AddContactActivity extends BaseActivity {
 							finish();
 							break;
 						case 1:
+							// 不删除系统库中的联系人
+							
 							finish();
 							break;
 						}

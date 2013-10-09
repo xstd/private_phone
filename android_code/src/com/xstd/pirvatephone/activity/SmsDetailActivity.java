@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
@@ -20,6 +21,7 @@ public class SmsDetailActivity extends BaseActivity {
 	private Button back;
 	private ListView listview;
 	private String number;
+	private Button sms_btn_recover;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,14 @@ public class SmsDetailActivity extends BaseActivity {
 
 	private void initView() {
 		back = (Button) findViewById(R.id.sms_detail_title_back);
+		/*sms_btn_recover = (Button) findViewById(R.id.bt_recover);
+		sms_btn_recover.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "hello", 0).show();
+			}
+		});*/
 		back.setOnClickListener(new OnClickListener() {
 
 			@Override
