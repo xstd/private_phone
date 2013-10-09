@@ -1,30 +1,13 @@
 package com.xstd.pirvatephone.utils;
 
-import java.util.ArrayList;
-
-import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.provider.CallLog;
-import android.provider.Contacts;
-import android.provider.ContactsContract;
-import android.provider.Contacts.People;
-import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.RawContacts;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 
-import com.xstd.pirvatephone.dao.contact.ContactInfo;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
 import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class RestoreSystemPhoneUtils {

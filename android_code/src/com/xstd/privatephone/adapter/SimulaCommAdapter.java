@@ -1,12 +1,17 @@
 package com.xstd.privatephone.adapter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.activity.SimulaCommActivity;
@@ -16,6 +21,7 @@ import com.xstd.pirvatephone.module.SimulaSms;
 
 public class SimulaCommAdapter extends BaseAdapter {
 
+	private static final String TAG = null;
 	private Context mCtx;
 	private List<SimulateComm> mDatas = new ArrayList<SimulateComm>();
 	private int type;
@@ -28,10 +34,6 @@ public class SimulaCommAdapter extends BaseAdapter {
 	/**
 	 * 通过类型来修改数据
 	 * 
-	 * @param type
-	 *            {@link com.xstd.pirvatephone.activity.SimulaCommActivity#SIMULA_SMS}
-	 *            、
-	 *            {@link com.xstd.pirvatephone.activity.SimulaCommActivity#SIMULA_PHONE}
 	 */
 	public void changeDatas() {
 		if (type == SimulaCommActivity.SIMULA_SMS) {
@@ -57,40 +59,71 @@ public class SimulaCommAdapter extends BaseAdapter {
 		return position;
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
 		if (convertView == null) {
+			holder = new ViewHolder();
 			if (type == SimulaCommActivity.SIMULA_PHONE) {
 				convertView = View.inflate(mCtx, R.layout.simulate_phone_item,
 						null);
+				holder.time = (TextView) convertView.findViewById(R.id.time);
+				holder.displayName = (TextView) convertView
+						.findViewById(R.id.displayName);
+				holder.phoneNumber = (TextView) convertView
+						.findViewById(R.id.phoneNumber);
 			} else if (type == SimulaCommActivity.SIMULA_SMS) {
-				convertView = View.inflate(mCtx, R.layout.simulate_phone_item,
+				convertView = View.inflate(mCtx, R.layout.simulate_sms_item,
 						null);
+				holder.time = (TextView) convertView.findViewById(R.id.time);
+				holder.displayName = (TextView) convertView
+						.findViewById(R.id.displayName);
+				holder.content = (TextView) convertView
+						.findViewById(R.id.content);
 			}
+			convertView.setTag(holder);
 		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		SimulateComm comm = mDatas.get(position);
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd kk:mm");
+		String futuretime = df.format(comm.getFuturetime());
+		holder.time.setText(futuretime);
+		if (type == SimulaCommActivity.SIMULA_PHONE) {
+			holder.phoneNumber.setText(comm.getPhonenumber() + "");
+			if (TextUtils.isEmpty(comm.getName())) {
+				holder.displayName.setText(mCtx.getString(R.string.s_stranger));
+			} else {
+				holder.displayName.setText(comm.getName());
+			}
+		} else if (type == SimulaCommActivity.SIMULA_SMS) {
+			holder.content.setText(comm.getContent());
+			if (TextUtils.isEmpty(comm.getName())) {
+				holder.displayName.setText(mCtx.getString(R.string.s_stranger)
+						+ "(" + comm.getPhonenumber() + ")");
+			} else {
+				holder.displayName.setText(comm.getName());
+			}
 
 		}
 		return convertView;
 	}
 
 	/**
-	 * SMS每个item对象的容器
-	 * 
-	 * @author Administrator
-	 * 
-	 */
-	class ViewHolderS {
-
-	}
-
-	/**
-	 * Phone每个item对象的容器
-	 * 
-	 * @author Administrator
-	 * 
-	 */
-	class ViewHolderP {
-
+     *
+     */
+	class ViewHolder {
+		TextView time;
+		TextView displayName;
+		/**
+		 * phone中的
+		 */
+		TextView phoneNumber;
+		/**
+		 * sms中的
+		 */
+		TextView content;
 	}
 
 }

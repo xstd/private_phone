@@ -3,9 +3,6 @@ package com.xstd.pirvatephone.utils;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import com.xstd.pirvatephone.R;
-import com.xstd.privatephone.bean.MyContactInfo;
-
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -17,6 +14,9 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
 import android.text.TextUtils;
+
+import com.xstd.pirvatephone.R;
+import com.xstd.privatephone.bean.MyContactInfo;
 
 public class GetContactUtils {
 	private Context mContext;

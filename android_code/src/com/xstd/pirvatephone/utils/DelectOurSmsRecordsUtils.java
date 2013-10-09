@@ -2,6 +2,7 @@ package com.xstd.pirvatephone.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.privatephone.tools.Tools;

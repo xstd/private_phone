@@ -3,18 +3,14 @@ package com.xstd.privatephone.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
-import com.xstd.privatephone.adapter.ShowSDFilesAdapter.ViewHolder;
 import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 

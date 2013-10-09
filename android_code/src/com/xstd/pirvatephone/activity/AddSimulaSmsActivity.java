@@ -42,7 +42,7 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	static final int DATE_DIALOG_ID = 2;
 	@SuppressWarnings("unused")
 	private static final String TAG = "AddSimulaSmsActivity";
-	private static final int REQUES_REVEIVER_TCODE = 3;
+	private static final int REQUES_REVEIVER_CODE = 3;
 
 	@ViewMapping(ID = R.id.back)
 	public ImageView back;
@@ -131,15 +131,16 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 			return;
 		}
 
-		SimulateComm entity = new SimulateComm(null, Long.valueOf(phone),
-				calendar.getTime(), content, SimulaCommActivity.SIMULA_SMS);
+		SimulateComm entity = new SimulateComm(null, contact == null ? null
+				: contact.getName(), phone, calendar.getTime(), content,
+				SimulaCommActivity.SIMULA_SMS);
 		SimulateDaoUtils.getSimulateDao(this).insert(entity);
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 		Intent intent = new Intent(getApplicationContext(),
 				SimulateSendSMSReceiver.class);
 		intent.putExtra("simu", entity);
 		PendingIntent pendIntent = PendingIntent.getBroadcast(
-				getApplicationContext(), REQUES_REVEIVER_TCODE, intent,
+				getApplicationContext(), REQUES_REVEIVER_CODE, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		long triggerAtMillis = calendar.getTimeInMillis()
 				- System.currentTimeMillis() + SystemClock.elapsedRealtime();
@@ -180,8 +181,7 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CHOOSE_CONTACT && resultCode == RESULT_OK) {
-			SimpleContact contact = ContactsUtils.readContact(this,
-					data.getData());
+			contact = ContactsUtils.readContact(this, data.getData());
 			phoneNumber.setText(contact.getPhone());
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -205,6 +205,7 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 			updateDateTime();
 		}
 	};
+	private SimpleContact contact;
 
 	private void updateDateTime() {
 		smsDate.setText(getString(R.string.s_simulate_date)

@@ -11,10 +11,12 @@ public class SimulateComm implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Long id;
-    private long phonenumber;
+    private String name;
+    /** Not-null value. */
+    private String phonenumber;
     /** Not-null value. */
     private java.util.Date futuretime;
-    private String contemt;
+    private String content;
     private Integer type;
 
     public SimulateComm() {
@@ -24,11 +26,12 @@ public class SimulateComm implements Serializable {
         this.id = id;
     }
 
-    public SimulateComm(Long id, long phonenumber, java.util.Date futuretime, String contemt, Integer type) {
+    public SimulateComm(Long id, String name, String phonenumber, java.util.Date futuretime, String content, Integer type) {
         this.id = id;
+        this.name = name;
         this.phonenumber = phonenumber;
         this.futuretime = futuretime;
-        this.contemt = contemt;
+        this.content = content;
         this.type = type;
     }
 
@@ -40,11 +43,21 @@ public class SimulateComm implements Serializable {
         this.id = id;
     }
 
-    public long getPhonenumber() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /** Not-null value. */
+    public String getPhonenumber() {
         return phonenumber;
     }
 
-    public void setPhonenumber(long phonenumber) {
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
 
@@ -58,12 +71,12 @@ public class SimulateComm implements Serializable {
         this.futuretime = futuretime;
     }
 
-    public String getContemt() {
-        return contemt;
+    public String getContent() {
+        return content;
     }
 
-    public void setContemt(String contemt) {
-        this.contemt = contemt;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Integer getType() {
@@ -76,7 +89,7 @@ public class SimulateComm implements Serializable {
 
     @Override
     public String toString() {
-        return "[SimulateComm]" + "id = " + id + ", " + "phonenumber = " + phonenumber + ", " + "futuretime = " + futuretime + ", " + "contemt = " + contemt + ", " + "type = " + type + "\r\n";
+        return "[SimulateComm]" + "id = " + id + ", " + "name = " + name + ", " + "phonenumber = " + phonenumber + ", " + "futuretime = " + futuretime + ", " + "content = " + content + ", " + "type = " + type + "\r\n";
     }
 
 }
