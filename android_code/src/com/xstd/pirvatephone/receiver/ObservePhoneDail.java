@@ -144,9 +144,13 @@ public class ObservePhoneDail extends ContentObserver {
 					}
 				}
 				
+				
+				this.onChange(false);
 				mContext.getContentResolver().delete(
 						Uri.parse("content://call_log/calls"), "date=?",
 						new String[] { date.toString() });
+				
+				this.onChange(true);
 				break ;
 
 			}
