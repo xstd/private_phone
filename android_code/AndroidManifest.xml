@@ -103,14 +103,14 @@
 
         <receiver android:name=".receiver.SimulateSendSMSReceiver" >
         </receiver>
-        
         <receiver android:name=".receiver.SimulateSendPhoneReceiver" >
         </receiver>
 
         <activity android:name=".activity.SimulateCallActivity" >
         </activity>
-        
-        
+
+        <service android:name=".service.LightScreenService" >
+        </service>
     </application>
 
 </manifest>

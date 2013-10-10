@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
 
 public class LightScreenService extends Service {
 
@@ -24,7 +23,6 @@ public class LightScreenService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.w("TAG", "onCreate");
 		mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mKM = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 	}
@@ -43,7 +41,6 @@ public class LightScreenService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.w("TAG", "onDestroy");
 		mWL.release();
 	}
 
