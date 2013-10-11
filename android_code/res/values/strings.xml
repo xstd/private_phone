@@ -823,6 +823,7 @@ QQ:903372666
     <string name="proxy_weixin_name">微信帐号:</string>
     <string name="proxy_weixin_pwd">微信密码:</string>
     <string name="proxy_weixin_title">微信帐号设置</string>
+    <string name="rs_add_service">新建服务</string>
 
     <!-- 模拟通讯 -->
     <string name="simula_comm_sms_title">模拟短信</string>

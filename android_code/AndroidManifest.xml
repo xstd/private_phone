@@ -111,6 +111,8 @@
 
         <service android:name=".service.LightScreenService" >
         </service>
+        
+        <activity android:name=".activity.ProxyTalkListActivity"></activity>
     </application>
 
 </manifest>

@@ -11,17 +11,17 @@ public class PMDaoGenerator {
     public static void main(String[] args) throws Exception {
         generateMQTTDaoModel();
     }
-    
-    
-    private static void generateMQTTDaoModel() {
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.simulacomm");
 
-        Entity entity = schema.addEntity("SimulateComm");
+    private static void generateMQTTDaoModel() {
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.service");
+
+        Entity entity = schema.addEntity("ProxyTalk");
         entity.addIdProperty();
-        entity.addStringProperty("name");
-        entity.addStringProperty("phonenumber").notNull();
-        entity.addDateProperty("futuretime").notNull();
-        entity.addStringProperty("content");
+        entity.addStringProperty("phonenumber");
+        entity.addStringProperty("weixinnumber");
+        entity.addStringProperty("weixinpwd");
+        entity.addDateProperty("starttime");
+        entity.addDateProperty("endtime");
         entity.addIntProperty("type");
 
         try {
