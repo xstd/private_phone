@@ -22,3 +22,9 @@ local.properties
 # IntelliJ IDEA files
 .idea
 *.iml
+
+# Android Studio
+gradlew
+gradlew.bat
+gradle/
+*.gradle

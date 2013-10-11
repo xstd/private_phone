@@ -49,7 +49,7 @@ public class ServiceActivity extends BaseActivity implements
                 Intent intent = new Intent();
                 switch (i) {
                     case 0:
-                        intent.setClass(getApplicationContext(), ProxyTalkActivity.class);
+                        intent.setClass(getApplicationContext(), ProxyTalkListActivity.class);
                         startActivity(intent);
                         break;
                 }
