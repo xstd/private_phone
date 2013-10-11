@@ -90,27 +90,40 @@
             android:name="com.xstd.pirvatephone.activity.PhoneDetailActivity"
             android:label="@string/title_activity_phone_detail" >
         </activity>
-        <activity android:name=".activity.ServiceActivity" />
-        <activity android:name=".activity.SimulaCommActivity" >
+        <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" >
         </activity>
         <activity
-            android:name=".activity.AddSimulaSmsActivity"
+            android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"
             android:theme="@android:style/Theme.DeviceDefault" >
         </activity>
-        <activity android:name=".activity.AddSimulaPhoneActivity" >
+        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" >
         </activity>
-        <activity android:name=".activity.ProxyTalkActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkActivity" />
 
-        <receiver android:name=".receiver.SimulateSendSMSReceiver" >
+        <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver" >
         </receiver>
-        <receiver android:name=".receiver.SimulateSendPhoneReceiver" >
+        <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendPhoneReceiver" >
         </receiver>
 
-        <activity android:name=".activity.SimulateCallActivity" >
+        <activity android:name="com.xstd.pirvatephone.activity.SimulateCallActivity" >
         </activity>
 
-        <service android:name=".service.LightScreenService" >
+        <service android:name="com.xstd.pirvatephone.service.LightScreenService" >
         </service>
+
+        <activity
+            android:name="com.xstd.pirvatephone.activity.ContextModelActivity"
+            android:label="@string/title_activity_context_model" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.NewContextModelActivity"
+            android:label="@string/title_activity_new_context_model" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.NotIntereptActivity"
+            android:label="@string/title_activity_not_interept" >
+        </activity>
     </application>
 
 </manifest>

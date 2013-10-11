@@ -742,6 +742,7 @@ QQ:903372666
     <string name="private_c_home_four">模拟通讯</string>
     <string name="private_c_home_five">服务大厅</string>
     <string name="private_c_home_six">用户中心</string>
+    <string name="private_c_home_seven">情景模式</string>
     <string name="title_activity_contact">ContactActivity</string>
     <string name="title_activity_hand_input">HandInputActivity</string>
     <string name="private_comm_btn_back">返回</string>
@@ -830,5 +831,8 @@ QQ:903372666
     <string name="simula_add_sms">新增模拟短信</string>
     <string name="simula_add_phone">新增模拟通话</string>
     <string name="title_activity_phone_detail">PhoneDetailActivity</string>
+    <string name="title_activity_context_model">ContextModelActivity</string>
+    <string name="title_activity_new_context_model">NewContextModelActivity</string>
+    <string name="title_activity_not_interept">NotIntereptActivity</string>
 
 </resources>

@@ -14,7 +14,7 @@ public class PMDaoGenerator {
     
     
     private static void generateMQTTDaoModel() {
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.simulacomm");
+       /* Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.simulacomm");
 
         Entity entity = schema.addEntity("SimulateComm");
         entity.addIdProperty();
@@ -22,8 +22,16 @@ public class PMDaoGenerator {
         entity.addStringProperty("phonenumber").notNull();
         entity.addDateProperty("futuretime").notNull();
         entity.addStringProperty("content");
-        entity.addIntProperty("type");
+        entity.addIntProperty("type");*/
+        
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.model");
 
+        Entity entity = schema.addEntity("Model");
+        entity.addIdProperty();
+        entity.addStringProperty("model_name");
+        entity.addIntProperty("model_type");
+        
+        
         try {
             new DaoGenerator().generateAll(schema, "../../src");
         } catch (Exception e) {

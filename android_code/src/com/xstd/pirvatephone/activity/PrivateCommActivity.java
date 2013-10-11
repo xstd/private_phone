@@ -136,6 +136,8 @@ public class PrivateCommActivity extends BaseActivity {
 	private PrivateCommSmsRecevier smsRecevier;
 	private IntentFilter intentFilter;
 	private IntentFilter smsIntentFilter;
+	private final String ACTION_NAME = "smsSend";
+	private ContactAdapter mContactAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -150,7 +152,8 @@ public class PrivateCommActivity extends BaseActivity {
 //				this);
 //		this.getContentResolver().registerContentObserver(
 //				Uri.parse("content://sms/"), true, recevier);
-//
+		
+		
 
 		// phone外拨
 		ObservePhoneDail phoneDail = new ObservePhoneDail(new Handler(), this);
@@ -375,6 +378,7 @@ public class PrivateCommActivity extends BaseActivity {
 			Cursor cursor = getContact();
 
 			updateContact(cursor, contact_lv_cont, contact_empty);
+			
 		}
 	}
 
@@ -673,7 +677,7 @@ public class PrivateCommActivity extends BaseActivity {
 				.getContactInfoDao(getApplicationContext());
 		SQLiteDatabase database = contactInfoDao.getDatabase();
 
-		Cursor contactCursor = database.query(ContactInfoDao.TABLENAME, null,
+		contactCursor = database.query(ContactInfoDao.TABLENAME, null,
 				null, null, null, null, null);
 		return contactCursor;
 	}
@@ -685,7 +689,7 @@ public class PrivateCommActivity extends BaseActivity {
 		} else {
 			// 通知数据获取完成
 			Tools.logSh("mCursor的长度为：" + mCursor.getCount());
-			ContactAdapter mContactAdapter = new ContactAdapter(
+			mContactAdapter = new ContactAdapter(
 					getApplicationContext(), mCursor);
 			mListView.setAdapter(mContactAdapter);
 			mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -757,6 +761,11 @@ public class PrivateCommActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 		// 当从增加联系人页面返回时，跟新数据
+		if(currIndex==2){
+			contactCursor.requery();
+			this.mContactAdapter.notifyDataSetChanged();
+		}
+		
 		super.onResume();
 	}
 }

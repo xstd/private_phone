@@ -24,7 +24,7 @@ public class HomeActivity extends BaseActivity {
 	private int[] pics = new int[] { R.drawable.home_privacy_comm,
 			R.drawable.home_privacy_mincomm, R.drawable.home_privacy_file,
 			R.drawable.home_moni_conm, R.drawable.home_privacy_service,
-			R.drawable.home_user_center };
+			R.drawable.home_user_center, R.drawable.home_user_center};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class HomeActivity extends BaseActivity {
 		titles.add(getResources().getString(R.string.private_c_home_four));
 		titles.add(getResources().getString(R.string.private_c_home_five));
 		titles.add(getResources().getString(R.string.private_c_home_six));
+		titles.add(getResources().getString(R.string.private_c_home_seven));
 		
 	}
 
@@ -76,6 +77,10 @@ public class HomeActivity extends BaseActivity {
                     	return;
                     case 4:
                         intent = new Intent(HomeActivity.this, ServiceActivity.class);
+                        startActivity(intent);
+                        return;
+                    case 6:
+                        intent = new Intent(HomeActivity.this, ContextModelActivity.class);
                         startActivity(intent);
                         return;
                 }

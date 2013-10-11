@@ -69,8 +69,8 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 						String privatePhone = recordCursor
 								.getString(recordCursor
 										.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
-						if (smsNumber.equals(privatePhone)) {// 屏蔽10086发来的短信
-							// 将此短信插入到我们的数据库中
+						if (smsNumber.equals(privatePhone)) {
+							// 若是隐私联系人，将此短信插入到我们的数据库中
 							SmsDetail mSmsDetail = new SmsDetail();
 							// thread_id
 
