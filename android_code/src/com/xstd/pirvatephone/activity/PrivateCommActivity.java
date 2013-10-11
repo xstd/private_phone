@@ -235,7 +235,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private void initView() {
 		// 1、title栏
-		edit = (Button) findViewById(R.id.edit);
+		edit = (Button) findViewById(R.id.btn_edit);
 		edit.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -264,7 +264,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 
-		ib_back = (Button) findViewById(R.id.ib_back);
+		ib_back = (Button) findViewById(R.id.btn_back);
 
 		ib_back.setOnClickListener(new OnClickListener() {
 

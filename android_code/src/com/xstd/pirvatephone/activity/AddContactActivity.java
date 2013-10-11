@@ -41,7 +41,7 @@ import com.xstd.privatephone.tools.Tools;
 
 public class AddContactActivity extends BaseActivity {
 
-	private Button bt_back;
+	private Button btn_back;
 	private Button bt_sure;
 	private Button bt_cancle;
 	private ListView lv_contact;
@@ -113,6 +113,8 @@ public class AddContactActivity extends BaseActivity {
 			}
 		};
 	};
+	private Button btn_edit;
+	private TextView tv_title;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -127,15 +129,22 @@ public class AddContactActivity extends BaseActivity {
 	}
 
 	private void initView() {
-		bt_back = (Button) findViewById(R.id.bt_back);
+		//title
+		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_edit = (Button) findViewById(R.id.btn_edit);
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText("从联系人添加");
+		//bottom
 		bt_sure = (Button) findViewById(R.id.bt_sure);
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
-
+		//content
 		lv_contact = (ListView) findViewById(R.id.lv_contact);
 		pb_empty = (ProgressBar) findViewById(R.id.pb_empty);
 		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
 
-		bt_back.setOnClickListener(new OnClickListener() {
+		btn_edit.setVisibility(View.GONE);
+		
+		btn_back.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

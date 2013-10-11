@@ -5,34 +5,8 @@
     android:background="@android:color/background_light"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/rl_title"
-        android:layout_width="match_parent"
-        android:layout_height="65dip"
-        android:background="@drawable/title_bg"
-        android:gravity="center_vertical"
-        android:paddingBottom="15dip"
-        android:paddingTop="15dip" >
-
-        <TextView
-            android:id="@+id/tv_title"
-            style="@style/private_comm_title_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/private_comm_add_contact" />
-
-        <Button
-            android:id="@+id/bt_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"
-            android:background="@drawable/private_comm_backbtn_selector"
-            android:text="@string/private_comm_btn_back"
-            android:textColor="@color/text_title_style_select_color"
-            android:textSize="14sp" />
-    </RelativeLayout>
+     <include layout="@layout/private_comm_title"
+         android:id="@+id/rl_title"/> 
     
      <RelativeLayout
         android:id="@+id/ll_content"

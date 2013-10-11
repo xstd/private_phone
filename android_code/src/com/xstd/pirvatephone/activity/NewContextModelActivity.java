@@ -60,7 +60,7 @@ public class NewContextModelActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(NewContextModelActivity.this,NotIntereptActivity.class);
-				startActivityForResult(intent, 0);
+				startActivity(intent);
 			}
 		});
 
@@ -69,7 +69,7 @@ public class NewContextModelActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(NewContextModelActivity.this,IntereptActivity.class);
-				startActivityForResult(intent, 0);
+				startActivity(intent);
 			}
 		});
 
