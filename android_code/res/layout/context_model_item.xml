@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false" />
 
@@ -25,7 +24,6 @@
         android:layout_marginRight="40dip"
         android:gravity="center_vertical"
         android:layout_alignParentRight="true"
-        android:clickable="true"
         android:text="hellodsafsajkfhdasfhlksdajfsdfasfadsafdsf" />
 
 </RelativeLayout>

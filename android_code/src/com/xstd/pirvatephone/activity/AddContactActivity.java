@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CallLog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,6 +54,7 @@ public class AddContactActivity extends BaseActivity {
 	private Uri smsUri = Uri.parse("content://sms/");
 	private static final int UPDATE = 1;
 	private static final int FINISH_GET_CONTACT = 2;
+	private static final int MSG_KEY = 3;
 
 	/** 选取转换为隐私联系人的号码 **/
 	private static ArrayList<String> mSelectContactsNumber = new ArrayList<String>();
@@ -110,11 +113,15 @@ public class AddContactActivity extends BaseActivity {
 				Tools.logSh("获取数据库联系人完成");
 				pb_empty.setVisibility(View.GONE);
 				break;
+			
+		case MSG_KEY:
+			refreshListView(msg.getData().get("value").toString());
 			}
 		};
 	};
 	private Button btn_edit;
 	private TextView tv_title;
+	private TextView et_search;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -134,6 +141,8 @@ public class AddContactActivity extends BaseActivity {
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("从联系人添加");
+		et_search = (TextView) findViewById(R.id.et_search);
+		
 		//bottom
 		bt_sure = (Button) findViewById(R.id.bt_sure);
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
@@ -143,6 +152,26 @@ public class AddContactActivity extends BaseActivity {
 		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
 
 		btn_edit.setVisibility(View.GONE);
+		
+		//search
+		et_search.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable editer) {
+			}
+
+			public void beforeTextChanged(CharSequence value, int arg0,
+					int arg1, int arg2) {
+			}
+
+			public void onTextChanged(CharSequence value, int arg0, int arg1,
+					int arg2) {
+				Message msg = new Message();
+				msg.what = MSG_KEY;
+				Bundle data = new Bundle();
+				data.putString("value", value.toString());
+				msg.setData(data);
+				handler.sendMessage(msg);
+			}
+		});
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 
@@ -260,7 +289,10 @@ public class AddContactActivity extends BaseActivity {
 
 	}
 
-
+	private void refreshListView(String value) {
+		//根据search条件查询
+		
+	}
 
 
 	@Override

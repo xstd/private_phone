@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
 import android.text.TextUtils;
@@ -45,15 +46,14 @@ public class GetContactUtils {
 
 		/** 得到手机通讯录联系人信息 **/
 		getPhoneContacts();
-		
+
 		return mContactsInfos;
 
 	}
-	
 
 	/** 得到手机SIM卡联系人人信息 **/
 	private void getSIMContacts() {
-		
+
 		ContentResolver resolver = mContext.getContentResolver();
 		// 获取Sims卡联系人
 		Uri uri = Uri.parse("content://icc/adn");
@@ -74,7 +74,8 @@ public class GetContactUtils {
 
 				// Sim卡中没有联系人头像
 				mContactsNumbers.add(phoneNumber);
-				MyContactInfo contactInfo = new MyContactInfo(phoneNumber, contactName, false);
+				MyContactInfo contactInfo = new MyContactInfo(phoneNumber,
+						contactName, false);
 				mContactsInfos.add(contactInfo);
 			}
 
@@ -110,9 +111,10 @@ public class GetContactUtils {
 				Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
 
 				mContactsNumbers.add(phoneNumber);
-				MyContactInfo contactInfo = new MyContactInfo(phoneNumber, contactName, false);
+				MyContactInfo contactInfo = new MyContactInfo(phoneNumber,
+						contactName, false);
 				mContactsInfos.add(contactInfo);
-				//mContactsPhotos.add(contactPhoto);
+				// mContactsPhotos.add(contactPhoto);
 			}
 
 			phoneCursor.close();

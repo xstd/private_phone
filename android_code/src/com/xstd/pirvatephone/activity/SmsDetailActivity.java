@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -81,6 +82,15 @@ public class SmsDetailActivity extends BaseActivity {
 				String sms_content = send_content.getText().toString();
 				if (!TextUtils.isEmpty(sms_content)) {
 					sendSms(sms_content);
+					//隐藏软键盘
+					((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(SmsDetailActivity.this
+                                    .getCurrentFocus().getWindowToken(),
+                                    InputMethodManager.HIDE_NOT_ALWAYS);
+					send_content.setText("");
+					//让textview失去焦点
+					send_content.clearFocus();
+
 				} else {
 					Toast.makeText(SmsDetailActivity.this, "短信不能为空！",
 							Toast.LENGTH_SHORT).show();
@@ -107,6 +117,7 @@ public class SmsDetailActivity extends BaseActivity {
 	}
 
 	public void sendSms(String content) {
+		Tools.logSh("短信粉条发送::" + content+":::"+number);
 		SmsManager smsManager = SmsManager.getDefault();
 		PendingIntent sentIntent = PendingIntent.getBroadcast(
 				SmsDetailActivity.this, 0, new Intent(), 0);
@@ -120,14 +131,18 @@ public class SmsDetailActivity extends BaseActivity {
 				smsManager.sendTextMessage(number, null, str, sentIntent, null);
 				smsDetailCursor.requery();
 				smsDetailAdapter.notifyDataSetChanged();
+				Tools.logSh("短信粉条发送::" + str);
+				Toast.makeText(SmsDetailActivity.this, "发送成功！",
+						Toast.LENGTH_LONG).show();
 			}
 		} else {
 			smsManager.sendTextMessage(number, null, content, sentIntent, null);
+			Tools.logSh("短信发送::" + content);
+
+			Toast.makeText(SmsDetailActivity.this, "发送成功！", Toast.LENGTH_LONG)
+					.show();
 			smsDetailCursor.requery();
 			smsDetailAdapter.notifyDataSetChanged();
 		}
-
-		Toast.makeText(SmsDetailActivity.this, "发送成功！", Toast.LENGTH_LONG)
-				.show();
 	}
 }

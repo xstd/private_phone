@@ -1,22 +1,24 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.ArrayList;
+
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
-import com.xstd.pirvatephone.dao.contextmodel.ContextModelDao;
-import com.xstd.pirvatephone.dao.contextmodel.ContextModelDaoUtils;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
-import com.xstd.privatephone.adapter.ModelAdapter;
+import com.xstd.pirvatephone.utils.GetModelUtils;
+import com.xstd.privatephone.adapter.MyModelAdapter;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
@@ -36,8 +38,11 @@ public class ContextModelActivity extends Activity {
 
 	private ListView model_lv;
 	private Button add_btn;
-	private Cursor modelCursor;
-	private ModelAdapter modelAdapter;
+	private MyModelAdapter modelAdapter;
+	private ModelBroadcastReciver recevier;
+	private IntentFilter intentFilter;
+	private ArrayList<Model> models;
+	private GetModelUtils modeUtils;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,23 +52,32 @@ public class ContextModelActivity extends Activity {
 		initView();
 
 		showModel();
+
+		recevier = new ModelBroadcastReciver();
+		intentFilter = new IntentFilter();
+		intentFilter.addAction("ModelBroadcastReciver");
+		this.registerReceiver(recevier, intentFilter);
+
 	}
 
 	private void showModel() {
 		// 查询情景模式表。若不存在表，创建该表，存在则查询数据，展示数据
-		ModelDao modelDao = ModelDaoUtils.getModelDao(ContextModelActivity.this);
-		SQLiteDatabase modelDatabase = modelDao.getDatabase();
-		modelCursor = modelDatabase.query(ModelDao.TABLENAME, null, null, null,
-				null, null, null);
-		modelAdapter = new ModelAdapter(getApplicationContext(), modelCursor);
+
+		modeUtils = new GetModelUtils(this);
+		models = modeUtils.getModels();
+		Tools.logSh(models.size() + ":::");
+
+		modelAdapter = new MyModelAdapter(ContextModelActivity.this, models);
 		model_lv.setAdapter(modelAdapter);
+
 		model_lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
-				TextView tv_modelname = (TextView) view.findViewById(R.id.tv_modelname);
+
+				TextView tv_modelname = (TextView) view
+						.findViewById(R.id.tv_modelname);
 				String modelName = tv_modelname.getText().toString();
 				showEditDialog(modelName);
 				return false;
@@ -108,12 +122,11 @@ public class ContextModelActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		modelCursor.requery();
+		models.clear();
+		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
 		super.onResume();
 	}
-	
-	
 
 	private void showEditDialog(final String modelName) {
 		final Builder builder = new AlertDialog.Builder(
@@ -126,6 +139,7 @@ public class ContextModelActivity extends Activity {
 
 						switch (which) {
 						case 0:
+							Tools.logSh("oldMOdel"+modelName);
 							showRenameDialog(modelName);
 							break;
 						case 1:
@@ -149,15 +163,16 @@ public class ContextModelActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				// 修改数据库中数据
 				String change_model = text.getText().toString();
-				if(!TextUtils.isEmpty(change_model)){
-					Tools.logSh("开始修改+change_model="+change_model);
-					updateModel(modelName,change_model);
+				if (!TextUtils.isEmpty(change_model)) {
+					Tools.logSh("开始修改modelName="+modelName+":::change_model=" + change_model);
+					updateModel(modelName, change_model);
 
 					dialog.dismiss();
-				}else{
-					Toast.makeText(ContextModelActivity.this, "情景模式不能为空", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(ContextModelActivity.this, "情景模式不能为空",
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 			}
 		});
 		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -168,7 +183,7 @@ public class ContextModelActivity extends Activity {
 				dialog.dismiss();
 			}
 		});
-		
+
 		builder.create().show();
 	}
 
@@ -198,46 +213,73 @@ public class ContextModelActivity extends Activity {
 
 		builder.create().show();
 	}
-	
-	
-	public void updateModel(String oldModel,String newModel){
-		
-		//查询系统数据库，获取当前的情景模式状态
-		ModelDao modelDao = ModelDaoUtils.getModelDao(ContextModelActivity.this);
+
+	public void updateModel(String oldModel, String newModel) {
+
+		// 查询系统数据库，获取当前的情景模式状态
+		ModelDao modelDao = ModelDaoUtils
+				.getModelDao(ContextModelActivity.this);
 		SQLiteDatabase modelDaoDatabase = modelDao.getDatabase();
-		Cursor modelQuery = modelDaoDatabase.query(ModelDao.TABLENAME, null, ModelDao.Properties.Model_name.columnName+"=?", new String[]{oldModel}, null, null, null);
-		
-		if(modelQuery!=null && modelQuery.getCount()>0){
-			while(modelQuery.moveToNext()){
-				Long _id = modelQuery.getLong(modelQuery.getColumnIndex(ModelDao.Properties.Id.columnName));
-				int type = modelQuery.getInt(modelQuery.getColumnIndex(ModelDao.Properties.Model_type.columnName));
-				
+		Cursor modelQuery = modelDaoDatabase.query(ModelDao.TABLENAME, null,
+				ModelDao.Properties.Model_name.columnName + "=?",
+				new String[] { oldModel }, null, null, null);
+
+		if (modelQuery != null && modelQuery.getCount() > 0) {
+			while (modelQuery.moveToNext()) {
+				Long _id = modelQuery.getLong(modelQuery
+						.getColumnIndex(ModelDao.Properties.Id.columnName));
+				int type = modelQuery
+						.getInt(modelQuery
+								.getColumnIndex(ModelDao.Properties.Model_type.columnName));
+
 				Model model = new Model();
 				model.setId(_id);
 				model.setModel_name(newModel);
 				model.setModel_type(type);
-				
-				Tools.logSh("modelName="+newModel+":::_id"+_id+":::type"+type);
+
+				Tools.logSh("modelName=" + newModel + ":::_id" + _id
+						+ ":::type" + type);
 				modelDao.update(model);
 			}
 			modelQuery.close();
 		}
-		
-		modelCursor.requery();
+		models.clear();
+		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
 	}
-	
-	public void deleteModel(String modelName){
-		ModelDao modelDao = ModelDaoUtils.getModelDao(ContextModelActivity.this);
+
+	public void deleteModel(String modelName) {
+		ModelDao modelDao = ModelDaoUtils
+				.getModelDao(ContextModelActivity.this);
 		SQLiteDatabase modelDaoDatabase = modelDao.getDatabase();
-		int delete = modelDaoDatabase.delete(ModelDao.TABLENAME, ModelDao.Properties.Model_name.columnName+"=?", new String[]{modelName});
-		if(delete>0){
-			Toast.makeText(ContextModelActivity.this, "删除了一个情景模式", Toast.LENGTH_SHORT).show();
-		}else{
-			Toast.makeText(ContextModelActivity.this, "删除情景模式失败", Toast.LENGTH_SHORT).show();
+		int delete = modelDaoDatabase.delete(ModelDao.TABLENAME,
+				ModelDao.Properties.Model_name.columnName + "=?",
+				new String[] { modelName });
+		if (delete > 0) {
+			Toast.makeText(ContextModelActivity.this, "删除了一个情景模式",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(ContextModelActivity.this, "删除情景模式失败",
+					Toast.LENGTH_SHORT).show();
 		}
-	
-		modelCursor.requery();
+		models.clear();
+		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
 	}
+
+	private class ModelBroadcastReciver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			models.clear();
+			models = modeUtils.getModels();
+			modelAdapter.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(recevier);
+		super.onDestroy();
+	}
+
 }
