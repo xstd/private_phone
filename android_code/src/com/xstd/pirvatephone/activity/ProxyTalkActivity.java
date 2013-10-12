@@ -10,6 +10,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,6 +22,10 @@ import android.widget.TimePicker;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.service.ProxyServiceDaoUtils;
+import com.xstd.pirvatephone.dao.service.ProxyTalk;
+import com.xstd.pirvatephone.dao.service.ProxyTalkDao;
+import com.xstd.privatephone.tools.Toasts;
 import com.xstd.privatephone.view.MyTimePickerDialog;
 
 /**
@@ -67,6 +72,10 @@ public class ProxyTalkActivity extends Activity implements
 	private String mWXName;
 	private String mWXPasswd;
 
+	private Date starttime;
+
+	private Date endtime;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -85,14 +94,22 @@ public class ProxyTalkActivity extends Activity implements
 		mWeixinCheck.setOnCheckedChangeListener(this);
 		mOtherCheck.setOnCheckedChangeListener(this);
 		mSelfCheck.setOnCheckedChangeListener(this);
+		mOtherCheck.setChecked(true);
 	}
 
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.ok:
-			mDefaultString = mDefaultEditText.getEditableText().toString();
-			finish();
+			if (checkInfo()) {
+				ProxyTalkDao dao = ProxyServiceDaoUtils
+						.getProxyTalkDao(getApplicationContext());
+				ProxyTalk entity = new ProxyTalk(null, null, mWXName,
+						mWXPasswd, mDefaultString, starttime, endtime,
+						mOtherCheck.isChecked() ? 0 : 1);
+				dao.insert(entity);
+				finish();
+			}
 			break;
 		case R.id.begin:
 			showTimeDialog(mBegin);
@@ -101,6 +118,29 @@ public class ProxyTalkActivity extends Activity implements
 			showTimeDialog(mEnd);
 			break;
 		}
+	}
+
+	/**
+	 * 检查用户输入数据
+	 * 
+	 * @return
+	 */
+	private boolean checkInfo() {
+		if (!mSMSCheck.isChecked() && !mWeixinCheck.isChecked()) {
+			Toasts.getInstance(this).show(R.string.rs_no_select_proxy, 0);
+			return false;
+		}
+		if (endtime.getTime() <= System.currentTimeMillis()
+				|| endtime.getTime() <= starttime.getTime()) {
+			Toasts.getInstance(this).show(R.string.rs_error_time, 0);
+			return false;
+		}
+		mDefaultString = mDefaultEditText.getText().toString().trim();
+		if (TextUtils.isEmpty(mDefaultString)) {
+			Toasts.getInstance(this).show(R.string.rs_no_talk_content, 0);
+			return false;
+		}
+		return true;
 	}
 
 	private void showTimeDialog(final Button bt) {
@@ -117,9 +157,20 @@ public class ProxyTalkActivity extends Activity implements
 								calendar.get(Calendar.MONTH),
 								calendar.get(Calendar.DAY_OF_MONTH), hourOfDay,
 								minute);
-						bt.setText(getString(R.string.proxy_time_begin)
-								+ DateFormat.getTimeInstance(DateFormat.SHORT)
-										.format(calendar.getTime()));
+						if (bt == mBegin) {
+							bt.setText(getString(R.string.proxy_time_begin)
+									+ DateFormat.getTimeInstance(
+											DateFormat.SHORT).format(
+											calendar.getTime()));
+							starttime = calendar.getTime();
+						}
+						if (bt == mEnd) {
+							bt.setText(getString(R.string.proxy_time_end)
+									+ DateFormat.getTimeInstance(
+											DateFormat.SHORT).format(
+											calendar.getTime()));
+							endtime = calendar.getTime();
+						}
 					}
 				}, calendar.get(Calendar.HOUR_OF_DAY),
 				calendar.get(Calendar.MINUTE), false);
@@ -180,8 +231,28 @@ public class ProxyTalkActivity extends Activity implements
 									mWeixinAccount.setText(mWXName);
 								}
 							}
-						}).setNegativeButton(R.string.enter_btn_cancel, null)
-				.create();
+						})
+				.setNegativeButton(R.string.enter_btn_cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								mWeixinCheck.setChecked(false);
+								mWeixinAccount.setText("");
+							}
+						})
+				.setOnKeyListener(new DialogInterface.OnKeyListener() {
+
+					@Override
+					public boolean onKey(DialogInterface dialog, int keyCode,
+							KeyEvent event) {
+						if (keyCode == KeyEvent.KEYCODE_BACK) {
+							mWeixinCheck.setChecked(false);
+							mWeixinAccount.setText("");
+						}
+						return false;
+					}
+				}).create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
 	}

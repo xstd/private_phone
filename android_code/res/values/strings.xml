@@ -808,6 +808,7 @@ QQ:903372666
     <string name="service_title">服务大厅</string>
     <string name="service_dailiao">代聊服务</string>
     <string name="service_jipiao">机票凭据服务</string>
+    <string name="service_picture">照片服务</string>
     <string name="service_liwu">代送礼物</string>
     <string name="proxy_category">选择代聊范围</string>
     <string name="proxy_time">选择代聊时间</string>
@@ -825,6 +826,9 @@ QQ:903372666
     <string name="proxy_weixin_pwd">微信密码:</string>
     <string name="proxy_weixin_title">微信帐号设置</string>
     <string name="rs_add_service">新建服务</string>
+    <string name="rs_error_time">结束时间必须大于开始时间和当前时间</string>
+    <string name="rs_no_select_proxy">至少选择一项代聊服务</string>
+    <string name="rs_no_talk_content">代聊回复文字不能为空</string>
 
     <!-- 模拟通讯 -->
     <string name="simula_comm_sms_title">模拟短信</string>

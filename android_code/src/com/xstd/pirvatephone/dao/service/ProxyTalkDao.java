@@ -27,9 +27,10 @@ public class ProxyTalkDao extends AbstractDao<ProxyTalk, Long> {
         public final static Property Phonenumber = new Property(1, String.class, "phonenumber", false, "PHONENUMBER");
         public final static Property Weixinnumber = new Property(2, String.class, "weixinnumber", false, "WEIXINNUMBER");
         public final static Property Weixinpwd = new Property(3, String.class, "weixinpwd", false, "WEIXINPWD");
-        public final static Property Starttime = new Property(4, java.util.Date.class, "starttime", false, "STARTTIME");
-        public final static Property Endtime = new Property(5, java.util.Date.class, "endtime", false, "ENDTIME");
-        public final static Property Type = new Property(6, Integer.class, "type", false, "TYPE");
+        public final static Property Talk_content = new Property(4, String.class, "talk_content", false, "TALK_CONTENT");
+        public final static Property Starttime = new Property(5, java.util.Date.class, "starttime", false, "STARTTIME");
+        public final static Property Endtime = new Property(6, java.util.Date.class, "endtime", false, "ENDTIME");
+        public final static Property Type = new Property(7, int.class, "type", false, "TYPE");
     };
 
 
@@ -49,9 +50,10 @@ public class ProxyTalkDao extends AbstractDao<ProxyTalk, Long> {
                 "'PHONENUMBER' TEXT," + // 1: phonenumber
                 "'WEIXINNUMBER' TEXT," + // 2: weixinnumber
                 "'WEIXINPWD' TEXT," + // 3: weixinpwd
-                "'STARTTIME' INTEGER," + // 4: starttime
-                "'ENDTIME' INTEGER," + // 5: endtime
-                "'TYPE' INTEGER);"); // 6: type
+                "'TALK_CONTENT' TEXT NOT NULL ," + // 4: talk_content
+                "'STARTTIME' INTEGER NOT NULL ," + // 5: starttime
+                "'ENDTIME' INTEGER NOT NULL ," + // 6: endtime
+                "'TYPE' INTEGER NOT NULL );"); // 7: type
     }
 
     /** Drops the underlying database table. */
@@ -84,21 +86,10 @@ public class ProxyTalkDao extends AbstractDao<ProxyTalk, Long> {
         if (weixinpwd != null) {
             stmt.bindString(4, weixinpwd);
         }
- 
-        java.util.Date starttime = entity.getStarttime();
-        if (starttime != null) {
-            stmt.bindLong(5, starttime.getTime());
-        }
- 
-        java.util.Date endtime = entity.getEndtime();
-        if (endtime != null) {
-            stmt.bindLong(6, endtime.getTime());
-        }
- 
-        Integer type = entity.getType();
-        if (type != null) {
-            stmt.bindLong(7, type);
-        }
+        stmt.bindString(5, entity.getTalk_content());
+        stmt.bindLong(6, entity.getStarttime().getTime());
+        stmt.bindLong(7, entity.getEndtime().getTime());
+        stmt.bindLong(8, entity.getType());
     }
 
     /** @inheritdoc */
@@ -115,9 +106,10 @@ public class ProxyTalkDao extends AbstractDao<ProxyTalk, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // phonenumber
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // weixinnumber
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // weixinpwd
-            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // starttime
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // endtime
-            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6) // type
+            cursor.getString(offset + 4), // talk_content
+            new java.util.Date(cursor.getLong(offset + 5)), // starttime
+            new java.util.Date(cursor.getLong(offset + 6)), // endtime
+            cursor.getInt(offset + 7) // type
         );
         return entity;
     }
@@ -129,9 +121,10 @@ public class ProxyTalkDao extends AbstractDao<ProxyTalk, Long> {
         entity.setPhonenumber(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setWeixinnumber(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setWeixinpwd(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setStarttime(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setEndtime(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setType(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setTalk_content(cursor.getString(offset + 4));
+        entity.setStarttime(new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setEndtime(new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setType(cursor.getInt(offset + 7));
      }
     
     /** @inheritdoc */

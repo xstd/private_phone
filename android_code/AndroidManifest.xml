@@ -13,8 +13,8 @@
     <!-- 写联系人 -->
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <!-- 震动 -->
-    <uses-permission android:name="android.permission.VIBRATE" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <!-- 挂断手机的权限 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 读取手机状态的权限 -->
@@ -62,70 +62,53 @@
         <activity android:name="com.xstd.pirvatephone.activity.BaseActivity" />
         <activity
             android:name="com.xstd.pirvatephone.activity.HomeActivity"
-            android:label="@string/title_activity_home" >
-        </activity>
+            android:label="@string/title_activity_home" />
         <activity
             android:name="com.xstd.pirvatephone.activity.PrivateCommActivity"
-            android:label="@string/title_activity_private_comm" >
-        </activity>
-        <activity android:name="com.xstd.pirvatephone.activity.PrivacySpaceActivity" >
-        </activity>
-        <activity android:name="com.xstd.pirvatephone.activity.PrivacyShowActivity" >
-        </activity>
-        <activity android:name="com.xstd.pirvatephone.activity.ShowSDCardFilesActivity" >
-        </activity>
+            android:label="@string/title_activity_private_comm" />
+        <activity android:name="com.xstd.pirvatephone.activity.PrivacySpaceActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.PrivacyShowActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.ShowSDCardFilesActivity" />
         <activity
             android:name="com.xstd.pirvatephone.activity.AddContactActivity"
-            android:label="@string/title_activity_contact" >
-        </activity>
+            android:label="@string/title_activity_contact" />
         <activity
             android:name="com.xstd.pirvatephone.activity.HandInputActivity"
-            android:label="@string/title_activity_hand_input" >
-        </activity>
+            android:label="@string/title_activity_hand_input" />
         <activity
             android:name="com.xstd.pirvatephone.activity.SmsDetailActivity"
-            android:label="@string/title_activity_sms_detail" >
-        </activity>
+            android:label="@string/title_activity_sms_detail" />
         <activity
             android:name="com.xstd.pirvatephone.activity.PhoneDetailActivity"
-            android:label="@string/title_activity_phone_detail" >
-        </activity>
+            android:label="@string/title_activity_phone_detail" />
         <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
-        <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" >
-        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" />
         <activity
             android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"
-            android:theme="@android:style/Theme.DeviceDefault" >
-        </activity>
-        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" >
-        </activity>
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkActivity" />
 
-        <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver" >
-        </receiver>
-        <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendPhoneReceiver" >
-        </receiver>
+        <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver" />
+        <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendPhoneReceiver" />
 
-        <activity android:name="com.xstd.pirvatephone.activity.SimulateCallActivity" >
-        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.SimulateCallActivity" />
 
-        <service android:name="com.xstd.pirvatephone.service.LightScreenService" >
-        </service>
+        <service android:name="com.xstd.pirvatephone.service.LightScreenService" />
 
         <activity
             android:name="com.xstd.pirvatephone.activity.ContextModelActivity"
-            android:label="@string/title_activity_context_model" >
-        </activity>
+            android:label="@string/title_activity_context_model" />
         <activity
             android:name="com.xstd.pirvatephone.activity.NewContextModelActivity"
-            android:label="@string/title_activity_new_context_model" >
-        </activity>
+            android:label="@string/title_activity_new_context_model" />
         <activity
             android:name="com.xstd.pirvatephone.activity.NotIntereptActivity"
-            android:label="@string/title_activity_not_interept" >
-        </activity>
-        
-        <activity android:name=".activity.ProxyTalkListActivity"></activity>
+            android:label="@string/title_activity_not_interept" />
+        <activity android:name=".activity.ProxyTalkListActivity" />
+        <activity android:name=".activity.ProxyTicketListActivity" />
+        <activity android:name=".activity.PictureListActivity" />
+        <activity android:name=".activity.AddProxyTicketActivity" />
     </application>
 
 </manifest>
