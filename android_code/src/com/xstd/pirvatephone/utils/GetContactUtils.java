@@ -1,21 +1,15 @@
 package com.xstd.pirvatephone.utils;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
 import android.text.TextUtils;
 
-import com.xstd.pirvatephone.R;
 import com.xstd.privatephone.bean.MyContactInfo;
 
 public class GetContactUtils {
@@ -36,10 +30,8 @@ public class GetContactUtils {
 
 	/** 联系人名称 **/
 	private static ArrayList<MyContactInfo> mContactsInfos = new ArrayList<MyContactInfo>();
-	private static ArrayList<String> mContactsNumbers = new ArrayList<String>();
 	/** 联系人号码 **/
-	/** 联系人头像 **/
-	private static ArrayList<Bitmap> mContactsPhotos = new ArrayList<Bitmap>();
+	private static ArrayList<String> mContactsNumbers = new ArrayList<String>();
 
 	public GetContactUtils(Context context) {
 		this.mContext = context;
@@ -117,25 +109,10 @@ public class GetContactUtils {
 				// 得到联系人头像ID
 				Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
 
-				// 得到联系人头像Bitamp
-				Bitmap contactPhoto = null;
-
-				// photoid 大于0 表示联系人有头像 如果没有给此人设置头像则给他一个默认的
-				if (photoid > 0) {
-					Uri uri = ContentUris.withAppendedId(
-							ContactsContract.Contacts.CONTENT_URI, contactid);
-					InputStream input = ContactsContract.Contacts
-							.openContactPhotoInputStream(resolver, uri);
-					contactPhoto = BitmapFactory.decodeStream(input);
-				} else {
-					contactPhoto = BitmapFactory.decodeResource(
-							mContext.getResources(), R.drawable.ic_launcher);
-				}
-
 				mContactsNumbers.add(phoneNumber);
 				MyContactInfo contactInfo = new MyContactInfo(phoneNumber, contactName, false);
 				mContactsInfos.add(contactInfo);
-				mContactsPhotos.add(contactPhoto);
+				//mContactsPhotos.add(contactPhoto);
 			}
 
 			phoneCursor.close();

@@ -839,5 +839,7 @@ QQ:903372666
     <string name="title_activity_context_model">ContextModelActivity</string>
     <string name="title_activity_new_context_model">NewContextModelActivity</string>
     <string name="title_activity_not_interept">NotIntereptActivity</string>
+    <string name="title_activity_interept">IntereptActivity</string>
+    <string name="title_activity_model_edit">ModelEditActivity</string>
 
 </resources>

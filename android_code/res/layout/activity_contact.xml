@@ -5,40 +5,38 @@
     android:background="@android:color/background_light"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <include
         android:id="@+id/rl_title"
-        android:layout_width="match_parent"
-        android:layout_height="65dip"
-        android:background="@drawable/title_bg"
-        android:gravity="center_vertical"
-        android:paddingBottom="15dip"
-        android:paddingTop="15dip" >
+        layout="@layout/private_comm_title" />
 
-        <TextView
-            android:id="@+id/tv_title"
-            style="@style/private_comm_title_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/private_comm_addfrom_contact" />
+    <RelativeLayout
+        android:id="@+id/rl_search"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_below="@id/rl_title"
+        android:gravity="center_vertical" >
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="60dip"
+            android:hint="请输入联系人电话或者姓名" />
 
         <Button
-            android:id="@+id/bt_back"
+            android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"
-            android:background="@drawable/private_comm_backbtn_selector"
-            android:text="@string/private_comm_btn_back"
-            android:textColor="@color/text_title_style_select_color"
-            android:textSize="14sp" />
+            android:layout_alignParentRight="true"
+            android:text="search"
+            android:textColor="@color/sms_text_content_unseleted" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rl_title"
+        android:layout_below="@id/rl_search"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -74,26 +72,23 @@
             android:layout_marginBottom="65dip"
             android:gravity="center"
             android:orientation="vertical" >
-            
+
             <ProgressBar
                 android:id="@+id/pb_empty"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <ListView
                 android:id="@+id/lv_contact"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-               />
+                android:layout_height="match_parent" />
 
-            
             <ImageView
                 android:id="@+id/iv_empty_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_launcher"/>
-            
+                android:background="@drawable/ic_launcher" />
         </LinearLayout>
     </RelativeLayout>
 

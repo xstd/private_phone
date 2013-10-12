@@ -41,6 +41,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="com.android.voicemail.permission.ADD_VOICEMAIL" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:name="com.xstd.pirvatephone.app.PrivatePhoneApplication"
@@ -105,7 +106,13 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.NotIntereptActivity"
             android:label="@string/title_activity_not_interept" />
-        <activity android:name=".activity.ProxyTalkListActivity" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.IntereptActivity"
+            android:label="@string/title_activity_interept" />
+        <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkListActivity" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.ModelEditActivity"
+            android:label="@string/title_activity_model_edit" />
         <activity android:name=".activity.ProxyTicketListActivity" />
         <activity android:name=".activity.PictureListActivity" />
         <activity android:name=".activity.AddProxyTicketActivity" />
