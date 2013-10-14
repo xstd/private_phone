@@ -762,8 +762,10 @@ public class PrivateCommActivity extends BaseActivity {
 
 		// 当从增加联系人页面返回时，跟新数据
 		if(currIndex==2){
-			contactCursor.requery();
-			this.mContactAdapter.notifyDataSetChanged();
+			if(mContactAdapter!=null){
+				contactCursor.requery();
+				this.mContactAdapter.notifyDataSetChanged();
+			}
 		}
 		
 		super.onResume();
