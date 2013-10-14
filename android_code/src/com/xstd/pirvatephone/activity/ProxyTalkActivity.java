@@ -1,6 +1,7 @@
 package com.xstd.pirvatephone.activity;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -32,14 +34,20 @@ import com.xstd.privatephone.view.MyTimePickerDialog;
  * Created with IntelliJ IDEA. User: michael Date: 13-9-26 Time: PM2:29 To
  * change this template use File | Settings | File Templates.
  */
-public class ProxyTalkActivity extends Activity implements
-		View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class ProxyTalkActivity extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
+	private static final int REQUEST_CONTACTS_CODE = 0;
+
+	private static final String TAG = "ProxyTalkActivity";
 
 	@ViewMapping(ID = R.id.ok)
 	public Button mOK;
 
 	@ViewMapping(ID = R.id.sms_check)
 	public CheckBox mSMSCheck;
+
+	@ViewMapping(ID = R.id.sms)
+	public TextView mSMSContacts;
 
 	@ViewMapping(ID = R.id.weixin_check)
 	public CheckBox mWeixinCheck;
@@ -102,11 +110,8 @@ public class ProxyTalkActivity extends Activity implements
 		switch (view.getId()) {
 		case R.id.ok:
 			if (checkInfo()) {
-				ProxyTalkDao dao = ProxyServiceDaoUtils
-						.getProxyTalkDao(getApplicationContext());
-				ProxyTalk entity = new ProxyTalk(null, null, mWXName,
-						mWXPasswd, mDefaultString, starttime, endtime,
-						mOtherCheck.isChecked() ? 0 : 1);
+				ProxyTalkDao dao = ProxyServiceDaoUtils.getProxyTalkDao(getApplicationContext());
+				ProxyTalk entity = new ProxyTalk(null, null, mWXName, mWXPasswd, mDefaultString, starttime, endtime, mOtherCheck.isChecked() ? 0 : 1);
 				dao.insert(entity);
 				finish();
 			}
@@ -130,8 +135,7 @@ public class ProxyTalkActivity extends Activity implements
 			Toasts.getInstance(this).show(R.string.rs_no_select_proxy, 0);
 			return false;
 		}
-		if (endtime.getTime() <= System.currentTimeMillis()
-				|| endtime.getTime() <= starttime.getTime()) {
+		if (endtime.getTime() <= System.currentTimeMillis() || endtime.getTime() <= starttime.getTime()) {
 			Toasts.getInstance(this).show(R.string.rs_error_time, 0);
 			return false;
 		}
@@ -147,33 +151,21 @@ public class ProxyTalkActivity extends Activity implements
 		long time = System.currentTimeMillis() + 60 * 1000;
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date(time));
-		MyTimePickerDialog timePickerDialog = new MyTimePickerDialog(this,
-				new TimePickerDialog.OnTimeSetListener() {
+		MyTimePickerDialog timePickerDialog = new MyTimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
-					@Override
-					public void onTimeSet(TimePicker view, int hourOfDay,
-							int minute) {
-						calendar.set(calendar.get(Calendar.YEAR),
-								calendar.get(Calendar.MONTH),
-								calendar.get(Calendar.DAY_OF_MONTH), hourOfDay,
-								minute);
-						if (bt == mBegin) {
-							bt.setText(getString(R.string.proxy_time_begin)
-									+ DateFormat.getTimeInstance(
-											DateFormat.SHORT).format(
-											calendar.getTime()));
-							starttime = calendar.getTime();
-						}
-						if (bt == mEnd) {
-							bt.setText(getString(R.string.proxy_time_end)
-									+ DateFormat.getTimeInstance(
-											DateFormat.SHORT).format(
-											calendar.getTime()));
-							endtime = calendar.getTime();
-						}
-					}
-				}, calendar.get(Calendar.HOUR_OF_DAY),
-				calendar.get(Calendar.MINUTE), false);
+			@Override
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay, minute);
+				if (bt == mBegin) {
+					bt.setText(getString(R.string.proxy_time_begin) + DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime()));
+					starttime = calendar.getTime();
+				}
+				if (bt == mEnd) {
+					bt.setText(getString(R.string.proxy_time_end) + DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime()));
+					endtime = calendar.getTime();
+				}
+			}
+		}, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
 		timePickerDialog.show();
 	}
 
@@ -181,6 +173,14 @@ public class ProxyTalkActivity extends Activity implements
 	public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 		switch (compoundButton.getId()) {
 		case R.id.sms_check:
+			if (!mIsSmsChecked && b) {
+				Intent intent = new Intent();
+				intent.setClass(getApplicationContext(), CopyContactsListMultiple.class);
+				startActivityForResult(intent, REQUEST_CONTACTS_CODE);
+			}
+			if (!b) {
+				mSMSContacts.setText("");
+			}
 			mIsSmsChecked = b;
 			break;
 		case R.id.weixin_check:
@@ -207,52 +207,62 @@ public class ProxyTalkActivity extends Activity implements
 		}
 	}
 
+	private ArrayList<String> smsContacts;
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_CONTACTS_CODE) {
+			smsContacts = data.getStringArrayListExtra("GET_CONTACT");
+			if (smsContacts != null && smsContacts.size() > 0) {
+				StringBuilder sb = new StringBuilder();
+				for (String str : smsContacts) {
+					sb.append(str.substring(str.lastIndexOf("\n") + 1) + "、");
+				}
+				sb.deleteCharAt(sb.length() - 1);
+				mSMSContacts.setText(sb);
+				return;
+			}
+		}
+		mSMSCheck.setChecked(false);
+
+	}
+
 	private void showWeiXinAccountDialog() {
 		View view = getLayoutInflater().inflate(R.layout.weixin_account, null);
 		final EditText name = (EditText) view.findViewById(R.id.weixin_account);
 		final EditText pwd = (EditText) view.findViewById(R.id.weixin_pwd);
-		AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.proxy_weixin_title)
-				.setView(view)
-				.setPositiveButton(R.string.enter_btn_ok,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(
-									DialogInterface dialogInterface, int i) {
-								mWXName = name.getText().toString();
-								mWXPasswd = pwd.getText().toString();
+		AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.proxy_weixin_title).setView(view).setPositiveButton(R.string.enter_btn_ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				mWXName = name.getText().toString();
+				mWXPasswd = pwd.getText().toString();
 
-								if (TextUtils.isEmpty(mWXName)
-										|| TextUtils.isEmpty(mWXPasswd)) {
-									mWeixinCheck.setChecked(false);
-									mWeixinAccount.setText("");
-								} else {
-									mWeixinCheck.setChecked(true);
-									mWeixinAccount.setText(mWXName);
-								}
-							}
-						})
-				.setNegativeButton(R.string.enter_btn_cancel,
-						new DialogInterface.OnClickListener() {
+				if (TextUtils.isEmpty(mWXName) || TextUtils.isEmpty(mWXPasswd)) {
+					mWeixinCheck.setChecked(false);
+					mWeixinAccount.setText("");
+				} else {
+					mWeixinCheck.setChecked(true);
+					mWeixinAccount.setText(mWXName);
+				}
+			}
+		}).setNegativeButton(R.string.enter_btn_cancel, new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
-								mWeixinCheck.setChecked(false);
-								mWeixinAccount.setText("");
-							}
-						})
-				.setOnKeyListener(new DialogInterface.OnKeyListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				mWeixinCheck.setChecked(false);
+				mWeixinAccount.setText("");
+			}
+		}).setOnKeyListener(new DialogInterface.OnKeyListener() {
 
-					@Override
-					public boolean onKey(DialogInterface dialog, int keyCode,
-							KeyEvent event) {
-						if (keyCode == KeyEvent.KEYCODE_BACK) {
-							mWeixinCheck.setChecked(false);
-							mWeixinAccount.setText("");
-						}
-						return false;
-					}
-				}).create();
+			@Override
+			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_BACK) {
+					mWeixinCheck.setChecked(false);
+					mWeixinAccount.setText("");
+				}
+				return false;
+			}
+		}).create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
 	}

@@ -116,6 +116,7 @@
         <activity android:name=".activity.ProxyTicketListActivity" />
         <activity android:name=".activity.PictureListActivity" />
         <activity android:name=".activity.AddProxyTicketActivity" />
+        <activity android:name=".activity.CopyContactsListMultiple"></activity>
     </application>
 
 </manifest>
