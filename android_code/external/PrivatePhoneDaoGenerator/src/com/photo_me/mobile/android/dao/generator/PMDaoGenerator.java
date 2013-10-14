@@ -14,17 +14,13 @@ public class PMDaoGenerator {
 
     private static void generateMQTTDaoModel() {
 
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.service");
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.modeldetail");
 
-        Entity entity = schema.addEntity("ProxyTalk");
+        Entity entity = schema.addEntity("ModelDetail");
         entity.addIdProperty();
-        entity.addStringProperty("phonenumber");
-        entity.addStringProperty("weixinnumber");
-        entity.addStringProperty("weixinpwd");
-        entity.addStringProperty("talk_content").notNull();
-        entity.addDateProperty("starttime").notNull();
-        entity.addDateProperty("endtime").notNull();
-        entity.addIntProperty("type").notNull();
+        entity.addStringProperty("address");
+        entity.addStringProperty("name");
+        entity.addStringProperty("massage");
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");

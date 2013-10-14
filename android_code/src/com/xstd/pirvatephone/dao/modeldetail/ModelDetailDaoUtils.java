@@ -1,12 +1,11 @@
-package com.xstd.pirvatephone.dao.contextmodel;
-
+package com.xstd.pirvatephone.dao.modeldetail;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-public class ContextModelDaoUtils {
+public class ModelDetailDaoUtils {
 
-	private static final String DATABASE_NAME = "contextmodel.db";
+	private static final String DATABASE_NAME = "modeldetail.db";
 
     private static DaoSession sDaoSession;
 
@@ -25,10 +24,10 @@ public class ContextModelDaoUtils {
         return sDaoSession;
     }
     
-    public static ContextModelDao getContextModelDao(Context context) {
+    public static ModelDetailDao getModelDetailDao(Context context) {
     	if(sDaoSession == null) {
-    		return getDaoSession(context).getContextModelDao();
+    		return getDaoSession(context).getModelDetailDao();
     	}
-    	return sDaoSession.getContextModelDao();
+    	return sDaoSession.getModelDetailDao();
     }
 }

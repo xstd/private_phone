@@ -14,10 +14,11 @@
         android:layout_height="60dip" >
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="新增加拦截联系人" />
+            android:text=":新增加拦截联系人" />
     </RelativeLayout>
 
     <RelativeLayout

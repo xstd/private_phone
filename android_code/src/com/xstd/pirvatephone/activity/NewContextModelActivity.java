@@ -1,14 +1,12 @@
 package com.xstd.pirvatephone.activity;
 
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
-import com.xstd.pirvatephone.dao.contextmodel.ContextModel;
-import com.xstd.pirvatephone.dao.contextmodel.ContextModelDao;
-import com.xstd.pirvatephone.dao.contextmodel.ContextModelDaoUtils;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
@@ -31,7 +29,6 @@ public class NewContextModelActivity extends Activity {
 	private Button add_interept;
 	private Button btn_cancle;
 	private Button btn_sure;
-	private ContextModelDao contextModelDao;
 	private ModelDao modelDao;
 
 	@Override
@@ -50,11 +47,13 @@ public class NewContextModelActivity extends Activity {
 	}
 
 	private void initView() {
+		// add_name
 		model_name = (EditText) findViewById(R.id.et_model_name);
 
+		// content
 		add_notinterept = (Button) findViewById(R.id.btn_add_notinterept);
 		add_interept = (Button) findViewById(R.id.btn_add_interept);
-
+		// bottom
 		btn_cancle = (Button) findViewById(R.id.btn_cancle);
 		btn_sure = (Button) findViewById(R.id.btn_sure);
 
@@ -62,9 +61,29 @@ public class NewContextModelActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(NewContextModelActivity.this,
-						NotIntereptActivity.class);
-				startActivity(intent);
+				String modelName = model_name.getText().toString().trim();
+
+				boolean b = hasModel(modelName);
+				if (b) {
+					// 还没有该情景模式。增加一种情景模式
+					createNewModel(modelName);
+
+					// 设置该情景模式的不拦截联系人
+					if (!TextUtils.isEmpty(modelName)) {
+						Intent intent = new Intent(
+								NewContextModelActivity.this,
+								NotIntereptActivity.class);
+						intent.putExtra("ModelName", modelName);
+						startActivity(intent);
+					} else {
+						Toast.makeText(NewContextModelActivity.this,
+								"情景模式名称不能为空", Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					Toast.makeText(NewContextModelActivity.this,
+							"已有该情景模式，请从新定义！", Toast.LENGTH_SHORT).show();
+				}
+
 			}
 		});
 
@@ -72,9 +91,29 @@ public class NewContextModelActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(NewContextModelActivity.this,
-						IntereptActivity.class);
-				startActivity(intent);
+
+				String modelName = model_name.getText().toString().trim();
+
+				boolean b = hasModel(modelName);
+				if (b) {
+					// 还没有该情景模式。增加一种情景模式
+					createNewModel(modelName);
+
+					// 设置该情景模式的不拦截联系人
+					if (!TextUtils.isEmpty(modelName)) {
+						Intent intent = new Intent(
+								NewContextModelActivity.this,
+								IntereptActivity.class);
+						intent.putExtra("ModelName", modelName);
+						startActivity(intent);
+					} else {
+						Toast.makeText(NewContextModelActivity.this,
+								"情景模式名称不能为空", Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					Toast.makeText(NewContextModelActivity.this,
+							"已有该情景模式，请从新定义！", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -98,17 +137,22 @@ public class NewContextModelActivity extends Activity {
 					if (b) {
 						// 还没有该情景模式。增加一种情景模式
 						createNewModel(modelName);
+						finish();
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
 								"已有该情景模式，请从新定义！", Toast.LENGTH_SHORT).show();
 					}
-					
+
 					// 更新UI
 					Intent intent = new Intent();
 					intent.setAction("ModelBroadcastReciver");
 					sendBroadcast(intent);
+				}else{
+					Toast.makeText(NewContextModelActivity.this,
+							"情景模式名称不能为空！", Toast.LENGTH_SHORT).show();
+					
 				}
-				finish();
+			
 			}
 		});
 	}
@@ -126,11 +170,14 @@ public class NewContextModelActivity extends Activity {
 	}
 
 	private void createNewModel(String modelName) {
+		//创建情景模式
 		Model model = new Model();
 		model.setModel_name(modelName);
 		model.setModel_type(0);
 		modelDao.insert(model);
 		Tools.logSh("新建了一种情景模式");
+		
+		
 	}
 
 	@Override

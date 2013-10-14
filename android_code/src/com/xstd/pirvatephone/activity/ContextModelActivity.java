@@ -88,8 +88,13 @@ public class ContextModelActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				
+				TextView tv_modelname = (TextView) view
+						.findViewById(R.id.tv_modelname);
+				String modelName = tv_modelname.getText().toString();
 				Intent intent = new Intent(ContextModelActivity.this,
 						ModelEditActivity.class);
+				intent.putExtra("ModelName", modelName);
 				startActivity(intent);
 
 			}
