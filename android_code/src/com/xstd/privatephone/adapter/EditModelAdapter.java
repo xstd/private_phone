@@ -75,12 +75,6 @@ public class EditModelAdapter extends BaseAdapter {
 		hold.name.setText(mNoIntereptNumbers.get(position));
 		// 绘制联系人号码
 		hold.phone.setText(mNoIntereptNames.get(position));
-		hold.check.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-			}
-		});
 		return convertView;
 	}
 

@@ -24,6 +24,11 @@ public class DelectSystemContactUtils {
 	
 	public void deleteContacts(){
 		
+		if(mPhoneNumbers==null){
+			Tools.logSh("kong--------------");
+		}else{
+			Tools.logSh("bukong--------------");
+		}
 		for (int i = 0; i < mPhoneNumbers.length; i++) {
 			String number = mPhoneNumbers[i];
 			Cursor cursor = mContext.getContentResolver().query(Data.CONTENT_URI,

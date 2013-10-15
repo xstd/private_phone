@@ -2,10 +2,15 @@ package com.xstd.pirvatephone.activity;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.pirvatephone.utils.GetModelUtils;
 import com.xstd.privatephone.adapter.MyModelAdapter;
 import com.xstd.privatephone.tools.Tools;
@@ -253,6 +258,9 @@ public class ContextModelActivity extends Activity {
 		modelAdapter.notifyDataSetChanged();
 	}
 
+	/*
+	 * 删除model表中的相关信息
+	 */
 	public void deleteModel(String modelName) {
 		ModelDao modelDao = ModelDaoUtils
 				.getModelDao(ContextModelActivity.this);
@@ -270,6 +278,40 @@ public class ContextModelActivity extends Activity {
 		models.clear();
 		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
+	}
+	
+	/*
+	 * 删除modelDetail表中的信息
+	 */
+	public void deleteModelDetail(String modelName) {
+		ModelDetailDao modelDetailDao = ModelDetailDaoUtils.getModelDetailDao(ContextModelActivity.this);
+		SQLiteDatabase modelDetailDatebase = modelDetailDao.getDatabase();
+		Cursor modelDetailQuery = modelDetailDatebase.query(ModelDetailDao.TABLENAME, null, null, null, null, null, null);
+		if(modelDetailQuery != null && modelDetailQuery.getCount()>0){
+			while(modelDetailQuery.moveToNext()){
+				String jsonMassage = modelDetailQuery
+						.getString(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
+				String address = modelDetailQuery
+				.getString(modelDetailQuery
+						.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+				try {
+					JSONObject json = new JSONObject(jsonMassage);
+					Object object = json.get(modelName);
+					if(object!=null){
+						Tools.logSh("移除了：："+address+":::"+modelName);
+						json.remove(modelName);
+					}else{
+						
+					}
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			modelDetailQuery.close();
+		}
 	}
 
 	private class ModelBroadcastReciver extends BroadcastReceiver {
