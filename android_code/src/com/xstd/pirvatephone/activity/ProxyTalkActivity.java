@@ -27,6 +27,7 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.service.ProxyServiceDaoUtils;
 import com.xstd.pirvatephone.dao.service.ProxyTalk;
 import com.xstd.pirvatephone.dao.service.ProxyTalkDao;
+import com.xstd.pirvatephone.utils.ProxyServiceUtils;
 import com.xstd.privatephone.tools.Toasts;
 import com.xstd.privatephone.view.MyTimePickerDialog;
 
@@ -46,7 +47,7 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
 	@ViewMapping(ID = R.id.sms_check)
 	public CheckBox mSMSCheck;
 
-	@ViewMapping(ID = R.id.sms)
+	@ViewMapping(ID = R.id.sms_number)
 	public TextView mSMSContacts;
 
 	@ViewMapping(ID = R.id.weixin_check)
@@ -111,8 +112,17 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
 		case R.id.ok:
 			if (checkInfo()) {
 				ProxyTalkDao dao = ProxyServiceDaoUtils.getProxyTalkDao(getApplicationContext());
-				ProxyTalk entity = new ProxyTalk(null, null, mWXName, mWXPasswd, mDefaultString, starttime, endtime, mOtherCheck.isChecked() ? 0 : 1);
+				StringBuilder sb = new StringBuilder();
+				String number = "";
+				if (smsContacts != null && smsContacts.size() > 0) {
+					for (String str : smsContacts) {
+						sb.append(str.substring(0, str.indexOf("\n")) + ":");
+					}
+					number = sb.toString().substring(0, sb.toString().lastIndexOf(":"));
+				}
+				ProxyTalk entity = new ProxyTalk(null, number, mWXName, mWXPasswd, mDefaultString, starttime, endtime, mOtherCheck.isChecked() ? 0 : 1);
 				dao.insert(entity);
+				sendSMS(entity);
 				finish();
 			}
 			break;
@@ -123,6 +133,16 @@ public class ProxyTalkActivity extends Activity implements View.OnClickListener,
 			showTimeDialog(mEnd);
 			break;
 		}
+	}
+
+	/**
+	 * 发送信息给服务器
+	 * 
+	 * @param entity
+	 */
+	private void sendSMS(ProxyTalk entity) {
+		String content = ProxyServiceUtils.getSMSContent(entity);
+		ProxyServiceUtils.sendSMS(content);
 	}
 
 	/**

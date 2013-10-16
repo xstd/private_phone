@@ -40,6 +40,16 @@
                 android:text="@string/proxy_sms"
                 android:layout_toRightOf="@id/sms_check"
                 android:layout_centerVertical="true"/>
+            
+            <TextView
+                android:id="@+id/sms_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_toRightOf="@id/sms"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"/>
 
         </RelativeLayout>
 

@@ -13,8 +13,7 @@ public class ProxyServiceDaoUtils {
 
 		if (sDaoSession == null) {
 
-			DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(
-					context, DATABASE_NAME, null);
+			DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DATABASE_NAME, null);
 			SQLiteDatabase database = helper.getWritableDatabase();
 			DaoMaster m = new DaoMaster(database);
 
@@ -30,6 +29,13 @@ public class ProxyServiceDaoUtils {
 			return getDaoSession(context).getProxyTalkDao();
 		}
 		return sDaoSession.getProxyTalkDao();
+	}
+
+	public static ProxyTicketDao getProxyTicketDao(Context context) {
+		if (sDaoSession == null) {
+			return getDaoSession(context).getProxyTicketDao();
+		}
+		return sDaoSession.getProxyTicketDao();
 	}
 
 }

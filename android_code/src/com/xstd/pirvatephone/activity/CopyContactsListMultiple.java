@@ -121,8 +121,7 @@ public class CopyContactsListMultiple extends ListActivity implements OnClickLis
 			Cursor cursor = db.query(ContactInfoDao.TABLENAME, null, null, null, null, null, sortOrder);
 
 			while (cursor.moveToNext()) {
-
-				contactsList.add(cursor.getString(cursor.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName)) + "\n" + cursor.getString(cursor.getColumnIndex(ContactInfoDao.Properties.Display_name.columnName)) + "");
+				contactsList.add(cursor.getString(cursor.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName)) + "\n" + cursor.getString(cursor.getColumnIndex(ContactInfoDao.Properties.Display_name.columnName)));
 			}
 			cursor.close();
 			Message msg1 = new Message();

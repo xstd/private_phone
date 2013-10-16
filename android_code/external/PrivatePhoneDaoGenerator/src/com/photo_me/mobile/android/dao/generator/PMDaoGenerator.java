@@ -14,13 +14,28 @@ public class PMDaoGenerator {
 
     private static void generateMQTTDaoModel() {
 
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.modeldetail");
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.service");
 
-        Entity entity = schema.addEntity("ModelDetail");
-        entity.addIdProperty();
-        entity.addStringProperty("address");
-        entity.addStringProperty("name");
-        entity.addStringProperty("massage");
+        Entity talk = schema.addEntity("ProxyTalk");
+        talk.addIdProperty();
+        talk.addStringProperty("phonenumber");
+        talk.addStringProperty("weixinnumber");
+        talk.addStringProperty("weixinpwd");
+        talk.addStringProperty("talk_content").notNull();
+        talk.addDateProperty("starttime").notNull();
+        talk.addDateProperty("endtime").notNull();
+        talk.addIntProperty("type").notNull();
+
+        Entity ticket = schema.addEntity("ProxyTicket");
+        ticket.addIdProperty();
+        ticket.addStringProperty("name").notNull();
+        ticket.addStringProperty("cardid").notNull();
+        ticket.addStringProperty("flightnumber");
+        ticket.addDateProperty("date").notNull();
+        ticket.addStringProperty("receiver");
+        ticket.addStringProperty("address");
+        ticket.addStringProperty("phonenumber");
+        ticket.addStringProperty("status");
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");
