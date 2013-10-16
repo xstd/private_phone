@@ -13,11 +13,13 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
+import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.privatephone.adapter.EditContactAdapter;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,13 +39,20 @@ public class IntereptActivity extends Activity {
 	private String modelName;
 	private ListView mListView;
 
-	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
-	private ArrayList<String> selectContactsNames = new ArrayList<String>();
 	private Cursor contactCursor;
 	private ModelDetailDao modelDetailDao;
 	private EditContactAdapter mContactAdapter;
 	private Button btn_cancle;
 	private Button btn_sure;
+	private TextView tv_title;
+	private RelativeLayout select_all;
+	private CheckBox btn_check_all;
+	private CheckBox btn_remove_record;
+	private RelativeLayout rl_remove_record;
+	private int flag_remove = 0;
+
+	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
+	private ArrayList<String> selectContactsNames = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +69,10 @@ public class IntereptActivity extends Activity {
 	}
 
 	private void initView() {
-		// title
-		TextView tv_title = (TextView) findViewById(R.id.tv_title);
+		//title
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		select_all = (RelativeLayout) findViewById(R.id.rl_add_all);
+		btn_check_all = (CheckBox) findViewById(R.id.btn_check_all);
 		tv_title.setText(modelName + ":新增加拦截联系人");
 
 		// bottm
@@ -69,6 +81,69 @@ public class IntereptActivity extends Activity {
 
 		// content
 		mListView = (ListView) findViewById(R.id.listview);
+		btn_remove_record = (CheckBox) findViewById(R.id.btn_remove_record);
+		rl_remove_record = (RelativeLayout) findViewById(R.id.rl_remove_record);
+		
+		rl_remove_record.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				btn_remove_record.setChecked(!btn_remove_record.isChecked());
+				if(btn_remove_record.isChecked()){
+					flag_remove = 1; 
+				}else{
+					flag_remove = 0;
+				}
+			}
+		});
+		
+		select_all.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (btn_check_all.isChecked()) {
+					// 反选所有的item
+					for (int index = 0; index < mListView.getChildCount(); index++) {
+						RelativeLayout layout = (RelativeLayout) mListView
+								.getChildAt(index);
+						CheckBox checkBox = (CheckBox) layout
+								.findViewById(R.id.checkbox);
+						checkBox.setChecked(false);
+
+						// 清空选中号码
+						selectContactsNumbers.clear();
+						selectContactsNames.clear();
+					}
+
+				} else {
+					// 全部选中所有的item
+					for (int index = 0; index < mListView.getChildCount(); index++) {
+						RelativeLayout layout = (RelativeLayout) mListView
+								.getChildAt(index);
+						CheckBox checkBox = (CheckBox) layout
+								.findViewById(R.id.checkbox);
+						TextView tv_phone_num = (TextView) layout
+								.findViewById(R.id.tv_phone_num);
+						TextView tv_name = (TextView) layout
+								.findViewById(R.id.tv_name);
+
+						String number = tv_phone_num.getText().toString()
+								.trim();
+						String name = tv_name.getText().toString().trim();
+
+						checkBox.setChecked(true);
+
+						// 将所有号码添加到选中号码。
+						selectContactsNumbers.add(number);
+						selectContactsNames.add(name);
+
+					}
+
+				}
+				btn_check_all.setChecked(!btn_check_all.isChecked());
+			}
+		});
 
 		btn_cancle.setOnClickListener(new OnClickListener() {
 
@@ -83,127 +158,33 @@ public class IntereptActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				//
-				saveModel();
+				String clazzName = getCallingActivity().getShortClassName()
+						.toString();
+				Toast.makeText(IntereptActivity.this,
+						"新增加了；；；；；；；！" + clazzName, Toast.LENGTH_SHORT).show();
+				if (".activity.ModelEditActivity".equals(clazzName)) {
+					Toast.makeText(IntereptActivity.this,
+							"callingActivity！ModelEditActivity",
+							Toast.LENGTH_SHORT).show();
+					ContextModelUtils.saveModelDetail(IntereptActivity.this,
+							modelName, selectContactsNames,
+							selectContactsNumbers, 2);
+				} else {
+					Toast.makeText(IntereptActivity.this,
+							"callingActivity！NewContextModelActivity",
+							Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent();
+					intent.putExtra("Type", 2);
+					intent.putStringArrayListExtra("SelectContactsNumbers",
+							selectContactsNumbers);
+					intent.putStringArrayListExtra("SelectContactsNames",
+							selectContactsNames);
+					intent.putExtra("Flag_remove", flag_remove);
+					setResult(2, intent);
+				}
 				finish();
 			}
 		});
-	}
-
-	private void saveModel() {
-
-		for (int i = 0; i < selectContactsNumbers.size(); i++) {
-			String number = selectContactsNumbers.get(i);
-			// 查询该号码是否存在
-			ModelDetailDao modelDetailDao = ModelDetailDaoUtils
-					.getModelDetailDao(IntereptActivity.this);
-			SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
-			Cursor modelDetailQuery = modelDetailDatabase.query(
-					ModelDetailDao.TABLENAME, null,
-					ModelDetailDao.Properties.Address.columnName + "=?",
-					new String[] { number }, null, null, null);
-			
-			if (modelDetailQuery != null && modelDetailQuery.getCount() > 0) {
-
-				while (modelDetailQuery.moveToNext()) {
-					String num = modelDetailQuery
-							.getString(modelDetailQuery
-									.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
-					if (number.equals(num)) {// 已有该号码的相关信息，更新
-						String jsonMassage = modelDetailQuery
-								.getString(modelDetailQuery
-										.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
-
-						Long _id = modelDetailQuery
-								.getLong(modelDetailQuery
-										.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
-
-						ModelDetail modelDetail = new ModelDetail();
-						modelDetail.setId(_id);
-						modelDetail.setAddress(number);
-						modelDetail.setName(selectContactsNames.get(i));
-						Tools.logSh("address" + number + "::" + "message=="
-								+ jsonMassage);
-						try {
-							// {"home":1,"company":2}
-							JSONObject json = new JSONObject(jsonMassage);
-							json.put(modelName, 2);
-							jsonMassage = json.toString();
-						} catch (JSONException ex) {
-							// 键为null或使用json不支持的数字格式(NaN, infinities)
-							throw new RuntimeException(ex);
-						}
-						modelDetail.setMassage(jsonMassage);
-
-						modelDetailDao.update(modelDetail);
-
-					} else {// 未有该号码的相关信息，添加
-						ModelDetail modelDetail = new ModelDetail();
-
-						modelDetail.setAddress(number);
-						String name = selectContactsNames.get(i);
-						modelDetail.setName(name);
-
-						// Json--
-						String msg = "";
-						try {
-							// 首先最外层是{}，是创建一个对象
-							JSONObject model = new JSONObject();
-
-							// 1，不拦截；2，拦截
-							model.put(modelName, 2);
-							msg = model.toString();
-							Tools.logSh("name=" + name + ":::" + "address"
-									+ number + "::" + "message==" + msg);
-							/*
-							 * { "家里"："1","公司":"2" }
-							 */
-
-						} catch (JSONException ex) {
-							// 键为null或使用json不支持的数字格式(NaN, infinities)
-							throw new RuntimeException(ex);
-						}
-
-						modelDetail.setMassage(msg);
-						Tools.logSh("向modelDetail添加了一条数据");
-						modelDetailDao.insert(modelDetail);
-					}
-
-				}
-				modelDetailQuery.close();
-
-			} else {
-				ModelDetail modelDetail = new ModelDetail();
-
-				modelDetail.setAddress(number);
-				String name = selectContactsNames.get(i);
-				modelDetail.setName(name);
-
-				// Json--
-				String msg = "";
-				try {
-					// 首先最外层是{}，是创建一个对象
-					JSONObject model = new JSONObject();
-
-					// 1，不拦截；2，拦截
-					model.put(modelName, 2);
-					msg = model.toString();
-					Tools.logSh("name=" + name + ":::" + "address" + number
-							+ "::" + "message==" + msg);
-					/*
-					 * { "家里"："1","公司":"2" }
-					 */
-
-				} catch (JSONException ex) {
-					// 键为null或使用json不支持的数字格式(NaN, infinities)
-					throw new RuntimeException(ex);
-				}
-
-				modelDetail.setMassage(msg);
-				Tools.logSh("向modelDetail添加了一条数据");
-				modelDetailDao.insert(modelDetail);
-			}
-		}
 	}
 
 	private void setData() {

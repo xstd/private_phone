@@ -1,5 +1,7 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.ArrayList;
+
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
@@ -7,6 +9,12 @@ import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
+import com.xstd.pirvatephone.utils.ContextModelUtils;
+import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
+import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
+import com.xstd.pirvatephone.utils.WriteSmsDetailUtils;
+import com.xstd.pirvatephone.utils.WriteSmsRecordUtils;
+import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
@@ -30,23 +38,24 @@ public class NewContextModelActivity extends Activity {
 	private Button btn_cancle;
 	private Button btn_sure;
 	private ModelDao modelDao;
+	private String modelName;
+	private int type;
+	private int flag_remove = 0;
+	private ArrayList<String> selectContactsNumbers;
+	private ArrayList<String> selectContactsNames;
+	private String[] selectPhones;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_context_model);
 
-		createModel();
 		initView();
 
 	}
 
-	private void createModel() {
-		modelDao = ModelDaoUtils.getModelDao(getApplicationContext());
-
-	}
-
 	private void initView() {
+
 		// add_name
 		model_name = (EditText) findViewById(R.id.et_model_name);
 
@@ -61,12 +70,9 @@ public class NewContextModelActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				String modelName = model_name.getText().toString().trim();
-
+				modelName = model_name.getText().toString().trim();
 				boolean b = hasModel(modelName);
 				if (b) {
-					// 还没有该情景模式。增加一种情景模式
-					createNewModel(modelName);
 
 					// 设置该情景模式的不拦截联系人
 					if (!TextUtils.isEmpty(modelName)) {
@@ -74,7 +80,8 @@ public class NewContextModelActivity extends Activity {
 								NewContextModelActivity.this,
 								NotIntereptActivity.class);
 						intent.putExtra("ModelName", modelName);
-						startActivity(intent);
+						// startActivity(intent);
+						startActivityForResult(intent, 1);
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
 								"情景模式名称不能为空", Toast.LENGTH_SHORT).show();
@@ -92,20 +99,19 @@ public class NewContextModelActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				String modelName = model_name.getText().toString().trim();
+				modelName = model_name.getText().toString().trim();
 
 				boolean b = hasModel(modelName);
 				if (b) {
-					// 还没有该情景模式。增加一种情景模式
-					createNewModel(modelName);
 
 					// 设置该情景模式的不拦截联系人
 					if (!TextUtils.isEmpty(modelName)) {
 						Intent intent = new Intent(
 								NewContextModelActivity.this,
 								IntereptActivity.class);
+
 						intent.putExtra("ModelName", modelName);
-						startActivity(intent);
+						startActivityForResult(intent, 2);
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
 								"情景模式名称不能为空", Toast.LENGTH_SHORT).show();
@@ -129,7 +135,7 @@ public class NewContextModelActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				String modelName = model_name.getText().toString().trim();
+				modelName = model_name.getText().toString().trim();
 				if (!TextUtils.isEmpty(modelName)) {
 					// 判断数据库中是否已有该情景模式
 					boolean b = hasModel(modelName);
@@ -138,6 +144,13 @@ public class NewContextModelActivity extends Activity {
 						// 还没有该情景模式。增加一种情景模式
 						createNewModel(modelName);
 						finish();
+						if (flag_remove == 1) {// 转移指定号码
+							removeContactRecord();
+							Toast.makeText(NewContextModelActivity.this, "正在移动", Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(NewContextModelActivity.this, "没有需要移动的", Toast.LENGTH_SHORT).show();
+						}
+
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
 								"已有该情景模式，请从新定义！", Toast.LENGTH_SHORT).show();
@@ -147,17 +160,59 @@ public class NewContextModelActivity extends Activity {
 					Intent intent = new Intent();
 					intent.setAction("ModelBroadcastReciver");
 					sendBroadcast(intent);
-				}else{
-					Toast.makeText(NewContextModelActivity.this,
-							"情景模式名称不能为空！", Toast.LENGTH_SHORT).show();
-					
+				} else {
+					Toast.makeText(NewContextModelActivity.this, "情景模式名称不能为空！",
+							Toast.LENGTH_SHORT).show();
+
 				}
-			
+
 			}
 		});
 	}
 
+	private void parseArray() {
+		Tools.logSh("parseArray");
+
+		if (selectContactsNumbers.size() > 0) {
+			selectPhones = new String[selectContactsNumbers.size()];
+			for (int i = 0; i <selectContactsNumbers.size(); i++) {
+				selectPhones[i] = selectContactsNumbers.get(i);
+				Tools.logSh("selectPhones[i]="+selectPhones[i]);
+			}
+		}
+	}
+
+	public void removeContactRecord() {
+		
+		parseArray();
+		if(selectPhones!=null && selectPhones.length>0){
+			// 将系统通话记录detail复制到我们数据库
+			WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(
+					getApplicationContext(), selectPhones);
+			mWritePhoneDetailUtils.writePhoneDetail();
+
+			// 将系统通话记录record复制到我们数据库
+			WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(
+					getApplicationContext(), selectPhones);
+			mWritePhoneRecordUtils.writePhoneRecord();
+
+			// 将系统sms detail复制到我们数据库
+			WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(
+					getApplicationContext(), selectPhones);
+			mWriteSmsDetailUtils.writeSmsDetail();
+
+			// 将系统sms record复制到我们数据库
+			WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(
+					getApplicationContext(), selectPhones);
+			mWriteSmsRecordUtils.writeSmsRecord();
+		}
+		
+	}
+
 	private boolean hasModel(String modelName) {
+
+		Tools.logSh("modelname=" + modelName);
+		modelDao = ModelDaoUtils.getModelDao(NewContextModelActivity.this);
 		SQLiteDatabase modelDatabase = modelDao.getDatabase();
 		Cursor modelQuery = modelDatabase.query(ModelDao.TABLENAME, null,
 				ModelDao.Properties.Model_name.columnName + "=?",
@@ -170,14 +225,17 @@ public class NewContextModelActivity extends Activity {
 	}
 
 	private void createNewModel(String modelName) {
-		//创建情景模式
+		// 创建情景模式
 		Model model = new Model();
 		model.setModel_name(modelName);
 		model.setModel_type(0);
 		modelDao.insert(model);
 		Tools.logSh("新建了一种情景模式");
-		
-		
+
+		if (selectContactsNumbers != null && selectContactsNumbers.size() > 0) {
+			ContextModelUtils.saveModelDetail(this, modelName,
+					selectContactsNames, selectContactsNumbers, type);
+		}
 	}
 
 	@Override
@@ -187,4 +245,19 @@ public class NewContextModelActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		type = data.getIntExtra("Type", 0);
+		selectContactsNumbers = data
+				.getStringArrayListExtra("SelectContactsNumbers");
+		selectContactsNames = data
+				.getStringArrayListExtra("SelectContactsNames");
+		flag_remove = data.getIntExtra("Flag_remove", 0);
+
+		Tools.logSh("type=" + type + ":::selectContactsNumbers="
+				+ selectContactsNumbers);
+
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 }

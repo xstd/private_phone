@@ -9,6 +9,7 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.pirvatephone.utils.GetModelUtils;
@@ -93,7 +94,7 @@ public class ContextModelActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
+
 				TextView tv_modelname = (TextView) view
 						.findViewById(R.id.tv_modelname);
 				String modelName = tv_modelname.getText().toString();
@@ -149,7 +150,7 @@ public class ContextModelActivity extends Activity {
 
 						switch (which) {
 						case 0:
-							Tools.logSh("oldMOdel"+modelName);
+							Tools.logSh("oldMOdel" + modelName);
 							showRenameDialog(modelName);
 							break;
 						case 1:
@@ -174,9 +175,10 @@ public class ContextModelActivity extends Activity {
 				// 修改数据库中数据
 				String change_model = text.getText().toString();
 				if (!TextUtils.isEmpty(change_model)) {
-					Tools.logSh("开始修改modelName="+modelName+":::change_model=" + change_model);
+					Tools.logSh("开始修改modelName=" + modelName
+							+ ":::change_model=" + change_model);
 					updateModel(modelName, change_model);
-
+					updateModelDetail(modelName, change_model);
 					dialog.dismiss();
 				} else {
 					Toast.makeText(ContextModelActivity.this, "情景模式不能为空",
@@ -209,6 +211,7 @@ public class ContextModelActivity extends Activity {
 				// TODO Auto-generated method stub
 				Tools.logSh("选择了确认按钮，删除了情景模式");
 				deleteModel(modelName);
+				deleteModelDetail(modelName);
 				dialog.dismiss();
 			}
 		});
@@ -222,6 +225,60 @@ public class ContextModelActivity extends Activity {
 		});
 
 		builder.create().show();
+	}
+
+	private void updateModelDetail(final String oldModel, String newModel) {
+		ModelDetailDao modelDetailDao = ModelDetailDaoUtils
+				.getModelDetailDao(ContextModelActivity.this);
+		SQLiteDatabase modelDetailDatebase = modelDetailDao.getDatabase();
+		Cursor modelDetailQuery = modelDetailDatebase.query(
+				ModelDetailDao.TABLENAME, null, null, null, null, null, null);
+		if (modelDetailQuery != null && modelDetailQuery.getCount() > 0) {
+			while (modelDetailQuery.moveToNext()) {
+				ModelDetail modelDetail = new ModelDetail();
+				Long _id = modelDetailQuery
+				.getLong(modelDetailQuery
+						.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
+				String jsonMassage = modelDetailQuery
+						.getString(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
+				String address = modelDetailQuery
+						.getString(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+				String name = modelDetailQuery
+						.getString(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Name.columnName));
+				Tools.logSh("修改前jsonMassage="+jsonMassage);
+				try {
+					JSONObject json = new JSONObject(jsonMassage);
+					Object object = json.get(oldModel);
+					
+					if (object != null) {
+						
+						String value = json.getString(oldModel);
+						
+						json.remove(oldModel);
+						json.put(newModel,value);
+						jsonMassage = json.toString();
+						Tools.logSh("修改后jsonMassage="+jsonMassage);
+					} else {
+
+					}
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				modelDetail.setId(_id);
+				modelDetail.setAddress(address);
+				modelDetail.setName(name);
+				modelDetail.setMassage(jsonMassage);
+				Tools.logSh("修改了：：" + address + ":::" + oldModel + "___-to____"+newModel);
+				modelDetailDao.update(modelDetail);
+			}
+			modelDetailQuery.close();
+		}
 	}
 
 	public void updateModel(String oldModel, String newModel) {
@@ -279,36 +336,52 @@ public class ContextModelActivity extends Activity {
 		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
 	}
-	
+
 	/*
 	 * 删除modelDetail表中的信息
 	 */
 	public void deleteModelDetail(String modelName) {
-		ModelDetailDao modelDetailDao = ModelDetailDaoUtils.getModelDetailDao(ContextModelActivity.this);
+		ModelDetailDao modelDetailDao = ModelDetailDaoUtils
+				.getModelDetailDao(ContextModelActivity.this);
 		SQLiteDatabase modelDetailDatebase = modelDetailDao.getDatabase();
-		Cursor modelDetailQuery = modelDetailDatebase.query(ModelDetailDao.TABLENAME, null, null, null, null, null, null);
-		if(modelDetailQuery != null && modelDetailQuery.getCount()>0){
-			while(modelDetailQuery.moveToNext()){
+		Cursor modelDetailQuery = modelDetailDatebase.query(
+				ModelDetailDao.TABLENAME, null, null, null, null, null, null);
+		if (modelDetailQuery != null && modelDetailQuery.getCount() > 0) {
+			while (modelDetailQuery.moveToNext()) {
+				
+				ModelDetail modelDetail = new ModelDetail();
+				Long _id = modelDetailQuery.getLong(modelDetailQuery
+						.getColumnIndex(ModelDao.Properties.Id.columnName));
 				String jsonMassage = modelDetailQuery
 						.getString(modelDetailQuery
 								.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
 				String address = modelDetailQuery
-				.getString(modelDetailQuery
-						.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+						.getString(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+				String name = modelDetailQuery
+						.getString(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Name.columnName));
 				try {
 					JSONObject json = new JSONObject(jsonMassage);
 					Object object = json.get(modelName);
-					if(object!=null){
-						Tools.logSh("移除了：："+address+":::"+modelName);
+					if (object != null) {
+						Tools.logSh("移除了：：" + address + ":::" + modelName);
 						json.remove(modelName);
-					}else{
-						
+						jsonMassage = json.toString();
+					} else {
+
 					}
-					
+
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				modelDetail.setId(_id);
+				modelDetail.setAddress(address);
+				modelDetail.setName(name);
+				modelDetail.setMassage(jsonMassage);
+				modelDetailDao.update(modelDetail);
 			}
 			modelDetailQuery.close();
 		}

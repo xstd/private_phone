@@ -624,12 +624,6 @@ public class PrivateCommActivity extends BaseActivity {
 			Tools.logSh("selectNumber===" + selectNumbers[i]);
 		}
 
-		// 联系人恢复，向系统联系人数据库添加联系人
-
-		RestoreSystemContactUtils mRestoreSystemContactUtils = new RestoreSystemContactUtils(
-				getApplicationContext(), selectNumbers);
-		mRestoreSystemContactUtils.restoreContacts();
-
 		// 短信恢复，向系统短信数据库添加短信
 		RestoreSystemSmsUtils mRestoreSystemSmsUtils = new RestoreSystemSmsUtils(
 				getApplicationContext(), selectNumbers);

@@ -169,12 +169,12 @@ public class ModelEditActivity extends Activity {
 					Intent intent = new Intent(ModelEditActivity.this,NotIntereptActivity.class);
 					intent.putExtra("ModelName", modelName);
 					intent.putExtra("type", 1);
-					startActivity(intent);
+					startActivityForResult(intent,3);
 				}else{
 					Intent intent = new Intent(ModelEditActivity.this,IntereptActivity.class);
 					intent.putExtra("ModelName", modelName);
 					intent.putExtra("type", 2);
-					startActivity(intent);
+					startActivityForResult(intent,3);
 				}
 				
 			}

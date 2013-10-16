@@ -65,6 +65,7 @@
              android:id="@+id/rl_remove_record"
              android:layout_width="match_parent"
              android:layout_height="50dip"
+             android:background="@android:color/background_dark"
              android:layout_alignParentBottom="true"
              android:clickable="true"
              android:gravity="center_vertical" >
