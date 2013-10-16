@@ -56,78 +56,102 @@
             android:textColor="#ffffff" />
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/ll_interept"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/ll_intercept_tab"
         android:layout_marginBottom="55dip"
-        android:layout_below="@id/ll_intercept_tab" >
+        android:visibility="gone"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/ll_interept"
+        <TextView
+            android:id="@+id/tv_unlock_count"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:text="已拦截隐私联系人:" />
+
+        <RelativeLayout
+            android:id="@+id/rl_add_all"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:clickable="true"
+            android:gravity="center_vertical" >
+
+            <CheckBox
+                android:id="@+id/btn_check_all"
+                style="@style/private_comm_checkbox_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/textView2"
+                android:clickable="false"
+                android:focusable="false" />
 
             <TextView
-                android:id="@+id/tv_unlock_count"
-                android:layout_width="fill_parent"
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已拦截隐私联系人:" />
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="全选2" />
+        </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rl_add_all"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:clickable="true"
-                android:gravity="center_vertical" >
-
-                <CheckBox
-                    android:id="@+id/btn_check_all"
-                    style="@style/private_comm_checkbox_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/textView2"
-                    android:clickable="false"
-                    android:focusable="false" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="全选" />
-            </RelativeLayout>
-
-            <ListView
-                android:id="@+id/lv_interept"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-            </ListView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_uninterept"
+        <ListView
+            android:id="@+id/lv_interept"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:visibility="gone" >
+            android:layout_height="fill_parent" />
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_uninterept"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/ll_intercept_tab"
+        android:layout_marginBottom="55dip"
+        android:orientation="vertical"
+         >
+
+        <TextView
+            android:id="@+id/tv_locked_count"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="未拦截隐私联系人:" />
+
+        <RelativeLayout
+            android:id="@+id/rl_uninterept_all"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:clickable="true"
+            android:gravity="center_vertical" >
+
+            <CheckBox
+                android:id="@+id/btn_uninterept"
+                style="@style/private_comm_checkbox_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/textView3"
+                android:clickable="false"
+                android:focusable="false" />
 
             <TextView
-                android:id="@+id/tv_locked_count"
-                android:layout_width="fill_parent"
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="未拦截隐私联系人:" />
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="全选1" />
+        </RelativeLayout>
 
-            <ListView
-                android:id="@+id/lv_uninterept"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-            </ListView>
-        </LinearLayout>
-    </FrameLayout>
-    
+        <ListView
+            android:id="@+id/lv_uninterept"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+       
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/add_contact"
         android:layout_width="match_parent"

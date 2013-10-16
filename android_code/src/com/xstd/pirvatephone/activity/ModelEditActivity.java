@@ -11,6 +11,7 @@ import com.xstd.pirvatephone.R.layout;
 import com.xstd.pirvatephone.R.menu;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
+import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.privatephone.adapter.EditModelAdapter;
@@ -29,7 +30,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,6 +56,8 @@ public class ModelEditActivity extends Activity {
 	private ArrayList<String> noIntereptNames = new ArrayList<String>();
 	private Button add_btn;
 	private int curIndex = 0;
+	private EditModelAdapter noIntereptAdapter;
+	private EditModelAdapter intereptAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +131,8 @@ public class ModelEditActivity extends Activity {
 		lv_uninterept = (ListView) findViewById(R.id.lv_uninterept);
 		
 		add_btn = (Button) findViewById(R.id.add_btn);
+		
+		showNoInterept();
 
 		tv_interept.setOnClickListener(new OnClickListener() {
 
@@ -172,7 +180,7 @@ public class ModelEditActivity extends Activity {
 			}
 		});
 
-		showNoInterept();
+		
 	}
 
 	/**
@@ -182,9 +190,10 @@ public class ModelEditActivity extends Activity {
 		curIndex = 2;
 		ll_interept.setVisibility(View.VISIBLE);
 		ll_uninterept.setVisibility(View.GONE);
-
-		lv_uninterept.setAdapter(new EditModelAdapter(ModelEditActivity.this,
-				intereptNumbers, intereptNames));
+		Tools.logSh("intereptNumbers="+intereptNumbers+":::"+"intereptNames="+intereptNames);
+		intereptAdapter = new EditModelAdapter(ModelEditActivity.this,
+				intereptNumbers, intereptNames);
+		lv_interept.setAdapter(intereptAdapter);
 	}
 
 	/**
@@ -195,13 +204,26 @@ public class ModelEditActivity extends Activity {
 		curIndex=1;
 		ll_interept.setVisibility(View.GONE);
 		ll_uninterept.setVisibility(View.VISIBLE);
+		noIntereptAdapter = new EditModelAdapter(ModelEditActivity.this,
+				noIntereptNumbers, noIntereptNames);
+		lv_uninterept.setAdapter(noIntereptAdapter);
+		lv_uninterept.setOnItemClickListener(new OnItemClickListener() {
 
-		lv_uninterept.setAdapter(new EditModelAdapter(ModelEditActivity.this,
-				noIntereptNumbers, noIntereptNames));
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Tools.logSh("条目被点击了");
+				CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+				checkbox.setChecked(!checkbox.isChecked());
+			}
+		});
+		
 		lv_uninterept.setOnLongClickListener(new OnLongClickListener() {
 
 			@Override
 			public boolean onLongClick(View v) {
+				
+				Tools.logSh("不拦截item长按了");
 				// 获取该号码
 				TextView tv_phone_num = (TextView) v
 						.findViewById(R.id.tv_phone_num);
@@ -232,7 +254,7 @@ public class ModelEditActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				Tools.logSh("选择了确认按钮，删除了情景模式");
-				deleteAddress(modelName, address);
+				deleteModelNumber(modelName, address);
 				dialog.dismiss();
 			}
 		});
@@ -247,9 +269,62 @@ public class ModelEditActivity extends Activity {
 
 		builder.create().show();
 	}
-
-	private void deleteAddress(String modelName, String address) {
-		Toast.makeText(this, "删除了一个号码", Toast.LENGTH_SHORT).show();
-
+	
+	private void deleteModelNumber(String model, String number){
+		ModelDetailDao modelDetailDao = ModelDetailDaoUtils.getModelDetailDao(ModelEditActivity.this);
+		SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
+		Cursor modelDetailQuery = modelDetailDatabase.query(ModelDetailDao.TABLENAME, null, ModelDetailDao.Properties.Address.columnName+"=?", new String[]{number}, null, null, null);
+		
+		if(modelDetailQuery!=null && modelDetailQuery.getCount()>0){
+			while(modelDetailQuery.moveToNext()){
+				Long _id = modelDetailQuery.getLong(modelDetailQuery.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
+				String address = modelDetailQuery.getString(modelDetailQuery.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+				String name = modelDetailQuery.getString(modelDetailQuery.getColumnIndex(ModelDetailDao.Properties.Name.columnName));
+				
+				
+				String message = modelDetailQuery.getString(modelDetailQuery.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
+				
+				ModelDetail modelDetail = new ModelDetail();
+				modelDetail.setId(_id);
+				modelDetail.setAddress(address);
+				modelDetail.setName(name);
+				
+				try {
+					JSONObject json = new JSONObject(message);
+					json.remove(model);
+					message = json.toString();
+					modelDetail.setMassage(message);
+					Tools.logSh("message===="+message);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				modelDetailDao.update(modelDetail);
+			
+			}
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		if(curIndex==1){
+			noIntereptNumbers.clear();
+			noIntereptNames.clear();
+			intereptNumbers.clear();
+			intereptNames.clear();
+			initData();
+			noIntereptAdapter.notifyDataSetChanged();
+		}else if (curIndex ==2){
+			noIntereptNumbers.clear();
+			noIntereptNames.clear();
+			intereptNumbers.clear();
+			intereptNames.clear();
+			initData();
+			intereptAdapter.notifyDataSetChanged();
+		}else{
+			
+		}
+		
+		super.onResume();
 	}
 }

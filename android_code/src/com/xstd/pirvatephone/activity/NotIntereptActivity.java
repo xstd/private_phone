@@ -24,11 +24,15 @@ import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -103,6 +107,18 @@ public class NotIntereptActivity extends Activity {
 					}
 				}
 
+			});
+
+			mListView.setOnLongClickListener(new OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					TextView tv_phone_num = (TextView) v
+							.findViewById(R.id.tv_phone_num);
+					String address = tv_phone_num.getText().toString();
+					showDeleteDialog(modelName, address);
+					return false;
+				}
 			});
 		} else {
 			Toast.makeText(NotIntereptActivity.this, "还没有隐私联系人，请先添加隐私联系人！",
@@ -239,25 +255,29 @@ public class NotIntereptActivity extends Activity {
 							.getString(modelDetailQuery
 									.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
 
-					Long _id = modelDetailQuery.getLong(modelDetailQuery.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
-					
+					Long _id = modelDetailQuery
+							.getLong(modelDetailQuery
+									.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
+
 					ModelDetail modelDetail = new ModelDetail();
 					modelDetail.setId(_id);
 					modelDetail.setAddress(number);
 					modelDetail.setName(selectContactsNames.get(i));
-					
+					Tools.logSh("address" + number + "::" + "message=="
+							+ jsonMassage);
 					try {
-					JSONObject json = (JSONObject) JSON.toJSON(jsonMassage);
-					json.put(modelName, 1);
-					jsonMassage = json.toString();
-					}catch (JSONException ex) {
+						// {"home":1,"company":2}
+						JSONObject json = new JSONObject(jsonMassage);
+						json.put(modelName, 1);
+						jsonMassage = json.toString();
+					} catch (JSONException ex) {
 						// 键为null或使用json不支持的数字格式(NaN, infinities)
 						throw new RuntimeException(ex);
 					}
 					modelDetail.setMassage(jsonMassage);
 
 					modelDetailDao.update(modelDetail);
-					
+
 				}
 				modelDetailQuery.close();
 
@@ -277,7 +297,8 @@ public class NotIntereptActivity extends Activity {
 					// 1，不拦截；2，拦截
 					model.put(modelName, 1);
 					msg = model.toString();
-					Tools.logSh("name="+name+":::"+"address"+number+"::"+"message=="+msg);
+					Tools.logSh("name=" + name + ":::" + "address" + number
+							+ "::" + "message==" + msg);
 					/*
 					 * { "家里"："1","公司":"2" }
 					 */
@@ -292,6 +313,38 @@ public class NotIntereptActivity extends Activity {
 				modelDetailDao.insert(modelDetail);
 			}
 		}
+	}
+
+	protected void showDeleteDialog(final String modelName, final String address) {
+		AlertDialog.Builder builder = new Builder(NotIntereptActivity.this);
+
+		builder.setMessage("删除此情景模式？");
+
+		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				Tools.logSh("选择了确认按钮，删除了情景模式");
+				// deleteModelNumber(modelName, address);
+				dialog.dismiss();
+			}
+		});
+
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+
+		builder.create().show();
+	}
+
+	private void updateUI() {
+		initData();
+		mContactAdapter.notifyDataSetChanged();
 	}
 
 	@Override

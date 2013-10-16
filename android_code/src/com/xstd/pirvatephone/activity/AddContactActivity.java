@@ -46,24 +46,27 @@ public class AddContactActivity extends BaseActivity {
 	private Button btn_back;
 	private Button bt_sure;
 	private Button bt_cancle;
-	private ListView lv_contact;
 	private TextView tv_empty;
-
+	private ListView mListView;
+	private ProgressBar pb_empty;
+	private ImageView iv_empty_bg;
 	private GetContactTast task;
 
-	private Uri smsUri = Uri.parse("content://sms/");
+	private Button btn_edit;
+	private TextView tv_title;
+	private TextView et_search;
+	private String[] selectPhones;
+
 	private static final int UPDATE = 1;
 	private static final int FINISH_GET_CONTACT = 2;
 	private static final int MSG_KEY = 3;
+	private static final int DELETE_OVER = 4;
+
+	private boolean flags_delete = false;
 
 	/** 选取转换为隐私联系人的号码 **/
-	private static ArrayList<String> mSelectContactsNumber = new ArrayList<String>();
+	private ArrayList<MyContactInfo> mContactInfos;
 
-	private static ArrayList<MyContactInfo> mContactInfos;
-
-	ListView mListView = null;
-
-	private static final int DISPLAY_NAME_COLUMN_INDEX = 1;
 	public static final Uri CONVERSATIONS_URI = Uri
 			.parse("content://sms/conversations");
 
@@ -71,21 +74,18 @@ public class AddContactActivity extends BaseActivity {
 			CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.NUMBER,
 			CallLog.Calls.TYPE, };
 
-	private ProgressBar pb_empty;
-	private ImageView iv_empty_bg;
-
 	public Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 
 			switch (msg.what) {
 			case UPDATE:
 				Tools.logSh("接受到消息");
-				lv_contact.setEmptyView(iv_empty_bg);
+				mListView.setEmptyView(iv_empty_bg);
 				pb_empty.setVisibility(View.GONE);
-				AddContactAdapter mAdapter= new AddContactAdapter(getApplicationContext(),
-						mContactInfos);
-				lv_contact.setAdapter(mAdapter);
-				lv_contact.setOnItemClickListener(new OnItemClickListener() {
+				AddContactAdapter mAdapter = new AddContactAdapter(
+						getApplicationContext(), mContactInfos);
+				mListView.setAdapter(mAdapter);
+				mListView.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
@@ -94,17 +94,11 @@ public class AddContactActivity extends BaseActivity {
 						Tools.logSh("条目被点击了");
 						CheckBox btn_check = (CheckBox) view
 								.findViewById(R.id.btn_check);
-
-						// 记录选项
-						if (!btn_check.isChecked()) {
-							mContactInfos.get(position).setChecked(true);
-							Tools.logSh("选中了" + mContactInfos.get(position));
-						} else {
-							mContactInfos.get(position).setChecked(false);
-							Tools.logSh("取消了" + mContactInfos.get(position));
-						}
 						btn_check.setChecked(!btn_check.isChecked());
-
+						// 记录选项
+						mContactInfos.get(position).setChecked(
+								btn_check.isChecked());
+						Tools.logSh("选中了" + mContactInfos.get(position));
 					}
 				});
 				break;
@@ -113,15 +107,12 @@ public class AddContactActivity extends BaseActivity {
 				Tools.logSh("获取数据库联系人完成");
 				pb_empty.setVisibility(View.GONE);
 				break;
-			
-		case MSG_KEY:
-			refreshListView(msg.getData().get("value").toString());
+
+			case MSG_KEY:
+				refreshListView(msg.getData().get("value").toString());
 			}
 		};
 	};
-	private Button btn_edit;
-	private TextView tv_title;
-	private TextView et_search;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,30 +121,32 @@ public class AddContactActivity extends BaseActivity {
 		setContentView(R.layout.activity_contact);
 
 		initView();
-
+		
 		task = new GetContactTast(getApplicationContext());
 		task.execute();
+		
+	
 	}
 
 	private void initView() {
-		//title
+		// title
 		btn_back = (Button) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("从联系人添加");
 		et_search = (TextView) findViewById(R.id.et_search);
-		
-		//bottom
+
+		// bottom
 		bt_sure = (Button) findViewById(R.id.bt_sure);
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
-		//content
-		lv_contact = (ListView) findViewById(R.id.lv_contact);
+		// content
+		mListView = (ListView) findViewById(R.id.lv_contact);
 		pb_empty = (ProgressBar) findViewById(R.id.pb_empty);
 		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
 
 		btn_edit.setVisibility(View.GONE);
-		
-		//search
+
+		// search
 		et_search.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable editer) {
 			}
@@ -172,7 +165,7 @@ public class AddContactActivity extends BaseActivity {
 				handler.sendMessage(msg);
 			}
 		});
-		
+
 		btn_back.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -193,65 +186,69 @@ public class AddContactActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// 选择的隐私联系人信息导入我们的数据库。
-				// 查询联系人信息添加到我们的数据库。
-				removeContact();
+				
+				parseArray();
+				Tools.logSh("selectPhones中个数为："+selectPhones.length);
+				// 将系统联系人复制到我们数据库
+				WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+						getApplicationContext(), selectPhones);
+				mWriteContactUtils.writeContact();
+
+				// 显示选择对话框
+				showDeleteDialog(selectPhones);
+
 			}
 		});
 	}
-
-	/**
-	 * 指定联系人的移动包含联系人、通话记录、短信
-	 */
-	private void removeContact() {
-
+	
+	private void parseArray(){
 		Tools.logSh("removeContact");
-		Tools.logSh(mContactInfos.size() + "");
-		
+	
 		ArrayList<MyContactInfo> mSelectContactInfos = new ArrayList<MyContactInfo>();
 
-		
 		for (int i = 0; i < mContactInfos.size(); i++) {
-			if(mContactInfos.get(i).isChecked()){
+			if (mContactInfos.get(i).isChecked()) {
 				mSelectContactInfos.add(mContactInfos.get(i));
 			}
 		}
-		Tools.logSh("----------------------------------------");
-		
-		// 数组转换
-		String[] selectPhones = new String[mSelectContactInfos.size()];
-		Object[] obj =  mSelectContactInfos.toArray();
+		Tools.logSh(mContactInfos.size() + "");
+
+
+		selectPhones = new String[mSelectContactInfos.size()];
+		Object[] obj = mSelectContactInfos.toArray();
 		for (int i = 0; i < obj.length; i++) {
-			selectPhones[i] =  ((MyContactInfo)(obj[i])).getAddress();
+			selectPhones[i] = ((MyContactInfo) (obj[i])).getAddress();
 			Tools.logSh(selectPhones[i]);
 		}
+		
+	}
 
-		Tools.logSh("2222222222----------------------------------------");
-		//将系统联系人复制到我们数据库
-		WriteContactUtils mWriteContactUtils = new WriteContactUtils(getApplicationContext(),selectPhones);
-		mWriteContactUtils.writeContact();
+	/**
+	 * 指定联系人的移动包含联系人的通话记录、短信
+	 */
+	private void removeContact(String[] selectPhones) {
 
-		Tools.logSh("11111111111111111111111111111111111111");
-		//将系统通话记录detail复制到我们数据库
-		WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(getApplicationContext(),selectPhones);
+		// 将系统通话记录detail复制到我们数据库
+		WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(
+				getApplicationContext(), selectPhones);
 		mWritePhoneDetailUtils.writePhoneDetail();
 
-		Tools.logSh("222222222222222222222222222222222222222");
-		//将系统通话记录record复制到我们数据库
-		WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(getApplicationContext(),selectPhones);
+		// 将系统通话记录record复制到我们数据库
+		WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(
+				getApplicationContext(), selectPhones);
 		mWritePhoneRecordUtils.writePhoneRecord();
-		
-		
-		Tools.logSh("333333333333333333333333333333333333333333");
+
 		// 将系统sms detail复制到我们数据库
-		WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(getApplicationContext(),selectPhones);
+		WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(
+				getApplicationContext(), selectPhones);
 		mWriteSmsDetailUtils.writeSmsDetail();
-		
+
 		// 将系统sms record复制到我们数据库
-		WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(getApplicationContext(),selectPhones);
+		WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(
+				getApplicationContext(), selectPhones);
 		mWriteSmsRecordUtils.writeSmsRecord();
-		// 显示选择对话框
-		showDeleteDialog(selectPhones);
+		
+		finish();
 
 	}
 
@@ -265,22 +262,18 @@ public class AddContactActivity extends BaseActivity {
 
 						switch (which) {
 						case 0:
-							// 删除系统库中的联系人。
-							DelectSystemContactUtils mDelectSystemContactUtils = new DelectSystemContactUtils(getApplicationContext(),selectPhones);
-							mDelectSystemContactUtils.deleteContacts();
-							
-							DelectSystemPhoneUtils mDelectSystemPhoneUtils = new DelectSystemPhoneUtils(getApplicationContext(),selectPhones);
-							mDelectSystemPhoneUtils.deletePhone();
-							
-							DelectSystemSmsUtils mDelectSystemSmsUtils = new DelectSystemSmsUtils(getApplicationContext(),selectPhones);
-							mDelectSystemSmsUtils.deleteSms();
-							
-							finish();
+							flags_delete = true;
+							// 删除系统库中的联系人的相关信息,移动相关的通信信息
+							DeleteSystemTast tast = new DeleteSystemTast(
+									AddContactActivity.this);
+							tast.execute();
 							break;
 						case 1:
-							// 不删除系统库中的联系人
-							
-							finish();
+							flags_delete = false;
+							// 不删除系统库中的联系人,移动相关的通信信息
+							DeleteSystemTast tast2 = new DeleteSystemTast(
+									AddContactActivity.this);
+							tast2.execute();
 							break;
 						}
 					}
@@ -289,11 +282,25 @@ public class AddContactActivity extends BaseActivity {
 
 	}
 
-	private void refreshListView(String value) {
-		//根据search条件查询
-		
+	private void deleteSytemDetail() {
+		/*
+		 * DelectSystemContactUtils mDelectSystemContactUtils = new
+		 * DelectSystemContactUtils( getApplicationContext(), selectPhones);
+		 * mDelectSystemContactUtils.deleteContacts();
+		 */
+		DelectSystemPhoneUtils mDelectSystemPhoneUtils = new DelectSystemPhoneUtils(
+				getApplicationContext(), selectPhones);
+		mDelectSystemPhoneUtils.deletePhone();
+
+		DelectSystemSmsUtils mDelectSystemSmsUtils = new DelectSystemSmsUtils(
+				getApplicationContext(), selectPhones);
+		mDelectSystemSmsUtils.deleteSms();
 	}
 
+	private void refreshListView(String value) {
+		// 根据search条件查询
+
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -301,7 +308,57 @@ public class AddContactActivity extends BaseActivity {
 		return true;
 	}
 
-	public class GetContactTast extends AsyncTask<Void, Integer, Integer> {
+	private class DeleteSystemTast extends AsyncTask<Void, Integer, Integer> {
+
+		private Context context;
+
+		public DeleteSystemTast(Context context) {
+			this.context = context;
+		}
+
+		/**
+		 * 运行在UI线程中，在调用doInBackground()之前执行
+		 */
+		@Override
+		public void onPreExecute() {
+			Toast.makeText(context, "开始执行", Toast.LENGTH_SHORT).show();
+		}
+
+		/**
+		 * 后台运行的方法，可以运行非UI线程，可以执行耗时的方法
+		 */
+		@Override
+		protected Integer doInBackground(Void... params) {
+			if (flags_delete) {
+				Tools.logSh("执行删除系统数据库信息");
+				deleteSytemDetail();
+			}
+			removeContact(selectPhones);
+
+			return null;
+		}
+
+		/**
+		 * 运行在ui线程中，在doInBackground()执行完毕后执行
+		 */
+		@Override
+		public void onPostExecute(Integer integer) {
+			Toast.makeText(context, "执行完毕", Toast.LENGTH_SHORT).show();
+			Message msg = new Message();
+			msg.what = DELETE_OVER;
+			handler.sendMessage(msg);
+		}
+
+		/**
+		 * 在publishProgress()被调用以后执行，publishProgress()用于更新进度
+		 */
+		@Override
+		public void onProgressUpdate(Integer... values) {
+
+		}
+	}
+
+	private class GetContactTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context context;
 
@@ -323,7 +380,8 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			GetContactUtils mGetContactUtils = new GetContactUtils(getApplicationContext());
+			GetContactUtils mGetContactUtils = new GetContactUtils(
+					getApplicationContext());
 			mContactInfos = mGetContactUtils.getContacts();
 
 			return null;
@@ -334,7 +392,7 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPostExecute(Integer integer) {
-			Toast.makeText(context, "执行完毕", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "获取系统联系人完毕"+mContactInfos.size()+"个", Toast.LENGTH_SHORT).show();
 			Message msg = new Message();
 			msg.what = UPDATE;
 			handler.sendMessage(msg);
@@ -345,7 +403,7 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		public void onProgressUpdate(Integer... values) {
-			
+
 		}
 	}
 }
