@@ -838,6 +838,7 @@ QQ:903372666
     <string name="rs_phone">收件人电话</string>
     <string name="service_add_jipiao">添加机票服务</string>
     <string name="rs_error_filed">请确认所有字段都正确填写了？</string>
+    <string name="rs_error_date">时间不能小于今天</string>
 
     <!-- 模拟通讯 -->
     <string name="simula_comm_sms_title">模拟短信</string>

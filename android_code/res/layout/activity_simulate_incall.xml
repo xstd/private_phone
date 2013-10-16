@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#71A641"
+            android:orientation="vertical"
+            android:paddingBottom="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp" >
+
+            <TextView
+                android:id="@+id/name"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:text="陈宇" />
+
+            <TextView
+                android:id="@+id/phonenumber"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="18062001183" />
+
+            <TextView
+                android:id="@+id/duringtime"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical|right"
+                android:text="00:03" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@id/number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#ffffffff"
+            android:textSize="40.0dip"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/normal_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#9fAEc2" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="#88000000" >
+
+                <Button
+                    android:id="@+id/btn1_middle_normal"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btn2_middle_normal"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btn3_middle_normal"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <TableLayout
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:visibility="gone" >
+
+            <TableRow
+                android:layout_height="0.0dip"
+                android:layout_marginBottom="4.0dip"
+                android:layout_weight="1.0" >
+
+                <ImageButton
+                    android:id="@id/b1"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_1" />
+
+                <ImageButton
+                    android:id="@id/b2"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_2" />
+
+                <ImageButton
+                    android:id="@id/b3"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_3" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="0.0dip"
+                android:layout_marginBottom="4.0dip"
+                android:layout_weight="1.0" >
+
+                <ImageButton
+                    android:id="@id/b4"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_4" />
+
+                <ImageButton
+                    android:id="@id/b5"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_5" />
+
+                <ImageButton
+                    android:id="@id/b6"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_6" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="0.0dip"
+                android:layout_marginBottom="4.0dip"
+                android:layout_weight="1.0" >
+
+                <ImageButton
+                    android:id="@id/b7"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_7" />
+
+                <ImageButton
+                    android:id="@id/b8"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_8" />
+
+                <ImageButton
+                    android:id="@id/b9"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_9" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0" >
+
+                <ImageButton
+                    android:id="@id/star"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_star" />
+
+                <ImageButton
+                    android:id="@id/b0"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:layout_marginRight="4.0dip"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_0" />
+
+                <ImageButton
+                    android:id="@id/bj"
+                    style="@style/EmergencyDialpadButtonStyle"
+                    android:contentDescription="@string/s_image"
+                    android:src="@drawable/dial_num_pound" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:padding="4dp" >
+
+        <TableRow
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1" >
+
+            <ImageButton
+                android:id="@+id/btn1_bottm"
+                style="@style/EmergencyDialpadButtonStyle"
+                android:layout_marginRight="4.0dip"
+                android:contentDescription="@string/s_image"
+                android:src="@drawable/dial_num_star" />
+
+            <ImageButton
+                android:id="@+id/btn2_bottm"
+                style="@style/EmergencyDialpadButtonStyle"
+                android:layout_marginRight="4.0dip"
+                android:contentDescription="@string/s_image"
+                android:src="@drawable/dial_num_0" />
+
+            <ImageButton
+                android:id="@+id/btn3_bottm"
+                style="@style/EmergencyDialpadButtonStyle"
+                android:contentDescription="@string/s_image"
+                android:src="@drawable/dial_num_pound" />
+        </TableRow>
+
+        <TableRow android:layout_weight="1" >
+
+            <ImageButton
+                android:id="@+id/btn4_bottm"
+                style="@style/EmergencyDialpadButtonStyle"
+                android:layout_marginRight="4.0dip"
+                android:contentDescription="@string/s_image"
+                android:src="@drawable/dial_num_star" />
+
+            <ImageButton
+                android:id="@+id/btn5_bottm"
+                style="@style/EmergencyDialpadButtonStyle"
+                android:layout_marginRight="4.0dip"
+                android:contentDescription="@string/s_image"
+                android:src="@drawable/dial_num_0" />
+
+            <ImageButton
+                android:id="@+id/btn6_bottm"
+                style="@style/EmergencyDialpadButtonStyle"
+                android:contentDescription="@string/s_image"
+                android:src="@drawable/dial_num_pound" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

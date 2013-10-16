@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.privatephone.adapter.ProxyTicketListAdapter;
 
 public class ProxyTicketListActivity extends BaseActivity implements View.OnClickListener {
 
@@ -20,6 +21,8 @@ public class ProxyTicketListActivity extends BaseActivity implements View.OnClic
 
 	@ViewMapping(ID = R.id.lv)
 	public ListView lv;
+
+	private ProxyTicketListAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,21 @@ public class ProxyTicketListActivity extends BaseActivity implements View.OnClic
 
 		return_bt.setOnClickListener(this);
 		title_text.setText(R.string.service_jipiao);
+		adapter = new ProxyTicketListAdapter(getApplicationContext());
+		lv.setAdapter(adapter);
+	}
+
+	/**
+	 * 更新界面数据
+	 */
+	private void updateData() {
+		adapter.updateDatas();
+	}
+
+	@Override
+	protected void onResume() {
+		updateData();
+		super.onResume();
 	}
 
 	@Override

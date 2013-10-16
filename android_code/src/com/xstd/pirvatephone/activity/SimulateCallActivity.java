@@ -10,14 +10,15 @@ import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.service.LightScreenService;
 
-public class SimulateCallActivity extends BaseActivity implements
-		OnClickListener {
+public class SimulateCallActivity extends BaseActivity implements OnClickListener {
 
 	private MediaPlayer mMediaPlayer;
 	private Vibrator vibrator;
@@ -34,17 +35,26 @@ public class SimulateCallActivity extends BaseActivity implements
 	@ViewMapping(ID = R.id.incalling)
 	public ImageView incalling;
 
+	@ViewMapping(ID = R.id.name)
+	public TextView name;
+
+	@ViewMapping(ID = R.id.phoneNumber)
+	public TextView phonenumber;
+
+	private SimulateComm simu;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_simulate_call);
 
+		simu = (SimulateComm) getIntent().getSerializableExtra("simu");
+
 		initUI();
 
 		try {
 			mMediaPlayer = new MediaPlayer();
-			mMediaPlayer.setDataSource(this, RingtoneManager
-					.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+			mMediaPlayer.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 			mMediaPlayer.setLooping(true);
 			mMediaPlayer.prepare();
@@ -64,6 +74,12 @@ public class SimulateCallActivity extends BaseActivity implements
 		hangup.setOnClickListener(this);
 		dial.setOnClickListener(this);
 		pickup.setOnClickListener(this);
+
+		if (simu != null) {
+			name.setText(simu.getName());
+			phonenumber.setText(simu.getPhonenumber() + "");
+		}
+
 	}
 
 	@Override
@@ -95,6 +111,13 @@ public class SimulateCallActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		if (v == hangup) {
+			finish();
+		}
+		if (v == pickup) {
+			Intent intent = new Intent();
+			intent.setClass(getApplicationContext(), SimulateIncallActivity.class);
+			intent.putExtra("simu", simu);
+			startActivity(intent);
 			finish();
 		}
 	}

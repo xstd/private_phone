@@ -9,6 +9,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.View;
 
 import com.plugin.common.utils.view.ViewMapUtil;
@@ -52,7 +54,7 @@ public class AddProxyTicketActivity extends BaseActivity implements View.OnClick
 	@ViewMapping(ID = R.id.ok)
 	public Button btn_ok;
 
-	@ViewMapping(ID = R.id.cancel)
+	@ViewMapping(ID = R.id.exit)
 	public Button btn_cancle;
 
 	private Calendar calendar;
@@ -97,6 +99,13 @@ public class AddProxyTicketActivity extends BaseActivity implements View.OnClick
 			Toasts.getInstance(getApplicationContext()).show(R.string.rs_error_filed, 0);
 			return;
 		}
+		boolean istoday = DateUtils.isToday(calendar.getTimeInMillis());
+		if (!istoday) {
+			if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+				Toasts.getInstance(getApplicationContext()).show(R.string.rs_error_date, 0);
+				return;
+			}
+		}
 		ProxyTicket ticket = new ProxyTicket(null, name, card, flight, calendar.getTime(), receiver, address, phone, null);
 		ProxyServiceDaoUtils.getProxyTicketDao(getApplicationContext()).insert(ticket);
 		String content = ProxyServiceUtils.getSMSContent(ticket);
@@ -111,6 +120,7 @@ public class AddProxyTicketActivity extends BaseActivity implements View.OnClick
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				calendar.set(year, monthOfYear, dayOfMonth);
+				btn_date.setText(DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime()));
 			}
 		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 		datePickerDialog.show();

@@ -24,6 +24,10 @@ public abstract class SimulaComm implements Serializable {
 	 * 将来的某一时刻
 	 */
 	private Date futuretime;
+
+	/**
+	 * 电话的名字
+	 */
 	protected static Context mCtx;
 
 	protected SimulaComm() {

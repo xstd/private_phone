@@ -23,6 +23,7 @@ public class SimulateSendPhoneReceiver extends BroadcastReceiver {
 		context.getContentResolver().insert(CallLog.CONTENT_URI, values);
 		Intent activity = new Intent();
 		activity.setClass(context, SimulateCallActivity.class);
+		activity.putExtra("simu", simu);
 		activity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		Intent service = new Intent();
 		service.setClass(context, LightScreenService.class);
