@@ -312,6 +312,10 @@
     <color name="security_level_legal_version">#ff119bea</color>
     <color name="security_level_safe_use">#ff3fb000</color>
     <color name="roottips_title_color">#ff36a518</color>
+    <item type="color" name="bg_color">@color/white</item>
+    <item type="color" name="list_bg_disabled">@color/white</item>
+    <color name="activity_divider_text_color">#ff7f8286</color>
+    <color name="btn_text">#ff4e7f11</color>
     
     <!--swj  -->
     <color name="white">#ffffff</color>

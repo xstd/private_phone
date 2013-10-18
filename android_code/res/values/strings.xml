@@ -734,6 +734,7 @@ QQ:903372666
     <string name="title_activity_private_comm">PrivateCommActivity</string>
     <string name="ll_turn_back">返回</string>
     <string name="ll_title_text">隐私保护</string>
+    <string name="rs_add_picture">添加图片</string>
 
     <!-- swj -->
     <string name="private_c_home_first">隐私通讯</string>
@@ -803,6 +804,19 @@ QQ:903372666
     <string name="success_modify">修改成功！</string>
     <string name="delete_pwd_alert">您确定要删除这条记录吗！</string>
     <string name="title_activity_sms_detail">SmsDetailActivity</string>
+    <string name="privacy_picture">隐私相册</string>
+    <string name="turn_back">返回</string>
+    <string name="setting">设置</string>
+    <string name="title_bar_btn_edit">编辑</string>
+    <string name="strongbox_image_inbox_divider">已加密保护的图片(%d)</string>
+    <string name="strongbox_buttonbar_delete">销毁</string>
+    <string name="strongbox_buttonbar_descryption">移出保险箱</string>
+    <string name="strongbox_buttonbar_selectall">全选</string>
+    <string name="title_bar_btn_done">完成</string>
+    <string name="strongbox_list_empty_tips">该文件夹下没有任何文件哦~</string>
+    <string name="emptyview_image_text1">360隐私保险箱，保护您的隐私图片</string>
+    <string name="emptyview_image_text2">"请勿卸载360隐私保险箱或清除数据，
+否则隐私图片将会丢失，无法恢复！"</string>
 
     <!-- 服务大厅 -->
     <string name="service_title">服务大厅</string>

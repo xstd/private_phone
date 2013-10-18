@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/bg_color"
+        android:orientation="vertical" >
+
+        <include layout="@layout/title_bar" />
+
+        <TextView
+            android:id="@+id/inbox_divider"
+            style="@style/activity_divider"
+            android:paddingLeft="10.0dip"
+            android:text="@string/strongbox_image_inbox_divider"
+            android:textSize="16.0sp" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0" >
+
+            <FrameLayout
+                android:id="@+id/strongbox_buttonbar_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" >
+
+                <include
+                    android:id="@+id/strongbox_buttonbar_add"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/buttonbar_inbox_add" />
+
+                <include
+                    android:id="@+id/strongbox_buttonbar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/buttonbar_inbox"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/image_inbox_buttonbar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/bottom_bar_height"
+                    android:layout_gravity="center_vertical"
+                    layout="@layout/image_inbox_buttonbar"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <include
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/strongbox_buttonbar_layout"
+                android:layout_alignParentTop="true"
+                layout="@layout/gridview" />
+
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/strongbox_buttonbar_layout"
+                android:layout_alignRight="@id/strongbox_buttonbar_layout"
+                layout="@layout/float_edit_btn_flipper" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

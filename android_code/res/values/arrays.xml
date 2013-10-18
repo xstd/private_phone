@@ -413,7 +413,7 @@
         <item>手动选择图片</item>
     </string-array>
     <string-array name="privacy_audio">
-        <item>添加录音文件</item>
+        <item>录音</item>
         <item>自动扫描音频</item>
         <item>手动选择音频</item>
     </string-array>

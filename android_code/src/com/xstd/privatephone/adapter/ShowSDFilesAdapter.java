@@ -7,7 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.sax.StartElementListener;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,11 +48,7 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 			return;
 		File[] files = file.listFiles();
 		if (files == null) {
-			Toast.makeText(
-					mContext,
-					mContext.getResources().getString(
-							R.string.privacy_permission_denied),
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, mContext.getResources().getString(R.string.privacy_permission_denied), Toast.LENGTH_SHORT).show();
 		}
 		this.files.clear();
 		for (File f : files) {
@@ -86,19 +85,17 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = View.inflate(mContext, R.layout.item_show_sdfile,
-					null);
+			convertView = View.inflate(mContext, R.layout.item_show_sdfile, null);
 			holder.icon = (ImageView) convertView.findViewById(R.id.icon);
-			holder.fileName = (TextView) convertView
-					.findViewById(R.id.filename);
-			holder.lastModify = (TextView) convertView
-					.findViewById(R.id.filemodify);
+			holder.fileName = (TextView) convertView.findViewById(R.id.filename);
+			holder.lastModify = (TextView) convertView.findViewById(R.id.filemodify);
 			holder.isSelect = (CheckBox) convertView.findViewById(R.id.cb);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		final FileInfo fileInfo = files.get(position);
+		holder.icon.setImageResource(fileInfo.isFolder ? R.drawable.ic_file_dir : R.drawable.ic_file);
 		holder.fileName.setText(fileInfo.name);
 		holder.lastModify.setText(df.format(new Date(fileInfo.lasstModify)));
 		holder.isSelect.setChecked(fileInfo.isChecked);

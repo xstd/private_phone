@@ -28,8 +28,7 @@ import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.privatephone.adapter.ShowSDFilesAdapter;
 import com.xstd.privatephone.adapter.ShowSDFilesAdapter.FileInfo;
 
-public class ShowSDCardFilesActivity extends BaseActivity implements
-		OnClickListener {
+public class ShowSDCardFilesActivity extends BaseActivity implements OnClickListener {
 
 	protected static final String TAG = "ShowSDCardFilesActivity";
 	private TextView return_btn;
@@ -58,8 +57,7 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				FileInfo fileInfo = (FileInfo) adapter.getItem(position);
 				if (fileInfo.isFolder) {
 					adapter.updateFiles(fileInfo.absolutePath);
@@ -82,8 +80,7 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 		btn_move = (Button) findViewById(R.id.btn_move);
 		btn_add = (Button) findViewById(R.id.btn_add);
 		title_text.setText(getString(R.string.show_sdcardfile_title));
-		current_path.setText(Environment.getExternalStorageDirectory()
-				.getAbsolutePath());
+		current_path.setText(Environment.getExternalStorageDirectory().getAbsolutePath());
 		adapter = new ShowSDFilesAdapter(this);
 		lv.setAdapter(adapter);
 	}
@@ -136,8 +133,7 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 	/**
 	 * 文件隐藏的位置
 	 */
-	public static final String PRIVACY_SAPCE_PATH = UtilsConfig.DISK_DIR_PATH
-			+ "MISSFolder" + File.separator;
+	public static final String PRIVACY_SAPCE_PATH = UtilsConfig.DISK_DIR_PATH + "MISSFolder" + File.separator;
 	ProgressDialog dialog;
 	private int privacy_type;
 
@@ -160,20 +156,16 @@ public class ShowSDCardFilesActivity extends BaseActivity implements
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				PrivacyFileDao dao = PrivacyDaoUtils
-						.getFileDao(ShowSDCardFilesActivity.this);
+				PrivacyFileDao dao = PrivacyDaoUtils.getFileDao(ShowSDCardFilesActivity.this);
 				for (FileInfo fileInfo : willMoves) {
 					// String destName = UUID.randomUUID().toString();
 					com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
 					info.fileName = fileInfo.name;
 					info.filePath = fileInfo.absolutePath;
 					// FileUtils.copyFile(info, PRIVACY_SAPCE_PATH);
-					FileUtils.moveFile(fileInfo.absolutePath,
-							PRIVACY_SAPCE_PATH + fileInfo.name);
-					Log.w(TAG, privacy_type+"");
-					dao.insert(new PrivacyFile(null, fileInfo.name,
-							fileInfo.name, fileInfo.absolutePath, new Date(),
-							privacy_type));
+					FileUtils.moveFile(fileInfo.absolutePath, PRIVACY_SAPCE_PATH + fileInfo.name);
+					Log.w(TAG, privacy_type + "");
+					dao.insert(new PrivacyFile(null, fileInfo.name, fileInfo.name, fileInfo.absolutePath, new Date(), privacy_type));
 					FileUtils.DeleteFile(info);
 				}
 

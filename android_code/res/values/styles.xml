@@ -77,4 +77,52 @@
      <style name="private_comm_checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
   		<item name="android:button">@drawable/private_comm_checkbox_selector</item>
   	</style>
+  	
+     <style name="activity_divider">
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textColor">@color/activity_divider_text_color</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/activity_divider_bg</item>
+        <item name="android:paddingLeft">5.0dip</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    
+     <style name="btn_gray">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">@drawable/selector_btn_text</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_btn_gray</item>
+        <item name="android:paddingLeft">5.0dip</item>
+        <item name="android:paddingTop">3.0dip</item>
+        <item name="android:paddingRight">5.0dip</item>
+        <item name="android:paddingBottom">6.0dip</item>
+        <item name="android:layout_margin">5.0dip</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    
+     <style name="btn_green">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">@drawable/selector_btn_text</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_btn_green</item>
+        <item name="android:paddingLeft">5.0dip</item>
+        <item name="android:paddingTop">3.0dip</item>
+        <item name="android:paddingRight">5.0dip</item>
+        <item name="android:paddingBottom">6.0dip</item>
+        <item name="android:layout_margin">5.0dip</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:shadowColor">@color/btn_shadow</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">0.5</item>
+    </style>
+    <style name="emptyview_text">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">0.5</item>
+    </style>
 </resources>

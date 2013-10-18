@@ -120,6 +120,7 @@
         </activity>
         <activity android:name=".activity.SimulateIncallActivity" >
         </activity>
+        <activity android:name=".activity.AddPrivacyPictureActivity"></activity>
     </application>
 
 </manifest>

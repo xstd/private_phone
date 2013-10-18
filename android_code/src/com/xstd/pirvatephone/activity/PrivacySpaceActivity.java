@@ -15,10 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+
 /**
  * 文件隐藏模块主界面
+ * 
  * @author Chrain
- *
+ * 
  */
 public class PrivacySpaceActivity extends BaseActivity {
 
@@ -55,11 +57,14 @@ public class PrivacySpaceActivity extends BaseActivity {
 		lv_privacy.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent intent = new Intent(PrivacySpaceActivity.this,
-						PrivacyShowActivity.class);
-				intent.putExtra("privacy_type", position);//把类型带过去
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent intent = new Intent();
+				if (position == 0) {
+					intent.setClass(getApplicationContext(), AddPrivacyPictureActivity.class);
+				} else {
+					intent.setClass(getApplicationContext(), PrivacyShowActivity.class);
+				}
+				intent.putExtra("privacy_type", position);// 把类型带过去
 				startActivity(intent);
 			}
 
@@ -81,9 +86,7 @@ public class PrivacySpaceActivity extends BaseActivity {
 	/**
 	 * 文件隐藏分类的图片
 	 */
-	int[] home_privacy_pic = new int[] { R.drawable.privacy_mainview_ic_image,
-			R.drawable.home_user_center, R.drawable.privacy_mainview_ic_video,
-			R.drawable.privacy_mainview_ic_file,R.drawable.privacy_mainview_ic_pwd };
+	int[] home_privacy_pic = new int[] { R.drawable.privacy_mainview_ic_image, R.drawable.home_user_center, R.drawable.privacy_mainview_ic_video, R.drawable.privacy_mainview_ic_file, R.drawable.privacy_mainview_ic_pwd };
 
 	static String[] home_privacy_title;
 
@@ -116,12 +119,9 @@ public class PrivacySpaceActivity extends BaseActivity {
 			ViewHolder holder = null;
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = View.inflate(PrivacySpaceActivity.this,
-						R.layout.item_privacy_space, null);
-				holder.privacy_pic = (ImageView) convertView
-						.findViewById(R.id.privacy_pic);
-				holder.privacy_title = (TextView) convertView
-						.findViewById(R.id.privacy_title);
+				convertView = View.inflate(PrivacySpaceActivity.this, R.layout.item_privacy_space, null);
+				holder.privacy_pic = (ImageView) convertView.findViewById(R.id.privacy_pic);
+				holder.privacy_title = (TextView) convertView.findViewById(R.id.privacy_title);
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();

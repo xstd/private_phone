@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/float_edit_btn_flipper"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:inAnimation="@anim/toolbar_button_in"
+    android:outAnimation="@anim/toolbar_button_out"
+    android:paddingBottom="6.0dip" >
+
+    <Button
+        android:id="@+id/float_edit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_float_black_btn"
+        android:drawableLeft="@drawable/ico_edit"
+        android:gravity="center"
+        android:paddingLeft="15.0dip"
+        android:paddingRight="18.0dip"
+        android:text="@string/title_bar_btn_edit"
+        android:textColor="@android:color/white"
+        android:textSize="12.0sp" />
+
+    <Button
+        android:id="@+id/float_done_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_float_black_btn"
+        android:drawableLeft="@drawable/ico_done"
+        android:gravity="center"
+        android:paddingLeft="15.0dip"
+        android:paddingRight="18.0dip"
+        android:text="@string/title_bar_btn_done"
+        android:textColor="@android:color/white"
+        android:textSize="12.0sp" />
+
+</ViewFlipper>
