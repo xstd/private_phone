@@ -29,7 +29,7 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
     private int privacy_type;
 
     @Override
-    public void onCreate(Bun dle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
         setContentView(R.layout.activity_add_file);
 

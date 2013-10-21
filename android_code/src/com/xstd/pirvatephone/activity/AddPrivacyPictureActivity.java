@@ -1,25 +1,22 @@
 package com.xstd.pirvatephone.activity;
 
+import java.io.File;
+
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.TextView;
+
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
-
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import com.xstd.privatephone.adapter.AddPrivacyPicAdapter;
-
-import java.io.File;
 
 public class AddPrivacyPictureActivity extends BaseActivity implements OnClickListener {
 
