@@ -14,28 +14,26 @@ public class PMDaoGenerator {
 
     private static void generateMQTTDaoModel() {
 
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.service");
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.privacy");
 
-        Entity talk = schema.addEntity("ProxyTalk");
+        Entity talk = schema.addEntity("PrivacyFile");
         talk.addIdProperty();
-        talk.addStringProperty("phonenumber");
-        talk.addStringProperty("weixinnumber");
-        talk.addStringProperty("weixinpwd");
-        talk.addStringProperty("talk_content").notNull();
-        talk.addDateProperty("starttime").notNull();
-        talk.addDateProperty("endtime").notNull();
-        talk.addIntProperty("type").notNull();
+        talk.addStringProperty("srcName").notNull();
+        talk.addStringProperty("destName").notNull();
+        talk.addStringProperty("srcPath").notNull();
+        talk.addDateProperty("misstime");
+        talk.addIntProperty("type");
 
-        Entity ticket = schema.addEntity("ProxyTicket");
+        Entity ticket = schema.addEntity("PrivacyPwd");
         ticket.addIdProperty();
         ticket.addStringProperty("name").notNull();
-        ticket.addStringProperty("cardid").notNull();
-        ticket.addStringProperty("flightnumber");
-        ticket.addDateProperty("date").notNull();
-        ticket.addStringProperty("receiver");
-        ticket.addStringProperty("address");
-        ticket.addStringProperty("phonenumber");
-        ticket.addStringProperty("status");
+        ticket.addStringProperty("site");
+        ticket.addStringProperty("number");
+        ticket.addStringProperty("password").notNull();
+
+        Entity pic = schema.addEntity("PrivacyPic");
+        pic.addIdProperty();
+        pic.addStringProperty("album").notNull();
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");

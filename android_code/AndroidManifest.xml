@@ -121,6 +121,7 @@
         <activity android:name=".activity.SimulateIncallActivity" >
         </activity>
         <activity android:name=".activity.AddPrivacyPictureActivity"></activity>
+        <activity android:name=".activity.AddFileActivity"></activity>
     </application>
 
 </manifest>

@@ -407,20 +407,9 @@
         <item>文件</item>
         <item>密码本</item>
     </string-array>
-    <string-array name="privacy_pic">
-        <item>添加相机照片</item>
-        <item>自动扫描图片</item>
-        <item>手动选择图片</item>
-    </string-array>
     <string-array name="privacy_audio">
         <item>录音</item>
         <item>自动扫描音频</item>
-        <item>手动选择音频</item>
-    </string-array>
-    <string-array name="privacy_vedio">
-        <item>添加拍摄视频</item>
-        <item>自动扫描视频</item>
-        <item>手动选择视频</item>
     </string-array>
     <string-array name="privacy_pwd_setting">
         <item>查看</item>

@@ -105,7 +105,7 @@
         <item name="android:textSize">18.0sp</item>
         <item name="android:textColor">@drawable/selector_btn_text</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/selector_btn_green</item>
+        <item name="android:background">@drawable/selector_compound_btn_green</item>
         <item name="android:paddingLeft">5.0dip</item>
         <item name="android:paddingTop">3.0dip</item>
         <item name="android:paddingRight">5.0dip</item>
