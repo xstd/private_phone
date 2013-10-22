@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:orientation="vertical" android:background="@color/black" android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="20.0sp" android:textColor="@color/white" android:gravity="center"
+              android:layout_gravity="center" android:id="@+id/image_empty" android:visibility="gone"
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/display_added_from_camra_empty" android:drawableTop="@drawable/emptyview_image"/>
+    <com.qihoo360.mobilesafe.strongbox.ui.MultiTouchGallery android:gravity="center" android:layout_gravity="center"
+                                                            android:id="@id/gallery" android:layout_width="fill_parent"
+                                                            android:layout_height="fill_parent"
+                                                            android:spacing="40.0dip"/>
+    <RelativeLayout android:layout_gravity="top" android:orientation="horizontal"
+                    android:id="@+id/display_image_top_bar"
+                    android:background="@drawable/assistant_title_bg" android:layout_width="fill_parent"
+                    android:layout_height="45.0dip" android:layout_marginTop="-4.0dip">
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:layout_centerInParent="true">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:src="@drawable/mobilesafe_log"/>
+            <TextView android:textSize="20.0sp" android:textColor="@color/white" android:id="@+id/image_count"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:layout_marginLeft="5.0dip"/>
+        </LinearLayout>
+        <ImageView android:id="@+id/imageViewBack" android:paddingLeft="20.0dip" android:paddingTop="5.0dip"
+                   android:paddingRight="20.0dip" android:paddingBottom="5.0dip" android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" android:src="@drawable/selector_assistant_title_back"
+                   android:layout_alignParentLeft="true" android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <LinearLayout android:gravity="center_vertical" android:layout_gravity="bottom" android:orientation="horizontal"
+                  android:id="@+id/display_image_bottom_bar" android:background="@drawable/button_bar_dark_bg"
+                  android:paddingTop="5.0dip" android:layout_width="fill_parent"
+                  android:layout_height="@dimen/bottom_bar_height">
+        <include android:layout_gravity="center_vertical" android:id="@+id/display_image_delete"
+                 android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginLeft="4.0dip"
+                 android:layout_marginRight="2.0dip" android:layout_weight="1.0" layout="@layout/compound_btn_dark"/>
+        <include android:layout_gravity="center_vertical" android:id="@+id/display_entry_strongbox"
+                 android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginLeft="4.0dip"
+                 android:layout_marginRight="2.0dip" android:layout_weight="1.0" layout="@layout/compound_btn_green"/>
+    </LinearLayout>
+</FrameLayout>
