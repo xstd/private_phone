@@ -1,6 +1,7 @@
 package com.xstd.pirvatephone.activity;
 
 import java.io.File;
+import java.util.concurrent.Executor;
 
 import android.content.Intent;
 import android.net.Uri;
