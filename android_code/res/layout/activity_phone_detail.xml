@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light" >
+
+    <RelativeLayout
+        android:id="@+id/phone_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="65dip"
+        android:background="@drawable/title_bg"
+        android:paddingBottom="15dip"
+        android:paddingTop="15dip" >
+
+        <TextView
+            android:id="@+id/phone_detail_title_text"
+            style="@style/private_comm_title_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="10010" />
+
+        <Button
+            android:id="@+id/phone_detail_title_call"
+            android:layout_width="45dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/private_comm_editbtn_selector"
+            android:text="@string/private_comm_btn_edit"
+            android:textColor="@color/text_title_style_select_color"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/phone_detail_title_back"
+            android:layout_width="55dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/private_comm_backbtn_selector"
+            android:text="@string/private_comm_btn_back"
+            android:textColor="@color/text_title_style_select_color"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/phone_detail_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/phone_detail_title"
+        android:layout_marginBottom="50dip" />
+
+    <LinearLayout
+        android:id="@+id/phone_ll_remove"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@drawable/private_comm_spacbtn_selector" >
+
+        <Button
+            android:id="@+id/bt_recover"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="拨打电话"
+            android:textColor="@color/sms_text_content_unseleted" />
+
+        <Button
+            android:id="@+id/bt_delete"
+             android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="发送短信"
+            android:textColor="@color/sms_text_content_unseleted" />
+    </LinearLayout>
+
+</RelativeLayout>
