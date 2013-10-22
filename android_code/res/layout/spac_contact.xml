@@ -49,7 +49,7 @@
             android:orientation="vertical" >
 
             <ListView
-                android:id="@+id/contact_edit_list_gone"
+                android:id="@+id/contact_edit_listview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             
@@ -112,7 +112,7 @@
             android:orientation="vertical" >
 
             <ListView
-                android:id="@+id/contact_lv_cont"
+                android:id="@+id/contact_listview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

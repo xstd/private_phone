@@ -194,6 +194,15 @@ public class ModelEditActivity extends Activity {
 		intereptAdapter = new EditModelAdapter(ModelEditActivity.this,
 				intereptNumbers, intereptNames);
 		lv_interept.setAdapter(intereptAdapter);
+		lv_interept.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+				checkbox.setChecked(!checkbox.isChecked());
+			}
+		});
 	}
 
 	/**

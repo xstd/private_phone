@@ -68,6 +68,7 @@ public class WriteSmsRecordUtils {
 					smsRecordDao.insert(mSmsRecord);
 					mSmsRecord = null;
 					Tools.logSh("向smsRecord插入了一条数据");
+					break ;
 
 				}
 				smsCursor.close();

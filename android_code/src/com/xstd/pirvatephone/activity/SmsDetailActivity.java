@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.privatephone.adapter.SmsDetailAdapter;
@@ -28,7 +30,6 @@ import com.xstd.privatephone.tools.Tools;
 public class SmsDetailActivity extends BaseActivity {
 
 	private ListView listview;
-	private String number;
 	private Button btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
@@ -36,18 +37,34 @@ public class SmsDetailActivity extends BaseActivity {
 	private EditText send_content;
 	private Cursor smsDetailCursor;
 	private SmsDetailAdapter smsDetailAdapter;
+	private String name = "";
+	private String number = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sms_detail);
 
-		number = getIntent().getStringExtra("Number");
-
-		Tools.logSh("Number====" + number);
+		name = getIntent().getStringExtra("Name");
+		//查询该name对应的number
+		getContactNumber();
 
 		initData();
 		initView();
+	}
+	
+	private void getContactNumber(){
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils.getContactInfoDao(this);
+		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+		Cursor query = contactDatabase.query(ContactInfoDao.TABLENAME, null, ContactInfoDao.Properties.Display_name.columnName+"=?", new String[]{name}, null, null, null);
+		if(query!=null && query.getCount()>0){
+			while(query.moveToNext()){
+				number = query.getString(query.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+			}
+			query.close();
+		}
+		
+		Tools.logSh("Number====" + number);
 	}
 
 	private void initView() {

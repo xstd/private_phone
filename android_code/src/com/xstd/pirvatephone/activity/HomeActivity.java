@@ -36,7 +36,7 @@ public class HomeActivity extends BaseActivity {
 		initView();
 		
 	}
-
+	
 	private void initData() {
 		titles.add(getResources().getString(R.string.private_c_home_first));
 		titles.add(getResources().getString(R.string.private_c_home_two));

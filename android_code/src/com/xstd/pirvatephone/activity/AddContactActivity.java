@@ -32,6 +32,7 @@ import com.xstd.pirvatephone.utils.DelectSystemContactUtils;
 import com.xstd.pirvatephone.utils.DelectSystemPhoneUtils;
 import com.xstd.pirvatephone.utils.DelectSystemSmsUtils;
 import com.xstd.pirvatephone.utils.GetContactUtils;
+import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
 import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
 import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
@@ -61,6 +62,7 @@ public class AddContactActivity extends BaseActivity {
 	private static final int FINISH_GET_CONTACT = 2;
 	private static final int MSG_KEY = 3;
 	private static final int DELETE_OVER = 4;
+	private static final int SHOW_TOAST = 5;
 
 	private boolean flags_delete = false;
 
@@ -110,6 +112,11 @@ public class AddContactActivity extends BaseActivity {
 
 			case MSG_KEY:
 				refreshListView(msg.getData().get("value").toString());
+
+			case SHOW_TOAST:
+				Toast.makeText(AddContactActivity.this, "已经存在该隐私联系人！！",
+						Toast.LENGTH_SHORT).show();
+
 			}
 		};
 	};
@@ -121,11 +128,10 @@ public class AddContactActivity extends BaseActivity {
 		setContentView(R.layout.activity_contact);
 
 		initView();
-		
+
 		task = new GetContactTast(getApplicationContext());
 		task.execute();
-		
-	
+
 	}
 
 	private void initView() {
@@ -186,24 +192,22 @@ public class AddContactActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				
 				parseArray();
-				Tools.logSh("selectPhones中个数为："+selectPhones.length);
-				// 将系统联系人复制到我们数据库
-				WriteContactUtils mWriteContactUtils = new WriteContactUtils(
-						getApplicationContext(), selectPhones);
-				mWriteContactUtils.writeContact();
-
-				// 显示选择对话框
-				showDeleteDialog(selectPhones);
-
+				if (selectPhones != null && selectPhones.length > 0) {
+					Tools.logSh("selectPhones中个数为：" + selectPhones.length);
+					// 显示选择对话框
+					showDeleteDialog(selectPhones);
+				} else {
+					Toast.makeText(AddContactActivity.this, "选择联系人不能为空！！",
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}
-	
-	private void parseArray(){
+
+	private void parseArray() {
 		Tools.logSh("removeContact");
-	
+
 		ArrayList<MyContactInfo> mSelectContactInfos = new ArrayList<MyContactInfo>();
 
 		for (int i = 0; i < mContactInfos.size(); i++) {
@@ -213,42 +217,12 @@ public class AddContactActivity extends BaseActivity {
 		}
 		Tools.logSh(mContactInfos.size() + "");
 
-
 		selectPhones = new String[mSelectContactInfos.size()];
 		Object[] obj = mSelectContactInfos.toArray();
 		for (int i = 0; i < obj.length; i++) {
-			selectPhones[i] = ((MyContactInfo) (obj[i])).getAddress();
+			selectPhones[i] = ((MyContactInfo) (obj[i])).getName();
 			Tools.logSh(selectPhones[i]);
 		}
-		
-	}
-
-	/**
-	 * 指定联系人的移动包含联系人的通话记录、短信
-	 */
-	private void removeContact(String[] selectPhones) {
-
-		// 将系统通话记录detail复制到我们数据库
-		WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(
-				getApplicationContext(), selectPhones);
-		mWritePhoneDetailUtils.writePhoneDetail();
-
-		// 将系统通话记录record复制到我们数据库
-		WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(
-				getApplicationContext(), selectPhones);
-		mWritePhoneRecordUtils.writePhoneRecord();
-
-		// 将系统sms detail复制到我们数据库
-		WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(
-				getApplicationContext(), selectPhones);
-		mWriteSmsDetailUtils.writeSmsDetail();
-
-		// 将系统sms record复制到我们数据库
-		WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(
-				getApplicationContext(), selectPhones);
-		mWriteSmsRecordUtils.writeSmsRecord();
-		
-		finish();
 
 	}
 
@@ -263,6 +237,7 @@ public class AddContactActivity extends BaseActivity {
 						switch (which) {
 						case 0:
 							flags_delete = true;
+
 							// 删除系统库中的联系人的相关信息,移动相关的通信信息
 							DeleteSystemTast tast = new DeleteSystemTast(
 									AddContactActivity.this);
@@ -270,6 +245,7 @@ public class AddContactActivity extends BaseActivity {
 							break;
 						case 1:
 							flags_delete = false;
+
 							// 不删除系统库中的联系人,移动相关的通信信息
 							DeleteSystemTast tast2 = new DeleteSystemTast(
 									AddContactActivity.this);
@@ -280,21 +256,6 @@ public class AddContactActivity extends BaseActivity {
 				});
 		builder.create().show();
 
-	}
-
-	private void deleteSytemDetail() {
-		/*
-		 * DelectSystemContactUtils mDelectSystemContactUtils = new
-		 * DelectSystemContactUtils( getApplicationContext(), selectPhones);
-		 * mDelectSystemContactUtils.deleteContacts();
-		 */
-		DelectSystemPhoneUtils mDelectSystemPhoneUtils = new DelectSystemPhoneUtils(
-				getApplicationContext(), selectPhones);
-		mDelectSystemPhoneUtils.deletePhone();
-
-		DelectSystemSmsUtils mDelectSystemSmsUtils = new DelectSystemSmsUtils(
-				getApplicationContext(), selectPhones);
-		mDelectSystemSmsUtils.deleteSms();
 	}
 
 	private void refreshListView(String value) {
@@ -329,12 +290,56 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			if (flags_delete) {
-				Tools.logSh("执行删除系统数据库信息");
-				deleteSytemDetail();
-			}
-			removeContact(selectPhones);
 
+			parseArray();
+
+			WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+					getApplicationContext());
+
+			// 仅选择一个时：判断私密通信联系人是否已有该联系人
+			if (selectPhones.length == 1) {
+				Tools.logSh("仅仅选择一个联系人");
+				boolean b = mWriteContactUtils.isPrivateContact(selectPhones);
+				if (b) {
+					Message msg = new Message();
+					msg.what = SHOW_TOAST;
+					handler.sendMessage(msg);
+					
+				} else {
+					Tools.logSh("仅仅选择一个联系人，还不存在该隐私联系人");
+					mWriteContactUtils.writeContact(selectPhones);
+
+					if (flags_delete) {
+						Tools.logSh("执行删除系统数据库信息");
+
+						RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+								AddContactActivity.this);
+						recordToUsUtils.removeContactRecord(selectPhones, flags_delete);
+						finish();
+					} else {
+						Tools.logSh("仅仅移动联系人");
+						finish();
+					}
+				}
+			} else {
+				
+				mWriteContactUtils.removeRepeat(selectPhones);
+				
+				// 选择多个时：剔除重复的联系人
+
+				if (flags_delete) {
+					Tools.logSh("执行删除系统数据库信息");
+
+					RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+							AddContactActivity.this);
+					recordToUsUtils.removeContactRecord(selectPhones, flags_delete);
+					finish();
+				} else {
+					Tools.logSh("仅仅移动联系人");
+					finish();
+				}
+			}
+			
 			return null;
 		}
 
@@ -392,7 +397,8 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPostExecute(Integer integer) {
-			Toast.makeText(context, "获取系统联系人完毕"+mContactInfos.size()+"个", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "获取系统联系人完毕" + mContactInfos.size() + "个",
+					Toast.LENGTH_SHORT).show();
 			Message msg = new Message();
 			msg.what = UPDATE;
 			handler.sendMessage(msg);

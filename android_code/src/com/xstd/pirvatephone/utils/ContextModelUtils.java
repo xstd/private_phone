@@ -10,26 +10,110 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.xstd.pirvatephone.activity.IntereptActivity;
+import com.xstd.pirvatephone.activity.NewContextModelActivity;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class ContextModelUtils {
+	private String[] selectPhones;
+	private ArrayList<String> intereptNumbers = new ArrayList<String>();
 	
-	public static void saveModelDetail(Context context,String modelName, ArrayList<String> selectContactsNames,ArrayList<String> selectContactsNumbers, int type) {
+	private String[] parseArray(ArrayList<String> selectContactsNumbers) {
+		Tools.logSh("parseArray");
+		selectPhones = null;
+
+		if (selectContactsNumbers.size() > 0) {
+			selectPhones = new String[selectContactsNumbers.size()];
+			for (int i = 0; i <selectContactsNumbers.size(); i++) {
+				selectPhones[i] = selectContactsNumbers.get(i);
+				Tools.logSh("selectPhones[i]="+selectPhones[i]);
+			}
+		}else{
+			return null;
+		}
+		
+		return  selectPhones;
+	}
+	
+	/**
+	 * 获取当前拦截联系人的号码
+	 */
+	public String[] getIntereptNumbers(Context context) {
+		// 1.获取当前的拦截模式
+		GetModelUtils modelUtils = new GetModelUtils(context);
+		String currentModel = modelUtils.getCurrentModel();
+		if (currentModel == null) {
+			Tools.logSh("currentModel===还没有拦截模式");
+			return null;
+		} else {
+			// 2.获取当前需要拦截的号码
+			ModelDetailDao modelDetailDao = ModelDetailDaoUtils
+					.getModelDetailDao(context);
+			SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
+
+			Cursor query = modelDetailDatabase.query(ModelDetailDao.TABLENAME,
+					null, null, null, null, null, null);
+
+			if (query != null && query.getCount() > 0) {
+				while (query.moveToNext()) {
+					String jsonMassage = query
+							.getString(query
+									.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
+					String address = query
+							.getString(query
+									.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+					try {
+						JSONObject json = new JSONObject(jsonMassage);
+						Object object = json.getInt(currentModel);
+
+						if (object == null) {
+							// 不存在
+						} else {
+							// 存在
+							intereptNumbers.add(address);
+
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+				}
+			}
+			return parseArray(intereptNumbers);
+		}
+	}
+	
+
+	public static void deleteModelDetail(Context mContext, String[] seleteNumbers) {
+
+		for (int i = 0; i < seleteNumbers.length; i++) {
+			String number = seleteNumbers[i];
+			ModelDetailDao modelDetailDao = ModelDetailDaoUtils
+					.getModelDetailDao(mContext);
+			SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
+			int delete = modelDetailDatabase.delete(ModelDetailDao.TABLENAME, ModelDetailDao.Properties.Address.columnName+"=?", new String[]{number});
+			if(delete>0){
+				Tools.logSh("删除一个");
+			}
+		}
+	}
+
+	public static void saveModelDetail(Context mContext, String modelName,
+			ArrayList<String> selectContactsNames,
+			ArrayList<String> selectContactsNumbers, int type, boolean delete) {
 
 		for (int i = 0; i < selectContactsNumbers.size(); i++) {
 			String number = selectContactsNumbers.get(i);
 			// 查询该号码是否存在于modelDetail中
 			ModelDetailDao modelDetailDao = ModelDetailDaoUtils
-					.getModelDetailDao(context);
+					.getModelDetailDao(mContext);
 			SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
 			Cursor modelDetailQuery = modelDetailDatabase.query(
 					ModelDetailDao.TABLENAME, null,
 					ModelDetailDao.Properties.Address.columnName + "=?",
 					new String[] { number }, null, null, null);
-			
+
 			// ModelDetail有数据时
 			if (modelDetailQuery != null && modelDetailQuery.getCount() > 0) {
 
@@ -130,6 +214,22 @@ public class ContextModelUtils {
 				modelDetail.setMassage(msg);
 				Tools.logSh("向modelDetail添加了一条数据");
 				modelDetailDao.insert(modelDetail);
+			}
+		}
+
+		// 是不拦截模式
+		if (type == 1) {
+			if (delete) {
+				RecordToSysUtils recordToSysUtils = new RecordToSysUtils(
+						mContext);
+				recordToSysUtils.restoreContact(selectContactsNumbers);
+			}
+
+		} else {// 拦截模式
+			if (delete) {
+				RecordToUsUtils recordToUsUtils = new RecordToUsUtils(mContext);
+				recordToUsUtils.removeContactRecord(selectContactsNumbers,
+						delete);
 			}
 		}
 	}

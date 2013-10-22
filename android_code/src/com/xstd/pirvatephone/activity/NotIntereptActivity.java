@@ -56,7 +56,8 @@ public class NotIntereptActivity extends Activity {
 	private String modelName;
 	private Cursor contactCursor;
 	private EditContactAdapter mContactAdapter;
-	private int flag_remove = 0;
+	private boolean delete = false;
+	private int type = 1;
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
@@ -163,7 +164,7 @@ public class NotIntereptActivity extends Activity {
 		btn_check_all = (CheckBox) findViewById(R.id.btn_check_all);
 
 		mListView = (ListView) findViewById(R.id.listview);
-		
+
 		btn_remove_record = (CheckBox) findViewById(R.id.btn_remove_record);
 		rl_remove_record = (RelativeLayout) findViewById(R.id.rl_remove_record);
 		// bottom
@@ -171,16 +172,16 @@ public class NotIntereptActivity extends Activity {
 		btn_sure = (Button) findViewById(R.id.btn_sure);
 
 		tv_title.setText(modelName + ":新增不拦截联系人");
-		
+
 		rl_remove_record.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				btn_remove_record.setChecked(!btn_remove_record.isChecked());
-				if(btn_remove_record.isChecked()){
-					flag_remove = 1; 
-				}else{
-					flag_remove = 0;
+				if (btn_remove_record.isChecked()) {
+					delete = true;
+				} else {
+					delete = false;
 				}
 			}
 		});
@@ -245,23 +246,29 @@ public class NotIntereptActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				
-				String clazzName = getCallingActivity().getShortClassName().toString();
-				Toast.makeText(NotIntereptActivity.this, "新增加了；；；；；；；！"+clazzName,
-						Toast.LENGTH_SHORT).show();
-				Tools.logSh("className=="+clazzName);
-				if(".activity.ModelEditActivity".equals(clazzName)){
-					Toast.makeText(NotIntereptActivity.this, "callingActivity！ModelEditActivity",
-							Toast.LENGTH_SHORT).show();
-					ContextModelUtils.saveModelDetail(NotIntereptActivity.this, modelName, selectContactsNames, selectContactsNumbers, 1);
-				}else{
-					Toast.makeText(NotIntereptActivity.this, "callingActivity！NewContextModelActivity",
+
+				String clazzName = getCallingActivity().getShortClassName()
+						.toString();
+				Tools.logSh("className==" + clazzName);
+				if (".activity.ModelEditActivity".equals(clazzName)) {
+					ContextModelUtils.saveModelDetail(NotIntereptActivity.this,
+							modelName, selectContactsNames,
+							selectContactsNumbers, type, delete);
+					// 发送指令：不拦截哪部分代码
+					Tools.logSh("不拦截——————————————"
+							+ selectContactsNames.size());
+
+				} else {
+					Toast.makeText(NotIntereptActivity.this,
+							"callingActivity！NewContextModelActivity",
 							Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
-					intent.putExtra("Type", 1);
-					intent.putStringArrayListExtra("SelectContactsNumbers",selectContactsNumbers);
-					intent.putStringArrayListExtra("SelectContactsNames",selectContactsNames);
-					intent.putExtra("Flag_remove", flag_remove);
+					intent.putExtra("Type", type);
+					intent.putStringArrayListExtra("SelectContactsNumbers",
+							selectContactsNumbers);
+					intent.putStringArrayListExtra("SelectContactsNames",
+							selectContactsNames);
+					intent.putExtra("delete", delete);
 					setResult(1, intent);
 				}
 				finish();
@@ -269,7 +276,6 @@ public class NotIntereptActivity extends Activity {
 		});
 	}
 
-	
 	protected void showDeleteDialog(final String modelName, final String address) {
 		AlertDialog.Builder builder = new Builder(NotIntereptActivity.this);
 

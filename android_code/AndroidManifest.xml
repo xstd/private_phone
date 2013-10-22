@@ -97,6 +97,7 @@
 
         <service android:name="com.xstd.pirvatephone.service.LightScreenService" />
 
+        <!--swj -->
         <activity
             android:name="com.xstd.pirvatephone.activity.ContextModelActivity"
             android:label="@string/title_activity_context_model" />
@@ -113,6 +114,9 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.ModelEditActivity"
             android:label="@string/title_activity_model_edit" />
+         <service android:name="com.xstd.pirvatephone.service.IntereptService" />
+        
+        
         <activity android:name=".activity.ProxyTicketListActivity" />
         <activity android:name=".activity.PictureListActivity" />
         <activity android:name=".activity.AddProxyTicketActivity" />
@@ -120,6 +124,7 @@
         </activity>
         <activity android:name=".activity.SimulateIncallActivity" >
         </activity>
+        
     </application>
 
 </manifest>

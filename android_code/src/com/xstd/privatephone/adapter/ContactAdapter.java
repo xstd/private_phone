@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.xstd.pirvatephone.R;
 
 public class ContactAdapter extends CursorAdapter {
-	private static Context mContext;
+	private Context mContext;
 
 	public ContactAdapter(Context context, Cursor c) {
 		super(context, c);

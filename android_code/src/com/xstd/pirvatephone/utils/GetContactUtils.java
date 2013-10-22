@@ -30,9 +30,9 @@ public class GetContactUtils {
 			Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID, Phone.CONTACT_ID };
 
 	/** 联系人名称 **/
-	private static ArrayList<MyContactInfo> mContactsInfos = new ArrayList<MyContactInfo>();
+	private  ArrayList<MyContactInfo> mContactsInfos = new ArrayList<MyContactInfo>();
 	/** 联系人号码 **/
-	private static ArrayList<String> mContactsNumbers = new ArrayList<String>();
+	private  ArrayList<String> mContactsNumbers = new ArrayList<String>();
 
 	public GetContactUtils(Context context) {
 		this.mContext = context;

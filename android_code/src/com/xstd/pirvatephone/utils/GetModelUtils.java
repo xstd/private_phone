@@ -50,5 +50,16 @@ public class GetModelUtils {
 		return mModels;
 
 	}
+	
+	public String getCurrentModel(){
+		getModels();
+		
+		for (Model model : mModels) {
+			if(model.getModel_type()==1){
+				return model.getModel_name();
+			}
+		}
+		return null;
+	}
 
 }

@@ -55,6 +55,7 @@ public class ContextModelActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_context_model);
 
+		initService();
 		initView();
 
 		showModel();
@@ -64,6 +65,14 @@ public class ContextModelActivity extends Activity {
 		intentFilter.addAction("ModelBroadcastReciver");
 		this.registerReceiver(recevier, intentFilter);
 
+	}
+	
+	/**
+	 * 开启拦截的服务
+	 */
+	private void initService(){
+		Intent intent = new Intent("com.xstd.pirvatephone.service.IntereptService");
+		startService(intent);
 	}
 
 	private void showModel() {

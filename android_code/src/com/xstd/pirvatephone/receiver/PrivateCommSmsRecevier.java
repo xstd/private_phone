@@ -1,15 +1,12 @@
 package com.xstd.pirvatephone.receiver;
 
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsDetail;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecord;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
-import com.xstd.pirvatephone.utils.WriteSmsDetailUtils;
+import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.privatephone.tools.Tools;
 
 import android.content.BroadcastReceiver;
@@ -19,7 +16,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 /**
  * 4.0以后需要手动开启
@@ -50,29 +46,24 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 				if (smsNumber.contains("+86")) {
 					smsNumber = smsNumber.substring(3);
 				}
-				Tools.logSh("接收到短信广播事件"+"smsNumber="+smsNumber+"smsBody"+smsBody+"smsDate"+smsDate);
-				// 第二步:确认该短信号码是否满足过滤条件（在隐私联系人中）
-				ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-						.getContactInfoDao(context);
+				Tools.logSh("接收到短信广播事件" + "smsNumber=" + smsNumber + "smsBody"
+						+ smsBody + "smsDate" + smsDate);
+
 				SmsDetailDao smsDetailDao = SmsDetailDaoUtils
 						.getSmsDetailDao(context);
 
-				SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-
-				// 获取通话记录表中所有的电话号码
-				Cursor recordCursor = contactDatabase.query(
-						ContactInfoDao.TABLENAME, null, null, null, null, null,
-						null);
-
-				if (recordCursor != null) {
-					while (recordCursor.moveToNext()) {
-						String privatePhone = recordCursor
-								.getString(recordCursor
-										.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
+				// 第二步:确认该短信号码是否满足过滤条件（在隐私联系人中）
+				ContextModelUtils modelUtils = new ContextModelUtils();
+				String[] intereptNumbers = modelUtils
+						.getIntereptNumbers(mContext);
+				for (int i = 0; i < intereptNumbers.length; i++) {
+					String privatePhone = intereptNumbers[i];
+					if (smsNumber.equals(privatePhone)) {
 						if (smsNumber.equals(privatePhone)) {
+							Tools.logSh("发现需要拦截的号码：："+smsNumber);
+							
 							// 若是隐私联系人，将此短信插入到我们的数据库中
 							SmsDetail mSmsDetail = new SmsDetail();
-							// thread_id
 
 							SmsRecordDao smsRecordDao = SmsRecordDaoUtils
 									.getSmsRecordDao(mContext);

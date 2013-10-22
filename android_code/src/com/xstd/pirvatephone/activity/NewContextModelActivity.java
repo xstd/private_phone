@@ -10,6 +10,17 @@ import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
+import com.xstd.pirvatephone.utils.DelectOurContactUtils;
+import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
+import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
+import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
+import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
+import com.xstd.pirvatephone.utils.DelectSystemPhoneUtils;
+import com.xstd.pirvatephone.utils.DelectSystemSmsUtils;
+import com.xstd.pirvatephone.utils.RecordToSysUtils;
+import com.xstd.pirvatephone.utils.RecordToUsUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemPhoneUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
 import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
 import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
 import com.xstd.pirvatephone.utils.WriteSmsDetailUtils;
@@ -39,11 +50,11 @@ public class NewContextModelActivity extends Activity {
 	private Button btn_sure;
 	private ModelDao modelDao;
 	private String modelName;
-	private int type;
-	private int flag_remove = 0;
+	private int type=1;
 	private ArrayList<String> selectContactsNumbers;
 	private ArrayList<String> selectContactsNames;
 	private String[] selectPhones;
+	private boolean delete = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -144,12 +155,26 @@ public class NewContextModelActivity extends Activity {
 						// 还没有该情景模式。增加一种情景模式
 						createNewModel(modelName);
 						finish();
-						if (flag_remove == 1) {// 转移指定号码
-							removeContactRecord();
-							Toast.makeText(NewContextModelActivity.this, "正在移动", Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(NewContextModelActivity.this, "没有需要移动的", Toast.LENGTH_SHORT).show();
+						if(type==2){//拦截
+							if (delete) {// 转移指定号码通信记录
+								RecordToUsUtils recordToUsUtils = new RecordToUsUtils(NewContextModelActivity.this);
+								recordToUsUtils.removeContactRecord(selectContactsNumbers, delete);
+								
+								Tools.logSh("selectContactsNumbers=="+selectContactsNumbers);
+								Toast.makeText(NewContextModelActivity.this, "正在移动", Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(NewContextModelActivity.this, "没有需要移动的1", Toast.LENGTH_SHORT).show();
+							}
+						}else{//不拦截
+							if (delete){
+								RecordToSysUtils recordToSysUtils = new RecordToSysUtils(NewContextModelActivity.this);
+								recordToSysUtils.restoreContact(selectContactsNumbers);
+							
+							}else{
+								Toast.makeText(NewContextModelActivity.this, "没有需要移动的2", Toast.LENGTH_SHORT).show();
+							}
 						}
+						
 
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
@@ -165,48 +190,8 @@ public class NewContextModelActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 
 				}
-
 			}
 		});
-	}
-
-	private void parseArray() {
-		Tools.logSh("parseArray");
-
-		if (selectContactsNumbers.size() > 0) {
-			selectPhones = new String[selectContactsNumbers.size()];
-			for (int i = 0; i <selectContactsNumbers.size(); i++) {
-				selectPhones[i] = selectContactsNumbers.get(i);
-				Tools.logSh("selectPhones[i]="+selectPhones[i]);
-			}
-		}
-	}
-
-	public void removeContactRecord() {
-		
-		parseArray();
-		if(selectPhones!=null && selectPhones.length>0){
-			// 将系统通话记录detail复制到我们数据库
-			WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(
-					getApplicationContext(), selectPhones);
-			mWritePhoneDetailUtils.writePhoneDetail();
-
-			// 将系统通话记录record复制到我们数据库
-			WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(
-					getApplicationContext(), selectPhones);
-			mWritePhoneRecordUtils.writePhoneRecord();
-
-			// 将系统sms detail复制到我们数据库
-			WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(
-					getApplicationContext(), selectPhones);
-			mWriteSmsDetailUtils.writeSmsDetail();
-
-			// 将系统sms record复制到我们数据库
-			WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(
-					getApplicationContext(), selectPhones);
-			mWriteSmsRecordUtils.writeSmsRecord();
-		}
-		
 	}
 
 	private boolean hasModel(String modelName) {
@@ -234,7 +219,7 @@ public class NewContextModelActivity extends Activity {
 
 		if (selectContactsNumbers != null && selectContactsNumbers.size() > 0) {
 			ContextModelUtils.saveModelDetail(this, modelName,
-					selectContactsNames, selectContactsNumbers, type);
+					selectContactsNames, selectContactsNumbers, type ,delete);
 		}
 	}
 
@@ -247,16 +232,17 @@ public class NewContextModelActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(data!=null){
+			type = data.getIntExtra("Type", 1);
+			selectContactsNumbers = data
+					.getStringArrayListExtra("SelectContactsNumbers");
+			selectContactsNames = data
+					.getStringArrayListExtra("SelectContactsNames");
+			delete = data.getBooleanExtra("delete", false);
 
-		type = data.getIntExtra("Type", 0);
-		selectContactsNumbers = data
-				.getStringArrayListExtra("SelectContactsNumbers");
-		selectContactsNames = data
-				.getStringArrayListExtra("SelectContactsNames");
-		flag_remove = data.getIntExtra("Flag_remove", 0);
-
-		Tools.logSh("type=" + type + ":::selectContactsNumbers="
-				+ selectContactsNumbers);
+			Tools.logSh("type=" + type + ":::selectContactsNumbers="
+					+ selectContactsNumbers);
+		}
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}

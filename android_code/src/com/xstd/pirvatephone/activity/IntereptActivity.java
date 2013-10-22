@@ -49,7 +49,8 @@ public class IntereptActivity extends Activity {
 	private CheckBox btn_check_all;
 	private CheckBox btn_remove_record;
 	private RelativeLayout rl_remove_record;
-	private int flag_remove = 0;
+	private boolean delete = false;
+	private int type = 2;
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
@@ -90,9 +91,9 @@ public class IntereptActivity extends Activity {
 			public void onClick(View v) {
 				btn_remove_record.setChecked(!btn_remove_record.isChecked());
 				if(btn_remove_record.isChecked()){
-					flag_remove = 1; 
+					delete = true; 
 				}else{
-					flag_remove = 0;
+					delete = false;
 				}
 			}
 		});
@@ -160,26 +161,23 @@ public class IntereptActivity extends Activity {
 			public void onClick(View v) {
 				String clazzName = getCallingActivity().getShortClassName()
 						.toString();
-				Toast.makeText(IntereptActivity.this,
-						"新增加了；；；；；；；！" + clazzName, Toast.LENGTH_SHORT).show();
+				//编辑页面切入
 				if (".activity.ModelEditActivity".equals(clazzName)) {
-					Toast.makeText(IntereptActivity.this,
-							"callingActivity！ModelEditActivity",
-							Toast.LENGTH_SHORT).show();
 					ContextModelUtils.saveModelDetail(IntereptActivity.this,
 							modelName, selectContactsNames,
-							selectContactsNumbers, 2);
-				} else {
+							selectContactsNumbers, type, delete);
+				} else {//新建情景模式切入
+					
 					Toast.makeText(IntereptActivity.this,
 							"callingActivity！NewContextModelActivity",
 							Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
-					intent.putExtra("Type", 2);
+					intent.putExtra("Type", type);
 					intent.putStringArrayListExtra("SelectContactsNumbers",
 							selectContactsNumbers);
 					intent.putStringArrayListExtra("SelectContactsNames",
 							selectContactsNames);
-					intent.putExtra("Flag_remove", flag_remove);
+					intent.putExtra("delete", delete);
 					setResult(2, intent);
 				}
 				finish();
