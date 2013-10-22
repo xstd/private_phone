@@ -1,9 +1,0 @@
-# incremental data. DO NOT EDIT.
-# format is <lastModified> <length> <SHA-1> <path>
-# Encoding is UTF-8
-1381574688909 14383 82acdd75e3fcc36026109406625edc69d4d7212d D:\workspace\private_phone\android_code\src_lib\mcuslib\build\res\all\debug\drawable-xhdpi\ic_launcher.png
-1381574688909 5237 7761bceaf18ed25cdba5f34bf00a55616d078acf D:\workspace\private_phone\android_code\src_lib\mcuslib\build\res\all\debug\drawable-mdpi\ic_launcher.png
-1381574688909 9397 4a5a9affbb731f195fc18fea78d51be7db7536a2 D:\workspace\private_phone\android_code\src_lib\mcuslib\build\res\all\debug\drawable-hdpi\ic_launcher.png
-1381574688927 318 819d7bfbd45fdf53eef6958c33b21c05afcbaa52 D:\workspace\private_phone\android_code\src_lib\mcuslib\build\res\all\debug\values-v11\values.xml
-1381574688926 332 fecf0603f7a59c02890e998a27435f3a9709bdc6 D:\workspace\private_phone\android_code\src_lib\mcuslib\build\res\all\debug\values-v14\values.xml
-1381574688925 1390 d061f587b21bdf79b2312f7a43336b1ebb18d827 D:\workspace\private_phone\android_code\src_lib\mcuslib\build\res\all\debug\values\values.xml
