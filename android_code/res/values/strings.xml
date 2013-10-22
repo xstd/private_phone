@@ -867,5 +867,6 @@ QQ:903372666
     <string name="title_activity_model_edit">ModelEditActivity</string>
     <string name="display_added_from_camra_empty">没有加密文件了</string>
     <string name="title_select_add_audio">选择要加密的录音</string>
+    <string name="title_select_add_vedio">选择要加密的视频</string>
 
 </resources>
