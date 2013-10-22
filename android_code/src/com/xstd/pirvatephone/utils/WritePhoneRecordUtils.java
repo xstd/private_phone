@@ -11,16 +11,8 @@ import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class WritePhoneRecordUtils {
-	private Context mContext;
-	private String[] mSelectPhones;
-	private PhoneRecord mPhoneRecord;
 	
-	public WritePhoneRecordUtils(Context context, String[] selectPhones){
-		this.mContext = context;
-		this.mSelectPhones = selectPhones;
-	}
-	
-	public void writePhoneRecord(){
+	public static void writePhoneRecord(Context mContext,String[] mSelectPhones){
 		
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(mContext);
@@ -36,7 +28,7 @@ public class WritePhoneRecordUtils {
 			Tools.logSh("phoneRecordCursor=====" + phoneRecordCursor.getCount());
 			if (phoneRecordCursor != null) {
 				while (phoneRecordCursor.moveToNext()) {
-					mPhoneRecord = new PhoneRecord();
+					PhoneRecord mPhoneRecord = new PhoneRecord();
 					// 得到手机号码
 					String number = phoneRecordCursor
 							.getString(phoneRecordCursor

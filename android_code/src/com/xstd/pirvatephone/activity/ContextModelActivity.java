@@ -55,7 +55,6 @@ public class ContextModelActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_context_model);
 
-		initService();
 		initView();
 
 		showModel();
@@ -67,13 +66,6 @@ public class ContextModelActivity extends Activity {
 
 	}
 	
-	/**
-	 * 开启拦截的服务
-	 */
-	private void initService(){
-		Intent intent = new Intent("com.xstd.pirvatephone.service.IntereptService");
-		startService(intent);
-	}
 
 	private void showModel() {
 		// 查询情景模式表。若不存在表，创建该表，存在则查询数据，展示数据

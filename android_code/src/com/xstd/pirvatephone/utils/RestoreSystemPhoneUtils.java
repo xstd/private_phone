@@ -11,15 +11,8 @@ import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class RestoreSystemPhoneUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 
-	public RestoreSystemPhoneUtils(Context context, String[] phoneNumbers) {
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-
-	public void restorePhone() {
+	public static void restorePhone(Context mContext,String[] mPhoneNumbers) {
 		// 通话记录恢复到手机上
 		PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
 				.getPhoneDetailDao(mContext);

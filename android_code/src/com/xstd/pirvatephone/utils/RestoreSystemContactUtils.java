@@ -13,15 +13,8 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class RestoreSystemContactUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public RestoreSystemContactUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void restoreContacts(){
+	public static void restoreContacts(Context mContext,String[] mPhoneNumbers){
 		// 向系统联系人数据库添加联系人
 
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils

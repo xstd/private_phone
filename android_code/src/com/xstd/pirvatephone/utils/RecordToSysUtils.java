@@ -45,34 +45,22 @@ public class RecordToSysUtils {
 	
 	public void restoreContact(String[] selectNumbers){
 		// 短信恢复，向系统短信数据库添加短信
-		RestoreSystemSmsUtils mRestoreSystemSmsUtils = new RestoreSystemSmsUtils(
-				mContext, selectNumbers);
-		mRestoreSystemSmsUtils.restoreSms();
+		RestoreSystemSmsUtils.restoreSms(mContext, selectNumbers);
 
 		// 通话记录恢复到手机上
-		RestoreSystemPhoneUtils mRestoreSystemPhoneUtils = new RestoreSystemPhoneUtils(
-				mContext, selectNumbers);
-		mRestoreSystemPhoneUtils.restorePhone();
+		RestoreSystemPhoneUtils.restorePhone(mContext, selectNumbers);
 
 		// record短信息移除
-		DelectOurSmsRecordsUtils mDelectOurSmsRecordsUtils = new DelectOurSmsRecordsUtils(
-				mContext, selectNumbers);
-		mDelectOurSmsRecordsUtils.deleteSmsRecords();
+		DelectOurSmsRecordsUtils.deleteSmsRecords(mContext, selectNumbers);
 
 		// detail短信息移除
-		DelectOurSmsDetailsUtils mDelectOurSmsDetailsUtils = new DelectOurSmsDetailsUtils(
-				mContext, selectNumbers);
-		mDelectOurSmsDetailsUtils.deleteSmsDetails();
+		DelectOurSmsDetailsUtils.deleteSmsDetails(mContext, selectNumbers);
 
 		// 通话记details录移除
-		DelectOurPhoneDetailsUtils mDelectOurPhoneDetailsUtils = new DelectOurPhoneDetailsUtils(
-				mContext, selectNumbers);
-		mDelectOurPhoneDetailsUtils.deletePhoneDetails();
+		DelectOurPhoneDetailsUtils.deletePhoneDetails(mContext, selectNumbers);
 
 		// 通话记录record移除
-		DelectOurPhoneRecordsUtils mDelectOurPhoneRecordsUtils = new DelectOurPhoneRecordsUtils(
-				mContext, selectNumbers);
-		mDelectOurPhoneRecordsUtils.deletePhoneRecords();
+		DelectOurPhoneRecordsUtils.deletePhoneRecords(mContext, selectNumbers);
 	}
 
 }

@@ -8,15 +8,7 @@ import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectOurSmsDetailsUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
-	
-	public DelectOurSmsDetailsUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deleteSmsDetails(){
+	public static void deleteSmsDetails(Context mContext,String[] mPhoneNumbers){
 		SmsDetailDao smsDetailDao = SmsDetailDaoUtils
 				.getSmsDetailDao(mContext);
 		SQLiteDatabase smsDetailDatabase = smsDetailDao.getDatabase();

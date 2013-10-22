@@ -11,15 +11,8 @@ import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class RestoreSystemSmsUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 
-	public RestoreSystemSmsUtils(Context context, String[] phoneNumbers) {
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-
-	public void restoreSms() {
+	public static void restoreSms(Context mContext,String[] mPhoneNumbers) {
 		// 短信恢复
 		SmsDetailDao smsDetailDao = SmsDetailDaoUtils.getSmsDetailDao(mContext);
 		SQLiteDatabase smsDetailDatabase = smsDetailDao.getDatabase();

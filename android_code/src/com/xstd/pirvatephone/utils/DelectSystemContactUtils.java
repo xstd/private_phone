@@ -14,15 +14,8 @@ import android.provider.ContactsContract.RawContacts;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectSystemContactUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectSystemContactUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deleteContacts(){
+	public static void deleteContacts(Context mContext,String[] mPhoneNumbers){
 		
 		if(mPhoneNumbers==null){
 			Tools.logSh("kong--------------");

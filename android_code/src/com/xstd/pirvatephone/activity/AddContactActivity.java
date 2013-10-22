@@ -28,16 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.utils.DelectSystemContactUtils;
-import com.xstd.pirvatephone.utils.DelectSystemPhoneUtils;
-import com.xstd.pirvatephone.utils.DelectSystemSmsUtils;
 import com.xstd.pirvatephone.utils.GetContactUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
-import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
-import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
-import com.xstd.pirvatephone.utils.WriteSmsDetailUtils;
-import com.xstd.pirvatephone.utils.WriteSmsRecordUtils;
 import com.xstd.privatephone.adapter.AddContactAdapter;
 import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
@@ -220,7 +213,7 @@ public class AddContactActivity extends BaseActivity {
 		selectPhones = new String[mSelectContactInfos.size()];
 		Object[] obj = mSelectContactInfos.toArray();
 		for (int i = 0; i < obj.length; i++) {
-			selectPhones[i] = ((MyContactInfo) (obj[i])).getName();
+			selectPhones[i] = ((MyContactInfo) (obj[i])).getAddress();
 			Tools.logSh(selectPhones[i]);
 		}
 

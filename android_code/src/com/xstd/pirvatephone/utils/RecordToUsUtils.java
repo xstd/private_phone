@@ -45,24 +45,16 @@ public class RecordToUsUtils {
 		
 		if(selectNumbers!=null && selectNumbers.length>0){
 			// 将系统通话记录detail复制到我们数据库
-			WritePhoneDetailUtils mWritePhoneDetailUtils = new WritePhoneDetailUtils(
-					mContext, selectNumbers);
-			mWritePhoneDetailUtils.writePhoneDetail();
+			WritePhoneDetailUtils.writePhoneDetail(mContext,selectNumbers);
 
 			// 将系统通话记录record复制到我们数据库
-			WritePhoneRecordUtils mWritePhoneRecordUtils = new WritePhoneRecordUtils(
-					mContext, selectNumbers);
-			mWritePhoneRecordUtils.writePhoneRecord();
+			WritePhoneRecordUtils.writePhoneRecord(mContext,selectNumbers);
 
 			// 将系统sms detail复制到我们数据库
-			WriteSmsDetailUtils mWriteSmsDetailUtils = new WriteSmsDetailUtils(
-					mContext, selectNumbers);
-			mWriteSmsDetailUtils.writeSmsDetail();
+			WriteSmsDetailUtils.writeSmsDetail(mContext,selectNumbers);
 
 			// 将系统sms record复制到我们数据库
-			WriteSmsRecordUtils mWriteSmsRecordUtils = new WriteSmsRecordUtils(
-					mContext, selectNumbers);
-			mWriteSmsRecordUtils.writeSmsRecord();
+			WriteSmsRecordUtils.writeSmsRecord(mContext,selectNumbers);
 		}
 		
 		if(delete){
@@ -76,13 +68,9 @@ public class RecordToUsUtils {
 	 */
 	private void deleteSytemDetail(String[] selectNumbers) {
 		Tools.logSh("deleteSytemDetail");
-		DelectSystemPhoneUtils mDelectSystemPhoneUtils = new DelectSystemPhoneUtils(
-				mContext, selectNumbers);
-		mDelectSystemPhoneUtils.deletePhone();
+		DelectSystemPhoneUtils.deletePhone(mContext,selectNumbers);
 
-		DelectSystemSmsUtils mDelectSystemSmsUtils = new DelectSystemSmsUtils(
-				mContext, selectNumbers);
-		mDelectSystemSmsUtils.deleteSms();
+		DelectSystemSmsUtils.deleteSms(mContext,selectNumbers);
 	}
 
 }

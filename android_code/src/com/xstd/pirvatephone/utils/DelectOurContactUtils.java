@@ -8,15 +8,8 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectOurContactUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectOurContactUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deleteContacts(){
+	public static void deleteContacts(Context mContext,String[] mPhoneNumbers){
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(mContext);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();

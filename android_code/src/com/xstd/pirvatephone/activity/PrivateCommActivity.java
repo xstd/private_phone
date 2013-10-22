@@ -146,9 +146,6 @@ public class PrivateCommActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_private_comm);
 
-		Intent intent = new Intent(
-				"com.xstd.pirvatephone.service.IntereptService.IntereptControlRecevier");
-		startService(intent);
 		initView();
 
 		selectContactsNumber = new ArrayList<String>();
@@ -537,9 +534,7 @@ public class PrivateCommActivity extends BaseActivity {
 	 * @param selectNumbers
 	 */
 	public void deleteContacts(String[] selectNumbers) {
-		DelectOurContactUtils contactUtils = new DelectOurContactUtils(this,
-				selectNumbers);
-		contactUtils.deleteContacts();
+		DelectOurContactUtils.deleteContacts(this, selectNumbers);
 
 		RecordToSysUtils recordToSysUtils = new RecordToSysUtils(this);
 		recordToSysUtils.restoreContact(selectNumbers);
@@ -632,7 +627,7 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void setPhoneRecordAdapter(ListView mListView) {
-		
+
 		if (phoneRecordCursor.getCount() == 0) {
 			mListView.setEmptyView(dial_empty);
 		} else {
@@ -686,7 +681,7 @@ public class PrivateCommActivity extends BaseActivity {
 				TextView sms_tv_num = (TextView) view
 						.findViewById(R.id.sms_tv_name);
 				String name = sms_tv_num.getText().toString().trim();
-				Tools.logSh("Name=="+name);
+				Tools.logSh("Name==" + name);
 				intent.putExtra("Name", name);
 				startActivity(intent);
 
@@ -695,6 +690,18 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void setContactAdapter(ListView mListView) {
+		if (contactCursor.getCount() == 0) {
+			Tools.logSh("没有数据");
+
+			mListView.setEmptyView(contact_empty);
+
+		} else {
+			contact_empty.setVisibility(View.GONE);
+			Tools.logSh("cursor的长度为：" + contactCursor.getCount());
+			mListView.setAdapter(new SmsRecordAdapter(getApplicationContext(),
+					contactCursor));
+		}
+
 		Tools.logSh("mCursor的长度为：" + contactCursor.getCount());
 		mContactAdapter = new ContactAdapter(getApplicationContext(),
 				contactCursor);

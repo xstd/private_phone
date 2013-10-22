@@ -11,25 +11,15 @@ import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class WriteSmsDetailUtils {
-	private Context mContext;
-	private String[] mSelectPhones;
-	private SmsDetail mSmsDetail;
-	
 	
 	public static final Uri CONVERSATIONS_URI = Uri
 			.parse("content://sms/conversations");
-	
-	public WriteSmsDetailUtils(Context context, String[] selectPhones){
-		this.mContext = context;
-		this.mSelectPhones = selectPhones;
-	}
-	
 	
 	/**
 	 * token 查询结果的唯一标示 ID cookie 传递对象 uri 查询的地址 projection 查询的字段 selection
 	 * 查询的条件 where id = ? selectionArgs查询条件参数 ? orderBy 排序
 	 */
-	public void writeSmsDetail(){
+	public static void writeSmsDetail(Context mContext,String[] mSelectPhones){
 		
 		ContentResolver resolver = mContext.getContentResolver();
 		
@@ -43,7 +33,7 @@ public class WriteSmsDetailUtils {
 					null, "address=?", new String[] { phone }, null);
 			if (detailCursor != null) {
 				while (detailCursor.moveToNext()) {
-					mSmsDetail = new SmsDetail();
+					SmsDetail mSmsDetail = new SmsDetail();
 					// thread_id
 					Integer type = detailCursor.getInt(detailCursor
 							.getColumnIndex("type"));

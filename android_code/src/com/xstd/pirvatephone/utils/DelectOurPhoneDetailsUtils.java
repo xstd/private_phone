@@ -8,15 +8,8 @@ import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectOurPhoneDetailsUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectOurPhoneDetailsUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deletePhoneDetails(){
+	public static  void deletePhoneDetails(Context mContext,String[] mPhoneNumbers){
 		PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
 				.getPhoneDetailDao(mContext);
 		SQLiteDatabase phoneDetailDatebase = phoneDetailDao.getDatabase();

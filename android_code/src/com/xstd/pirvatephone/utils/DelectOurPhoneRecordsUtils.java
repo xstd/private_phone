@@ -8,15 +8,8 @@ import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectOurPhoneRecordsUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectOurPhoneRecordsUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deletePhoneRecords(){
+	public static void deletePhoneRecords(Context mContext,String[] mPhoneNumbers){
 		// 通话记record录移除
 		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(mContext);

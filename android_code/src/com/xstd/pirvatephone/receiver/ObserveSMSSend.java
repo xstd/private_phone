@@ -10,20 +10,16 @@ import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 
 public class ObserveSMSSend extends ContentObserver {
 
 	private Context mContext;
-	private final String ACTION_NAME = "smsSend";
 
 	public ObserveSMSSend(Handler handler, Context context) {
 		super(handler);

@@ -6,15 +6,8 @@ import android.net.Uri;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectSystemSmsUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectSystemSmsUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deleteSms(){
+	public static void deleteSms(Context mContext,String[] mPhoneNumbers){
 		
 		for (int i = 0; i < mPhoneNumbers.length; i++) {
 			String number = mPhoneNumbers[i];

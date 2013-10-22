@@ -8,15 +8,8 @@ import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectOurSmsRecordsUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectOurSmsRecordsUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deleteSmsRecords(){
+	public static void deleteSmsRecords(Context mContext,String[] mPhoneNumbers){
 		SmsRecordDao smsRecordDao = SmsRecordDaoUtils
 				.getSmsRecordDao(mContext);
 		SQLiteDatabase smsRecordDatabase = smsRecordDao.getDatabase();

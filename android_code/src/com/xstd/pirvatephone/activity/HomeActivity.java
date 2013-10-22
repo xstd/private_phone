@@ -14,29 +14,41 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.service.PhoneService;
+import com.xstd.pirvatephone.service.SmsService;
 
 public class HomeActivity extends BaseActivity {
 	private GridView gv_home;
 	private MyGridViewAdapter adapter;
 
 	private ArrayList<String> titles = new ArrayList<String>();
-	
+
 	private int[] pics = new int[] { R.drawable.home_privacy_comm,
 			R.drawable.home_privacy_mincomm, R.drawable.home_privacy_file,
 			R.drawable.home_moni_conm, R.drawable.home_privacy_service,
-			R.drawable.home_user_center, R.drawable.home_user_center};
+			R.drawable.home_user_center, R.drawable.home_user_center };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		initService();
+
 		initData();
-		
+
 		initView();
-		
+
 	}
-	
+
+	private void initService() {
+		Intent intent = new Intent(this, PhoneService.class);
+		startService(intent);
+		Intent intent2 = new Intent(this, SmsService.class);
+		startService(intent2);
+
+	}
+
 	private void initData() {
 		titles.add(getResources().getString(R.string.private_c_home_first));
 		titles.add(getResources().getString(R.string.private_c_home_two));
@@ -45,11 +57,8 @@ public class HomeActivity extends BaseActivity {
 		titles.add(getResources().getString(R.string.private_c_home_five));
 		titles.add(getResources().getString(R.string.private_c_home_six));
 		titles.add(getResources().getString(R.string.private_c_home_seven));
-		
+
 	}
-
-
-
 
 	private void initView() {
 		gv_home = (GridView) findViewById(R.id.gv_home);
@@ -61,29 +70,34 @@ public class HomeActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-                Intent intent = null;
-                switch (position) {
-                    case 0:
-                        intent = new Intent(HomeActivity.this, PrivateCommActivity.class);
-                        startActivity(intent);
-                        return;
-                    case 2:
-                        intent = new Intent(HomeActivity.this, PrivacySpaceActivity.class);
-                        startActivity(intent);
-                        return;
-                    case 3:
-                    	intent = new Intent(HomeActivity.this, SimulaCommActivity.class);
-                        startActivity(intent);
-                    	return;
-                    case 4:
-                        intent = new Intent(HomeActivity.this, ServiceActivity.class);
-                        startActivity(intent);
-                        return;
-                    case 6:
-                        intent = new Intent(HomeActivity.this, ContextModelActivity.class);
-                        startActivity(intent);
-                        return;
-                }
+				Intent intent = null;
+				switch (position) {
+				case 0:
+					intent = new Intent(HomeActivity.this,
+							PrivateCommActivity.class);
+					startActivity(intent);
+					return;
+				case 2:
+					intent = new Intent(HomeActivity.this,
+							PrivacySpaceActivity.class);
+					startActivity(intent);
+					return;
+				case 3:
+					intent = new Intent(HomeActivity.this,
+							SimulaCommActivity.class);
+					startActivity(intent);
+					return;
+				case 4:
+					intent = new Intent(HomeActivity.this,
+							ServiceActivity.class);
+					startActivity(intent);
+					return;
+				case 6:
+					intent = new Intent(HomeActivity.this,
+							ContextModelActivity.class);
+					startActivity(intent);
+					return;
+				}
 
 			}
 		});

@@ -6,15 +6,8 @@ import android.provider.CallLog;
 import com.xstd.privatephone.tools.Tools;
 
 public class DelectSystemPhoneUtils {
-	private Context mContext;
-	private String[] mPhoneNumbers;
 	
-	public DelectSystemPhoneUtils(Context context, String[] phoneNumbers){
-		this.mContext = context;
-		this.mPhoneNumbers = phoneNumbers;
-	}
-	
-	public void deletePhone(){
+	public static void deletePhone(Context mContext,String[] mPhoneNumbers){
 		
 		for (int i = 0; i < mPhoneNumbers.length; i++) {
 			String number = mPhoneNumbers[i];
