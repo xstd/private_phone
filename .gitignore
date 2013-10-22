@@ -20,6 +20,7 @@ local.properties
 #.project
 
 # IntelliJ IDEA files
+out/
 .idea
 *.iml
 
