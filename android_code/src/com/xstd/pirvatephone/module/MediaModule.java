@@ -1,6 +1,8 @@
 package com.xstd.pirvatephone.module;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +15,8 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class MediaModule implements Serializable {
+
+    private int mData;
 
     private String display_name;
     private Long size;
