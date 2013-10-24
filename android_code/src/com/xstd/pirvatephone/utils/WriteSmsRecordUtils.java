@@ -63,20 +63,25 @@ public class WriteSmsRecordUtils {
 
 					if (smsRecordCursor != null
 							&& smsRecordCursor.getCount() > 0) {// 已经存在该号码
-
-						smsRecord.setPhone_number(phone);
-						smsRecord
-								.setCount(smsRecordCursor.getInt(smsRecordCursor
-										.getColumnIndex(SmsRecordDao.Properties.Count.columnName)) + 1);
-						smsRecord
-								.setId(smsRecordCursor.getLong(smsRecordCursor
-										.getColumnIndex(SmsRecordDao.Properties.Id.columnName)));
-						smsRecord.setLasted_contact(smsDate);
-						smsRecord.setLasted_data(smsBody);
-						// 向我们的数据库跟新SmsRecord
-						smsRecordDao.update(smsRecord);
-						Tools.logSh("向我们smsRecord数据库中跟新了smsRecord");
-						Tools.logSh("短信record" + "address" + phone);
+						
+						while(smsRecordCursor.moveToNext()){
+							smsRecord.setPhone_number(phone);
+							smsRecord
+									.setCount(smsRecordCursor.getInt(smsRecordCursor
+											.getColumnIndex(SmsRecordDao.Properties.Count.columnName)) + 1);
+							smsRecord
+									.setId(smsRecordCursor.getLong(smsRecordCursor
+											.getColumnIndex(SmsRecordDao.Properties.Id.columnName)));
+							smsRecord.setLasted_contact(smsDate);
+							smsRecord.setLasted_data(smsBody);
+							// 向我们的数据库跟新SmsRecord
+							smsRecordDao.update(smsRecord);
+							Tools.logSh("向我们smsRecord数据库中跟新了smsRecord");
+							Tools.logSh("短信record" + "address" + phone);
+							break ; 
+						}
+						smsRecordCursor.close();
+						
 
 					} else {// 还不存在该号码
 						Tools.logSh("" + smsCursor.getCount());

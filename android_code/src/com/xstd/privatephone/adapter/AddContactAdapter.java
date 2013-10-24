@@ -17,15 +17,12 @@ import com.xstd.privatephone.tools.Tools;
 public class AddContactAdapter extends BaseAdapter {
 
 	private Context mContext;
-	private ArrayList<MyContactInfo> mContactsInfos;
+	private ArrayList<MyContactInfo> mContactsInfos = new  ArrayList<MyContactInfo>();
 	/** 选取转换为隐私联系人的号码 **/
 
 	public AddContactAdapter(Context context,
 			ArrayList<MyContactInfo> contactInfos) {
 		mContext = context;
-		/*
-		 * mContactsName = contactsName; mContactsNumber = contactsNumber;
-		 */
 		mContactsInfos = contactInfos;
 	}
 

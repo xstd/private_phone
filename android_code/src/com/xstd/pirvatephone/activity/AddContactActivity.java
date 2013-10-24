@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -58,9 +60,10 @@ public class AddContactActivity extends BaseActivity {
 	private static final int SHOW_TOAST = 5;
 
 	private boolean flags_delete = false;
+	private String param;
 
 	/** 选取转换为隐私联系人的号码 **/
-	private ArrayList<MyContactInfo> mContactInfos;
+	private ArrayList<MyContactInfo> mContactInfos = new ArrayList<MyContactInfo>();
 
 	public static final Uri CONVERSATIONS_URI = Uri
 			.parse("content://sms/conversations");
@@ -91,8 +94,9 @@ public class AddContactActivity extends BaseActivity {
 								.findViewById(R.id.btn_check);
 						btn_check.setChecked(!btn_check.isChecked());
 						// 记录选项
-						mContactInfos.get(position).setChecked(
-								btn_check.isChecked());
+							mContactInfos.get(position).setChecked(
+									btn_check.isChecked());
+
 						Tools.logSh("选中了" + mContactInfos.get(position));
 					}
 				});
@@ -122,7 +126,7 @@ public class AddContactActivity extends BaseActivity {
 
 		initView();
 
-		task = new GetContactTast(getApplicationContext());
+		task = new GetContactTast(AddContactActivity.this);
 		task.execute();
 
 	}
@@ -133,12 +137,12 @@ public class AddContactActivity extends BaseActivity {
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("从联系人添加");
-		et_search = (TextView) findViewById(R.id.et_search);
 
 		// bottom
 		bt_sure = (Button) findViewById(R.id.bt_sure);
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
 		// content
+		et_search = (TextView) findViewById(R.id.et_search);
 		mListView = (ListView) findViewById(R.id.lv_contact);
 		pb_empty = (ProgressBar) findViewById(R.id.pb_empty);
 		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
@@ -252,8 +256,12 @@ public class AddContactActivity extends BaseActivity {
 	}
 
 	private void refreshListView(String value) {
+		param = value;
 		// 根据search条件查询
-
+		mContactInfos.clear();
+		task = new GetContactTast(AddContactActivity.this);
+		task.execute();
+		
 	}
 
 	@Override
@@ -285,54 +293,8 @@ public class AddContactActivity extends BaseActivity {
 		protected Integer doInBackground(Void... params) {
 
 			parseArray();
+				remove(selectPhones);
 
-			WriteContactUtils mWriteContactUtils = new WriteContactUtils(
-					getApplicationContext());
-
-			// 仅选择一个时：判断私密通信联系人是否已有该联系人
-			if (selectPhones.length == 1) {
-				Tools.logSh("仅仅选择一个联系人");
-				boolean b = mWriteContactUtils.isPrivateContact(selectPhones);
-				if (b) {
-					Message msg = new Message();
-					msg.what = SHOW_TOAST;
-					handler.sendMessage(msg);
-					
-				} else {
-					Tools.logSh("仅仅选择一个联系人，还不存在该隐私联系人");
-					mWriteContactUtils.writeContact(selectPhones);
-
-					if (flags_delete) {
-						Tools.logSh("执行删除系统数据库信息");
-
-						RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
-								AddContactActivity.this);
-						recordToUsUtils.removeContactRecord(selectPhones, flags_delete);
-						finish();
-					} else {
-						Tools.logSh("仅仅移动联系人");
-						finish();
-					}
-				}
-			} else {
-				
-				mWriteContactUtils.removeRepeat(selectPhones);
-				
-				// 选择多个时：剔除重复的联系人
-
-				if (flags_delete) {
-					Tools.logSh("执行删除系统数据库信息");
-
-					RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
-							AddContactActivity.this);
-					recordToUsUtils.removeContactRecord(selectPhones, flags_delete);
-					finish();
-				} else {
-					Tools.logSh("仅仅移动联系人");
-					finish();
-				}
-			}
-			
 			return null;
 		}
 
@@ -356,9 +318,60 @@ public class AddContactActivity extends BaseActivity {
 		}
 	}
 
+	private void remove(String[] numbers) {
+		WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+				getApplicationContext());
+		// 仅选择一个时：判断私密通信联系人是否已有该联系人
+		if (numbers.length == 1) {
+			Tools.logSh("仅仅选择一个联系人");
+			boolean b = mWriteContactUtils.isPrivateContact(numbers);
+			if (b) {
+				Message msg = new Message();
+				msg.what = SHOW_TOAST;
+				handler.sendMessage(msg);
+
+			} else {
+				Tools.logSh("仅仅选择一个联系人，还不存在该隐私联系人");
+				mWriteContactUtils.writeContact(selectPhones);
+
+				if (flags_delete) {
+					Tools.logSh("执行删除系统数据库信息");
+
+					RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+							AddContactActivity.this);
+					recordToUsUtils.removeContactRecord(numbers,
+							flags_delete);
+					finish();
+				} else {
+					Tools.logSh("仅仅移动联系人");
+					finish();
+				}
+			}
+		} else {
+
+			mWriteContactUtils.removeRepeat(numbers);
+
+			// 选择多个时：剔除重复的联系人
+
+			if (flags_delete) {
+				Tools.logSh("执行删除系统数据库信息");
+
+				RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+						AddContactActivity.this);
+				recordToUsUtils.removeContactRecord(numbers, flags_delete);
+				finish();
+			} else {
+				Tools.logSh("仅仅移动联系人");
+				finish();
+			}
+		}
+
+	}
+
 	private class GetContactTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context context;
+		private GetContactUtils getContactUtils;
 
 		public GetContactTast(Context context) {
 			this.context = context;
@@ -378,10 +391,14 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			GetContactUtils mGetContactUtils = new GetContactUtils(
-					getApplicationContext());
-			mContactInfos = mGetContactUtils.getContacts();
-
+			getContactUtils = new GetContactUtils(
+					AddContactActivity.this);
+			if(param==null){
+				mContactInfos = getContactUtils.getContacts();
+			}else{
+				mContactInfos = getContactUtils.getContacts(param);
+			}
+			
 			return null;
 		}
 
@@ -390,8 +407,12 @@ public class AddContactActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPostExecute(Integer integer) {
-			Toast.makeText(context, "获取系统联系人完毕" + mContactInfos.size() + "个",
-					Toast.LENGTH_SHORT).show();
+			if (mContactInfos != null) {
+				Toast.makeText(context,
+						"获取系统联系人完毕" + mContactInfos.size() + "个",
+						Toast.LENGTH_SHORT).show();
+			}
+
 			Message msg = new Message();
 			msg.what = UPDATE;
 			handler.sendMessage(msg);

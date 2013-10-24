@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.globle.GlobleVaries;
 import com.xstd.pirvatephone.service.PhoneService;
 import com.xstd.pirvatephone.service.SmsService;
 
@@ -42,6 +43,8 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void initService() {
+		GlobleVaries.CONTEXT = getApplicationContext();
+		
 		Intent intent = new Intent(this, PhoneService.class);
 		startService(intent);
 		Intent intent2 = new Intent(this, SmsService.class);

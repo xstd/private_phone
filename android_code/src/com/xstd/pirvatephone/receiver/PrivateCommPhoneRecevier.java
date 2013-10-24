@@ -1,21 +1,15 @@
 package com.xstd.pirvatephone.receiver;
 
-import java.lang.reflect.Method;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.AudioManager;
 import android.net.Uri;
-import android.os.IBinder;
 import android.provider.CallLog;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
-import com.android.internal.telephony.ITelephony;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneDetail;
@@ -24,8 +18,6 @@ import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecord;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
-import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class PrivateCommPhoneRecevier extends BroadcastReceiver {
