@@ -16,13 +16,20 @@ import java.util.Date;
  */
 public class MediaModule implements Serializable {
 
-    private int mData;
-
     private String display_name;
     private Long size;
     private Long date_modified;
     private String path;
     private Bitmap thumb;
+    private boolean isSelect;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
 
     public Bitmap getThumb() {
         return thumb;

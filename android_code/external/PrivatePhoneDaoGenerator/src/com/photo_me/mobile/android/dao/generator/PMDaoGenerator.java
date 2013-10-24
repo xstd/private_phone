@@ -23,6 +23,7 @@ public class PMDaoGenerator {
         talk.addStringProperty("srcPath").notNull();
         talk.addDateProperty("misstime");
         talk.addIntProperty("type");
+        talk.addLongProperty("ref_id");
 
         Entity ticket = schema.addEntity("PrivacyPwd");
         ticket.addIdProperty();
@@ -33,7 +34,7 @@ public class PMDaoGenerator {
 
         Entity pic = schema.addEntity("PrivacyPic");
         pic.addIdProperty();
-        pic.addStringProperty("album").notNull();
+        pic.addStringProperty("name").notNull();
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");

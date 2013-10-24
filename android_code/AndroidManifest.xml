@@ -35,7 +35,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="8"
         android:targetSdkVersion="14" />
 
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -85,8 +85,8 @@
         <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" />
         <activity
-            android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"
-            android:theme="@android:style/Theme.DeviceDefault" />
+            android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"/>
+            <!--android:theme="@android:style/Theme.DeviceDefault" />-->
         <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkActivity" />
 

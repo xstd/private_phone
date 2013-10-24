@@ -868,5 +868,8 @@ QQ:903372666
     <string name="display_added_from_camra_empty">没有加密文件了</string>
     <string name="title_select_add_audio">选择要加密的录音</string>
     <string name="title_select_add_vedio">选择要加密的视频</string><string name="rs_privacy_move">移入</string>
+    <string name="rs_my_img">我的相册</string>
+    <string name="rs_create_album">创建相册</string>
+    <string name="rs_create">创建</string>
 
 </resources>

@@ -1,7 +1,10 @@
 package com.xstd.pirvatephone.activity;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,11 +14,16 @@ import android.widget.TextView;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.privacy.PrivacyDaoUtils;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFileDao;
 import com.xstd.pirvatephone.module.MediaModule;
+import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.pirvatephone.utils.MediaUtils;
 import com.xstd.privatephone.adapter.AddFileAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,16 +93,25 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v == ll_return_btn) {
-            finish();
+            if (isEdit) {
+                isEdit = false;
+                ll_edit.setVisibility(View.GONE);
+                adapter.changeData(data, -1);
+            } else finish();
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        isEdit = true;
-        adapter.showEdit(data.get(mapKeys.get(position)));
-        ll_edit.setVisibility(View.VISIBLE);
-        //TODO 显示内容
+        if (isEdit) {
+            MediaModule module = (MediaModule) adapter.getItem(position);
+            module.setSelect(!module.isSelect());
+            adapter.notifyDataSetChanged();
+        } else {
+            isEdit = true;
+            ll_edit.setVisibility(View.VISIBLE);
+            adapter.changeData(data, position);
+        }
     }
 
     private class QueryMediaTask extends AsyncTask<Integer, Void, Void> {
@@ -108,9 +125,24 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter.changeData(data);
+            adapter.changeData(data, -1);
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && isEdit) {
+            isEdit = false;
+            ll_edit.setVisibility(View.GONE);
+            adapter.changeData(data, -1);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private List<MediaModule> willMoves = new ArrayList<MediaModule>();
+
+    ProgressDialog dialog;
 
     /**
      * 隐藏按钮
@@ -118,7 +150,39 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
      * @param view Button对象
      */
     public void move(View view) {
+        for (int i = 0; i < adapter.getCount(); i++) {
+            MediaModule module = (MediaModule) adapter.getItem(i);
+            if (module.isSelect()) {
+                willMoves.add(module);
+            }
+        }
+        new AsyncTask<Void, Void, Void>() {
 
+            protected void onPreExecute() {
+                dialog = new ProgressDialog(AddFileActivity.this);
+                dialog.show();
+            };
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                PrivacyFileDao dao = PrivacyDaoUtils.getFileDao(AddFileActivity.this);
+                for (MediaModule module : willMoves) {
+                    com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
+                    info.fileName = module.getDisplay_name();
+                    info.filePath = module.getPath();
+                    FileUtils.moveFile(module.getPath(), ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH + module.getDisplay_name());
+                    dao.insert(new PrivacyFile(null, module.getDisplay_name(), module.getDisplay_name(), module.getPath(), new Date(), privacy_type,null));
+                    FileUtils.DeleteFile(info);
+                }
+                return null;
+            }
+
+            protected void onPostExecute(Void result) {
+                dialog.dismiss();
+                finish();
+            };
+
+        }.execute();
     }
 
     /**
@@ -127,6 +191,10 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
      * @param view Button对象
      */
     public void selectAll(View view) {
-
+        for (int i = 0; i < adapter.getCount(); i++) {
+            MediaModule module = (MediaModule) adapter.getItem(i);
+            module.setSelect(true);
+        }
+        adapter.notifyDataSetChanged();
     }
 }

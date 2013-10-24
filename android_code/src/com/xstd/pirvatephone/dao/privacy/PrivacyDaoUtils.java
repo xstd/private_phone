@@ -38,4 +38,11 @@ public class PrivacyDaoUtils {
 		}
 		return sDaoSession.getPrivacyPwdDao();
 	}
+
+    public static PrivacyPicDao geThumbDao(Context context) {
+        if (sDaoSession == null) {
+            return getDaoSession(context).getPrivacyPicDao();
+        }
+        return sDaoSession.getPrivacyPicDao();
+    }
 }

@@ -147,9 +147,10 @@ public class PrivacyShowActivity extends BaseActivity {
                         startActivityForResult(intent, REQUEST_RECORDER_CODE);
                         break;
                     case 1:
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        intent.setType("audio/*");
-                        startActivityForResult(intent, REQUEST_AUDIO_CODE);
+                        intent = new Intent(PrivacyShowActivity.this,
+                                AddFileActivity.class);
+                        intent.putExtra("privacy_type", privacy_type);
+                        startActivity(intent);
                         break;
                 }
             }
@@ -228,6 +229,15 @@ public class PrivacyShowActivity extends BaseActivity {
         }
         if(resultCode == RESULT_OK && requestCode == REQUEST_RECORDER_CODE) {
              //TODO 把录音机返回的音频文件加密
+            Uri uri = data.getData();
+            Log.w(TAG,uri.toString());
+            Cursor cursor = getContentResolver().query(uri, null, null, null,
+                    null);
+            cursor.moveToFirst();
+            String path = cursor.getString(1);
+            String name = cursor.getString(2);
+            cursor.close();
+            hideFile(name,path);
         }
     }
 
@@ -260,7 +270,7 @@ public class PrivacyShowActivity extends BaseActivity {
                 FileUtils.moveFile(params[1],
                         ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH + params[0]);
                 dao.insert(new PrivacyFile(null, params[0], params[0],
-                        params[1], new Date(), privacy_type));
+                        params[1], new Date(), privacy_type,null));
                 FileUtils.DeleteFile(info);
                 return null;
             }
