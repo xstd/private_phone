@@ -1,6 +1,8 @@
 package com.xstd.pirvatephone.module;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +21,15 @@ public class MediaModule implements Serializable {
     private Long date_modified;
     private String path;
     private Bitmap thumb;
+    private boolean isSelect;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
 
     public Bitmap getThumb() {
         return thumb;

@@ -19,6 +19,7 @@ public class PrivacyFile implements Serializable {
     private String srcPath;
     private java.util.Date misstime;
     private Integer type;
+    private Long ref_id;
 
     public PrivacyFile() {
     }
@@ -27,13 +28,14 @@ public class PrivacyFile implements Serializable {
         this.id = id;
     }
 
-    public PrivacyFile(Long id, String srcName, String destName, String srcPath, java.util.Date misstime, Integer type) {
+    public PrivacyFile(Long id, String srcName, String destName, String srcPath, java.util.Date misstime, Integer type, Long ref_id) {
         this.id = id;
         this.srcName = srcName;
         this.destName = destName;
         this.srcPath = srcPath;
         this.misstime = misstime;
         this.type = type;
+        this.ref_id = ref_id;
     }
 
     public Long getId() {
@@ -90,9 +92,17 @@ public class PrivacyFile implements Serializable {
         this.type = type;
     }
 
+    public Long getRef_id() {
+        return ref_id;
+    }
+
+    public void setRef_id(Long ref_id) {
+        this.ref_id = ref_id;
+    }
+
     @Override
     public String toString() {
-        return "[PrivacyFile]" + "id = " + id + ", " + "srcName = " + srcName + ", " + "destName = " + destName + ", " + "srcPath = " + srcPath + ", " + "misstime = " + misstime + ", " + "type = " + type + "\r\n";
+        return "[PrivacyFile]" + "id = " + id + ", " + "srcName = " + srcName + ", " + "destName = " + destName + ", " + "srcPath = " + srcPath + ", " + "misstime = " + misstime + ", " + "type = " + type + ", " + "ref_id = " + ref_id + "\r\n";
     }
 
 }

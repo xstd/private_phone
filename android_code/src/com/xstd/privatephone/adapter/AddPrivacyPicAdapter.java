@@ -4,7 +4,13 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
+
+import com.xstd.pirvatephone.R;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,27 +21,50 @@ import android.widget.ListAdapter;
  */
 public class AddPrivacyPicAdapter extends BaseAdapter {
 
+    private Context mCtx;
 
-    public AddPrivacyPicAdapter(Context ctx) {
+    private List<String> data;
+
+    public AddPrivacyPicAdapter(Context ctx, List<String> img_name) {
+        mCtx = ctx;
+        data = img_name;
     }
 
     @Override
     public int getCount() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return data.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        ViewHolder holder = null;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = View.inflate(mCtx, R.layout.item_show_img_folder, null);
+            holder.iv = (ImageView) convertView.findViewById(R.id.iv);
+            holder.name = (TextView) convertView.findViewById(R.id.name);
+            holder.count = (TextView) convertView.findViewById(R.id.count);
+            convertView.setTag(holder);
+        } else holder = (ViewHolder) convertView.getTag();
+        if(position == data.size()-1) holder.iv.setImageResource(R.drawable.selector_add_album_btn);
+        String str = data.get(position);
+        holder.name.setText(str);
+        return convertView;
+    }
+
+    private class ViewHolder {
+        ImageView iv;
+        TextView name;
+        TextView count;
     }
 }
