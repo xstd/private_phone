@@ -115,7 +115,7 @@ public class PhoneService extends Service {
 					Dtime = System.currentTimeMillis() - Ringtime;// 获得通话时间
 					Tools.logSh("通话持续时间为：" + Dtime);
 					removeDail(outingNumber);
-
+					
 				}
 
 				Ringtime = 0;
@@ -165,6 +165,7 @@ public class PhoneService extends Service {
 
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
 				recevierTime = System.currentTimeMillis();
+				
 
 				break;
 
@@ -348,7 +349,7 @@ public class PhoneService extends Service {
 									.setName(phoneRecordCursor.getString(phoneRecordCursor
 											.getColumnIndex(PhoneRecordDao.Properties.Name.columnName)));
 							phoneRecord.setDate(date);
-							phoneRecord.setType(1);
+							phoneRecord.setType(2);
 							phoneRecord
 									.setContact_times(phoneRecordCursor.getInt(phoneRecordCursor
 											.getColumnIndex(PhoneRecordDao.Properties.Contact_times.columnName)) + 1);
@@ -364,7 +365,7 @@ public class PhoneService extends Service {
 											.getColumnIndex(PhoneRecordDao.Properties.Name.columnName)));
 							phoneDetail.setDate(date);
 							phoneDetail.setDuration(duration);
-							phoneDetail.setType(1);
+							phoneDetail.setType(2);
 
 							phoneDetailDao.insert(phoneDetail);
 							break;
@@ -375,7 +376,7 @@ public class PhoneService extends Service {
 						phoneRecord.setPhone_number(address);
 
 						phoneRecord.setDate(System.currentTimeMillis());
-						phoneRecord.setType(1);
+						phoneRecord.setType(2);
 						phoneRecord.setContact_times(1);
 
 						PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
@@ -384,7 +385,7 @@ public class PhoneService extends Service {
 						phoneDetail.setPhone_number(address);
 						phoneDetail.setDate(date);
 						phoneDetail.setDuration(duration);
-						phoneDetail.setType(1);
+						phoneDetail.setType(2);
 
 						ContactInfoDao contactInfoDao2 = ContactInfoDaoUtils
 								.getContactInfoDao(mContext);

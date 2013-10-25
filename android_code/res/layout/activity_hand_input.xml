@@ -73,6 +73,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:checked="true"
+                    android:textColor="@android:color/background_dark"
                     android:text="@string/private_comm_radio_normal"/>
                 <!-- 第二個RadioButton -->
 
@@ -81,6 +82,7 @@
                     android:layout_width="0dip"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@android:color/background_dark"
                     android:text="@string/private_comm_radio_stop"/>
             </RadioGroup>
         </LinearLayout>

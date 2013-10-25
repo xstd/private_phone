@@ -39,13 +39,17 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		phoneType = "";
 		picId = 0; 
 		if(type == 1){//
-			phoneType = "拨出电话";
-			picId = R.drawable.privacy_outgoing;
-		}else if(type == 2){
-			phoneType = "接入电话";
+			phoneType = "拨入电话";
 			picId = R.drawable.privacy_incoming;
+		}else if(type == 2){
+			phoneType = "呼出电话";
+			picId = R.drawable.privacy_outgoing;
+			
 		}else if(type == 3){
-			phoneType = "未接通";
+			phoneType = "来电未接通";
+			picId = R.drawable.privacy_incoming;
+		}else{
+			phoneType = "其它";
 			picId = R.drawable.privacy_incoming;
 		}
 		

@@ -84,9 +84,8 @@
             android:label="@string/title_activity_phone_detail" />
         <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" />
-        <activity
-            android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"/>
-            <!--android:theme="@android:style/Theme.DeviceDefault" />-->
+        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity" />
+        <!-- android:theme="@android:style/Theme.DeviceDefault" /> -->
         <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkActivity" />
 
@@ -97,7 +96,7 @@
 
         <service android:name="com.xstd.pirvatephone.service.LightScreenService" />
 
-        <!--swj -->
+        <!-- swj -->
         <activity
             android:name="com.xstd.pirvatephone.activity.ContextModelActivity"
             android:label="@string/title_activity_context_model" />
@@ -114,19 +113,25 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.ModelEditActivity"
             android:label="@string/title_activity_model_edit" />
-         <service android:name="com.xstd.pirvatephone.service.PhoneService" />
-         <service android:name="com.xstd.pirvatephone.service.SmsService" />
-        
-        
-        <activity android:name=".activity.ProxyTicketListActivity" />
-        <activity android:name=".activity.PictureListActivity" />
-        <activity android:name=".activity.AddProxyTicketActivity" />
-        <activity android:name=".activity.CopyContactsListMultiple" >
+
+        <service android:name="com.xstd.pirvatephone.service.PhoneService" />
+        <service android:name="com.xstd.pirvatephone.service.SmsService" />
+
+        <activity android:name="com.xstd.pirvatephone.activity.ProxyTicketListActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.PictureListActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.AddProxyTicketActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.CopyContactsListMultiple" >
         </activity>
-        <activity android:name=".activity.SimulateIncallActivity" >
+        <activity android:name="com.xstd.pirvatephone.activity.SimulateIncallActivity" >
         </activity>
-        <activity android:name=".activity.AddPrivacyPictureActivity"></activity>
-        <activity android:name=".activity.AddFileActivity"></activity>
+        <activity android:name="com.xstd.pirvatephone.activity.AddPrivacyPictureActivity" >
+        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.AddFileActivity" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.PrivateContactEditActivity"
+            android:label="@string/title_activity_private_contact_edit" >
+        </activity>
     </application>
 
 </manifest>

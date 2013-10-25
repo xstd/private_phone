@@ -11,8 +11,11 @@ public class ContactInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Long id;
+    /** Not-null value. */
     private String phone_number;
+    /** Not-null value. */
     private String display_name;
+    private Integer type;
 
     public ContactInfo() {
     }
@@ -21,10 +24,11 @@ public class ContactInfo implements Serializable {
         this.id = id;
     }
 
-    public ContactInfo(Long id, String phone_number, String display_name) {
+    public ContactInfo(Long id, String phone_number, String display_name, Integer type) {
         this.id = id;
         this.phone_number = phone_number;
         this.display_name = display_name;
+        this.type = type;
     }
 
     public Long getId() {
@@ -35,25 +39,37 @@ public class ContactInfo implements Serializable {
         this.id = id;
     }
 
+    /** Not-null value. */
     public String getPhone_number() {
         return phone_number;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 
+    /** Not-null value. */
     public String getDisplay_name() {
         return display_name;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setDisplay_name(String display_name) {
         this.display_name = display_name;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
-        return "[ContactInfo]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "display_name = " + display_name + "\r\n";
+        return "[ContactInfo]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "display_name = " + display_name + ", " + "type = " + type + "\r\n";
     }
 
 }

@@ -13,7 +13,7 @@ public class PMDaoGenerator {
     }
 
     private static void generateMQTTDaoModel() {
-
+/*
         Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.privacy");
 
         Entity talk = schema.addEntity("PrivacyFile");
@@ -34,7 +34,16 @@ public class PMDaoGenerator {
 
         Entity pic = schema.addEntity("PrivacyPic");
         pic.addIdProperty();
-        pic.addStringProperty("name").notNull();
+        pic.addStringProperty("name").notNull();*/
+        
+
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.contact");
+
+        Entity contact = schema.addEntity("ContactInfo");
+        contact.addIdProperty();
+        contact.addStringProperty("phone_number").notNull();
+        contact.addStringProperty("display_name").notNull();
+        contact.addIntProperty("type");
 
         try {
             new DaoGenerator().generateAll(schema, "../../src");

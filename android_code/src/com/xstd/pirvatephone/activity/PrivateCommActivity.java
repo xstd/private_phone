@@ -10,7 +10,6 @@ import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
-import com.xstd.pirvatephone.receiver.PrivateCommSmsRecevier;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.DelectOurContactUtils;
 import com.xstd.pirvatephone.utils.RecordToSysUtils;
@@ -697,8 +696,8 @@ public class PrivateCommActivity extends BaseActivity {
 		} else {
 			contact_empty.setVisibility(View.GONE);
 			Tools.logSh("cursor的长度为：" + contactCursor.getCount());
-			mListView.setAdapter(new SmsRecordAdapter(getApplicationContext(),
-					contactCursor));
+			/*mListView.setAdapter(new SmsRecordAdapter(getApplicationContext(),
+					contactCursor));*/
 		}
 
 		Tools.logSh("mCursor的长度为：" + contactCursor.getCount());
@@ -710,23 +709,70 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				
+				
 				// 讲电话号码传递给系统拨号服务，开启电话
 				Toast.makeText(getApplicationContext(), "" + "开启电话" + position,
 						Toast.LENGTH_SHORT).show();
 				TextView tv_phone_num = (TextView) view
 						.findViewById(R.id.tv_phone_num);
+				TextView tv_name = (TextView) view
+						.findViewById(R.id.tv_name);
+				TextView tv_type = (TextView) view
+						.findViewById(R.id.tv_type);
 				String phone_number = tv_phone_num.getText().toString().trim();
-
-				if (phone_number != null && !phone_number.equals("")) {
-
-					// 封装一个拨打电话的intent，并且将电话号码包装成一个Uri对象传入
-					Intent intent = new Intent(Intent.ACTION_CALL, Uri
-							.parse("tel:" + phone_number));
-					startActivity(intent);// 内部类
+				String name = tv_name.getText().toString().trim();
+				String strType = tv_type.getText().toString().trim();
+				int type = 0;
+				if("立即挂断".equals(strType)){
+					type =1 ;
+				}else{
+					type = 0;
 				}
+				
+				//显示编辑
+				showEditDialog(name,phone_number,type);
+				
+
 			}
 		});
 	}
+	
+	public void showEditDialog(final String name,final String address,final int type) {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setItems(new String[] { "打电话", "发短信" ,"编辑","退出" },
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						switch (which) {
+						case 0:
+
+							break;
+						
+						case 1:
+							break;
+						case 2:
+							Intent intent = new Intent(PrivateCommActivity.this,PrivateContactEditActivity.class);
+							intent.putExtra("Display_Name", name);
+							intent.putExtra("Address", address);
+							intent.putExtra("Type", type);
+							
+							startActivity(intent);
+							
+							break;
+						case 3:
+							
+							
+							break;
+						}
+					}
+				});
+		builder.create().show();
+
+	}
+	
 
 	private void showDialog() {
 		final Builder builder = new AlertDialog.Builder(this);

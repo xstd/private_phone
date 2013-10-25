@@ -48,13 +48,13 @@ public class PhoneDetailAdapter extends CursorAdapter {
 		
 		String typeStr = "";
 		if(type==1){
-			typeStr = "拨出电话";
-			views.type_pic.setBackgroundResource(R.drawable.privacy_outgoing);
-		}else if(type == 2){
-			typeStr = "呼入电话";
+			typeStr = "拨入电话";
 			views.type_pic.setBackgroundResource(R.drawable.privacy_incoming);
+		}else if(type == 2){
+			typeStr = "呼出电话";
+			views.type_pic.setBackgroundResource(R.drawable.privacy_outgoing);
 		}else if(type == 3){
-			typeStr = "未接通";
+			typeStr = "未接来电";
 			views.type_pic.setBackgroundResource(R.drawable.privacy_incoming);
 		}
 		views.type.setText(typeStr);

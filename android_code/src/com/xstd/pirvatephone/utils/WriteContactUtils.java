@@ -134,7 +134,7 @@ public class WriteContactUtils {
 
 						contactInfo.setPhone_number(number);
 						contactInfo.setDisplay_name(contactName);
-
+						contactInfo.setType(0);//0不拦截
 						// 添加到我们数据库
 						contactInfoDao.insert(contactInfo);
 						Tools.logSh("phoneCursor插入了一条数据");
