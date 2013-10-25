@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
+import com.xstd.privatephone.tools.Tools;
 
 public class PhoneRecordAdapter extends CursorAdapter {
 	private static Context mContext;
@@ -34,7 +35,7 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		String phone_number = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
 		Long date = cursor.getLong(cursor.getColumnIndex(PhoneRecordDao.Properties.Date.columnName));
 		String name = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Name.columnName));
-		
+		Tools.logSh("name======================="+name);
 		phoneType = "";
 		picId = 0; 
 		if(type == 1){//
@@ -45,7 +46,7 @@ public class PhoneRecordAdapter extends CursorAdapter {
 			picId = R.drawable.privacy_incoming;
 		}else if(type == 3){
 			phoneType = "未接通";
-			picId = R.drawable.privacy_outgoing;
+			picId = R.drawable.privacy_incoming;
 		}
 		
 		

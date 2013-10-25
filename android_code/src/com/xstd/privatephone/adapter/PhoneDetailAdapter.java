@@ -48,11 +48,14 @@ public class PhoneDetailAdapter extends CursorAdapter {
 		
 		String typeStr = "";
 		if(type==1){
+			typeStr = "拨出电话";
+			views.type_pic.setBackgroundResource(R.drawable.privacy_outgoing);
+		}else if(type == 2){
 			typeStr = "呼入电话";
 			views.type_pic.setBackgroundResource(R.drawable.privacy_incoming);
-		}else{
-			typeStr = "呼出电话";
-			views.type_pic.setBackgroundResource(R.drawable.privacy_outgoing);
+		}else if(type == 3){
+			typeStr = "未接通";
+			views.type_pic.setBackgroundResource(R.drawable.privacy_incoming);
 		}
 		views.type.setText(typeStr);
 		views.date.setText(DateFormat.format("yyyy-MM-dd kk.mm.ss", date).toString()+"("+duration+"秒)");

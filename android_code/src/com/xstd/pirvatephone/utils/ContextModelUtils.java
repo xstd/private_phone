@@ -19,24 +19,71 @@ import com.xstd.privatephone.tools.Tools;
 public class ContextModelUtils {
 	private String[] selectPhones;
 	private ArrayList<String> intereptNumbers = new ArrayList<String>();
-	
+
 	private String[] parseArray(ArrayList<String> selectContactsNumbers) {
 		Tools.logSh("parseArray");
 		selectPhones = null;
 
 		if (selectContactsNumbers.size() > 0) {
 			selectPhones = new String[selectContactsNumbers.size()];
-			for (int i = 0; i <selectContactsNumbers.size(); i++) {
+			for (int i = 0; i < selectContactsNumbers.size(); i++) {
 				selectPhones[i] = selectContactsNumbers.get(i);
-				Tools.logSh("selectPhones[i]="+selectPhones[i]);
+				Tools.logSh("selectPhones[i]=" + selectPhones[i]);
 			}
-		}else{
+		} else {
 			return null;
 		}
-		
-		return  selectPhones;
+
+		return selectPhones;
 	}
-	
+
+	/**
+	 * 获取当前拦截联系人的号码
+	 */
+	public ArrayList<String> getNumbers(Context context) {
+		// 1.获取当前的拦截模式
+		GetModelUtils modelUtils = new GetModelUtils(context);
+		String currentModel = modelUtils.getCurrentModel();
+		if (currentModel == null) {
+			Tools.logSh("currentModel===还没有拦截模式");
+			return null;
+		} else {
+			// 2.获取当前需要拦截的号码
+			ModelDetailDao modelDetailDao = ModelDetailDaoUtils
+					.getModelDetailDao(context);
+			SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
+
+			Cursor query = modelDetailDatabase.query(ModelDetailDao.TABLENAME,
+					null, null, null, null, null, null);
+
+			if (query != null && query.getCount() > 0) {
+				while (query.moveToNext()) {
+					String jsonMassage = query
+							.getString(query
+									.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
+					String address = query
+							.getString(query
+									.getColumnIndex(ModelDetailDao.Properties.Address.columnName));
+					try {
+						JSONObject json = new JSONObject(jsonMassage);
+						Object object = json.getInt(currentModel);
+
+						if (object == null) {
+							// 不存在
+						} else {
+							// 存在
+							intereptNumbers.add(address);
+
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+				}
+			}
+			return intereptNumbers ;
+		}
+	}
+
 	/**
 	 * 获取当前拦截联系人的号码
 	 */
@@ -83,17 +130,19 @@ public class ContextModelUtils {
 			return parseArray(intereptNumbers);
 		}
 	}
-	
 
-	public static void deleteModelDetail(Context mContext, String[] seleteNumbers) {
+	public static void deleteModelDetail(Context mContext,
+			String[] seleteNumbers) {
 
 		for (int i = 0; i < seleteNumbers.length; i++) {
 			String number = seleteNumbers[i];
 			ModelDetailDao modelDetailDao = ModelDetailDaoUtils
 					.getModelDetailDao(mContext);
 			SQLiteDatabase modelDetailDatabase = modelDetailDao.getDatabase();
-			int delete = modelDetailDatabase.delete(ModelDetailDao.TABLENAME, ModelDetailDao.Properties.Address.columnName+"=?", new String[]{number});
-			if(delete>0){
+			int delete = modelDetailDatabase.delete(ModelDetailDao.TABLENAME,
+					ModelDetailDao.Properties.Address.columnName + "=?",
+					new String[] { number });
+			if (delete > 0) {
 				Tools.logSh("删除一个");
 			}
 		}

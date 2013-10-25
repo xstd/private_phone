@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class SmsDetailActivity extends BaseActivity {
 	private SmsDetailAdapter smsDetailAdapter;
 	private String name = "";
 	private String number = "";
+	private RelativeLayout sms_detail_title;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class SmsDetailActivity extends BaseActivity {
 		setContentView(R.layout.activity_sms_detail);
 
 		name = getIntent().getStringExtra("Name");
+		Tools.logSh("Name====" + name);
 		//查询该name对应的number
 		getContactNumber();
 
@@ -68,11 +71,12 @@ public class SmsDetailActivity extends BaseActivity {
 	}
 
 	private void initView() {
-		// title
-		btn_back = (Button) findViewById(R.id.btn_back);
-		btn_edit = (Button) findViewById(R.id.btn_edit);
-		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("隐私短信");
+		//title
+		sms_detail_title = (RelativeLayout) findViewById(R.id.sms_detail_title);
+		btn_back = (Button)sms_detail_title.findViewById(R.id.btn_back);
+		btn_edit = (Button) sms_detail_title.findViewById(R.id.btn_edit);
+		tv_title = (TextView) sms_detail_title.findViewById(R.id.tv_title);
+		tv_title.setText(number);
 		btn_edit.setVisibility(View.GONE);
 		// content
 		listview = (ListView) findViewById(R.id.sms_detail_listview);
@@ -123,13 +127,15 @@ public class SmsDetailActivity extends BaseActivity {
 				.getSmsDetailDao(getApplicationContext());
 		SQLiteDatabase database = smsDetailDao.getDatabase();
 		smsDetailCursor = database.query("SMS_DETAIL", null, "phone_number=?",
-				new String[] { number }, null, null, null);
+				new String[] { number }, null, null, "date desc");
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.sms_detail, menu);
+		getMenuInflater().inflate(
+				
+				R.menu.sms_detail, menu);
 		return true;
 	}
 

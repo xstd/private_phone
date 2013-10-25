@@ -1,5 +1,7 @@
 package com.xstd.pirvatephone.receiver;
 
+import java.util.ArrayList;
+
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsDetail;
@@ -8,6 +10,7 @@ import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecord;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
+import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.privatephone.tools.Tools;
 
 import android.content.Context;
@@ -29,57 +32,45 @@ public class ObserveSMSSend extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
+		Tools.logSh("短信数据库变化了");
 
-		Cursor cursor = this.mContext.getContentResolver().query(
-				Uri.parse("content://sms/outbox"), null, null, null, null);
+		// 1.查询最近一次fa短信记录
+		Cursor cursor = mContext.getContentResolver().query(
+				Uri.parse("content://sms/"), null, null, null,
+				"date desc limit 1");
 
-		while (cursor.moveToNext()) {
+		Tools.logSh("count===" + cursor.getCount());
+		if (cursor != null && cursor.getCount() > 0) {
 
-			String address = cursor.getString(cursor.getColumnIndex("address"));
-			Long date = cursor.getLong(cursor.getColumnIndex("date"));
+			while (cursor.moveToNext()) {
 
-			String body = cursor.getString(cursor.getColumnIndex("" +
-					"" +
-					"body"));
-			// 1是接受，2是发送
-			int type = 2;
+				String smsNumber = cursor.getString(cursor
+						.getColumnIndex("address"));
+				Long smsDate = cursor.getLong(cursor.getColumnIndex("date"));
 
-			// 查询该号码是否是隐私通信号码
-			ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-					.getContactInfoDao(mContext);
-			SQLiteDatabase contactInfoDaoDatabase = contactInfoDao
-					.getDatabase();
-			Cursor contactInfoCursor = contactInfoDaoDatabase.query(
-					ContactInfoDao.TABLENAME, null,
-					ContactInfoDao.Properties.Phone_number.columnName + "=?",
-					new String[] { address }, null, null, null);
+				String smsBody = cursor.getString(cursor.getColumnIndex("" + ""
+						+ "body"));
+				int type = cursor.getInt(cursor.getColumnIndex("type"));
+				
+				Tools.logSh("smsNumber="+smsNumber+"   "+"type="+type+"    "+"smsDate"+smsDate);
 
-			if (contactInfoCursor != null && contactInfoCursor.getCount() > 0) {
-				while (contactInfoCursor.moveToNext()) {
-					String privateNumber = contactInfoCursor
-							.getString(contactInfoCursor
-									.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+				// 2.判断是不是发送短信（需要拦截的）
+				if (type == 2) {
+					SmsDetailDao smsDetailDao = SmsDetailDaoUtils
+							.getSmsDetailDao(mContext);
 
-					if (address.equals(privateNumber)) {
-						// 向我们的数据库添加一条SmsDetail
+					ContextModelUtils contextModelUtils = new ContextModelUtils();
+					ArrayList<String> numbers = contextModelUtils
+							.getNumbers(mContext);
+
+					// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
+					if (numbers != null && numbers.contains(smsNumber)) {
+
+						Tools.logSh("发现需要拦截的号码：：" + smsNumber);
+
+						// 2. 若是拦截联系人，将此短信插入到我们的数据库中
 						SmsDetail mSmsDetail = new SmsDetail();
-						// thread_id
 
-						SmsDetailDao smsDetailDao = SmsDetailDaoUtils
-								.getSmsDetailDao(mContext);
-
-						mSmsDetail.setThread_id(type);
-						mSmsDetail.setPhone_number(address);
-						mSmsDetail.setDate(date);
-						mSmsDetail.setData(body);
-
-						Tools.logSh("短信详细" + "type" + type + "::"
-								+ "phone_number" + address + "::" + "date"
-								+ date + "::" + "body" + body);
-						smsDetailDao.insert(mSmsDetail);
-						mSmsDetail = null;
-
-						// 查询我们数据库中SmsRecord信息(旧)
 						SmsRecordDao smsRecordDao = SmsRecordDaoUtils
 								.getSmsRecordDao(mContext);
 						SQLiteDatabase smsRecordDatabase = smsRecordDao
@@ -87,51 +78,68 @@ public class ObserveSMSSend extends ContentObserver {
 						Cursor smsRecordCursor = smsRecordDatabase.query(
 								SmsRecordDao.TABLENAME, null,
 								SmsRecordDao.Properties.Phone_number.columnName
-										+ "=?", new String[] { address }, null,
-								null, null);
-						// 如果已经存在sms记录
+										+ "=?", new String[] { smsNumber },
+								null, null, null);
+						// 2.1我们数据库中已经有smsRecord
 						if (smsRecordCursor != null
 								&& smsRecordCursor.getCount() > 0) {
 							while (smsRecordCursor.moveToNext()) {
-								SmsRecord smsRecord = new SmsRecord();
-								smsRecord.setPhone_number(address);
-								smsRecord
-										.setCount(smsRecordCursor.getInt(smsRecordCursor
-												.getColumnIndex(SmsRecordDao.Properties.Count.columnName)) + 1);
-								smsRecord
-										.setId(smsRecordCursor.getLong(smsRecordCursor
-												.getColumnIndex(SmsRecordDao.Properties.Id.columnName)));
-								smsRecord.setLasted_contact(date);
-								smsRecord.setLasted_data(body);
-								// 向我们的数据库跟新SmsRecord
-								smsRecordDao.update(smsRecord);
-								Tools.logSh("向我们smsRecord数据库中跟新了smsRecord");
-								Tools.logSh("短信record" + "address" + address);
+								
+								//3.判断最近一次的发送时间比我们数据库中的时间（以上操作的缺陷在于当我们数据库像系统中返回时会出现异常）
+								long date = smsRecordCursor.getLong(smsRecordCursor.getColumnIndex(SmsRecordDao.Properties.Lasted_contact.columnName));
+								Tools.logSh("date=-=="+date+":::"+"smsDate===="+smsDate);
+								
+								if(date>smsDate){
+									SmsRecord smsRecord = new SmsRecord();
+									smsRecord.setPhone_number(smsNumber);
+									smsRecord
+											.setCount(smsRecordCursor.getInt(smsRecordCursor
+													.getColumnIndex(SmsRecordDao.Properties.Count.columnName)) + 1);
+									smsRecord
+											.setId(smsRecordCursor.getLong(smsRecordCursor
+													.getColumnIndex(SmsRecordDao.Properties.Id.columnName)));
+									smsRecord.setLasted_contact(smsDate);
+									smsRecord.setLasted_data(smsBody);
+									// 向我们的数据库跟新SmsRecord
+									smsRecordDao.update(smsRecord);
+									Tools.logSh("向我们smsRecord数据库中跟新了smsRecord");
+									Tools.logSh("短信record" + "address" + smsNumber);
+								}
 							}
 						} else {
-							// 如果不存在sms记录
 							SmsRecord smsRecord = new SmsRecord();
-							smsRecord.setPhone_number(address);
+							smsRecord.setPhone_number(smsNumber);
 							smsRecord.setCount(1);
-							smsRecord.setLasted_contact(date);
-							smsRecord.setLasted_data(body);
+							smsRecord.setLasted_contact(smsDate);
+							smsRecord.setLasted_data(smsBody);
 							// 向我们的数据库跟新SmsRecord
 							smsRecordDao.insert(smsRecord);
 							Tools.logSh("向我们smsRecord数据库中插入了一条smsRecord");
-							Tools.logSh("短信record" + "address" + address);
+							Tools.logSh("短信record" + "address" + smsNumber);
 						}
 
-						// 删除掉这个记录
-						mContext.getContentResolver().delete(Uri.parse("content://sms"),
-								"date=?", new String[] { date.toString() });
+						mSmsDetail.setThread_id(2);
+						mSmsDetail.setPhone_number(smsNumber);
+						mSmsDetail.setDate(System.currentTimeMillis());
+						mSmsDetail.setData(smsBody);
 
+						Tools.logSh("短信详细" + "type" + 2 + "::" + "phone_number"
+								+ smsNumber + "::" + "date"
+								+ System.currentTimeMillis() + "::" + "body"
+								+ smsBody);
+						smsDetailDao.insert(mSmsDetail);
+						mSmsDetail = null;
+						Tools.logSh("向smsDetail插入了一条数据");
 
-						cursor.close();
-						break;
+						mContext.getContentResolver().delete(
+								Uri.parse("content://sms"), "date=?",
+								new String[] { smsDate.toString() });
+
 					}
 				}
+				cursor.close();
+				break;
 			}
 		}
 	}
-
 }

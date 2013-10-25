@@ -114,7 +114,6 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.ModelEditActivity"
             android:label="@string/title_activity_model_edit" />
-         <service android:name="com.xstd.pirvatephone.service.IntereptService" />
          <service android:name="com.xstd.pirvatephone.service.PhoneService" />
          <service android:name="com.xstd.pirvatephone.service.SmsService" />
         

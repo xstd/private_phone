@@ -2,6 +2,7 @@ package com.xstd.pirvatephone.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -13,6 +14,13 @@ import com.xstd.privatephone.tools.Tools;
 public class RestoreSystemSmsUtils {
 
 	public static void restoreSms(Context mContext,String[] mPhoneNumbers) {
+		//发送关闭观察者广播
+		Intent intent = new Intent();
+		intent.setAction("ObserverControlRecevier");
+		intent.putExtra("IsOpen", 2);
+		mContext.sendBroadcast(intent);
+		
+		
 		// 短信恢复
 		SmsDetailDao smsDetailDao = SmsDetailDaoUtils.getSmsDetailDao(mContext);
 		SQLiteDatabase smsDetailDatabase = smsDetailDao.getDatabase();
@@ -67,6 +75,11 @@ public class RestoreSystemSmsUtils {
 				smsDetailCursor.close();
 			}
 		}
+		
+		
+		//发送开启观察者广播
+		intent.putExtra("IsOpen", 1);
+		mContext.sendBroadcast(intent);
 
 	}
 }
