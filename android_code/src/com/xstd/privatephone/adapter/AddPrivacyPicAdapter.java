@@ -9,6 +9,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.privacy.PrivacyPic;
 
 import java.util.List;
 
@@ -23,9 +24,9 @@ public class AddPrivacyPicAdapter extends BaseAdapter {
 
     private Context mCtx;
 
-    private List<String> data;
+    private List<PrivacyPic> data;
 
-    public AddPrivacyPicAdapter(Context ctx, List<String> img_name) {
+    public AddPrivacyPicAdapter(Context ctx, List<PrivacyPic> img_name) {
         mCtx = ctx;
         data = img_name;
     }
@@ -57,7 +58,7 @@ public class AddPrivacyPicAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else holder = (ViewHolder) convertView.getTag();
         if(position == data.size()-1) holder.iv.setImageResource(R.drawable.selector_add_album_btn);
-        String str = data.get(position);
+        String str = data.get(position).getName();
         holder.name.setText(str);
         return convertView;
     }

@@ -54,6 +54,8 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
 
     private int privacy_type;
 
+    private long ref_id;//用来标识图片是哪个图库的。
+
     private boolean isEdit = false;
 
     private Map<String, ArrayList<MediaModule>> data = new HashMap<String, ArrayList<MediaModule>>();
@@ -66,6 +68,8 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_add_file);
 
         privacy_type = getIntent().getIntExtra("privacy_type", 0);
+
+        ref_id = getIntent().getLongExtra("ref_id",-1);
 
         initUI();
     }
@@ -86,6 +90,8 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
             ll_title_text.setText(R.string.title_select_add_audio);
         } else if (privacy_type == 2) {
             ll_title_text.setText(R.string.title_select_add_vedio);
+        } else if (privacy_type == 0) {
+            ll_title_text.setText(R.string.title_select_add_image);
         }
         new QueryMediaTask().execute(privacy_type);
     }
@@ -119,6 +125,7 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
         @Override
         protected Void doInBackground(Integer... params) {
             data = MediaUtils.getMediaParentFolder(getApplicationContext(), mapKeys, params[0]);
+            Log.w(TAG,data.size()+"");
             return null;
         }
 
@@ -171,7 +178,7 @@ public class AddFileActivity extends BaseActivity implements View.OnClickListene
                     info.fileName = module.getDisplay_name();
                     info.filePath = module.getPath();
                     FileUtils.moveFile(module.getPath(), ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH + module.getDisplay_name());
-                    dao.insert(new PrivacyFile(null, module.getDisplay_name(), module.getDisplay_name(), module.getPath(), new Date(), privacy_type,null));
+                    dao.insert(new PrivacyFile(null, module.getDisplay_name(), module.getDisplay_name(), module.getPath(), new Date(), privacy_type,ref_id));
                     FileUtils.DeleteFile(info);
                 }
                 return null;

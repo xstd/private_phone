@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.xstd.pirvatephone.module.MediaModule;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +36,6 @@ public class MediaUtils {
         List<MediaModule> datas = new ArrayList<MediaModule>();
         Cursor cursor = null;
         if (type == 1) {
-            Log.w(TAG, "audio");
             cursor = ctx.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
             if (cursor != null && cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
@@ -60,11 +61,28 @@ public class MediaUtils {
                     options.inDither = false;
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     module.setThumb(MediaStore.Video.Thumbnails.getThumbnail(ctx.getContentResolver(), cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)), MediaStore.Images.Thumbnails.MICRO_KIND, options));
-                    if (module.getThumb() != null)
-                        Log.w(TAG, module.getThumb().toString());
                     datas.add(module);
                 }
             }
+        } else if (type == 0) {
+            cursor = ctx.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,null,null,MediaStore.Images.Media.DEFAULT_SORT_ORDER);
+
+            if (cursor != null && cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    MediaModule module = new MediaModule();
+                    module.setDisplay_name(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
+                    module.setSize(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)));
+                    module.setDate_modified(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)));
+                    module.setPath(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inDither = false;
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    module.setThumb(MediaStore.Images.Thumbnails.getThumbnail(ctx.getContentResolver(), cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)), MediaStore.Images.Thumbnails.MICRO_KIND, options));
+                    datas.add(module);
+                }
+            }
+
         }
         if (cursor != null) {
             cursor.close();

@@ -871,5 +871,8 @@ QQ:903372666
     <string name="rs_my_img">我的相册</string>
     <string name="rs_create_album">创建相册</string>
     <string name="rs_create">创建</string>
+    <string name="rs_error_empty_thumb">相册名不能为空</string>
+    <string name="rs_delete_thumb">删除相册</string>
+    <string name="title_select_add_image">选择要加密的图片</string>
 
 </resources>

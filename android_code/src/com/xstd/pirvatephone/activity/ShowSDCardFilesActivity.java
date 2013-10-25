@@ -164,7 +164,6 @@ public class ShowSDCardFilesActivity extends BaseActivity implements OnClickList
 					info.filePath = fileInfo.absolutePath;
 					// FileUtils.copyFile(info, PRIVACY_SAPCE_PATH);
 					FileUtils.moveFile(fileInfo.absolutePath, PRIVACY_SAPCE_PATH + fileInfo.name);
-					Log.w(TAG, privacy_type + "");
 					dao.insert(new PrivacyFile(null, fileInfo.name, fileInfo.name, fileInfo.absolutePath, new Date(), privacy_type,null));
 					FileUtils.DeleteFile(info);
 				}

@@ -48,7 +48,6 @@ public class PrivacyShowActivity extends BaseActivity {
     protected static final int REQUEST_AUDIO_CODE = 1;
     private static final int REQUEST_RECORDER_CODE = 2;
     private TextView return_bt;
-    private TextView title_text;
     /**
      * 上个页面传来的隐藏文件类型int
      */
@@ -85,17 +84,16 @@ public class PrivacyShowActivity extends BaseActivity {
 
     private void initViews() {
         return_bt = (TextView) findViewById(R.id.ll_return_btn);
-        title_text = (TextView) findViewById(R.id.ll_title_text);
+        TextView title_text = (TextView) findViewById(R.id.ll_title_text);
         title_text.setText(getString(R.string.privacy)
                 + PrivacySpaceActivity.home_privacy_title[privacy_type]);
-        add_privacy = (Button) findViewById(R.id.add_privacy);
+        Button add_privacy = (Button) findViewById(R.id.add_privacy);
         empty_view = (RelativeLayout) findViewById(R.id.empty_view);
         lv = (ListView) findViewById(R.id.lv);
         add_privacy.setText(getString(R.string.privacy_add_msg)
                 + PrivacySpaceActivity.home_privacy_title[privacy_type]);
     }
 
-    private Button add_privacy;
     private RelativeLayout empty_view;
     private ListView lv;
 
@@ -107,6 +105,13 @@ public class PrivacyShowActivity extends BaseActivity {
     public void add(View view) {
         Intent intent;
         switch (privacy_type) {
+            case 0:
+                intent = new Intent(PrivacyShowActivity.this,
+                        AddFileActivity.class);
+                intent.putExtra("privacy_type", privacy_type);
+                intent.putExtra("ref_id",getIntent().getLongExtra("ref_id",-1));
+                startActivity(intent);
+                break;
             case 1:
                 showAudioSelectDialog();
                 break;
@@ -133,7 +138,6 @@ public class PrivacyShowActivity extends BaseActivity {
      * 选择音频对话框
      */
     private void showAudioSelectDialog() {
-        Log.w(TAG, "show audio select dialog!!!");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(R.array.privacy_audio, new DialogInterface.OnClickListener() {
 
@@ -212,20 +216,26 @@ public class PrivacyShowActivity extends BaseActivity {
             Uri uri = data.getData();
 
             // 查询，返回cursor
-            Cursor cursor = getContentResolver().query(uri, null, null, null,
-                    null);
+            Cursor cursor = null;
+            if (uri != null) {
+                cursor = getContentResolver().query(uri, null, null, null,
+                        null);
+            }
 
             // 第一行第二列保存路径strRingPath
-            cursor.moveToFirst();
-            String name = "";
-            if (privacy_type == 0) {
-                name = cursor.getString(3);
-            } else if (privacy_type == 1) {
-                name = cursor.getString(2);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                String name = "";
+                if (privacy_type == 0) {
+                    name = cursor.getString(3);
+                } else if (privacy_type == 1) {
+                    name = cursor.getString(2);
+                }
+                String path = cursor.getString(1);
+                cursor.close();
+                hideFile(name, path);
             }
-            String path = cursor.getString(1);
-            cursor.close();
-            hideFile(name, path);
+
         }
         if(resultCode == RESULT_OK && requestCode == REQUEST_RECORDER_CODE) {
              //TODO 把录音机返回的音频文件加密
@@ -241,8 +251,6 @@ public class PrivacyShowActivity extends BaseActivity {
         }
     }
 
-    ;
-
     /**
      * 文件隐藏
      *
@@ -256,8 +264,6 @@ public class PrivacyShowActivity extends BaseActivity {
                 dialog = new ProgressDialog(PrivacyShowActivity.this);
                 dialog.show();
             }
-
-            ;
 
             @Override
             protected Void doInBackground(String... params) {
@@ -279,8 +285,6 @@ public class PrivacyShowActivity extends BaseActivity {
                 dialog.dismiss();
             }
 
-            ;
-
         }.execute(fileName, filePath);
     }
 
@@ -299,10 +303,11 @@ public class PrivacyShowActivity extends BaseActivity {
             PrivacyFileDao dao = PrivacyDaoUtils
                     .getFileDao(PrivacyShowActivity.this);
             String type = String.valueOf(privacy_type);
+            String ref_id = String.valueOf(getIntent().getLongExtra("ref_id",-1));
             String orderBy = PrivacyFileDao.Properties.SrcName.columnName
                     + " COLLATE LOCALIZED ASC";
             Cursor cursor = dao.getDatabase().query(dao.getTablename(),
-                    dao.getAllColumns(), "type=?", new String[]{type}, null,
+                    dao.getAllColumns(), "type=? and ref_id=?", new String[]{type,ref_id}, null,
                     null, orderBy);
             List<PrivacyFile> result = new ArrayList<PrivacyFile>();
             if (cursor != null && cursor.getCount() > 0) {
@@ -324,7 +329,9 @@ public class PrivacyShowActivity extends BaseActivity {
                     result.add(mapping);
                 }
             }
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
             return result;
         }
 
@@ -391,8 +398,6 @@ public class PrivacyShowActivity extends BaseActivity {
                                     window.dismiss();
                                 }
 
-                                ;
-
                             }.execute();
                         }
                     });
@@ -457,7 +462,9 @@ public class PrivacyShowActivity extends BaseActivity {
                     result.add(mapping);
                 }
             }
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
             return result;
         }
 
