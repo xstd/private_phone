@@ -724,7 +724,7 @@ public class PrivateCommActivity extends BaseActivity {
 				String name = tv_name.getText().toString().trim();
 				String strType = tv_type.getText().toString().trim();
 				int type = 0;
-				if("立即挂断".equals(strType)){
+				if("[立即挂断]".equals(strType)){
 					type =1 ;
 				}else{
 					type = 0;

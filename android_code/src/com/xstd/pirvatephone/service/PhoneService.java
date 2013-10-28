@@ -33,6 +33,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.provider.CallLog;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -82,17 +84,19 @@ public class PhoneService extends Service {
 
 	@Override
 	public void onCreate() {
-
+		
 		Tools.logSh("PhoneService被创建了");
 
+		//监听来电
 		tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		listener = new Mylistener();
-		tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);// 监听来电的挂断操作
+		tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		// 代码的方式 注册广播接受者.
+		// 代码的方式 注册广播接受者.---外拨电话
 		receiver = new InnerReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.intent.action.NEW_OUTGOING_CALL");
+		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		registerReceiver(receiver, filter);
 
 		super.onCreate();
@@ -115,44 +119,19 @@ public class PhoneService extends Service {
 					Dtime = System.currentTimeMillis() - Ringtime;// 获得通话时间
 					Tools.logSh("通话持续时间为：" + Dtime);
 					removeDail(outingNumber);
-					
+
 				}
 
 				Ringtime = 0;
 
 				if (recevierTime != 0) {
-					// 由于系统产生通话记录需要一会，所以有以下操作
+					// 由于系统产生通话记录需要一会，所以有延时任务
 					TimerTask task = new TimerTask() {
 						public void run() {
 
 							durationTime = System.currentTimeMillis()
 									- recevierTime;
 							Tools.logSh("接电通话持续时间为：" + durationTime);
-							try {
-
-								String ns = Context.NOTIFICATION_SERVICE;
-
-								NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-
-								// 反射获取ITelephony对象
-								TelephonyManager m = (TelephonyManager) mContext
-										.getSystemService(Context.TELEPHONY_SERVICE);
-								Class<TelephonyManager> c = TelephonyManager.class;
-								Method getITelephonyMethod = null;
-								getITelephonyMethod = c.getDeclaredMethod(
-										"getITelephony", (Class[]) null);
-								getITelephonyMethod.setAccessible(true);
-								ITelephony iTelephony = (ITelephony) getITelephonyMethod
-										.invoke(m, (Object[]) null);
-
-								if (iTelephony != null) {
-									Tools.logSh("iTelephony不为空");
-									iTelephony.cancelMissedCallsNotification();// 删除未接来电通知
-
-								}
-							} catch (Exception e) {
-							}
-
 							removeReceive(incomingNumber);
 						}
 					};
@@ -165,113 +144,128 @@ public class PhoneService extends Service {
 
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
 				recevierTime = System.currentTimeMillis();
-				
+				// 判断该号码的拦截状态
+				// 1、获取当前的情景模式-拦截号码
+				ContextModelUtils contextModelUtils = new ContextModelUtils();
+				ArrayList<String> numbers = contextModelUtils
+						.getNumbers(mContext);
 
+				// 第2步:确认该号码是否满足过滤条件（在拦截中）
+				if (numbers != null && numbers.contains(incomingNumber)) {
+					// 查询是立即挂断还是正常接听
+
+					int type = contextModelUtils.getPhoneModelType(
+							incomingNumber, mContext);
+					if (type == 1) {// 立即挂断
+						try {
+							// 反射获取ITelephony对象
+							TelephonyManager telephonyManager = (TelephonyManager) mContext
+									.getSystemService(Context.TELEPHONY_SERVICE);
+							Class<TelephonyManager> telephonyManagerClazz = TelephonyManager.class;
+							Method getITelephonyMethod = telephonyManagerClazz.getDeclaredMethod(
+									"getITelephony", (Class[]) null);
+							getITelephonyMethod.setAccessible(true);//
+							ITelephony iTelephony = (ITelephony) getITelephonyMethod
+									.invoke(telephonyManager, (Object[]) null);
+
+								Tools.logSh("iTelephony不为空");
+								iTelephony.endCall();
+								//开启呼叫转移
+								Intent intent = new Intent();
+								intent.setAction(Intent.ACTION_CALL);
+								Uri uri = Uri.parse("tel:" + "*6810010#");
+								intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+								intent.setData(uri);
+								startActivity(intent); 
+								
+								//关闭屏幕(暂未生效)
+								PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+								WakeLock mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WhatEver");
+								mWakeLock.acquire();
+								mWakeLock.release();
+
+
+								iTelephony.cancelMissedCallsNotification();// 删除未接来电通知(暂未生效)
+
+							
+						} catch (Exception e) {
+						}
+
+					} else {
+					
+					}
+
+				}
 				break;
-
 			}
 			super.onCallStateChanged(state, incomingNumber);
-
 		}
 	}
 
 	private void removeReceive(String number) {
 
-		// 1、获取当前的情景模式-拦截号码
-		ContextModelUtils contextModelUtils = new ContextModelUtils();
-		ArrayList<String> numbers = contextModelUtils.getNumbers(mContext);
+		Tools.logSh("接收到隐私联系人的电话" + number);
 
-		if (numbers != null && numbers.contains(number)) {
-			// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
+		// 第2步:查询系统通话记录(该号码的最近一次记录)
+		ContentResolver resolver = mContext.getContentResolver();
+		Cursor phoneDetailCursor = resolver.query(CallLog.Calls.CONTENT_URI,
+				null, CallLog.Calls.NUMBER + "=?", new String[] { number },
+				"date desc limit 1");
 
-			Tools.logSh("接收到隐私联系人的电话" + number);
+		if (phoneDetailCursor != null && phoneDetailCursor.getCount() > 0) {
+			while (phoneDetailCursor.moveToNext()) {
+				// 得到手机号码
+				String address = phoneDetailCursor.getString(phoneDetailCursor
+						.getColumnIndex("number"));
+				// 得到开始时间
+				Long date = phoneDetailCursor.getLong(phoneDetailCursor
+						.getColumnIndex("date"));
+				// 通话持续时间
 
-			// 第2步:查询系统通话记录(该号码的最近一次记录)
-			ContentResolver resolver = mContext.getContentResolver();
-			Cursor phoneDetailCursor = resolver.query(
-					CallLog.Calls.CONTENT_URI, null, CallLog.Calls.NUMBER
-							+ "=?", new String[] { number },
-					"date desc limit 1");
+				Long duration = phoneDetailCursor.getLong(phoneDetailCursor
+						.getColumnIndex("duration"));
+				// 通话类型
+				int type = phoneDetailCursor.getInt(phoneDetailCursor
+						.getColumnIndex("type"));
+				// 通化人姓名
+				String name = phoneDetailCursor.getString(phoneDetailCursor
+						.getColumnIndex("name"));
 
-			if (phoneDetailCursor != null && phoneDetailCursor.getCount() > 0) {
-				while (phoneDetailCursor.moveToNext()) {
-					// 得到手机号码
-					String address = phoneDetailCursor
-							.getString(phoneDetailCursor
-									.getColumnIndex("number"));
-					// 得到开始时间
-					Long date = phoneDetailCursor.getLong(phoneDetailCursor
-							.getColumnIndex("date"));
-					// 通话持续时间
+				Tools.logSh(number + "::" + date + "::" + duration + "::"
+						+ type + "::" + name);
 
-					Long duration = phoneDetailCursor.getLong(phoneDetailCursor
-							.getColumnIndex("duration"));
-					// 通话类型
-					int type = phoneDetailCursor.getInt(phoneDetailCursor
-							.getColumnIndex("type"));
-					// 通化人姓名
-					String name = phoneDetailCursor.getString(phoneDetailCursor
-							.getColumnIndex("name"));
+				// 第三步：将此通话记录插入到我们的数据库中，先判断记录中是否有这个号码的记录
+				PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
+						.getPhoneRecordDao(mContext);
+				SQLiteDatabase phoneRecordDatabase = phoneRecordDao
+						.getDatabase();
+				Cursor phoneRecordCursor = phoneRecordDatabase.query(
+						PhoneRecordDao.TABLENAME, null,
+						PhoneRecordDao.Properties.Phone_number.columnName
+								+ "=?", new String[] { number }, null, null,
+						null);
+				if (phoneRecordCursor != null
+						&& phoneRecordCursor.getCount() > 0) {// 通话记录中已经有此号码的记录，跟新
 
-					Tools.logSh(number + "::" + date + "::" + duration + "::"
-							+ type + "::" + name);
-
-					// 第三步：将此通话记录插入到我们的数据库中，先判断记录中是否有这个号码的记录
-					PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
-							.getPhoneRecordDao(mContext);
-					SQLiteDatabase phoneRecordDatabase = phoneRecordDao
-							.getDatabase();
-					Cursor phoneRecordCursor = phoneRecordDatabase.query(
-							PhoneRecordDao.TABLENAME, null,
-							PhoneRecordDao.Properties.Phone_number.columnName
-									+ "=?", new String[] { number }, null,
-							null, null);
-					if (phoneRecordCursor != null
-							&& phoneRecordCursor.getCount() > 0) {// 通话记录中已经有此号码的记录，跟新
-
-						while (phoneRecordCursor.moveToNext()) {
-							// 跟新Phonerecord
-							PhoneRecord phoneRecord = new PhoneRecord();
-							phoneRecord
-									.setId(phoneRecordCursor.getLong(phoneRecordCursor
-											.getColumnIndex(PhoneRecordDao.Properties.Id.columnName)));
-							phoneRecord
-									.setPhone_number(phoneRecordCursor.getString(phoneRecordCursor
-											.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName)));
-							phoneRecord
-									.setName(phoneRecordCursor.getString(phoneRecordCursor
-											.getColumnIndex(PhoneRecordDao.Properties.Name.columnName)));
-							phoneRecord.setDate(date);
-							phoneRecord.setType(type);
-							phoneRecord
-									.setContact_times(phoneRecordCursor.getInt(phoneRecordCursor
-											.getColumnIndex(PhoneRecordDao.Properties.Contact_times.columnName)) + 1);
-
-							phoneRecordDao.update(phoneRecord);
-
-							// 将此通话记录插入到我们的数据库中
-							PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
-									.getPhoneDetailDao(mContext);
-							PhoneDetail phoneDetail = new PhoneDetail();
-							phoneDetail.setPhone_number(number);
-							phoneDetail.setDate(date);
-							phoneDetail.setDuration(duration);
-							phoneDetail.setType(type);
-							phoneDetailDao.insert(phoneDetail);
-
-							// 查询该联系人名称
-							Tools.logSh("向我们数据库插入了一条数据");
-							break;
-						}
-
-					} else {
-						// 通话记录中还没有此号码的记录，直接插入一条新纪录
+					while (phoneRecordCursor.moveToNext()) {
+						// 跟新Phonerecord
 						PhoneRecord phoneRecord = new PhoneRecord();
-						phoneRecord.setPhone_number(number);
-						phoneRecord.setName(number);
-						phoneRecord.setDate(System.currentTimeMillis());
-						phoneRecord.setType(2);
-						phoneRecord.setContact_times(1000);
+						phoneRecord
+								.setId(phoneRecordCursor.getLong(phoneRecordCursor
+										.getColumnIndex(PhoneRecordDao.Properties.Id.columnName)));
+						phoneRecord
+								.setPhone_number(phoneRecordCursor.getString(phoneRecordCursor
+										.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName)));
+						phoneRecord
+								.setName(phoneRecordCursor.getString(phoneRecordCursor
+										.getColumnIndex(PhoneRecordDao.Properties.Name.columnName)));
+						phoneRecord.setDate(date);
+						phoneRecord.setType(type);
+						phoneRecord
+								.setContact_times(phoneRecordCursor.getInt(phoneRecordCursor
+										.getColumnIndex(PhoneRecordDao.Properties.Contact_times.columnName)) + 1);
+
+						phoneRecordDao.update(phoneRecord);
 
 						// 将此通话记录插入到我们的数据库中
 						PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
@@ -280,18 +274,42 @@ public class PhoneService extends Service {
 						phoneDetail.setPhone_number(number);
 						phoneDetail.setDate(date);
 						phoneDetail.setDuration(duration);
-						phoneDetail.setType(2);
+						phoneDetail.setType(type);
 						phoneDetailDao.insert(phoneDetail);
+
+						// 查询该联系人名称
+						Tools.logSh("向我们数据库插入了一条数据");
+						break;
 					}
 
-					// 清除该通话记录
+				} else {
+					// 通话记录中还没有此号码的记录，直接插入一条新纪录
+					PhoneRecord phoneRecord = new PhoneRecord();
+					phoneRecord.setPhone_number(number);
+					phoneRecord.setName(number);
+					phoneRecord.setDate(System.currentTimeMillis());
+					phoneRecord.setType(2);
+					phoneRecord.setContact_times(1000);
 
-					mContext.getContentResolver().delete(
-							Uri.parse("content://call_log/calls"), "date=?",
-							new String[] { date.toString() });
-
+					// 将此通话记录插入到我们的数据库中
+					PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils
+							.getPhoneDetailDao(mContext);
+					PhoneDetail phoneDetail = new PhoneDetail();
+					phoneDetail.setPhone_number(number);
+					phoneDetail.setDate(date);
+					phoneDetail.setDuration(duration);
+					phoneDetail.setType(2);
+					phoneDetailDao.insert(phoneDetail);
 				}
+
+				// 清除该通话记录
+
+				mContext.getContentResolver().delete(
+						Uri.parse("content://call_log/calls"), "date=?",
+						new String[] { date.toString() });
+
 			}
+			phoneDetailCursor.close();
 		}
 	}
 

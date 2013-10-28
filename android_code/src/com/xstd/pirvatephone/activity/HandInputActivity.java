@@ -91,7 +91,7 @@ public class HandInputActivity extends Activity {
 					}
 					contactInfo.setPhone_number(phone);
 					contactInfo.setDisplay_name(name);
-					//type
+					//type:0-正常接听，1-立即挂断
 					if(myRadioButton1.isChecked()){
 						Tools.logSh("type==="+0);
 						contactInfo.setType(0);

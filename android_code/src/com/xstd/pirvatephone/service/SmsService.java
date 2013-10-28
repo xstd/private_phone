@@ -18,9 +18,6 @@ import com.xstd.privatephone.tools.Tools;
 
 public class SmsService extends Service {
 
-	private IntentFilter filter;
-
-	private IntentFilter filter2;
 
 	private PrivateCommSmsRecevier smsGetRecevier;
 
@@ -30,7 +27,10 @@ public class SmsService extends Service {
 
 	private ContentResolver resolver;
 
-	private IntentFilter filter3;
+	private IntentFilter smsRecevierFilter;
+
+	private IntentFilter controlRecevierFilter;
+
 
 	@Override
 	public void onDestroy() {
@@ -59,9 +59,10 @@ public class SmsService extends Service {
 		Tools.logSh("SmsService被创建了");
 
 		smsGetRecevier = new PrivateCommSmsRecevier();
-		filter2 = new IntentFilter();
-		filter2.addAction("android.provider.Telephony.SMS_RECEIVED");
-		registerReceiver(smsGetRecevier, filter2);
+		smsRecevierFilter = new IntentFilter();
+		smsRecevierFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
+		smsRecevierFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+		registerReceiver(smsGetRecevier, smsRecevierFilter);
 
 		registObserver();
 		registControl();
@@ -76,7 +77,7 @@ public class SmsService extends Service {
 		// ”表“内容观察者 ，通过测试我发现只能监听此Uri -----> content://sms
 		// 监听不到其他的Uri 比如说 content://sms/outbox
 		observeSMSsend = new ObserveSMSSend(new Handler(), GlobleVaries.CONTEXT);
-		resolver = GlobleVaries.CONTEXT.getContentResolver();
+		resolver = getContentResolver();
 		resolver.registerContentObserver(Uri.parse("content://sms"), true,
 				observeSMSsend);
 	}
@@ -84,9 +85,9 @@ public class SmsService extends Service {
 	private void registControl(){
 		Tools.logSh("registControl()被调用了");
 		ObserverControlRecevier controlRecevier = new ObserverControlRecevier();
-		filter3 = new IntentFilter();
-		filter3.addAction("ObserverControlRecevier");
-		registerReceiver(controlRecevier, filter2);
+		controlRecevierFilter = new IntentFilter();
+		controlRecevierFilter.addAction("ObserverControlRecevier");
+		registerReceiver(controlRecevier, controlRecevierFilter);
 	}
 
 	private void unregistObserver() {
@@ -96,7 +97,6 @@ public class SmsService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

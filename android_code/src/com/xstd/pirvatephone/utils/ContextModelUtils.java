@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.xstd.pirvatephone.activity.IntereptActivity;
 import com.xstd.pirvatephone.activity.NewContextModelActivity;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
@@ -35,6 +37,27 @@ public class ContextModelUtils {
 		}
 
 		return selectPhones;
+	}
+	
+	/**
+	 * 获取一个隐私联系人的号码处理方式
+	 * @param phoneNumber
+	 * @param context
+	 * @return //type:0-正常接听，1-立即挂断
+	 */
+	public int getPhoneModelType(String phoneNumber, Context context){
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils.getContactInfoDao(context);
+		SQLiteDatabase ContactDatabase = contactInfoDao.getDatabase();
+		Cursor query = ContactDatabase.query(ContactInfoDao.TABLENAME, null, ContactInfoDao.Properties.Phone_number.columnName+"=?", new String[]{phoneNumber}, null, null, null);
+		if(query!=null &&query.getCount()>0){
+			while(query.moveToNext()){
+				int type = query.getInt(query.getColumnIndex(ContactInfoDao.Properties.Type.columnName));
+				return  type;
+			}
+			query.close();
+		}
+		
+		return 0;
 	}
 
 	/**
