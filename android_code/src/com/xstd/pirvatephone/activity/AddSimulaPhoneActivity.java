@@ -40,7 +40,7 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 
 	private static final int CHOOSE_CONTACT = 1;
 
-	private static final int REQUES_REVEIVER_CODE = 3;
+	public static final int REQUES_REVEIVER_CODE = 3;
 
 	@ViewMapping(ID = R.id.back)
 	public ImageView back;
@@ -140,7 +140,7 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		long triggerAtMillis = calendar.getTimeInMillis()
 				- System.currentTimeMillis() + SystemClock.elapsedRealtime();
-		am.set(AlarmManager.ELAPSED_REALTIME, triggerAtMillis, pendIntent);
+		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendIntent);
 		finish();
 	}
 

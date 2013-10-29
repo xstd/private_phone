@@ -7,10 +7,11 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:scaleType="centerCrop"
         android:background="@drawable/video_thumbnail_default"
         android:id="@+id/file_thumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
 
     <LinearLayout
         android:layout_width="0dp"
