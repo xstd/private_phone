@@ -24,147 +24,162 @@ import com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver;
 import com.xstd.privatephone.adapter.SimulaCommAdapter;
 
 public class SimulaCommActivity extends BaseActivity implements
-        OnItemLongClickListener {
+		OnItemLongClickListener {
 
-    /**
-     * 代表模拟短信的类型
-     */
-    public final static int SIMULA_SMS = 1;
+	/**
+	 * 代表模拟短信的类型
+	 */
+	public final static int SIMULA_SMS = 1;
 
-    /**
-     * 代表模拟通话的类型
-     */
-    public final static int SIMULA_PHONE = 2;
-    private static final String TAG = "SimulaCommActivity";
+	/**
+	 * 代表模拟通话的类型
+	 */
+	public final static int SIMULA_PHONE = 2;
+	private static final String TAG = "SimulaCommActivity";
 
-    @ViewMapping(ID = R.id.lv_phone)
-    public ListView lv_phone;
+	@ViewMapping(ID = R.id.lv_phone)
+	public ListView lv_phone;
 
-    @ViewMapping(ID = R.id.lv_sms)
-    public ListView lv_sms;
+	@ViewMapping(ID = R.id.lv_sms)
+	public ListView lv_sms;
 
-    @ViewMapping(ID = R.id.btn_add)
-    public Button btn_add;
+	@ViewMapping(ID = R.id.btn_add)
+	public Button btn_add;
 
-    private int type = SIMULA_PHONE;
+	private int type = SIMULA_PHONE;
 
-    private SimulaCommAdapter adapter_phone;
+	private SimulaCommAdapter adapter_phone;
 
-    private SimulaCommAdapter adapter_sms;
+	private SimulaCommAdapter adapter_sms;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simula_comm);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_simula_comm);
 
-        initUI();
-    }
+		initUI();
+	}
 
-    private void initUI() {
-        ViewMapUtil.viewMapping(this, getWindow());
+	private void initUI() {
+		ViewMapUtil.viewMapping(this, getWindow());
 
-        adapter_phone = new SimulaCommAdapter(this, SIMULA_PHONE);
-        lv_phone.setAdapter(adapter_phone);
-        adapter_sms = new SimulaCommAdapter(this, SIMULA_SMS);
-        lv_sms.setAdapter(adapter_sms);
+		adapter_phone = new SimulaCommAdapter(this, SIMULA_PHONE);
+		lv_phone.setAdapter(adapter_phone);
+		adapter_sms = new SimulaCommAdapter(this, SIMULA_SMS);
+		lv_sms.setAdapter(adapter_sms);
 
-        lv_phone.setOnItemLongClickListener(this);
-        lv_sms.setOnItemLongClickListener(this);
-    }
+		lv_phone.setOnItemLongClickListener(this);
+		lv_sms.setOnItemLongClickListener(this);
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (type == SIMULA_PHONE)
-            adapter_phone.changeDatas();
-        else if (type == SIMULA_SMS)
-            adapter_sms.changeDatas();
-        displayWhich();
-    }
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (type == SIMULA_PHONE)
+			adapter_phone.changeDatas();
+		else if (type == SIMULA_SMS)
+			adapter_sms.changeDatas();
+		displayWhich();
+	}
 
-    private void displayWhich() {
-        if (type == SIMULA_PHONE) {
-            lv_phone.setVisibility(View.VISIBLE);
-            lv_sms.setVisibility(View.GONE);
-        } else if (type == SIMULA_SMS) {
-            lv_phone.setVisibility(View.GONE);
-            lv_sms.setVisibility(View.VISIBLE);
-        }
-    }
+	private void displayWhich() {
+		if (type == SIMULA_PHONE) {
+			lv_phone.setVisibility(View.VISIBLE);
+			lv_sms.setVisibility(View.GONE);
+		} else if (type == SIMULA_SMS) {
+			lv_phone.setVisibility(View.GONE);
+			lv_sms.setVisibility(View.VISIBLE);
+		}
+	}
 
-    /**
-     * 显示模拟短信记录按钮
-     *
-     * @param view
-     */
-    public void simulaSms(View view) {
-        btn_add.setText(R.string.simula_add_sms);
-        type = SIMULA_SMS;
-        adapter_sms.changeDatas();
-        displayWhich();
-    }
+	/**
+	 * 显示模拟短信记录按钮
+	 * 
+	 * @param view
+	 */
+	public void simulaSms(View view) {
+		btn_add.setText(R.string.simula_add_sms);
+		type = SIMULA_SMS;
+		adapter_sms.changeDatas();
+		displayWhich();
+	}
 
-    /**
-     * 显示模拟电话记录按钮
-     *
-     * @param view
-     */
-    public void simulaPhone(View view) {
-        btn_add.setText(R.string.simula_add_phone);
-        type = SIMULA_PHONE;
-        adapter_phone.changeDatas();
-        displayWhich();
-    }
+	/**
+	 * 显示模拟电话记录按钮
+	 * 
+	 * @param view
+	 */
+	public void simulaPhone(View view) {
+		btn_add.setText(R.string.simula_add_phone);
+		type = SIMULA_PHONE;
+		adapter_phone.changeDatas();
+		displayWhich();
+	}
 
-    /**
-     * 添加一条模拟通讯
-     *
-     * @param view
-     */
-    public void addSimula(View view) {
-        Intent intent = new Intent();
-        if (type == SIMULA_SMS) {
-            intent.setClass(this, AddSimulaSmsActivity.class);
-        } else if (type == SIMULA_PHONE) {
-            intent.setClass(this, AddSimulaPhoneActivity.class);
-        }
-        startActivity(intent);
-    }
+	/**
+	 * 添加一条模拟通讯
+	 * 
+	 * @param view
+	 */
+	public void addSimula(View view) {
+		Intent intent = new Intent();
+		if (type == SIMULA_SMS) {
+			intent.setClass(this, AddSimulaSmsActivity.class);
+		} else if (type == SIMULA_PHONE) {
+			intent.setClass(this, AddSimulaPhoneActivity.class);
+		}
+		startActivity(intent);
+	}
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                   int position, long id) {
-        showDialog((SimulateComm) parent.getAdapter().getItem(position));
-        return false;
-    }
+	public void addSMS(View view) {
+		//TODO 
+	}
 
-    private void showDialog(final SimulateComm entity) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.s_del_title).setMessage(R.string.s_del_msg)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, new OnClickListener() {
+	public void addPhone(View view) {
+		//TODO 
+	}
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SimulateDaoUtils
-                                .getSimulateDao(getApplicationContext())
-                                .delete(entity);
-                        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent();
-                        if (type == SIMULA_PHONE) {
-                            adapter_phone.changeDatas();
-                            intent.setClass(getApplicationContext(), SimulateSendPhoneReceiver.class);
-                        } else if (type == SIMULA_SMS) {
-                            adapter_sms.changeDatas();
-                            intent.setClass(getApplicationContext(), SimulateSendSMSReceiver.class);
-                        }
-                        intent.putExtra("simu",entity);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), AddSimulaPhoneActivity.REQUES_REVEIVER_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        am.cancel(pendingIntent);
-                        Log.w(TAG, "删除记录:" + entity.toString());
-                    }
-                }).create();
-        dialog.show();
-    }
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		showDialog((SimulateComm) parent.getAdapter().getItem(position));
+		return false;
+	}
+
+	private void showDialog(final SimulateComm entity) {
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.s_del_title).setMessage(R.string.s_del_msg)
+				.setNegativeButton(android.R.string.cancel, null)
+				.setPositiveButton(android.R.string.ok, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SimulateDaoUtils
+								.getSimulateDao(getApplicationContext())
+								.delete(entity);
+						AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+						Intent intent = new Intent();
+						if (type == SIMULA_PHONE) {
+							adapter_phone.changeDatas();
+							intent.setClass(getApplicationContext(),
+									SimulateSendPhoneReceiver.class);
+						} else if (type == SIMULA_SMS) {
+							adapter_sms.changeDatas();
+							intent.setClass(getApplicationContext(),
+									SimulateSendSMSReceiver.class);
+						}
+						intent.putExtra("simu", entity);
+						PendingIntent pendingIntent = PendingIntent
+								.getBroadcast(
+										getApplicationContext(),
+										AddSimulaPhoneActivity.REQUES_REVEIVER_CODE,
+										intent,
+										PendingIntent.FLAG_UPDATE_CURRENT);
+						am.cancel(pendingIntent);
+						Log.w(TAG, "删除记录:" + entity.toString());
+					}
+				}).create();
+		dialog.show();
+	}
 
 }

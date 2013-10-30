@@ -880,6 +880,6 @@ QQ:903372666
     <string name="rs_create">创建</string>
     <string name="title_activity_private_contact_edit">PrivateContactEditActivity</string>
     <string name="title_activity_call_forwarding">CallForwardingActivity</string>
-    
+    <string name="rs_cancle_all">取消全选</string>
 
 </resources>

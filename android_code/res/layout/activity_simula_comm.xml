@@ -9,19 +9,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <TextView
+            style="@style/btn_simulate"
             android:onClick="simulaSms"
             android:text="@string/simula_comm_sms_title" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <TextView
+            style="@style/btn_simulate"
             android:onClick="simulaPhone"
             android:text="@string/simula_comm_phone_title" />
+
+        <TextView
+            style="@style/btn_simulate"
+            android:onClick="addSMS"
+            android:text="@string/s_calllog_header" />
+
+        <TextView
+            style="@style/btn_simulate"
+            android:onClick="addPhone"
+            android:text="@string/s_sms_header" />
     </LinearLayout>
 
     <Button

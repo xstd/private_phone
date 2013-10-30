@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.activity.ShowSDCardFilesActivity;
 
 public class ShowSDFilesAdapter extends BaseAdapter {
 
@@ -108,7 +109,7 @@ public class ShowSDFilesAdapter extends BaseAdapter {
 				} else {
 					fileInfo.isChecked = true;
 				}
-				Log.v(TAG, fileInfo.isChecked + "");
+                ((ShowSDCardFilesActivity)mContext).checkIsSelectAll();
 			}
 		});
 		return convertView;

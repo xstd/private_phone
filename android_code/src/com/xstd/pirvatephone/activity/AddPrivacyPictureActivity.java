@@ -3,7 +3,6 @@ package com.xstd.pirvatephone.activity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +35,7 @@ import com.xstd.privatephone.tools.Toasts;
 public class AddPrivacyPictureActivity extends BaseActivity implements OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private static final String TAG = "AddPrivacyPictureActivity";
+	private static final int REQUEST_CAMERA_CODE = 1;
     @ViewMapping(ID = R.id.left_line)
     public ViewGroup left_line;
 
@@ -49,8 +48,8 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
     @ViewMapping(ID = R.id.inbox_divider)
     public TextView inbox_divider;
 
-    @ViewMapping(ID = R.id.strongbox_buttonbar_layout)
-    public ViewGroup add_strongbox;
+    @ViewMapping(ID = R.id.add_pic)
+    public ViewGroup add_pic;
 
     @ViewMapping(ID = R.id.gridview)
     public GridView gridview;
@@ -82,7 +81,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
         left_line.setOnClickListener(this);
         right_line.setVisibility(View.VISIBLE);
         right_line.setOnClickListener(this);
-        add_strongbox.setOnClickListener(this);
+        add_pic.setOnClickListener(this);
         float_edit_btn.setOnClickListener(this);
         float_done_btn.setOnClickListener(this);
         text.setText(R.string.s_hide_image_add);
@@ -115,9 +114,9 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
                 File file = new File(path, "IMG_" + System.currentTimeMillis() + ".jpg");
                 Uri mOutPutFileUri = Uri.fromFile(file);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutPutFileUri);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, REQUEST_CAMERA_CODE);
                 break;
-            case R.id.add_strongbox:
+            case R.id.add_pic:
                 Log.w(TAG,"您按了添加按钮");
                 intent = new Intent(this,AddFileActivity.class);
                 startActivity(intent);
@@ -127,7 +126,10 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    	if(REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {
+    		Uri uri = data.getData();
+    		Log.w(TAG, uri.toString());
+    	}
     }
 
     private void queryImageFolderCount() {

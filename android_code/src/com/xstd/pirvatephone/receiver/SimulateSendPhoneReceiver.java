@@ -19,8 +19,8 @@ public class SimulateSendPhoneReceiver extends BroadcastReceiver {
 		values.put(CallLog.Calls.NUMBER, simu.getPhonenumber());
 		values.put(CallLog.Calls.DATE, simu.getFuturetime().getTime());
 		values.put(CallLog.Calls.TYPE, CallLog.Calls.MISSED_TYPE);
-		values.put(CallLog.Calls.NEW, 1);
-		context.getContentResolver().insert(CallLog.CONTENT_URI, values);
+		values.put(CallLog.Calls.NEW, 1);// 0已看1未看
+		context.getContentResolver().insert(CallLog.Calls.CONTENT_URI, values);
 		Intent activity = new Intent();
 		activity.setClass(context, SimulateCallActivity.class);
 		activity.putExtra("simu", simu);
