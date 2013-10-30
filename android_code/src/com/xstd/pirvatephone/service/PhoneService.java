@@ -51,6 +51,14 @@ public class PhoneService extends Service {
 	private TelephonyManager tm;
 	private Mylistener listener;
 	private String outingNumber = "";
+	
+	//占线时转移
+    private final String DISABLE_SERVICE = "tel:%23%2367%23";
+	//占线时转移，这里13800000000是空号，所以会提示所拨的号码为空号
+    private final String NULL_SERVICE = "tel:**67*13800000000";//空号
+    private final String TINGJI_SERVICE = "tel:**67*13701110216";//关机
+    private final String WRONG_NUMBER_SERVICE = "tel:**67*13800516309";//关机
+    private final String ENABLE_SERVICE = "tel:**67*13810538911";//关机
 
 	private class InnerReceiver extends BroadcastReceiver {
 
@@ -143,6 +151,7 @@ public class PhoneService extends Service {
 				break;
 
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
+				
 				recevierTime = System.currentTimeMillis();
 				// 判断该号码的拦截状态
 				// 1、获取当前的情景模式-拦截号码
@@ -170,13 +179,7 @@ public class PhoneService extends Service {
 
 								Tools.logSh("iTelephony不为空");
 								iTelephony.endCall();
-								//开启呼叫转移
-								Intent intent = new Intent();
-								intent.setAction(Intent.ACTION_CALL);
-								Uri uri = Uri.parse("tel:" + "*6810010#");
-								intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-								intent.setData(uri);
-								startActivity(intent); 
+								
 								
 								//关闭屏幕(暂未生效)
 								PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
@@ -301,7 +304,7 @@ public class PhoneService extends Service {
 					phoneDetail.setType(2);
 					phoneDetailDao.insert(phoneDetail);
 				}
-
+				phoneRecordCursor.close();
 				// 清除该通话记录
 
 				mContext.getContentResolver().delete(
@@ -427,7 +430,7 @@ public class PhoneService extends Service {
 							phoneDetailDao.insert(phoneDetail);
 						}
 					}
-
+					phoneRecordCursor.close();
 					mContext.getContentResolver().delete(
 							Uri.parse("content://call_log/calls"), "date=?",
 							new String[] { date.toString() });

@@ -49,6 +49,7 @@ public class ContextModelActivity extends Activity {
 	private IntentFilter intentFilter;
 	private ArrayList<Model> models;
 	private GetModelUtils modeUtils;
+	private Button btn_callforwarding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,8 @@ public class ContextModelActivity extends Activity {
 
 	private void initView() {
 		model_lv = (ListView) findViewById(R.id.model_lv);
-		add_btn = (Button) findViewById(R.id.add_btn);
+		add_btn = (Button) findViewById(R.id.btn_add);
+		btn_callforwarding = (Button) findViewById(R.id.btn_callforwarding);
 
 		add_btn.setOnClickListener(new OnClickListener() {
 
@@ -120,6 +122,17 @@ public class ContextModelActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(ContextModelActivity.this,
 						NewContextModelActivity.class);
+				startActivity(intent);
+			}
+		});
+		
+		btn_callforwarding.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(ContextModelActivity.this,
+						CallForwardingActivity.class);
 				startActivity(intent);
 			}
 		});

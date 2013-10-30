@@ -132,6 +132,10 @@
             android:name="com.xstd.pirvatephone.activity.PrivateContactEditActivity"
             android:label="@string/title_activity_private_contact_edit" >
         </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.CallForwardingActivity"
+            android:label="@string/title_activity_call_forwarding" >
+        </activity>
     </application>
 
 </manifest>

@@ -417,4 +417,12 @@
         <item>删除</item>
     </string-array>
 
+    <!-- swj -->
+    <string-array name="call_forwarding_item">
+        <item>转移所有来电</item>
+        <item>正在接听时转移</item>
+        <item>无人接听是转移</item>
+        <item>关机活无信号是转移</item>
+    </string-array>
+
 </resources>

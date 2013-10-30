@@ -768,6 +768,7 @@ QQ:903372666
     <string name="private_comm_delete_comm">删除通话记录</string>
     <string name="private_comm_recover_contact">恢复</string>
     <string name="private_comm_delete">删除</string>
+    
 
     <!-- 入口 -->
     <string name="enter_no_password_tips">提示</string>
@@ -878,4 +879,7 @@ QQ:903372666
     <string name="rs_create_album">创建相册</string>
     <string name="rs_create">创建</string>
     <string name="title_activity_private_contact_edit">PrivateContactEditActivity</string>
+    <string name="title_activity_call_forwarding">CallForwardingActivity</string>
+    
+
 </resources>

