@@ -10,8 +10,11 @@ import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
+import com.xstd.pirvatephone.utils.ContactUtils;
+import com.xstd.pirvatephone.utils.ContactsUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.DelectOurContactUtils;
+import com.xstd.pirvatephone.utils.MakeCallUtils;
 import com.xstd.pirvatephone.utils.RecordToSysUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.EditContactAdapter;
@@ -46,6 +49,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -153,7 +157,6 @@ public class PrivateCommActivity extends BaseActivity {
 
 	@Override
 	public void onDestroy() {
-		// unregisterReceiver(smsRecevier);
 		super.onDestroy();
 	}
 
@@ -339,7 +342,7 @@ public class PrivateCommActivity extends BaseActivity {
 				public void onClick(View v) {
 					// show dialog
 					Tools.logSh("接收到增加联系人点击" + currIndex);
-					showDialog();
+					showAddContactDialog();
 				}
 			});
 
@@ -651,6 +654,19 @@ public class PrivateCommActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				TextView sms_tv_num = (TextView) view
+						.findViewById(R.id.dial_tv_phone_num);
+				String name = sms_tv_num.getText().toString().trim();
+				showPhoneDialog(name);
+				return false;
+			}
+		});
 	}
 
 	private void setSmsRecordAdapter(ListView mListView) {
@@ -748,10 +764,17 @@ public class PrivateCommActivity extends BaseActivity {
 
 						switch (which) {
 						case 0:
-
+							MakeCallUtils.makeCall(PrivateCommActivity.this, address);
 							break;
 						
 						case 1:
+							
+							Intent smsDetailIntent = new Intent(PrivateCommActivity.this,
+									SmsDetailActivity.class);
+							// 姓名带过去
+							Tools.logSh("Name==" + name);
+							smsDetailIntent.putExtra("Name", name);
+							startActivity(smsDetailIntent);
 							break;
 						case 2:
 							Intent intent = new Intent(PrivateCommActivity.this,PrivateContactEditActivity.class);
@@ -773,8 +796,42 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 	
+	public void showPhoneDialog(final String name) {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(""+name);
+		builder.setItems(new String[] { "打电话", "发短信" ,"删除" },
+				new DialogInterface.OnClickListener() {
 
-	private void showDialog() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						switch (which) {
+						case 0:
+							//获取号码
+							String phone = ContactUtils.queryContactNumber(PrivateCommActivity.this, name);
+							MakeCallUtils.makeCall(PrivateCommActivity.this, phone);
+							break;
+						
+						case 1:
+							Intent smsDetailIntent = new Intent(PrivateCommActivity.this,
+									SmsDetailActivity.class);
+							// 姓名带过去
+							Tools.logSh("Name==" + name);
+							smsDetailIntent.putExtra("Name", name);
+							startActivity(smsDetailIntent);
+							
+							
+							break;
+						case 2:
+							Toast.makeText(PrivateCommActivity.this, "还没做", Toast.LENGTH_SHORT).show();
+							break;
+						}
+					}
+				});
+		builder.create().show();
+	}
+
+	private void showAddContactDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("添加新的联系人");
@@ -812,6 +869,7 @@ public class PrivateCommActivity extends BaseActivity {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub

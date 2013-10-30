@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.utils.MakeCallUtils;
 
 public class ContactAdapter extends CursorAdapter {
 	private Context mContext;
@@ -57,11 +58,7 @@ public class ContactAdapter extends CursorAdapter {
 			public void onClick(View v) {
 				if (phone_number != null && !phone_number.equals("")) {
 
-					// 封装一个拨打电话的intent，并且将电话号码包装成一个Uri对象传入
-					Intent intent = new Intent(Intent.ACTION_CALL, Uri
-							.parse("tel:" + phone_number));
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					mContext.startActivity(intent);// 内部类
+					MakeCallUtils.makeCall(mContext, phone_number);
 				}
 			}
 		});

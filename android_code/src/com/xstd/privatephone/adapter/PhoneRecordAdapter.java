@@ -26,6 +26,7 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		mContext = context;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void bindView(View view, Context arg1, Cursor cursor) {
 		ViewHold views = (ViewHold) view.getTag();

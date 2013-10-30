@@ -151,7 +151,6 @@ public class AddContactActivity extends BaseActivity {
 
 		btn_edit.setVisibility(View.GONE);
 		
-		//
 		mListView.setOnScrollListener(new OnScrollListener() {
 			
 			@Override
