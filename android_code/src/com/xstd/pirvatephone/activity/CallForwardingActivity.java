@@ -13,9 +13,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +37,7 @@ public class CallForwardingActivity extends Activity {
 	public static final String FORWARD_TYPE = "FORWARD_TYPE";
 	public static int PICK_REQUEST = 0;
 	public static final String SETTING_INFO = "setting_infos";
-	private int FORWARDING_TYPE = 0;// 转移类型
+	private int FORWARDING_TYPE = 2;// 转移类型
 	private ArrayAdapter<String> adapter;
 	private Button btn_close = null;
 	private Button btn_forwarding = null;
@@ -43,19 +45,73 @@ public class CallForwardingActivity extends Activity {
 	private TelephonyManager manager;
 	private EditText numberEditText = null;
 	ArrayList<String> numberList = null;
-	private int phoneType = 1;// 是否开启
+	private int phoneType = 1;// 
+	private boolean isCallForwarding;// 是否开启
 	SharedPreferences settings;
 	private Spinner sp_selectCmd;
 
 	private SimpleContact contact;
 	private String number;
+	private SharedPreferences sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_call_forwarding);
 
+		sp = getSharedPreferences("isCallForwarding", 0);
+		
 		initView();
+		
+		initData();
+	}
+
+	private void initData() {
+		
+	}
+	
+	private void stopCallForwarding(String number){
+		//取消来电转移
+		
+		Uri uri = getCancelUri(number);
+				
+		Intent localIntent2 = new Intent("android.intent.action.CALL",uri);
+		localIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(localIntent2);
+	}
+	
+	private Uri getCancelUri(String number) {
+		this.manager = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE));
+		  phoneType = this.manager.getPhoneType();
+		  if(phoneType==TelephonyManager.PHONE_TYPE_NONE){
+		  }else if(phoneType==TelephonyManager.PHONE_TYPE_GSM){
+			  return Uri.fromParts("tel", "##67#", null);
+		  }else if(phoneType==TelephonyManager.PHONE_TYPE_CDMA){
+			  return Uri.fromParts("tel", "*900", null);
+		  }
+		return null;
+	}
+
+	private void startCallForwarding(String number){
+		//开启来电转移
+		
+		Uri uri = getUri(number);
+				
+		Intent localIntent2 = new Intent("android.intent.action.CALL",uri);
+		localIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(localIntent2);
+	}
+	
+	private Uri getUri(String number) {
+		this.manager = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE));
+		  phoneType = this.manager.getPhoneType();
+		  if(phoneType==TelephonyManager.PHONE_TYPE_NONE){
+		  }else if(phoneType==TelephonyManager.PHONE_TYPE_GSM){
+			  return Uri.fromParts("tel", "**67*"+number+"#", null);
+		  }else if(phoneType==TelephonyManager.PHONE_TYPE_CDMA){
+			  return Uri.fromParts("tel", "*90"+number, null);
+		  }
+		return null;
 	}
 
 	private void initView() {
@@ -65,6 +121,16 @@ public class CallForwardingActivity extends Activity {
 		btn_forwarding = (Button) findViewById(R.id.forwarding);
 		btn_close = (Button) findViewById(R.id.close);
 
+		isCallForwarding = sp.getBoolean("isCallForwarding", false);
+		if(isCallForwarding){
+			btn_forwarding.setText("关闭转移服务");
+			Tools.logSh("isCallForwarding==="+isCallForwarding);
+		}else{
+			btn_forwarding.setText("开启转移服务");
+			Tools.logSh("isCallForwarding==="+isCallForwarding);
+		}
+
+		
 		String[] arrayOfString = { "转移所有来电", "正在接听时转移", "无人接听时转移", "关机与无信号时转移" };
 
 		adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,
@@ -85,10 +151,30 @@ public class CallForwardingActivity extends Activity {
 			public void onClick(View paramAnonymousView) {
 				number = numberEditText.getText().toString().trim();
 
-				Toast.makeText(
-						CallForwardingActivity.this,
-						"number===" + number + "::FORWARDING_TYPE==="
-								+ FORWARDING_TYPE, Toast.LENGTH_SHORT).show();
+				if(isCallForwarding){
+					isCallForwarding=false;
+					 sp.edit().putBoolean("isCallForwarding", isCallForwarding).commit();  
+
+					stopCallForwarding(number);
+					btn_forwarding.setText("开启转移服务");
+					Tools.logSh("isCallForwarding==="+isCallForwarding);
+					return ;
+				}else{
+					
+					if(TextUtils.isEmpty(number)){
+						Toast.makeText(CallForwardingActivity.this, "号码不能为空", Toast.LENGTH_SHORT).show();
+						return ;
+					}
+					
+					isCallForwarding=true;
+					 sp.edit().putBoolean("isCallForwarding", isCallForwarding).commit();  
+					
+					startCallForwarding(number);
+					btn_forwarding.setText("关闭转移服务");
+					Tools.logSh("isCallForwarding==="+isCallForwarding);
+					return ;
+				}
+				
 			}
 		});
 

