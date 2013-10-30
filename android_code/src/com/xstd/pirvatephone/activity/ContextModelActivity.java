@@ -40,7 +40,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ContextModelActivity extends Activity {
+public class ContextModelActivity extends BaseActivity {
 
 	private ListView model_lv;
 	private Button add_btn;
@@ -52,7 +52,7 @@ public class ContextModelActivity extends Activity {
 	private Button btn_callforwarding;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_context_model);
 
@@ -411,7 +411,7 @@ public class ContextModelActivity extends Activity {
 	}
 
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		unregisterReceiver(recevier);
 		super.onDestroy();
 	}

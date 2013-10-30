@@ -39,7 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ModelEditActivity extends Activity {
+public class ModelEditActivity extends BaseActivity {
 
 	private TextView tv_uninterept;
 	private TextView tv_interept;
@@ -60,7 +60,7 @@ public class ModelEditActivity extends Activity {
 	private EditModelAdapter intereptAdapter;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_model_edit);
 

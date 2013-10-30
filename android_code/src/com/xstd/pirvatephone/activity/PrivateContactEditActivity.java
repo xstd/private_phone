@@ -22,7 +22,7 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.privatephone.tools.Tools;
 
-public class PrivateContactEditActivity extends Activity{
+public class PrivateContactEditActivity extends BaseActivity{
 	private Button bt_cancle;
 	private Button btn_back;
 	private EditText et_name;
@@ -40,7 +40,7 @@ public class PrivateContactEditActivity extends Activity{
 	private int type;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_private_contact_edit);
 		

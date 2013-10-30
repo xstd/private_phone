@@ -41,7 +41,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class NewContextModelActivity extends Activity {
+public class NewContextModelActivity extends BaseActivity {
 
 	private EditText model_name;
 	private Button add_notinterept;
@@ -57,7 +57,7 @@ public class NewContextModelActivity extends Activity {
 	private boolean delete = false;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_context_model);
 

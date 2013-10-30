@@ -19,8 +19,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -148,6 +150,26 @@ public class AddContactActivity extends BaseActivity {
 		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
 
 		btn_edit.setVisibility(View.GONE);
+		
+		//
+		mListView.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// TODO Auto-generated method stub
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				boolean isOpen=imm.isActive();//isOpen若返回true，则表示输入法打开
+				if(isOpen){
+					imm.hideSoftInputFromWindow(view.getWindowToken(), 1000); //强制隐藏键盘
+				}
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				
+			}
+		});
 
 		// search
 		et_search.addTextChangedListener(new TextWatcher() {

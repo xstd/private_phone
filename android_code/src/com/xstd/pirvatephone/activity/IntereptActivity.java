@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class IntereptActivity extends Activity {
+public class IntereptActivity extends BaseActivity {
 
 	private String modelName;
 	private ListView mListView;
@@ -56,7 +56,7 @@ public class IntereptActivity extends Activity {
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_interept);
 

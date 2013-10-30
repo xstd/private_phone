@@ -19,7 +19,7 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
-public class HandInputActivity extends Activity {
+public class HandInputActivity extends BaseActivity {
 
 	private Button bt_cancle;
 	private Button btn_back;
@@ -35,7 +35,7 @@ public class HandInputActivity extends Activity {
 	private RadioButton myRadioButton2;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hand_input);
 

@@ -44,7 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NotIntereptActivity extends Activity {
+public class NotIntereptActivity extends BaseActivity {
 
 	private TextView tv_title;
 	private RelativeLayout select_all;
@@ -65,7 +65,7 @@ public class NotIntereptActivity extends Activity {
 	private RelativeLayout rl_remove_record;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_not_interept);
 

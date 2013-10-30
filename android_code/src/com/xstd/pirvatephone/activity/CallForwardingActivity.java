@@ -28,7 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CallForwardingActivity extends Activity {
+public class CallForwardingActivity extends BaseActivity {
 
 	private static final int CHOOSE_CONTACT = 1;
 
@@ -55,7 +55,7 @@ public class CallForwardingActivity extends Activity {
 	private SharedPreferences sp;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_call_forwarding);
 
