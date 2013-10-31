@@ -143,6 +143,9 @@ public class PrivateCommActivity extends BaseActivity {
 			case REMOVE_FINISH:
 				showEdit = false;
 
+				textView1.setClickable(true);
+				textView2.setClickable(true);
+				textView3.setClickable(true);
 				// 跟新listview
 				Tools.logSh("currIndex=====" + currIndex);
 
@@ -158,7 +161,6 @@ public class PrivateCommActivity extends BaseActivity {
 					}
 				}
 
-
 				break;
 			}
 		};
@@ -170,9 +172,9 @@ public class PrivateCommActivity extends BaseActivity {
 		setContentView(R.layout.activity_private_comm);
 
 		initData();
+		InitImageView();
 		initView();
 
-		InitImageView();
 		InitViewPager();
 	}
 
@@ -260,6 +262,9 @@ public class PrivateCommActivity extends BaseActivity {
 
 				if (showEdit) {
 					showNormalUI();
+					textView1.setClickable(true);
+					textView2.setClickable(true);
+					textView3.setClickable(true);
 				} else {
 					showEditUI();
 				}
@@ -299,12 +304,16 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void showEditUI() {
+		textView1.setClickable(false);
+		textView2.setClickable(false);
+		textView3.setClickable(false);
 		edit_ll_body.setVisibility(View.VISIBLE);
 		Tools.logSh("进入编辑模式");
 		if (currIndex == smsPageNum) {
-			
-			editSmsAdapter = new EditSmsAdapter(PrivateCommActivity.this, smsRecordCursor);
-			
+
+			editSmsAdapter = new EditSmsAdapter(PrivateCommActivity.this,
+					smsRecordCursor);
+
 			edit_listview.setAdapter(editSmsAdapter);
 
 			edit_listview.setOnItemClickListener(new OnItemClickListener() {
@@ -336,35 +345,35 @@ public class PrivateCommActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 
-
-					if(selectContacts==null || selectContacts.size()==0){
-						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目", Toast.LENGTH_SHORT).show();
-					}else{
+					if (selectContacts == null || selectContacts.size() == 0) {
+						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+								Toast.LENGTH_SHORT).show();
+					} else {
 						showEditDeleteSmsDialog();
 					}
-			
 
 				}
 			});
 			edit_btn_recover_sms.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					if(selectContacts==null || selectContacts.size()==0){
-						Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目", Toast.LENGTH_SHORT).show();
-					}else{
+					if (selectContacts == null || selectContacts.size() == 0) {
+						Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目",
+								Toast.LENGTH_SHORT).show();
+					} else {
 						showEditRecoverSmsDialog();
 					}
-					
+
 				}
 			});
-			
-			
+
 		} else if (currIndex == dialPageNum) {
-			
-			editPhoneAdapter = new EditPhoneAdapter(PrivateCommActivity.this, phoneRecordCursor);
-			
+
+			editPhoneAdapter = new EditPhoneAdapter(PrivateCommActivity.this,
+					phoneRecordCursor);
+
 			edit_listview.setAdapter(editPhoneAdapter);
 
 			edit_listview.setOnItemClickListener(new OnItemClickListener() {
@@ -395,16 +404,17 @@ public class PrivateCommActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 
-					if(selectContacts==null || selectContacts.size()==0){
-						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目", Toast.LENGTH_SHORT).show();
-					}else{
+					if (selectContacts == null || selectContacts.size() == 0) {
+						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+								Toast.LENGTH_SHORT).show();
+					} else {
 						showEditPhoneDialog();
 					}
 				}
 			});
-			
+
 		} else if (currIndex == contactPageNum) {
-			
+
 			editContactAdapter = new EditContactAdapter(
 					PrivateCommActivity.this, contactCursor);
 			edit_listview.setAdapter(editContactAdapter);
@@ -436,9 +446,10 @@ public class PrivateCommActivity extends BaseActivity {
 
 				@Override
 				public void onClick(View v) {
-					if(selectContacts==null || selectContacts.size()==0){
-						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目", Toast.LENGTH_SHORT).show();
-					}else{
+					if (selectContacts == null || selectContacts.size() == 0) {
+						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+								Toast.LENGTH_SHORT).show();
+					} else {
 						showEditContactDialog();
 					}
 				}
@@ -561,9 +572,6 @@ public class PrivateCommActivity extends BaseActivity {
 		return selectPhones;
 	}
 
-
-	
-	
 	/**
 	 * 删除联系人同时恢复记录到系统数据库
 	 * 
@@ -632,7 +640,7 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	public void updateContact(ListView mListView, TextView tv) {
-		
+
 		switch (currIndex) {
 		case 0:
 			if (smsRecordCursor.getCount() == 0) {
@@ -652,7 +660,7 @@ public class PrivateCommActivity extends BaseActivity {
 				setPhoneRecordAdapter(mListView);
 			}
 			break;
-			
+
 		case 2:
 			if (contactCursor.getCount() == 0) {
 				mListView.setEmptyView(tv);
@@ -783,8 +791,8 @@ public class PrivateCommActivity extends BaseActivity {
 		});
 	}
 
-	public void showContactItemEditDialog(final String name, final String address,
-			final int type) {
+	public void showContactItemEditDialog(final String name,
+			final String address, final int type) {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setItems(new String[] { "打电话", "发短信", "编辑", "退出" },
 				new DialogInterface.OnClickListener() {
@@ -906,12 +914,14 @@ public class PrivateCommActivity extends BaseActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				
-				if(selectContacts==null || selectContacts.size()==0){
-					
-					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目", Toast.LENGTH_SHORT).show();
-				}else{
-					RestoreContactTast tast = new RestoreContactTast(PrivateCommActivity.this);
+
+				if (selectContacts == null || selectContacts.size() == 0) {
+
+					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					RestoreContactTast tast = new RestoreContactTast(
+							PrivateCommActivity.this);
 					tast.execute();
 
 				}
@@ -928,93 +938,99 @@ public class PrivateCommActivity extends BaseActivity {
 		builder.create().show();
 
 	}
-	
+
 	private void showEditPhoneDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("提示:确定删除此条通话记录");
 		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if(selectContacts==null || selectContacts.size()==0){
-					
-					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目", Toast.LENGTH_SHORT).show();
-				}else{
-					DeletePhoneTast task = new DeletePhoneTast(PrivateCommActivity.this);
+				if (selectContacts == null || selectContacts.size() == 0) {
+
+					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					DeletePhoneTast task = new DeletePhoneTast(
+							PrivateCommActivity.this);
 					task.execute();
 				}
 			}
 		});
 		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				
+
 			}
 		});
 		builder.create().show();
-		
+
 	}
-	
+
 	private void showEditDeleteSmsDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("提示:确定删除整个短信会话");
 		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if(selectContacts==null || selectContacts.size()==0){
-					
-					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目", Toast.LENGTH_SHORT).show();
-				}else{
-					DeleteSmsTast task = new DeleteSmsTast(PrivateCommActivity.this);
+				if (selectContacts == null || selectContacts.size() == 0) {
+
+					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					DeleteSmsTast task = new DeleteSmsTast(
+							PrivateCommActivity.this);
 					task.execute();
 				}
 				dialog.dismiss();
 			}
 		});
 		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
 		});
 		builder.create().show();
-		
+
 	}
-	
+
 	private void showEditRecoverSmsDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("提示:是否将隐私短信恢复到系统");
 		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Tools.logSh("selectContacts======="+selectContacts);
-				if(selectContacts==null || selectContacts.size()==0){
-					
-					Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目", Toast.LENGTH_SHORT).show();
-				}else{
-					RestoreSmsTast task = new RestoreSmsTast(PrivateCommActivity.this);
+				Tools.logSh("selectContacts=======" + selectContacts);
+				if (selectContacts == null || selectContacts.size() == 0) {
+
+					Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					RestoreSmsTast task = new RestoreSmsTast(
+							PrivateCommActivity.this);
 					task.execute();
 				}
 			}
 		});
 		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				
+
 			}
 		});
 		builder.create().show();
-		
+
 	}
 
 	@Override
@@ -1045,21 +1061,19 @@ public class PrivateCommActivity extends BaseActivity {
 
 		super.onResume();
 	}
-	
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(showEdit){
+		if (showEdit) {
 			showNormalUI();
-			showEdit= !showEdit;
+			showEdit = !showEdit;
 			return false;
-		}else{
+		} else {
 			return super.onKeyDown(keyCode, event);
 		}
-		
+
 	}
-	
-	
+
 	private class DeletePhoneTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
@@ -1091,15 +1105,19 @@ public class PrivateCommActivity extends BaseActivity {
 		public void onPostExecute(Integer integer) {
 			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
 			ArrayUtils arrayUtils = new ArrayUtils();
-			DelectOurPhoneDetailsUtils.deletePhoneDetails(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
-			DelectOurPhoneRecordsUtils.deletePhoneRecords(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
+			DelectOurPhoneDetailsUtils.deletePhoneDetails(
+					PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
+			DelectOurPhoneRecordsUtils.deletePhoneRecords(
+					PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
 			selectContacts.clear();
 
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
 			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
-		
+
 		}
 
 		/**
@@ -1111,8 +1129,6 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 	}
 
-	
-	
 	private class RestoreContactTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
@@ -1151,7 +1167,7 @@ public class PrivateCommActivity extends BaseActivity {
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
 			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
-		
+
 		}
 
 		/**
@@ -1163,7 +1179,6 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 	}
 
-	
 	private class RestoreSmsTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
@@ -1195,16 +1210,19 @@ public class PrivateCommActivity extends BaseActivity {
 		public void onPostExecute(Integer integer) {
 			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
 			ArrayUtils arrayUtils = new ArrayUtils();
-			RestoreSystemSmsUtils.restoreSms(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
-			DelectOurSmsDetailsUtils.deleteSmsDetails(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
-			DelectOurSmsRecordsUtils.deleteSmsRecords(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
+			RestoreSystemSmsUtils.restoreSms(PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
+			DelectOurSmsDetailsUtils.deleteSmsDetails(PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
+			DelectOurSmsRecordsUtils.deleteSmsRecords(PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
 			selectContacts.clear();
 
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
 			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
-		
+
 		}
 
 		/**
@@ -1216,7 +1234,6 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 	}
 
-	
 	private class DeleteSmsTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
@@ -1248,15 +1265,17 @@ public class PrivateCommActivity extends BaseActivity {
 		public void onPostExecute(Integer integer) {
 			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
 			ArrayUtils arrayUtils = new ArrayUtils();
-			DelectOurSmsDetailsUtils.deleteSmsDetails(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
-			DelectOurSmsRecordsUtils.deleteSmsRecords(PrivateCommActivity.this, arrayUtils.listToArray(selectContacts));
+			DelectOurSmsDetailsUtils.deleteSmsDetails(PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
+			DelectOurSmsRecordsUtils.deleteSmsRecords(PrivateCommActivity.this,
+					arrayUtils.listToArray(selectContacts));
 			selectContacts.clear();
 
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
 			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
-		
+
 		}
 
 		/**
@@ -1267,5 +1286,5 @@ public class PrivateCommActivity extends BaseActivity {
 
 		}
 	}
-	
+
 }
