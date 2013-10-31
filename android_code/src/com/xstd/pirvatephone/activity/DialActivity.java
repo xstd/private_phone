@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -117,7 +118,9 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
         if (TextUtils.isEmpty(SettingManager.getInstance().getKeyEnterPassword())) {
             View v = getLayoutInflater().inflate(R.layout.enter_password_dialog, null);
             final EditText passwd = (EditText) v.findViewById(R.id.password);
+            passwd.setInputType(InputType.TYPE_CLASS_NUMBER);
             final EditText passwdCheck = (EditText) v.findViewById(R.id.password_confirm);
+            passwdCheck.setInputType(InputType.TYPE_CLASS_NUMBER);
             AlertDialog dialog = new AlertDialog.Builder(this)
                                         .setTitle(R.string.enter_no_password_tips)
                                         .setView(v)

@@ -38,7 +38,7 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 
 	private static final String TAG = "AddSimulaPhoneActivity";
 
-	private static final int CHOOSE_CONTACT = 1;
+	public static final int CHOOSE_CONTACT = 1;
 
 	public static final int REQUES_REVEIVER_CODE = 3;
 
@@ -128,7 +128,7 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 		}
 		SimulateComm entity = new SimulateComm(null, contact == null ? null
 				: contact.getName(), phone, calendar.getTime(),
-				null, SimulaCommActivity.SIMULA_PHONE);
+				null, SimulaCommActivity.SIMULATE_PHONE);
 		SimulateDaoUtils.getSimulateDao(this).insert(entity);
 
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);

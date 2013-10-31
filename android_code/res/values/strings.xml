@@ -344,8 +344,8 @@
     <string name="s_export_progress_title">正在恢复隐私内容</string>
     <string name="s_calllog_all">公开记录</string>
     <string name="s_calllog_privacy">隐私记录</string>
-    <string name="s_calllog_header">新增通话记录</string>
-    <string name="s_sms_header">新增短信记录</string>
+    <string name="s_calllog_header">通话</string>
+    <string name="s_sms_header">短信</string>
     <string name="s_stranger">陌生人</string>
     <string name="s_sms_all">公开短信</string>
     <string name="s_sms_privacy">隐私短信</string>
@@ -881,5 +881,17 @@ QQ:903372666
     <string name="title_activity_private_contact_edit">PrivateContactEditActivity</string>
     <string name="title_activity_call_forwarding">CallForwardingActivity</string>
     <string name="rs_cancle_all">取消全选</string>
+    <string name="add_common_sms">增加短信记录</string>
+    <string name="add_common_phone">增加电话记录</string>
+    <string name="rs_input_sms_type">请选择短信类型</string>
+    <string name="rs_input_sms_date">请选择短信日期</string>
+    <string name="rs_input_sms_time">请选择短信时间</string>
+    <string name="rs_select_phone_type">请选择电话模式</string>
+    <string name="rs_input_phone_date">请选择通话日期</string>
+    <string name="rs_input_phone_time">请选择通话时间</string>
+    <string name="rs_calling_during">通话持续时长：</string>
+    <string name="rs_add_common_phone">新增通话记录</string>
+    <string name="rs_error_type">请选择一种电话模式</string>
+    <string name="rs_error_datetime">时间要小于当前时间</string>
 
 </resources>

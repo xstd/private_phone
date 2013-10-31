@@ -3,9 +3,13 @@ package com.xstd.pirvatephone.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 
+import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.module.SimpleContact;
+
+import java.util.List;
 
 public class ContactsUtils {
 
@@ -61,4 +65,13 @@ public class ContactsUtils {
 		cursor.close();
 		return name;
 	}
+
+    public static List<SimulateComm> getSmsByPeople(Context ctx) {
+        return null;
+    }
+
+    public static List<SimulateComm> getCallLogByPeople(Context ctx) {
+        Cursor cursor = ctx.getContentResolver().query(CallLog.Calls.CONTENT_URI,null,null,null,CallLog.Calls.DEFAULT_SORT_ORDER);
+        return null;
+    }
 }

@@ -28,7 +28,7 @@ public class SimulaPhone extends SimulaComm {
 						dao.getAllColumns(),
 						SimulateCommDao.Properties.Type.columnName + "=?",
 						new String[] { String
-								.valueOf(SimulaCommActivity.SIMULA_PHONE) },
+								.valueOf(SimulaCommActivity.SIMULATE_PHONE) },
 						null, null, null);
 		List<SimulateComm> results = new ArrayList<SimulateComm>();
 		if (cursor != null) {

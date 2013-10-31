@@ -133,7 +133,7 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 
 		SimulateComm entity = new SimulateComm(null, contact == null ? null
 				: contact.getName(), phone, calendar.getTime(), content,
-				SimulaCommActivity.SIMULA_SMS);
+				SimulaCommActivity.SIMULATE_SMS);
 		SimulateDaoUtils.getSimulateDao(this).insert(entity);
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 		Intent intent = new Intent(getApplicationContext(),

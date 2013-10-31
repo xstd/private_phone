@@ -424,5 +424,14 @@
         <item>无人接听是转移</item>
         <item>关机活无信号是转移</item>
     </string-array>
+    <string-array name="phone_type" >
+         <item>已拨</item>
+         <item>已接来电</item>
+         <item>未接来电</item>
+     </string-array>
+    <string-array name="sms_type" >
+         <item>接收</item>
+         <item>发送</item>
+     </string-array>
 
 </resources>
