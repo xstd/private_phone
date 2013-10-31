@@ -4,33 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/dial_rl_select"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/adblock_list_head_bg"
-        android:paddingBottom="8dip"
-        android:paddingTop="8dip" >
-
-        <Button
-            android:id="@+id/iv_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dip"
-            android:focusable="false"
-            android:background="@drawable/shield_checkbox_alert_unchecked" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="18dp"
-            android:text="@string/private_comm_select_all"
-            android:textSize="15sp" />
-    </RelativeLayout>
-    
     <LinearLayout
         android:id="@+id/dial_ll_remove"
         android:layout_width="match_parent"
@@ -53,7 +26,6 @@
         android:id="@+id/dial_ll_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/dial_rl_select"
         android:layout_marginBottom="65dip"
         android:orientation="vertical" >
 
@@ -61,6 +33,7 @@
             android:id="@+id/dial_lv_cont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
              />
 
         <TextView
