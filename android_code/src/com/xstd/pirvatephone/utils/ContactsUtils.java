@@ -66,12 +66,12 @@ public class ContactsUtils {
 		return name;
 	}
 
-    public static List<SimulateComm> getSmsByPeople(Context ctx) {
+    public static Cursor getSmsByPeople(Context ctx) {
         return null;
     }
 
-    public static List<SimulateComm> getCallLogByPeople(Context ctx) {
-        Cursor cursor = ctx.getContentResolver().query(CallLog.Calls.CONTENT_URI,null,null,null,CallLog.Calls.DEFAULT_SORT_ORDER);
-        return null;
+    public static Cursor getCallLogByPeople(Context ctx) {
+        String[] projection = new String[]{CallLog.Calls._ID,CallLog.Calls.NUMBER,CallLog.Calls.DATE,CallLog.Calls.CACHED_NAME};
+        return ctx.getContentResolver().query(CallLog.Calls.CONTENT_URI,projection,null,null,CallLog.Calls.DEFAULT_SORT_ORDER);
     }
 }
