@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xstd.pirvatephone"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
     <!-- 读取联系人权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -48,12 +48,12 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Secret">
+        android:theme="@style/Theme.Secret" >
         <activity
             android:name="com.xstd.pirvatephone.activity.DialActivity"
             android:excludeFromRecents="true"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -120,18 +120,40 @@
         <activity android:name="com.xstd.pirvatephone.activity.ProxyTicketListActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.PictureListActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.AddProxyTicketActivity" />
-        <activity android:name="com.xstd.pirvatephone.activity.CopyContactsListMultiple"></activity>
-        <activity android:name="com.xstd.pirvatephone.activity.SimulateIncallActivity"></activity>
-        <activity android:name="com.xstd.pirvatephone.activity.AddPrivacyPictureActivity"></activity>
-        <activity android:name="com.xstd.pirvatephone.activity.AddFileActivity"></activity>
+        <activity android:name="com.xstd.pirvatephone.activity.CopyContactsListMultiple" >
+        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.SimulateIncallActivity" >
+        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.AddPrivacyPictureActivity" >
+        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.AddFileActivity" >
+        </activity>
         <activity
             android:name="com.xstd.pirvatephone.activity.PrivateContactEditActivity"
-            android:label="@string/title_activity_private_contact_edit"></activity>
+            android:label="@string/title_activity_private_contact_edit" >
+        </activity>
         <activity
             android:name="com.xstd.pirvatephone.activity.CallForwardingActivity"
-            android:label="@string/title_activity_call_forwarding"></activity>
-        <activity android:name=".activity.AddCommonPhoneActivity" />
-        <activity android:name=".activity.AddCommonSmsActivity" />
+            android:label="@string/title_activity_call_forwarding" >
+        </activity>
+        <activity android:name="com.xstd.pirvatephone.activity.AddCommonPhoneActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.AddCommonSmsActivity" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.UserCenterActivity"
+            android:label="@string/title_activity_user_center" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.SettingActivity"
+            android:label="@string/title_activity_setting" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.NotificationSettingActivity"
+            android:label="@string/title_activity_notification_setting" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.NotificationModifyActivity"
+            android:label="@string/title_activity_notification_modify" >
+        </activity>
     </application>
 
 </manifest>

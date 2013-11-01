@@ -433,5 +433,11 @@
          <item>接收</item>
          <item>发送</item>
      </string-array>
+    <string-array name="user_setting_item" >
+         <item>新内容显示通知提示</item>
+         <item>新内容声音提示</item>
+         <item>新内容震动提示</item>
+         <item>状态栏通知提示图标及文字</item>
+     </string-array>
 
 </resources>

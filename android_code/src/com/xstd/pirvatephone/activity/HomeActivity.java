@@ -106,6 +106,11 @@ public class HomeActivity extends BaseActivity {
 							ServiceActivity.class);
 					startActivity(intent);
 					return;
+				case 5:
+					intent = new Intent(HomeActivity.this,
+							UserCenterActivity.class);
+					startActivity(intent);
+					return;
 				case 6:
 					intent = new Intent(HomeActivity.this,
 							ContextModelActivity.class);

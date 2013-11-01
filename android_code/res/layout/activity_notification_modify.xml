@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="@dimen/d_main_horspace"
+    android:paddingRight="@dimen/d_main_horspace" >
+
+    <LinearLayout
+        android:id="@id/titlePanel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/d_view_marginTop"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:id="@id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/s_image"
+            android:src="@drawable/back_selector" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/s_image"
+            android:src="@drawable/line1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d_main_title_marginLeft"
+            android:gravity="center_vertical"
+            android:text="@string/s_setting_statusbar"
+            android:textSize="@dimen/d_main_title_textsize" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@id/sepator"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/d_sepator_height"
+        android:layout_below="@id/titlePanel"
+        android:background="@color/c_dial_sepator"
+        android:contentDescription="@string/s_image" />
+
+    <ListView
+        android:id="@id/settingList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/sepator"
+        android:cacheColorHint="#00000000"
+        android:clickable="false"
+        android:divider="@color/c_list_sepator"
+        android:dividerHeight="1.0dip"
+        android:listSelector="@android:color/transparent" />
+
+</RelativeLayout>
