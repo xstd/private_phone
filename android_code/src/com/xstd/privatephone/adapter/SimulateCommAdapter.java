@@ -40,10 +40,6 @@ public class SimulateCommAdapter extends BaseAdapter {
             mDatas = SimulaSms.getInstance(mCtx).getSimulaCommByType();
         } else if (type == SimulaCommActivity.SIMULATE_PHONE) {
             mDatas = SimulaPhone.getInstance(mCtx).getSimulaCommByType();
-        } else if (type == SimulaCommActivity.COMMON_SMS) {
-            mDatas = ContactsUtils.getSmsByPeople(mCtx);
-        } else if (type == SimulaCommActivity.COMMON_PHONE) {
-            mDatas = ContactsUtils.getCallLogByPeople(mCtx);
         }
         notifyDataSetChanged();
     }

@@ -22,6 +22,9 @@ import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateDaoUtils;
 import com.xstd.pirvatephone.receiver.SimulateSendPhoneReceiver;
 import com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver;
+import com.xstd.pirvatephone.utils.ContactsUtils;
+import com.xstd.privatephone.adapter.AddCommonPhoneAdapter;
+import com.xstd.privatephone.adapter.AddCommonSMSAdapter;
 import com.xstd.privatephone.adapter.SimulateCommAdapter;
 
 public class SimulaCommActivity extends BaseActivity implements
@@ -77,8 +80,8 @@ public class SimulaCommActivity extends BaseActivity implements
 
     private SimulateCommAdapter adapter_phone;
     private SimulateCommAdapter adapter_sms;
-    private SimulateCommAdapter adapter_common_phone;
-    private SimulateCommAdapter adapter_common_sms;
+    private AddCommonPhoneAdapter adapter_common_phone;
+    private AddCommonSMSAdapter adapter_common_sms;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,10 +109,10 @@ public class SimulaCommActivity extends BaseActivity implements
         adapter_sms = new SimulateCommAdapter(this, SIMULATE_SMS);
         lv_sms.setAdapter(adapter_sms);
 
-        adapter_common_phone = new SimulateCommAdapter(this, COMMON_PHONE);
+        adapter_common_phone = new AddCommonPhoneAdapter(getApplicationContext(), ContactsUtils.getCallLogByPeople(getApplicationContext()),true);
         lv_common_phone.setAdapter(adapter_common_phone);
 
-        adapter_common_sms = new SimulateCommAdapter(this, COMMON_SMS);
+        adapter_common_sms = new AddCommonSMSAdapter(getApplicationContext(), ContactsUtils.getSmsByPeople(getApplicationContext()),true);
         lv_common_sms.setAdapter(adapter_common_sms);
 
         lv_phone.setOnItemLongClickListener(this);
@@ -125,10 +128,6 @@ public class SimulaCommActivity extends BaseActivity implements
             adapter_phone.changeDatas();
         else if (type == SIMULATE_SMS)
             adapter_sms.changeDatas();
-        else if (type == COMMON_PHONE)
-            adapter_common_phone.changeDatas();
-        else if (type == COMMON_SMS)
-            adapter_common_sms.changeDatas();
         displayWhich();
     }
 
@@ -232,7 +231,8 @@ public class SimulaCommActivity extends BaseActivity implements
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
                                    int position, long id) {
-        showDialog((SimulateComm) parent.getAdapter().getItem(position));
+        if (type == SIMULATE_PHONE || type == SIMULATE_SMS)
+            showDialog((SimulateComm) parent.getAdapter().getItem(position));
         return false;
     }
 
