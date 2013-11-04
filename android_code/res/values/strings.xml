@@ -891,6 +891,7 @@ QQ:903372666
     <string name="rs_calling_during">通话持续时长：</string>
     <string name="rs_add_common_phone">新增通话记录</string>
     <string name="rs_error_type">请选择一种电话模式</string>
+    <string name="rs_error_sms_type">请选择一种短信模式</string>
     <string name="rs_error_datetime">时间要小于当前时间</string>
     <string name="title_activity_user_center">UserCenterActivity</string>
     <string name="title_activity_setting">SettingActivity</string>

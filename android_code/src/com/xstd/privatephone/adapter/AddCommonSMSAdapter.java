@@ -32,7 +32,6 @@ public class AddCommonSMSAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
     }
 
     static class ViewHolder {
