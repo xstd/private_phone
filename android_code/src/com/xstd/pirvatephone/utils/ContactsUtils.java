@@ -67,7 +67,8 @@ public class ContactsUtils {
 	}
 
     public static Cursor getSmsByPeople(Context ctx) {
-        return null;
+        String[] projection = new String[]{"address","date","body"};
+        return ctx.getContentResolver().query(Uri.parse("content://sms"),projection,null,null,null);
     }
 
     public static Cursor getCallLogByPeople(Context ctx) {
