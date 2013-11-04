@@ -32,10 +32,6 @@ public class SettingActivity extends BaseActivity {
 	@ViewMapping(ID = R.id.settingList)
 	public ListView settingList;
 
-	private boolean show_Notification;
-	private boolean show_Voice;
-	private boolean show_shake;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -126,7 +126,7 @@ public class PhoneService extends Service {
 				Ringtime = 0;
 
 				if (recevierTime != 0) {
-					ShowNotificationUtils.showNotification(mContext);
+				
 					// 由于系统产生通话记录需要一会，所以有延时任务
 					TimerTask task = new TimerTask() {
 						public void run() {
@@ -156,7 +156,7 @@ public class PhoneService extends Service {
 				// 第2步:确认该号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(incomingNumber)) {
 					// 查询是立即挂断还是正常接听
-
+					ShowNotificationUtils.showNotification(mContext);
 					int type = contextModelUtils.getPhoneModelType(
 							incomingNumber, mContext);
 					if (type == 1) {// 立即挂断
