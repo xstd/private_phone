@@ -1,50 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_contact"
-    android:layout_width="match_parent"
-    android:layout_height="55dip"
-    android:background="@android:color/background_light"
-    android:gravity="center_vertical"
-    android:padding="10dip" >
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-           android:layout_marginLeft="10dip"
-        />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10.0dip"
+    android:layout_marginRight="10.0dip"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/d_padding_v2"
+    android:paddingTop="@dimen/d_padding_v2" >
 
-    <RelativeLayout 
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/iv_icon"
-        android:layout_marginLeft="10dip"
-        >
-        <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@id/icon"
+        android:layout_width="48.0dip"
+        android:layout_height="48.0dip"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="5.0dip"
+        android:contentDescription="@string/s_image"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="0.0dip"
         android:layout_height="wrap_content"
-        android:hint="110" />
-        
+        android:layout_weight="1.0"
+        android:orientation="vertical" >
+
         <TextView
-        android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_name"
-        android:hint="110" />
-        
-        
-    </RelativeLayout>
-    
+            android:id="@id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="@color/c_common_text"
+            android:textSize="@dimen/d_dlg_textsize" />
+
+        <TextView
+            android:id="@id/desc"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2.0dip"
+            android:textColor="#ff8c8c8c"
+            android:textSize="14.0sp" />
+    </LinearLayout>
 
     <CheckBox
-        android:id="@+id/btn_check"
-        style="@style/private_comm_checkbox_style"
+        android:id="@id/check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10.0dip"
         android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusable="false" />
 
-</RelativeLayout>
+</LinearLayout>

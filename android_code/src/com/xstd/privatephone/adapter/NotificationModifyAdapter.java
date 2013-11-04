@@ -1,5 +1,7 @@
 package com.xstd.privatephone.adapter;
 
+import java.util.ArrayList;
+
 import com.xstd.pirvatephone.R;
 
 import android.content.Context;
@@ -9,29 +11,38 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NotificationModifyAdapter extends BaseAdapter {
 
-	
-	
 	private Context mContext;
-	private String[] contentItems = {"",};
+	private int checkedId;
+
+	private String[] mTitleStrs;
+	private String[] mContentStrs;
+
+	private int[] iconIds = { R.drawable.ic_statusbar_0,
+			R.drawable.ic_statusbar_1, R.drawable.ic_statusbar_2,
+			R.drawable.ic_statusbar_3, R.drawable.ic_statusbar_4,
+			R.drawable.ic_statusbar_5, R.drawable.ic_statusbar_6,
+			R.drawable.ic_statusbar_7 };
+	private SharedPreferences sp;
 
 	public NotificationModifyAdapter(Context context) {
-		mContext = context;
-		contentItems = context.getResources().getStringArray(
-				R.array.user_setting_item);
+		this.mContext = context;
+		mTitleStrs = context.getResources().getStringArray(
+				R.array.s_setting_statusbar_titles);
+		mContentStrs = context.getResources().getStringArray(
+				R.array.s_setting_statusbar_contents);
 		initData();
 	}
 
 	@Override
 	public int getCount() {
-		if (contentItems != null && contentItems.length > 0) {
-			return contentItems.length;
-		} else {
-			return 0;
-		}
+		return iconIds.length;
 	}
 
 	@Override
@@ -47,21 +58,64 @@ public class NotificationModifyAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = View.inflate(mContext, R.layout.private_user_notification_item,
-				null);
-		TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
-		CheckBox btn_check = (CheckBox) view.findViewById(R.id.btn_check);
+	public View getView(final int position, View convertView, ViewGroup parent) {
 
-		tv_name.setText(contentItems[position]);
-		
+		final ViewHolder viewHolder;
+		if (convertView == null) {
+			viewHolder = new ViewHolder();
+			convertView = View.inflate(mContext,
+					R.layout.private_user_notification_item, null);
+			viewHolder.iv_icon = (ImageView) convertView
+					.findViewById(R.id.icon);
+			viewHolder.tv_name = (TextView) convertView
+					.findViewById(R.id.title);
+			viewHolder.tv_content = (TextView) convertView
+					.findViewById(R.id.desc);
+			viewHolder.btn_check = (CheckBox) convertView
+					.findViewById(R.id.check);
+			convertView.setTag(viewHolder);
 
-		return view;
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		viewHolder.iv_icon.setBackgroundResource(iconIds[position]);
+		viewHolder.tv_name.setText(mTitleStrs[position]);
+		viewHolder.tv_content.setText(mContentStrs[position]);
+		if (checkedId == position) {
+			viewHolder.btn_check.setChecked(true);
+		} else {
+			viewHolder.btn_check.setChecked(false);
+		}
+
+		viewHolder.btn_check
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (viewHolder.btn_check.isChecked()) {
+							checkedId = position;
+							sp.edit().putInt("CheckedId", checkedId).commit();
+							sp.edit().putInt("Icon", iconIds[position]).commit();
+							sp.edit().putString("Title", mTitleStrs[position]).commit();
+							sp.edit().putString("Desc", mContentStrs[position]).commit();
+							notifyDataSetChanged();
+						}
+					}
+				});
+
+		return convertView;
 	}
-	
-	private void initData(){
-		SharedPreferences sp = mContext.getSharedPreferences("Setting_Info", 0);
 
+	private void initData() {
+		sp = mContext.getSharedPreferences("Setting_Info", 0);
+		checkedId = sp.getInt("CheckedId", 0);
 	}
 
+	static class ViewHolder {
+		ImageView iv_icon;
+		TextView tv_name;
+		TextView tv_content;
+		CheckBox btn_check;
+	}
 }

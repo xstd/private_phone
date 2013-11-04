@@ -51,8 +51,8 @@ public class SettingAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = View.inflate(mContext, R.layout.private_user_setting_item,
 				null);
-		TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
-		CheckBox btn_check = (CheckBox) view.findViewById(R.id.btn_check);
+		TextView tv_name = (TextView) view.findViewById(R.id.title);
+		CheckBox btn_check = (CheckBox) view.findViewById(R.id.check);
 
 		tv_name.setText(contentItems[position]);
 		

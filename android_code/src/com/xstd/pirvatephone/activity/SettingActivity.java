@@ -22,7 +22,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends BaseActivity {
 
 	private SharedPreferences sp;
 
@@ -37,7 +37,7 @@ public class SettingActivity extends Activity {
 	private boolean show_shake;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
 
@@ -64,7 +64,7 @@ public class SettingActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				CheckBox btn_check = (CheckBox) view
-						.findViewById(R.id.btn_check);
+						.findViewById(R.id.check);
 				btn_check.setChecked(!btn_check.isChecked());
 				switch (position) {
 				case 0:

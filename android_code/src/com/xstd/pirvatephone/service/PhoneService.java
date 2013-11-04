@@ -18,6 +18,7 @@ import com.xstd.pirvatephone.globle.GlobleVaries;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.GetModelUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
+import com.xstd.pirvatephone.utils.ShowNotificationUtils;
 import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
 import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
 import com.xstd.privatephone.tools.Tools;
@@ -52,14 +53,6 @@ public class PhoneService extends Service {
 	private Mylistener listener;
 	private String outingNumber = "";
 	
-	//占线时转移
-    private final String DISABLE_SERVICE = "tel:%23%2367%23";
-	//占线时转移，这里13800000000是空号，所以会提示所拨的号码为空号
-    private final String NULL_SERVICE = "tel:**67*13800000000";//空号
-    private final String TINGJI_SERVICE = "tel:**67*13701110216";//关机
-    private final String WRONG_NUMBER_SERVICE = "tel:**67*13800516309";//关机
-    private final String ENABLE_SERVICE = "tel:**67*13810538911";//关机
-
 	private class InnerReceiver extends BroadcastReceiver {
 
 		@Override
@@ -127,12 +120,13 @@ public class PhoneService extends Service {
 					Dtime = System.currentTimeMillis() - Ringtime;// 获得通话时间
 					Tools.logSh("通话持续时间为：" + Dtime);
 					removeDail(outingNumber);
-
+					
 				}
 
 				Ringtime = 0;
 
 				if (recevierTime != 0) {
+					ShowNotificationUtils.showNotification(mContext);
 					// 由于系统产生通话记录需要一会，所以有延时任务
 					TimerTask task = new TimerTask() {
 						public void run() {

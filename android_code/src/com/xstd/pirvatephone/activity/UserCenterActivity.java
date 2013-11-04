@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class UserCenterActivity extends Activity {
+public class UserCenterActivity extends BaseActivity {
 
 	private Button btn_setting;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_center);
 		

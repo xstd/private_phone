@@ -1,11 +1,14 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.ArrayList;
+
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.R.layout;
 import com.xstd.pirvatephone.R.menu;
 import com.xstd.privatephone.adapter.NotificationModifyAdapter;
+import com.xstd.privatephone.view.StatusBarModifyDialog;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,10 +17,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class NotificationModifyActivity extends Activity {
+public class NotificationModifyActivity extends BaseActivity {
 	@ViewMapping(ID = R.id.back)
 	public ImageView back;
 
@@ -26,8 +31,9 @@ public class NotificationModifyActivity extends Activity {
 
 	private NotificationModifyAdapter notificationAdapter;
 
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification_modify);
 
@@ -52,10 +58,22 @@ public class NotificationModifyActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// view.findViewById(R.id.checkBox);
-
+				
+				CheckBox check = (CheckBox) view.findViewById(R.id.check);
+				if(check.isChecked()){
+					TextView title = (TextView) view.findViewById(R.id.title);
+					TextView desc = (TextView) view.findViewById(R.id.desc);
+				}else{
+					check.setChecked(!check.isChecked());
+				}
+				
+				//showEditDialog();
 			}
 		});
+	}
+	
+	private void showEditDialog(){
+		StatusBarModifyDialog dialog = new StatusBarModifyDialog(this);
 	}
 
 	@Override
