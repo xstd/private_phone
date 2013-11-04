@@ -45,9 +45,9 @@ public class AddCommonSMSAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.address.setText(cursor.getString(0));
-        holder.date.setText(df.format(new Date(cursor.getLong(1))));
-        holder.content.setText(cursor.getString(2));
+        holder.address.setText(cursor.getString(1));
+        holder.date.setText(df.format(new Date(cursor.getLong(2))));
+        holder.content.setText(cursor.getString(3));
     }
 
     static class ViewHolder {

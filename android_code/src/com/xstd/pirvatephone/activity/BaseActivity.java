@@ -1,7 +1,11 @@
 package com.xstd.pirvatephone.activity;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.xstd.pirvatephone.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,15 +16,41 @@ import android.os.Bundle;
  */
 public class BaseActivity extends Activity {
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-    
-    
+    protected static int count = -1;
+    private MediaPlayer mediaPlayer;
 
-    public void onDestroy() {
-        super.onDestroy();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ddz);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mediaPlayer.start();
+            }
+        });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (count == -1) {
+            mediaPlayer.start();
+        }
+        count++;
+        Log.w("TAG", "多少个Activity" + count);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        count--;
+        if (count == -1) {
+            mediaPlayer.pause();
+        }
+        Log.w("TAG", "多少个Activity" + count);
+    }
+
 }
 
 

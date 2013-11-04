@@ -7,7 +7,7 @@
     <include layout="@layout/ll_title_bar" />
 
     <ListView
-        android:id="@+id/android:list"
+        android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="10dip"

@@ -2,6 +2,7 @@ package com.xstd.pirvatephone.activity;
 
 import java.util.regex.Pattern;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +29,7 @@ import com.xstd.privatephone.tools.Toasts;
  * Created with IntelliJ IDEA. User: michael Date: 13-9-9 Time: PM3:11 To change
  * this template use File | Settings | File Templates.
  */
-public class DialActivity extends BaseActivity implements View.OnClickListener {
+public class DialActivity extends Activity implements View.OnClickListener {
 
     @ViewMapping(ID = R.id.number)
     public TextView mNumber;
@@ -83,7 +84,7 @@ public class DialActivity extends BaseActivity implements View.OnClickListener {
 
     private String mNumberStr = "";
 
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.emergency_dialer);

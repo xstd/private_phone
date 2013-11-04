@@ -35,7 +35,7 @@ import com.xstd.privatephone.view.MyTimePickerDialog;
  * Created with IntelliJ IDEA. User: michael Date: 13-9-26 Time: PM2:29 To
  * change this template use File | Settings | File Templates.
  */
-public class ProxyTalkActivity extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class ProxyTalkActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
 	private static final int REQUEST_CONTACTS_CODE = 0;
 
