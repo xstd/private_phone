@@ -816,9 +816,6 @@ QQ:903372666
     <string name="strongbox_list_empty_tips">该文件夹下没有任何文件哦~</string>
     <string name="emptyview_image_text1">360隐私保险箱，保护您的隐私图片</string>
     <string name="emptyview_image_text2">"请勿卸载360隐私保险箱或清除数据，否则隐私图片将会丢失，无法恢复！"</string>
-    <string name="rs_my_img">我的相册</string>
-    <string name="rs_create_album">创建相册</string>
-    <string name="rs_create">创建</string>
     <string name="rs_error_empty_thumb">相册名不能为空</string>
     <string name="rs_delete_thumb">删除相册</string>
     <string name="title_select_add_image">选择要加密的图片</string>

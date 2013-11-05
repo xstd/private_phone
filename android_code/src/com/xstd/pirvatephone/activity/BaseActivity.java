@@ -1,11 +1,10 @@
 package com.xstd.pirvatephone.activity;
 
 import android.app.Activity;
-import android.media.MediaPlayer;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.BackgroundSoundManager;
 
 /**
@@ -18,11 +17,19 @@ import com.xstd.pirvatephone.utils.BackgroundSoundManager;
 public class BaseActivity extends Activity {
 
     protected static int count = -1;
-
+    
+    private SharedPreferences sp;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
+    	sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
+    }
+    
     @Override
     protected void onStart() {
         super.onStart();
-        if (count == -1) {
+        if (sp.getBoolean("play_background_sound", false)&&count == -1) {
             BackgroundSoundManager.getInstance(getApplicationContext()).playBackgroundSound();
         }
         count++;

@@ -96,7 +96,7 @@ public class UserCenterActivity extends BaseActivity implements OnClickListener 
             }
         });
         select_bg_media.setOnClickListener(this);
-        int resID = sp.getInt("BACKGROUND_SOUND_RESID", R.raw.ddz);
+        int resID = sp.getInt("background_sound_resid", R.raw.ddz);
         if (resID == R.raw.ddz)
             select_bg_media.setText(getResources().getStringArray(R.array.background_sound_list)[0]);
         else if (resID == R.raw.ttkp)
@@ -125,9 +125,9 @@ public class UserCenterActivity extends BaseActivity implements OnClickListener 
             public void onClick(DialogInterface dialogInterface, int i) {
                 BackgroundSoundManager.getInstance(getApplicationContext()).stopBackGroundSound();
                 if (i == 0) {
-                    sp.edit().putInt("BACKGROUND_SOUND_RESID", R.raw.ddz).commit();
+                    sp.edit().putInt("background_sound_resid", R.raw.ddz).commit();
                 } else if (i == 1) {
-                    sp.edit().putInt("BACKGROUND_SOUND_RESID", R.raw.ttkp).commit();
+                    sp.edit().putInt("background_sound_resid", R.raw.ttkp).commit();
                 }
                 BackgroundSoundManager.getInstance(getApplicationContext()).playBackgroundSound();
             }

@@ -35,7 +35,7 @@ public class BackgroundSoundManager {
     }
 
     public void playBackgroundSound() {
-        int resID = sp.getInt("BACKGROUND_SOUND_RESID", R.raw.ddz);
+        int resID = sp.getInt("background_sound_resid", R.raw.ddz);
         if (mMediaPlayer == null) {
             mMediaPlayer = MediaPlayer.create(mContext,resID);
             mMediaPlayer.setLooping(true);
