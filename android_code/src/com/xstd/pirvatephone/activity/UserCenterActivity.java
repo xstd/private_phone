@@ -1,137 +1,188 @@
 package com.xstd.pirvatephone.activity;
 
-import com.plugin.common.utils.view.ViewMapUtil;
-import com.plugin.common.utils.view.ViewMapping;
-import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.id;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
-import com.xstd.pirvatephone.utils.BackgroundSoundManager;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.media.MediaPlayer;
-import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.plugin.common.utils.view.ViewMapUtil;
+import com.plugin.common.utils.view.ViewMapping;
+import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.utils.BackgroundSoundManager;
+
 public class UserCenterActivity extends BaseActivity implements OnClickListener {
 
-    private Button btn_setting;
+	private Button btn_setting;
 
-    @ViewMapping(ID = id.switch_status)
-    public TextView switch_status;
+	@ViewMapping(ID = R.id.bgs_switch_status)
+	public TextView bgs_switch_status;
 
-    @ViewMapping(ID = id.kg)
-    public Switch kg;
+	@ViewMapping(ID = R.id.bgs_kg)
+	public Switch bgs_kg;
 
-    @ViewMapping(ID = id.select_bg_media)
-    public Button select_bg_media;
+	@ViewMapping(ID = R.id.bgs_select_bg_media)
+	public Button bgs_select_bg_media;
+	
+	@ViewMapping(ID = R.id.exit_switch_status)
+	public TextView exit_switch_status;
 
-    private static final String SETTING_SP = "setting";
+	@ViewMapping(ID = R.id.exit_kg)
+	public Switch exit_kg;
 
-    private SharedPreferences sp;
+	@ViewMapping(ID = R.id.exit_select_bg_media)
+	public Button exit_select_bg_media;
+	
+	private static final String SETTING_SP = "setting";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_center);
+	private SharedPreferences sp;
 
-        sp = getSharedPreferences(SETTING_SP, MODE_PRIVATE);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_user_center);
 
-        initView();
-    }
+		sp = getSharedPreferences(SETTING_SP, MODE_PRIVATE);
 
-    private void initView() {
-        ViewMapUtil.viewMapping(this, getWindow());
+		initView();
+	}
 
-        btn_setting = (Button) findViewById(R.id.btn_setting);
-        btn_setting.setOnClickListener(new OnClickListener() {
+	private void initView() {
+		ViewMapUtil.viewMapping(this, getWindow());
 
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UserCenterActivity.this,
-                        SettingActivity.class);
-                startActivity(intent);
-            }
-        });
-        boolean play_background_sound = sp.getBoolean("play_background_sound", false);
-        if (play_background_sound) {
-            switch_status.setText(R.string.rs_on_background_sound);
-            select_bg_media.setVisibility(View.VISIBLE);
-        } else {
-            switch_status.setText(R.string.rs_off_background_sound);
-            select_bg_media.setVisibility(View.GONE);
-        }
-        kg.setChecked(play_background_sound);
-        kg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                sp.edit().putBoolean("play_background_sound", b).commit();
-                if (b) {
-                    Log.w("TAG", "开关开启了，音乐要start");
-                    switch_status.setText(R.string.rs_on_background_sound);
-                    select_bg_media.setVisibility(View.VISIBLE);
-                    BackgroundSoundManager.getInstance(getApplicationContext()).playBackgroundSound();
-                } else {
-                    Log.w("TAG", "开关关闭了，音乐也要stop");
-                    switch_status.setText(R.string.rs_off_background_sound);
-                    select_bg_media.setVisibility(View.GONE);
-                    BackgroundSoundManager.getInstance(getApplicationContext()).stopBackGroundSound();
-                }
-            }
-        });
-        select_bg_media.setOnClickListener(this);
-        int resID = sp.getInt("background_sound_resid", R.raw.ddz);
-        if (resID == R.raw.ddz)
-            select_bg_media.setText(getResources().getStringArray(R.array.background_sound_list)[0]);
-        else if (resID == R.raw.ttkp)
-            select_bg_media.setText(getResources().getStringArray(R.array.background_sound_list)[1]);
-    }
+		btn_setting = (Button) findViewById(R.id.btn_setting);
+		btn_setting.setOnClickListener(new OnClickListener() {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.user_center, menu);
-        return true;
-    }
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(UserCenterActivity.this,
+						SettingActivity.class);
+				startActivity(intent);
+			}
+		});
+		boolean play_background_sound = sp.getBoolean("play_background_sound",
+				false);
+		if (play_background_sound) {
+			bgs_switch_status.setText(R.string.rs_on_background_sound);
+			bgs_select_bg_media.setVisibility(View.VISIBLE);
+		} else {
+			bgs_switch_status.setText(R.string.rs_off_background_sound);
+			bgs_select_bg_media.setVisibility(View.GONE);
+		}
+		boolean jump_other = sp.getBoolean("jump_other_software", false);
+		if (jump_other) {
+			exit_switch_status.setText(R.string.rs_on_jump_software);
+			exit_select_bg_media.setVisibility(View.VISIBLE);
+		} else {
+			exit_switch_status.setText(R.string.rs_off_jump_software);
+			exit_select_bg_media.setVisibility(View.GONE);
+		}
+		bgs_kg.setChecked(play_background_sound);
+		bgs_kg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton,
+					boolean b) {
+				sp.edit().putBoolean("play_background_sound", b).commit();
+				if (b) {
+					bgs_switch_status.setText(R.string.rs_on_background_sound);
+					bgs_select_bg_media.setVisibility(View.VISIBLE);
+					BackgroundSoundManager.getInstance(getApplicationContext())
+							.playBackgroundSound();
+				} else {
+					bgs_switch_status.setText(R.string.rs_off_background_sound);
+					bgs_select_bg_media.setVisibility(View.GONE);
+					BackgroundSoundManager.getInstance(getApplicationContext())
+							.stopBackGroundSound();
+				}
+			}
+		});
+		exit_kg.setChecked(play_background_sound);
+		exit_kg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton,
+					boolean b) {
+				sp.edit().putBoolean("jump_other_software", b).commit();
+				if (b) {
+					exit_switch_status.setText(R.string.rs_on_jump_software);
+					exit_select_bg_media.setVisibility(View.VISIBLE);
+					//TODO 界面显示一键切出图标
+				} else {
+					exit_switch_status.setText(R.string.rs_off_jump_software);
+					exit_select_bg_media.setVisibility(View.GONE);
+					//TODO 界面隐藏一键切出图标
+				}
+			}
+		});
+		bgs_select_bg_media.setOnClickListener(this);
+		exit_select_bg_media.setOnClickListener(this);
+		displayBtn();
+	}
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case id.select_bg_media:
-                showSelectBackGroundSoundDialog();
-                break;
-        }
-    }
+	private void displayBtn() {
+		int resID = sp.getInt("background_sound_resid", R.raw.ddz);
+		if (resID == R.raw.ddz)
+			bgs_select_bg_media.setText(getResources().getStringArray(
+					R.array.background_sound_list)[0]);
+		else if (resID == R.raw.ttkp)
+			bgs_select_bg_media.setText(getResources().getStringArray(
+					R.array.background_sound_list)[1]);
+		String jump_software_name = sp.getString("jump_software_name", "日历");
+		exit_select_bg_media.setText(jump_software_name);		
+	}
 
-    private void showSelectBackGroundSoundDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.rs_background_sound_title).setItems(R.array.background_sound_list, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                BackgroundSoundManager.getInstance(getApplicationContext()).stopBackGroundSound();
-                if (i == 0) {
-                    sp.edit().putInt("background_sound_resid", R.raw.ddz).commit();
-                } else if (i == 1) {
-                    sp.edit().putInt("background_sound_resid", R.raw.ttkp).commit();
-                }
-                BackgroundSoundManager.getInstance(getApplicationContext()).playBackgroundSound();
-            }
-        }).create();
-        dialog.show();
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.user_center, menu);
+		return true;
+	}
+
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+		case R.id.bgs_select_bg_media:
+			showSelectBackGroundSoundDialog();
+			break;
+		case R.id.exit_select_bg_media:
+			Intent intent = new Intent(getApplicationContext(), ShowAllInstallAppActivity.class);
+			startActivity(intent);
+			break;
+		}
+	}
+
+	private void showSelectBackGroundSoundDialog() {
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.rs_background_sound_title)
+				.setItems(R.array.background_sound_list,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(
+									DialogInterface dialogInterface, int i) {
+								BackgroundSoundManager.getInstance(
+										getApplicationContext())
+										.stopBackGroundSound();
+								if (i == 0) {
+									sp.edit()
+											.putInt("background_sound_resid",
+													R.raw.ddz).commit();
+								} else if (i == 1) {
+									sp.edit()
+											.putInt("background_sound_resid",
+													R.raw.ttkp).commit();
+								}
+								displayBtn();
+								BackgroundSoundManager.getInstance(
+										getApplicationContext())
+										.playBackgroundSound();
+							}
+						}).create();
+		dialog.show();
+	}
 }

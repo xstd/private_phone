@@ -33,8 +33,7 @@
 
     <!-- 亮屏的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"  />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -86,9 +85,12 @@
             android:label="@string/title_activity_phone_detail" />
         <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" />
-        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity" />
-        <!-- android:theme="@android:style/Theme.DeviceDefault" /> -->
-        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity"
+            android:theme="@android:style/Theme.DeviceDefault" />
         <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkActivity" />
 
         <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver" />
@@ -138,11 +140,16 @@
             android:name="com.xstd.pirvatephone.activity.CallForwardingActivity"
             android:label="@string/title_activity_call_forwarding" >
         </activity>
-        <activity android:name="com.xstd.pirvatephone.activity.AddCommonPhoneActivity" />
-        <activity android:name="com.xstd.pirvatephone.activity.AddCommonSmsActivity" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.AddCommonPhoneActivity"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.xstd.pirvatephone.activity.AddCommonSmsActivity"
+            android:theme="@android:style/Theme.DeviceDefault" />
         <activity
             android:name="com.xstd.pirvatephone.activity.UserCenterActivity"
-            android:label="@string/title_activity_user_center" >
+            android:label="@string/title_activity_user_center"
+            android:theme="@android:style/Theme.DeviceDefault" >
         </activity>
         <activity
             android:name="com.xstd.pirvatephone.activity.SettingActivity"
@@ -155,6 +162,10 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.NotificationModifyActivity"
             android:label="@string/title_activity_notification_modify" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.ShowAllInstallAppActivity"
+            android:label="@string/title_activity_show_all_install_app" >
         </activity>
     </application>
 

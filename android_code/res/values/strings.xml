@@ -897,5 +897,11 @@ QQ:903372666
     <string name="rs_on_background_sound">背景音乐已开启</string>
     <string name="rs_off_background_sound">背景音乐已关闭</string>
     <string name="rs_background_sound_title">请选择背景音乐</string>
+    <string name="rs_on_jump_software">一键切出功能已开启</string>
+    <string name="rs_off_jump_software">一键切出功能已关闭</string>
+    <string name="title_activity_show_all_install_app">ShowAllInstallAppActivity</string>
+    <string name="rs_choose_jump_app">选择一键切出程序</string>
+    <string name="rs_set_jump_app">设置一键切出程序</string>
+    <string name="rs_set_sure">你确定要设置&lt;font color=\"#ff0000\">%1$s&lt;/font>为一键切出程序吗？</string>
 
 </resources>

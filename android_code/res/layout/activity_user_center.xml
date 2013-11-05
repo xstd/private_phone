@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@android:color/background_light"
-    tools:context=".UserCenterActivity">
+    tools:context=".UserCenterActivity" >
 
     <Button
         android:id="@+id/btn_setting"
@@ -17,42 +17,75 @@
         android:text="点击进入设置界面" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:orientation="vertical" >
 
         <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/switch_status"
+                android:id="@+id/bgs_switch_status"
                 style="?android:textAppearanceMediumInverse"
-                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
+                android:layout_centerVertical="true" />
 
             <Switch
-                android:id="@+id/kg"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
+                android:id="@+id/bgs_kg"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
-
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
         </RelativeLayout>
 
         <Button
-            android:textColor="@color/c_common_text"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/choose_selector"
-            android:paddingLeft="@dimen/d_btn_paddingLeft"
+            android:id="@+id/bgs_select_bg_media"
             android:layout_width="@dimen/d_view_width"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/d_view_marginTop"
-            android:id="@+id/select_bg_media" />
+            android:background="@drawable/choose_selector"
+            android:gravity="center"
+            android:paddingLeft="@dimen/d_btn_paddingLeft"
+            android:textColor="@color/c_common_text" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/exit_switch_status"
+                style="?android:textAppearanceMediumInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true" />
+
+            <Switch
+                android:id="@+id/exit_kg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/exit_select_bg_media"
+            android:layout_width="@dimen/d_view_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/d_view_marginTop"
+            android:background="@drawable/choose_selector"
+            android:gravity="center"
+            android:paddingLeft="@dimen/d_btn_paddingLeft"
+            android:textColor="@color/c_common_text" />
     </LinearLayout>
 
 </LinearLayout>
