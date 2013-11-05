@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 
-import com.xstd.pirvatephone.globle.GlobleVaries;
 import com.xstd.pirvatephone.receiver.CommSmsSendRecevier;
 import com.xstd.pirvatephone.receiver.ObserveSMSSend;
 import com.xstd.pirvatephone.receiver.PrivateCommSmsRecevier;
@@ -30,6 +29,8 @@ public class SmsService extends Service {
 	private IntentFilter smsRecevierFilter;
 
 	private IntentFilter controlRecevierFilter;
+	
+	private Context mContext;
 
 
 	@Override
@@ -55,7 +56,7 @@ public class SmsService extends Service {
 
 	@Override
 	public void onCreate() {
-
+		mContext = getApplicationContext();
 		Tools.logSh("SmsService被创建了");
 
 		smsGetRecevier = new PrivateCommSmsRecevier();
@@ -76,7 +77,7 @@ public class SmsService extends Service {
 		
 		// ”表“内容观察者 ，通过测试我发现只能监听此Uri -----> content://sms
 		// 监听不到其他的Uri 比如说 content://sms/outbox
-		observeSMSsend = new ObserveSMSSend(new Handler(), GlobleVaries.CONTEXT);
+		observeSMSsend = new ObserveSMSSend(new Handler(), mContext);
 		resolver = getContentResolver();
 		resolver.registerContentObserver(Uri.parse("content://sms"), true,
 				observeSMSsend);

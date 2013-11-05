@@ -1,6 +1,7 @@
 package com.xstd.privatephone.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.xstd.pirvatephone.R;
 
@@ -38,6 +39,7 @@ public class NotificationModifyAdapter extends BaseAdapter {
 		mContentStrs = context.getResources().getStringArray(
 				R.array.s_setting_statusbar_contents);
 		initData();
+
 	}
 
 	@Override
@@ -59,52 +61,40 @@ public class NotificationModifyAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
+		View view = View.inflate(mContext,
+				R.layout.private_user_notification_item, null);
+		ImageView iv_icon = (ImageView) view.findViewById(R.id.icon);
+		TextView tv_name = (TextView) view.findViewById(R.id.title);
+		TextView tv_content = (TextView) view.findViewById(R.id.desc);
+		CheckBox btn_check = (CheckBox) view.findViewById(R.id.check);
+		iv_icon.setBackgroundResource(iconIds[position]);
+		tv_name.setText(mTitleStrs[position]);
+		tv_content.setText(mContentStrs[position]);
 
-		final ViewHolder viewHolder;
-		if (convertView == null) {
-			viewHolder = new ViewHolder();
-			convertView = View.inflate(mContext,
-					R.layout.private_user_notification_item, null);
-			viewHolder.iv_icon = (ImageView) convertView
-					.findViewById(R.id.icon);
-			viewHolder.tv_name = (TextView) convertView
-					.findViewById(R.id.title);
-			viewHolder.tv_content = (TextView) convertView
-					.findViewById(R.id.desc);
-			viewHolder.btn_check = (CheckBox) convertView
-					.findViewById(R.id.check);
-			convertView.setTag(viewHolder);
-
+		if (position == checkedId) {
+			btn_check.setChecked(true);
 		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-		}
-		viewHolder.iv_icon.setBackgroundResource(iconIds[position]);
-		viewHolder.tv_name.setText(mTitleStrs[position]);
-		viewHolder.tv_content.setText(mContentStrs[position]);
-		if (checkedId == position) {
-			viewHolder.btn_check.setChecked(true);
-		} else {
-			viewHolder.btn_check.setChecked(false);
+			btn_check.setChecked(false);
 		}
 
-		viewHolder.btn_check
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		btn_check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						if (viewHolder.btn_check.isChecked()) {
-							checkedId = position;
-							sp.edit().putInt("CheckedId", checkedId).commit();
-							sp.edit().putInt("Icon", iconIds[position]).commit();
-							sp.edit().putString("Title", mTitleStrs[position]).commit();
-							sp.edit().putString("Desc", mContentStrs[position]).commit();
-							notifyDataSetChanged();
-						}
-					}
-				});
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				if (buttonView.isChecked()) {
+					checkedId = position;
+					sp.edit().putInt("CheckedId", checkedId).commit();
+					sp.edit().putInt("Icon", iconIds[position]).commit();
+					sp.edit().putString("Title", mTitleStrs[position]).commit();
+					sp.edit().putString("Desc", mContentStrs[position])
+							.commit();
+					notifyDataSetChanged();
+				}
+			}
+		});
 
-		return convertView;
+		return view;
 	}
 
 	private void initData() {
@@ -112,10 +102,4 @@ public class NotificationModifyAdapter extends BaseAdapter {
 		checkedId = sp.getInt("CheckedId", 0);
 	}
 
-	static class ViewHolder {
-		ImageView iv_icon;
-		TextView tv_name;
-		TextView tv_content;
-		CheckBox btn_check;
-	}
 }

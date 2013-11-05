@@ -67,7 +67,7 @@ public class NotificationModifyActivity extends BaseActivity {
 					check.setChecked(!check.isChecked());
 				}
 				
-				//showEditDialog();
+				showEditDialog();
 			}
 		});
 	}

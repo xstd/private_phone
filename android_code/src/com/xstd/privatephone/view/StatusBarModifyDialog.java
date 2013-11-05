@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +23,19 @@ public class StatusBarModifyDialog extends Dialog implements View.OnClickListene
 
 	public StatusBarModifyDialog(Context context) {
 		super(context);
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-		final View entryView = LayoutInflater.from(context).inflate(
-				R.layout.dialog_modify_statusbar, null);
-
-		builder.setIcon(R.drawable.ic_statusbar_0);
-
-		builder.setTitle("修改提示信息");
-
+		
+		AlertDialog.Builder builder = new Builder(context);
+		View entryView = LayoutInflater.from(context).inflate(R.layout.dialog_modify_statusbar, null, true);
 		builder.setView(entryView);
 
 		builder.create().show();
 
+		SharedPreferences sp = context.getSharedPreferences("Setting_Info", 0);
+		
 		titleEdit = (TextView) entryView.findViewById(R.id.titleEdit);
 		contentEdit = (TextView) entryView.findViewById(R.id.contentEdit);
+		titleEdit.setText(sp.getString("Title", ""));
+		contentEdit.setText(sp.getString("Desc", ""));
 		
 		btn_sure = ((Button) entryView.findViewById(R.id.dialog_ok_btn));
 		btn_sure.setOnClickListener(this);

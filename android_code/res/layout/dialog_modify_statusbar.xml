@@ -6,6 +6,14 @@
     android:layout_gravity="center"
     android:layout_marginTop="20.0dip"
     android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:background="@drawable/tag_bg_focus"
+        android:text="修改提示信息" />
     
     <EditText
         android:id="@id/titleEdit"

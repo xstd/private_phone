@@ -14,16 +14,10 @@ import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecord;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
-import com.xstd.pirvatephone.globle.GlobleVaries;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
-import com.xstd.pirvatephone.utils.GetModelUtils;
-import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.ShowNotificationUtils;
-import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
-import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
 import com.xstd.privatephone.tools.Tools;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -48,10 +42,10 @@ public class PhoneService extends Service {
 	private long recevierTime;// 接到电话
 	private long durationTime;// 接到电话通话时间
 	private InnerReceiver receiver;// 监听外拨电话的广播接收者
-	private Context mContext = GlobleVaries.CONTEXT;
 	private TelephonyManager tm;
 	private Mylistener listener;
 	private String outingNumber = "";
+	private Context mContext;
 	
 	private class InnerReceiver extends BroadcastReceiver {
 
@@ -87,7 +81,7 @@ public class PhoneService extends Service {
 	public void onCreate() {
 		
 		Tools.logSh("PhoneService被创建了");
-
+		mContext = getApplicationContext();
 		//监听来电
 		tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		listener = new Mylistener();
@@ -145,7 +139,7 @@ public class PhoneService extends Service {
 				break;
 
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
-				
+				Tools.logSh("来电了");
 				recevierTime = System.currentTimeMillis();
 				// 判断该号码的拦截状态
 				// 1、获取当前的情景模式-拦截号码
@@ -157,8 +151,12 @@ public class PhoneService extends Service {
 				if (numbers != null && numbers.contains(incomingNumber)) {
 					// 查询是立即挂断还是正常接听
 					ShowNotificationUtils.showNotification(mContext);
+					ShowNotificationUtils.startShake(mContext);
+					//ShowNotificationUtils.startVoice(mContext, 1, 1);
 					int type = contextModelUtils.getPhoneModelType(
 							incomingNumber, mContext);
+					
+					Tools.logSh("来电了==="+incomingNumber+"===type==="+type);
 					if (type == 1) {// 立即挂断
 						try {
 							// 反射获取ITelephony对象
@@ -187,11 +185,7 @@ public class PhoneService extends Service {
 							
 						} catch (Exception e) {
 						}
-
-					} else {
-					
-					}
-
+					} 
 				}
 				break;
 			}

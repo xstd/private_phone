@@ -9,6 +9,7 @@ import com.xstd.pirvatephone.dao.sms.SmsRecord;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
+import com.xstd.pirvatephone.utils.ShowNotificationUtils;
 import com.xstd.privatephone.tools.Tools;
 
 import android.content.BroadcastReceiver;
@@ -60,7 +61,9 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 
 				// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(smsNumber)) {
-
+					ShowNotificationUtils.showNotification(mContext);
+					ShowNotificationUtils.startShake(mContext);
+				//	ShowNotificationUtils.startVoice(mContext, 1, 1);
 					Tools.logSh("发现需要拦截的号码：：" + smsNumber);
 
 					//2. 若是拦截联系人，将此短信插入到我们的数据库中
