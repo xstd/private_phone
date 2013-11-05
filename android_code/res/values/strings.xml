@@ -897,5 +897,8 @@ QQ:903372666
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_notification_setting">NotificationSettingActivity</string>
     <string name="title_activity_notification_modify">NotificationModifyActivity</string>
+    <string name="rs_on_background_sound">背景音乐已开启</string>
+    <string name="rs_off_background_sound">背景音乐已关闭</string>
+    <string name="rs_background_sound_title">请选择背景音乐</string>
 
 </resources>

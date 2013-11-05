@@ -440,4 +440,9 @@
          <item>状态栏通知提示图标及文字</item>
      </string-array>
 
+    <string-array name="background_sound_list" >
+        <item>斗地主</item>
+        <item>天天酷跑</item>
+    </string-array>
+
 </resources>

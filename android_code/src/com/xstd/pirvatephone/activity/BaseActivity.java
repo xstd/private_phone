@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.utils.BackgroundSoundManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,28 +18,14 @@ import com.xstd.pirvatephone.R;
 public class BaseActivity extends Activity {
 
     protected static int count = -1;
-    private MediaPlayer mediaPlayer;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ddz);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mediaPlayer.start();
-            }
-        });
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (count == -1) {
-            mediaPlayer.start();
+            BackgroundSoundManager.getInstance(getApplicationContext()).playBackgroundSound();
         }
         count++;
-        Log.w("TAG", "多少个Activity" + count);
     }
 
     @Override
@@ -46,9 +33,8 @@ public class BaseActivity extends Activity {
         super.onStop();
         count--;
         if (count == -1) {
-            mediaPlayer.pause();
+            BackgroundSoundManager.getInstance(getApplicationContext()).pauseBackgroundSound();
         }
-        Log.w("TAG", "多少个Activity" + count);
     }
 
 }
