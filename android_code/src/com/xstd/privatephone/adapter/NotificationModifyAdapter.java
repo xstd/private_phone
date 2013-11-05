@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.privatephone.tools.Tools;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -67,9 +68,19 @@ public class NotificationModifyAdapter extends BaseAdapter {
 		TextView tv_name = (TextView) view.findViewById(R.id.title);
 		TextView tv_content = (TextView) view.findViewById(R.id.desc);
 		CheckBox btn_check = (CheckBox) view.findViewById(R.id.check);
+		
+		String cont = sp.getString(""+position, "");
+		if(cont!=""){
+			String[] strs = cont.split(":");
+			Tools.logSh("strs="+strs[0]+":"+strs[1]);
+			tv_name.setText(strs[0]);
+			tv_content.setText(strs[1]);
+		}else{
+			tv_name.setText(mTitleStrs[position]);
+			tv_content.setText(mContentStrs[position]);
+		}
 		iv_icon.setBackgroundResource(iconIds[position]);
-		tv_name.setText(mTitleStrs[position]);
-		tv_content.setText(mContentStrs[position]);
+
 
 		if (position == checkedId) {
 			btn_check.setChecked(true);
