@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".ContextModelActivity" >
+
+    <RelativeLayout
+        android:id="@+id/model_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dip" >
+
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="还没有情景模式，添加一种情景模式" />
+
+        <ListView
+            android:id="@+id/model_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/add_model"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/private_comm_spacbtn_selector"
+        android:orientation="horizontal"
+        android:padding="5dip" >
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:text="新建情景模式"
+            
+            android:textColor="@color/sms_text_content_unseleted" />
+        
+        <Button
+            android:id="@+id/btn_callforwarding"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+             android:layout_width="0dip"
+            android:text="呼叫转移设置"
+            android:textColor="@color/sms_text_content_unseleted" />
+    </LinearLayout>
+
+</RelativeLayout>

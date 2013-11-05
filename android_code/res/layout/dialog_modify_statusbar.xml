@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/RelativeLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:layout_marginTop="20.0dip"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:background="@drawable/tag_bg_focus"
+        android:text="修改提示信息" />
+    
+    <EditText
+        android:id="@id/titleEdit"
+        style="@style/text_input"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5.0dip"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:layout_marginTop="5.0dip"
+        android:hint="@string/s_hint_statusbar_title"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@id/contentEdit"
+        style="@style/text_input"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5.0dip"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
+        android:hint="@string/s_hint_statusbar_content"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:id="@id/btn_pane"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@id/dialog_ok_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_selector"
+            android:text="@string/s_ok"
+            android:textColor="@color/c_common_text" />
+
+        <Button
+            android:id="@id/dialog_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20.0dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_selector"
+            android:text="@string/s_cancel"
+            android:textColor="@color/c_common_text" />
+    </LinearLayout>
+
+</LinearLayout>
