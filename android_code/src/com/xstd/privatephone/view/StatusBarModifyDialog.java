@@ -20,15 +20,18 @@ public class StatusBarModifyDialog extends Dialog implements View.OnClickListene
 	private Button btn_cancel;
 	private TextView titleEdit;
 	private TextView contentEdit;
+	private AlertDialog.Builder builder;
+	private AlertDialog dialog;
 
 	public StatusBarModifyDialog(Context context) {
 		super(context);
 		
-		AlertDialog.Builder builder = new Builder(context);
+		builder = new Builder(context);
 		View entryView = LayoutInflater.from(context).inflate(R.layout.dialog_modify_statusbar, null, true);
 		builder.setView(entryView);
 
-		builder.create().show();
+		dialog = builder.create();
+		dialog.show();
 
 		SharedPreferences sp = context.getSharedPreferences("Setting_Info", 0);
 		
@@ -52,9 +55,10 @@ public class StatusBarModifyDialog extends Dialog implements View.OnClickListene
 		      return ;
 		}
 		if(paramView==btn_cancel){
-			 dismiss();
+			if(dialog!=null){
+				dialog.dismiss();
+			}
 		}
-
 	}
 
 }
