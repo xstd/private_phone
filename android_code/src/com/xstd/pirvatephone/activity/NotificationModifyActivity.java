@@ -8,6 +8,7 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.R.layout;
 import com.xstd.pirvatephone.R.menu;
 import com.xstd.privatephone.adapter.NotificationModifyAdapter;
+import com.xstd.privatephone.tools.Tools;
 import com.xstd.privatephone.view.StatusBarModifyDialog;
 
 import android.os.Bundle;
@@ -30,7 +31,6 @@ public class NotificationModifyActivity extends BaseActivity {
 	public ListView listView;
 
 	private NotificationModifyAdapter notificationAdapter;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,22 +58,26 @@ public class NotificationModifyActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
+
 				CheckBox check = (CheckBox) view.findViewById(R.id.check);
-				if(check.isChecked()){
-					TextView title = (TextView) view.findViewById(R.id.title);
-					TextView desc = (TextView) view.findViewById(R.id.desc);
-				}else{
+				if (check.isChecked()) {
+					NotificationModifyActivity.this
+							.getSharedPreferences("Setting_Info", 0).edit()
+							.putInt("CheckedId", position).commit();
+				} else {
 					check.setChecked(!check.isChecked());
 				}
-				
-				showEditDialog();
+				TextView tv_title = (TextView) view.findViewById(R.id.title);
+				TextView tv_desc = (TextView) view.findViewById(R.id.desc);
+
+				String title = tv_title.getText().toString().trim();
+				String desc = tv_desc.getText().toString().trim();
+
+				Tools.logSh("title==" + title + "-----desc==" + desc);
+				new StatusBarModifyDialog(NotificationModifyActivity.this,
+						title, desc);
 			}
 		});
-	}
-	
-	private void showEditDialog(){
-		StatusBarModifyDialog dialog = new StatusBarModifyDialog(this);
 	}
 
 	@Override

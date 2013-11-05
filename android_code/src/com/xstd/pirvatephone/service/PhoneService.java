@@ -150,8 +150,8 @@ public class PhoneService extends Service {
 				// 第2步:确认该号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(incomingNumber)) {
 					// 查询是立即挂断还是正常接听
-					ShowNotificationUtils.showNotification(mContext);
-					ShowNotificationUtils.startShake(mContext);
+					new ShowNotificationUtils().showNotification(mContext);
+					new ShowNotificationUtils().startShake(mContext);
 					//ShowNotificationUtils.startVoice(mContext, 1, 1);
 					int type = contextModelUtils.getPhoneModelType(
 							incomingNumber, mContext);

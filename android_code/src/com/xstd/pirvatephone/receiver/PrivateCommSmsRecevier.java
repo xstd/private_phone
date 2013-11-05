@@ -61,8 +61,8 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 
 				// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(smsNumber)) {
-					ShowNotificationUtils.showNotification(mContext);
-					ShowNotificationUtils.startShake(mContext);
+					new ShowNotificationUtils().showNotification(mContext);
+					new ShowNotificationUtils().startShake(mContext);
 				//	ShowNotificationUtils.startVoice(mContext, 1, 1);
 					Tools.logSh("发现需要拦截的号码：：" + smsNumber);
 

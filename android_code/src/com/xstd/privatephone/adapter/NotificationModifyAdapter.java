@@ -68,19 +68,22 @@ public class NotificationModifyAdapter extends BaseAdapter {
 		TextView tv_name = (TextView) view.findViewById(R.id.title);
 		TextView tv_content = (TextView) view.findViewById(R.id.desc);
 		CheckBox btn_check = (CheckBox) view.findViewById(R.id.check);
-		
-		String cont = sp.getString(""+position, "");
-		if(cont!=""){
-			String[] strs = cont.split(":");
-			Tools.logSh("strs="+strs[0]+":"+strs[1]);
-			tv_name.setText(strs[0]);
-			tv_content.setText(strs[1]);
-		}else{
-			tv_name.setText(mTitleStrs[position]);
-			tv_content.setText(mContentStrs[position]);
-		}
-		iv_icon.setBackgroundResource(iconIds[position]);
 
+		String cont = sp.getString("" + position, "");
+		final String title;
+		final String desc;
+
+		if (cont != "") {
+			String[] strs = cont.split(":");
+			title =strs[0];
+			desc =strs[1];
+		} else {
+			title= mTitleStrs[position];
+			desc= mContentStrs[position];
+		}
+		tv_name.setText(title);
+		tv_content.setText(desc);
+		iv_icon.setBackgroundResource(iconIds[position]);
 
 		if (position == checkedId) {
 			btn_check.setChecked(true);
@@ -97,8 +100,8 @@ public class NotificationModifyAdapter extends BaseAdapter {
 					checkedId = position;
 					sp.edit().putInt("CheckedId", checkedId).commit();
 					sp.edit().putInt("Icon", iconIds[position]).commit();
-					sp.edit().putString("Title", mTitleStrs[position]).commit();
-					sp.edit().putString("Desc", mContentStrs[position])
+					sp.edit().putString("Title", title).commit();
+					sp.edit().putString("Desc", desc)
 							.commit();
 					notifyDataSetChanged();
 				}

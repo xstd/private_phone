@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.activity.PrivateCommActivity;
+import com.xstd.privatephone.tools.Tools;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -16,12 +17,12 @@ import android.media.SoundPool;
 import android.os.Vibrator;
 
 public class ShowNotificationUtils {
-	private static NotificationManager mNotificationManager;
-	private static Notification notification;
-	private static Vibrator vibrator;
+	private NotificationManager mNotificationManager;
+	private Notification notification;
+	private Vibrator vibrator;
 
 	@SuppressWarnings("deprecation")
-	public static void showNotification(Context context) {
+	public void showNotification(Context context) {
 
 		// 1.获取当前的设置
 		SharedPreferences sp = context.getSharedPreferences("Setting_Info", 0);
@@ -38,16 +39,29 @@ public class ShowNotificationUtils {
 			// 定义通知栏展现的内容信息
 
 			int icon = sp.getInt("Icon", R.drawable.ic_statusbar_0);
-			CharSequence tickerText = "我的通知栏标题";
+			String tickerText = "";
 
 			long when = System.currentTimeMillis();
 
 			notification = new Notification(icon, tickerText, when);
 
 			// 定义下拉通知栏时要展现的内容信息,
+			int checkedId = sp.getInt("CheckedId", 0);
+			String cont = sp.getString("" + checkedId, "");
+			String title;
+			String desc;
 
-			String title = sp.getString("Title", mTitleStrs[0]);
-			String desc = sp.getString("Desc", mContentStrs[0]);
+			if (cont == "") {
+				String[] strings = cont.split(":");
+				title = strings[0];
+				desc = strings[1];
+			} else {
+				Tools.logSh("count==" + cont);
+				title = sp.getString("Title", mTitleStrs[0]);
+				desc = sp.getString("Desc", mContentStrs[0]);
+			}
+
+			System.out.println("Title=" + title + "  Desc=" + desc);
 
 			Intent notificationIntent = new Intent(context,
 					PrivateCommActivity.class);
@@ -63,33 +77,36 @@ public class ShowNotificationUtils {
 		}
 	}
 
-	public static void clearNotifacation() {
+	public void clearNotifacation() {
 		if (mNotificationManager != null && notification != null) {
 			mNotificationManager.cancel(1);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void startShake(Context context) {
+	public void startShake(Context context) {
 		AudioManager mAudioManager = (AudioManager) context
 				.getSystemService(Context.AUDIO_SERVICE);
 		@SuppressWarnings("deprecation")
-		int vibrate_setting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-		
-		if(vibrate_setting==AudioManager.VIBRATE_SETTING_OFF){
-			SharedPreferences sp = context.getSharedPreferences("Setting_Info", 0);
+		int vibrate_setting = mAudioManager
+				.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+
+		if (vibrate_setting == AudioManager.VIBRATE_SETTING_OFF) {
+			SharedPreferences sp = context.getSharedPreferences("Setting_Info",
+					0);
 			boolean Show_Shake = sp.getBoolean("Show_Shake", true);
 			if (Show_Shake) {
 				vibrator = (Vibrator) context
 						.getSystemService(Context.VIBRATOR_SERVICE);
 				long[] pattern = { 100, 400, 100, 400 }; // 停止 开启 停止 开启
-				vibrator.vibrate(pattern, -1); // 重复两次上面的pattern 如果只想震动一次，index设为-1(2)
+				vibrator.vibrate(pattern, -1); // 重复两次上面的pattern
+												// 如果只想震动一次，index设为-1(2)
 			}
 
 		}
 	}
 
-	public static void stopShake() {
+	public void stopShake() {
 		if (vibrator != null) {
 			vibrator.cancel();
 		}
