@@ -1,9 +1,10 @@
 package com.xstd.pirvatephone.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.Html;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.app.PrivatePhoneApplication;
 import com.xstd.privatephone.adapter.ShowAllInstallAppAdapter;
+import com.xstd.privatephone.view.ComeMySelfWindowView;
 
 public class ShowAllInstallAppActivity extends BaseActivity implements
 		OnClickListener {
@@ -32,10 +35,14 @@ public class ShowAllInstallAppActivity extends BaseActivity implements
 	@ViewMapping(ID = R.id.lv)
 	public ListView lv;
 
+	private SharedPreferences sp;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_all_install_app);
+
+		sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
 
 		initUI();
 	}
@@ -59,19 +66,40 @@ public class ShowAllInstallAppActivity extends BaseActivity implements
 	}
 
 	private void showOkDialog(final PackageInfo packageInfo) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(
-				R.string.rs_set_jump_app).setMessage(
-				Html.fromHtml(String.format(getString(R.string.rs_set_sure),
-						packageInfo.applicationInfo
-								.loadLabel(getPackageManager())))).setPositiveButton(android.R.string.ok,new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent data = new Intent();
-                data.putExtra("pi",packageInfo);
-                setResult(RESULT_OK, data);
-                finish();
-            }
-        }).setNegativeButton(android.R.string.cancel,null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.rs_set_jump_app)
+				.setMessage(
+						Html.fromHtml(String.format(
+								getString(R.string.rs_set_sure),
+								packageInfo.applicationInfo
+										.loadLabel(getPackageManager()))))
+				.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(
+									DialogInterface dialogInterface, int i) {
+								sp.edit()
+										.putString(
+												"jump_software_name",
+												packageInfo.applicationInfo
+														.loadLabel(
+																getPackageManager())
+														.toString()).commit();
+								sp.edit()
+										.putString(
+												"jump_software_package_name",
+												packageInfo.applicationInfo.packageName)
+										.commit();
+								Intent data = getPackageManager()
+										.getLaunchIntentForPackage(
+												packageInfo.packageName);
+								startActivity(data);
+								ComeMySelfWindowView.getInstance(getApplicationContext()).show();
+								PrivatePhoneApplication app = (PrivatePhoneApplication) getApplication();
+								app.setComeon(true);
+								finish();
+							}
+						}).setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}
 

@@ -1,7 +1,5 @@
 package com.xstd.privatephone.view;
 
-import com.xstd.pirvatephone.app.PrivatePhoneApplication;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +21,7 @@ import android.widget.TextView;
 /**
  * Created by chrain on 13-11-6.
  */
-public class JumpSoftwareWindowView extends LinearLayout {
+public class ComeMySelfWindowView extends LinearLayout {
 
 	private static final int BACK_GROUND_STATE_NONE = 0;
 	private static final int BACK_GROUND_STATE_LEFT = 1;
@@ -43,19 +41,19 @@ public class JumpSoftwareWindowView extends LinearLayout {
 	private WindowManager mWM = (WindowManager) getContext().getSystemService(
 			Context.WINDOW_SERVICE);
 	android.view.WindowManager.LayoutParams mWMParams;
-	private static JumpSoftwareWindowView instance;
+	private static ComeMySelfWindowView instance;
 	private static Object mObject = new Object();
 
-	private JumpSoftwareWindowView(Context context) {
+	private ComeMySelfWindowView(Context context) {
 		super(context);
 		init();
 	}
 
-	public static JumpSoftwareWindowView getInstance(Context context) {
+	public static ComeMySelfWindowView getInstance(Context context) {
 		if (instance == null) {
 			synchronized (mObject) {
 				if (instance == null) {
-					instance = new JumpSoftwareWindowView(context);
+					instance = new ComeMySelfWindowView(context);
 				}
 			}
 		}
@@ -145,17 +143,16 @@ public class JumpSoftwareWindowView extends LinearLayout {
 		tv.setTextColor(Color.DKGRAY);
 		tv.setTextSize(8 * mDensity);
 		tv.setGravity(Gravity.CENTER);
-		tv.setText("一键切出");
+		tv.setText("一键切回");
 		addView(tv);
 
 		setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				String packageName = sp.getString("jump_software_package_name",
-						getContext().getPackageName());
 				Intent intent = getContext().getPackageManager()
-						.getLaunchIntentForPackage(packageName);
+						.getLaunchIntentForPackage(
+								getContext().getPackageName());
 				getContext().startActivity(intent);
 			}
 		});
