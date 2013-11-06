@@ -2,6 +2,8 @@ package com.xstd.pirvatephone.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.Html;
@@ -56,12 +58,20 @@ public class ShowAllInstallAppActivity extends BaseActivity implements
 		});
 	}
 
-	private void showOkDialog(PackageInfo packageInfo) {
+	private void showOkDialog(final PackageInfo packageInfo) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(
 				R.string.rs_set_jump_app).setMessage(
 				Html.fromHtml(String.format(getString(R.string.rs_set_sure),
 						packageInfo.applicationInfo
-								.loadLabel(getPackageManager()))));
+								.loadLabel(getPackageManager())))).setPositiveButton(android.R.string.ok,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent data = new Intent();
+                data.putExtra("pi",packageInfo);
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        }).setNegativeButton(android.R.string.cancel,null);
 		builder.show();
 	}
 

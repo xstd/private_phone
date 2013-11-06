@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.xstd.pirvatephone.utils.BackgroundSoundManager;
+import com.xstd.privatephone.view.JumpSoftwareWindowView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,20 +18,23 @@ import com.xstd.pirvatephone.utils.BackgroundSoundManager;
 public class BaseActivity extends Activity {
 
     protected static int count = -1;
-    
+
     private SharedPreferences sp;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        super.onCreate(savedInstanceState);
+        sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
     }
-    
+
     @Override
     protected void onStart() {
         super.onStart();
-        if (sp.getBoolean("play_background_sound", false)&&count == -1) {
+        if (sp.getBoolean("play_background_sound", false) && count == -1) {
             BackgroundSoundManager.getInstance(getApplicationContext()).playBackgroundSound();
+        }
+        if (sp.getBoolean("jump_other_software", false) && count == -1) {
+            JumpSoftwareWindowView.getInstance(getApplicationContext()).show();
         }
         count++;
     }
@@ -41,6 +45,9 @@ public class BaseActivity extends Activity {
         count--;
         if (count == -1) {
             BackgroundSoundManager.getInstance(getApplicationContext()).pauseBackgroundSound();
+        }
+        if (count == -1) {
+            JumpSoftwareWindowView.getInstance(getApplicationContext()).dismiss();
         }
     }
 

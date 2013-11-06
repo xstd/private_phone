@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -17,10 +18,12 @@ import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.BackgroundSoundManager;
+import com.xstd.privatephone.view.JumpSoftwareWindowView;
 
 public class UserCenterActivity extends BaseActivity implements OnClickListener {
 
-	private Button btn_setting;
+    private static final int REQUEST_SET_JUMP_APP_CODE = 1;
+    private Button btn_setting;
 
 	@ViewMapping(ID = R.id.bgs_switch_status)
 	public TextView bgs_switch_status;
@@ -103,7 +106,7 @@ public class UserCenterActivity extends BaseActivity implements OnClickListener 
 				}
 			}
 		});
-		exit_kg.setChecked(play_background_sound);
+		exit_kg.setChecked(jump_other);
 		exit_kg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton compoundButton,
@@ -113,10 +116,12 @@ public class UserCenterActivity extends BaseActivity implements OnClickListener 
 					exit_switch_status.setText(R.string.rs_on_jump_software);
 					exit_select_bg_media.setVisibility(View.VISIBLE);
 					//TODO 界面显示一键切出图标
+                    JumpSoftwareWindowView.getInstance(getApplicationContext()).show();
 				} else {
 					exit_switch_status.setText(R.string.rs_off_jump_software);
 					exit_select_bg_media.setVisibility(View.GONE);
 					//TODO 界面隐藏一键切出图标
+                    JumpSoftwareWindowView.getInstance(getApplicationContext()).dismiss();
 				}
 			}
 		});
@@ -133,7 +138,7 @@ public class UserCenterActivity extends BaseActivity implements OnClickListener 
 		else if (resID == R.raw.ttkp)
 			bgs_select_bg_media.setText(getResources().getStringArray(
 					R.array.background_sound_list)[1]);
-		String jump_software_name = sp.getString("jump_software_name", "日历");
+		String jump_software_name = sp.getString("jump_software_name", getApplicationInfo().loadLabel(getPackageManager()).toString());
 		exit_select_bg_media.setText(jump_software_name);		
 	}
 
@@ -152,12 +157,23 @@ public class UserCenterActivity extends BaseActivity implements OnClickListener 
 			break;
 		case R.id.exit_select_bg_media:
 			Intent intent = new Intent(getApplicationContext(), ShowAllInstallAppActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, REQUEST_SET_JUMP_APP_CODE);
 			break;
 		}
 	}
 
-	private void showSelectBackGroundSoundDialog() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == REQUEST_SET_JUMP_APP_CODE) {
+            PackageInfo pi = data.getParcelableExtra("pi");
+            sp.edit().putString("jump_software_name",pi.applicationInfo.loadLabel(getPackageManager()).toString()).commit();
+            sp.edit().putString("jump_software_package_name",pi.applicationInfo.packageName).commit();
+            displayBtn();
+        }
+    }
+
+    private void showSelectBackGroundSoundDialog() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
 				.setTitle(R.string.rs_background_sound_title)
 				.setItems(R.array.background_sound_list,
