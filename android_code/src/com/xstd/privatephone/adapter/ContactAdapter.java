@@ -52,17 +52,6 @@ public class ContactAdapter extends CursorAdapter {
 				""));
 		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 
-		views.btn_dail.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (phone_number != null && !phone_number.equals("")) {
-
-					MakeCallUtils.makeCall(mContext, phone_number);
-				}
-			}
-		});
-
 	}
 
 	@Override

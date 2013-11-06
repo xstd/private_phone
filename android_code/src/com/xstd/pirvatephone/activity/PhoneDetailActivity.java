@@ -41,8 +41,9 @@ public class PhoneDetailActivity extends BaseActivity {
 		setContentView(R.layout.activity_phone_detail);
 
 		name = getIntent().getStringExtra("Name");
+		number = getIntent().getStringExtra("Number");
 
-		getContactNumber();
+		//getContactNumber();
 
 		initView();
 	}

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.utils.ContactUtils;
 
 public class SmsRecordAdapter extends CursorAdapter {
 	private static Context mContext;
@@ -44,26 +45,17 @@ public class SmsRecordAdapter extends CursorAdapter {
 				.getColumnIndex("LASTED_DATA"));
 
 		// 根据电话号码 查询联系人信息
-		String name = null;
-		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
-				Uri.encode(phone_number));
-		Cursor contactCursor = mContext.getContentResolver().query(uri,
-				CONTACT_PROJECTION, null, null, null);
-		if (contactCursor.moveToFirst()) {
-			// 查询到了联系人
-			name = contactCursor.getString(DISPLAY_NAME_COLUMN_INDEX);
-		}
-		contactCursor.close();
 
 		// 适配数据到控件
-
-		if (name != null) {
-			// 查询到了联系人
-			views.tv_phone_name.setText(name);
-		} else {
-			// 没有查询到联系人
-			views.tv_phone_name.setText(phone_number);
-		}
+		String name = ContactUtils.queryContactName(mContext, phone_number);
+		
+		
+		if (name == null || "".equals(name)) {
+			name = phone_number;
+		} 
+		
+		views.tv_phone_name.setText(name);
+		views.tv_phone_number.setText(phone_number);
 		views.sms_tv_count.setText("(" + msg_count + ")");
 
 		views.isopen.setBackgroundResource(R.drawable.private_sms_read);
@@ -83,6 +75,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 
 		hold.isopen = (ImageView) view.findViewById(R.id.sms_iv_inorout);
 		hold.tv_phone_name = (TextView) view.findViewById(R.id.sms_tv_name);
+		hold.tv_phone_number = (TextView) view.findViewById(R.id.sms_tv_number);
 		hold.sms_tv_content = (TextView) view.findViewById(R.id.sms_tv_content);
 		hold.sms_tv_date = (TextView) view.findViewById(R.id.sms_tv_date);
 		hold.sms_tv_count = (TextView) view.findViewById(R.id.sms_tv_count);
@@ -98,6 +91,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 		TextView sms_tv_date;
 		TextView sms_tv_content;
 		TextView tv_phone_name;
+		TextView tv_phone_number;
 		TextView sms_tv_count;
 	}
 

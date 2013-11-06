@@ -23,8 +23,12 @@ import android.widget.Toast;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsDetail;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsRecord;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.privatephone.adapter.SmsDetailAdapter;
 import com.xstd.privatephone.tools.Tools;
 
@@ -41,6 +45,11 @@ public class SmsDetailActivity extends BaseActivity {
 	private String name = "";
 	private String number = "";
 	private RelativeLayout sms_detail_title;
+	private SmsDetailDao smsDetailDao;
+	private SmsRecordDao smsRecordDao;
+	private SQLiteDatabase smsDetailDatabase;
+	private SQLiteDatabase smsRecordDatabase;
+	private Cursor smsRecordCursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,32 +57,38 @@ public class SmsDetailActivity extends BaseActivity {
 		setContentView(R.layout.activity_sms_detail);
 
 		name = getIntent().getStringExtra("Name");
+		number = getIntent().getStringExtra("Number");
 		Tools.logSh("Name====" + name);
-		//查询该name对应的number
-		getContactNumber();
+		// 查询该name对应的number
+		//getContactNumber();
 
 		initData();
 		initView();
 	}
-	
-	private void getContactNumber(){
-		ContactInfoDao contactInfoDao = ContactInfoDaoUtils.getContactInfoDao(this);
+
+	private void getContactNumber() {
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(this);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-		Cursor query = contactDatabase.query(ContactInfoDao.TABLENAME, null, ContactInfoDao.Properties.Display_name.columnName+"=?", new String[]{name}, null, null, null);
-		if(query!=null && query.getCount()>0){
-			while(query.moveToNext()){
-				number = query.getString(query.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+		Cursor query = contactDatabase.query(ContactInfoDao.TABLENAME, null,
+				ContactInfoDao.Properties.Display_name.columnName + "=?",
+				new String[] { name }, null, null, null);
+		if (query != null && query.getCount() > 0) {
+			while (query.moveToNext()) {
+				number = query
+						.getString(query
+								.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
 			}
 			query.close();
 		}
-		
+
 		Tools.logSh("Number====" + number);
 	}
 
 	private void initView() {
-		//title
+		// title
 		sms_detail_title = (RelativeLayout) findViewById(R.id.sms_detail_title);
-		btn_back = (Button)sms_detail_title.findViewById(R.id.btn_back);
+		btn_back = (Button) sms_detail_title.findViewById(R.id.btn_back);
 		btn_edit = (Button) sms_detail_title.findViewById(R.id.btn_edit);
 		tv_title = (TextView) sms_detail_title.findViewById(R.id.tv_title);
 		tv_title.setText(number);
@@ -103,13 +118,13 @@ public class SmsDetailActivity extends BaseActivity {
 				String sms_content = send_content.getText().toString();
 				if (!TextUtils.isEmpty(sms_content)) {
 					sendSms(sms_content);
-					//隐藏软键盘
+					// 隐藏软键盘
 					((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
-                    .hideSoftInputFromWindow(SmsDetailActivity.this
-                                    .getCurrentFocus().getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
+							.hideSoftInputFromWindow(SmsDetailActivity.this
+									.getCurrentFocus().getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
 					send_content.setText("");
-					//让textview失去焦点
+					// 让textview失去焦点
 					send_content.clearFocus();
 
 				} else {
@@ -122,25 +137,41 @@ public class SmsDetailActivity extends BaseActivity {
 	}
 
 	private void initData() {
-		// TODO Auto-generated method stub
-		SmsDetailDao smsDetailDao = SmsDetailDaoUtils
-				.getSmsDetailDao(getApplicationContext());
-		SQLiteDatabase database = smsDetailDao.getDatabase();
-		smsDetailCursor = database.query("SMS_DETAIL", null, "phone_number=?",
+		smsDetailDao = SmsDetailDaoUtils.getSmsDetailDao(this);
+		smsDetailDatabase = smsDetailDao.getDatabase();
+		smsDetailCursor = smsDetailDatabase.query(SmsDetailDao.TABLENAME, null,
+				SmsDetailDao.Properties.Phone_number.columnName + "=?",
 				new String[] { number }, null, null, "date desc");
+
+		smsRecordDao = SmsRecordDaoUtils.getSmsRecordDao(this);
+		smsRecordDatabase = smsRecordDao.getDatabase();
+		smsRecordCursor = smsRecordDatabase.query(SmsRecordDao.TABLENAME, null,
+				SmsDetailDao.Properties.Phone_number.columnName + "=?",
+				new String[] { number }, null, null, null);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if(smsDetailCursor!=null){
+			smsDetailCursor.close();
+		}
+		if(smsRecordCursor!=null){
+			smsRecordCursor.close();
+		}
+		super.onDestroy();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(
-				
-				R.menu.sms_detail, menu);
+
+		R.menu.sms_detail, menu);
 		return true;
 	}
 
 	public void sendSms(String content) {
-		Tools.logSh("短信粉条发送::" + content+":::"+number);
+		Tools.logSh("短信粉条发送::" + content + ":::" + number);
 		SmsManager smsManager = SmsManager.getDefault();
 		PendingIntent sentIntent = PendingIntent.getBroadcast(
 				SmsDetailActivity.this, 0, new Intent(), 0);
@@ -152,6 +183,9 @@ public class SmsDetailActivity extends BaseActivity {
 			for (String str : ms) {
 				// 短信发送
 				smsManager.sendTextMessage(number, null, str, sentIntent, null);
+
+				InsertMessage(number, str);
+
 				smsDetailCursor.requery();
 				smsDetailAdapter.notifyDataSetChanged();
 				Tools.logSh("短信粉条发送::" + str);
@@ -164,8 +198,55 @@ public class SmsDetailActivity extends BaseActivity {
 
 			Toast.makeText(SmsDetailActivity.this, "发送成功！", Toast.LENGTH_LONG)
 					.show();
+			InsertMessage(number, content);
 			smsDetailCursor.requery();
 			smsDetailAdapter.notifyDataSetChanged();
+		}
+	}
+
+	private void InsertMessage(String number, String body) {
+		// 向我们的smsDetail数据库插入一条记录，
+		SmsDetail smsDetail = new SmsDetail();
+		smsDetail.setData(body);
+		smsDetail.setDate(System.currentTimeMillis());
+		smsDetail.setPhone_number(number);
+		smsDetail.setThread_id(2);
+		// 向我们的smsRecord数据库插入跟新记录，
+		smsDetailDao.insert(smsDetail);
+
+		//判断有该号码的记录没有
+		if(smsRecordCursor!=null && smsRecordCursor.getCount()>0){
+			while(smsRecordCursor.moveToNext()){
+				
+				Long _id = smsRecordCursor.getLong(smsRecordCursor.getColumnIndex(SmsRecordDao.Properties.Id.columnName));
+				String phone_number = smsRecordCursor.getString(smsRecordCursor
+						.getColumnIndex(SmsRecordDao.Properties.Phone_number.columnName));
+				int msg_count = smsRecordCursor.getInt(smsRecordCursor.getColumnIndex(SmsRecordDao.Properties.Count.columnName));
+				Long lastedContact = smsRecordCursor.getLong(smsRecordCursor
+						.getColumnIndex(SmsRecordDao.Properties.Lasted_contact.columnName));
+				String lasted_data = smsRecordCursor.getString(smsRecordCursor
+						.getColumnIndex(SmsRecordDao.Properties.Lasted_data.columnName));
+				
+				SmsRecord smsRecord = new SmsRecord();
+				smsRecord.setId(_id);
+				smsRecord.setPhone_number(phone_number);
+				smsRecord.setCount(msg_count+1);
+				smsRecord.setLasted_data(lasted_data);
+				smsRecord.setLasted_contact(System.currentTimeMillis());
+				smsRecordDao.update(smsRecord);
+			}
+			smsRecordCursor.close();
+			return ;
+			
+		}else{
+			SmsRecord smsRecord = new SmsRecord();
+			smsRecord.setPhone_number(number);
+			smsRecord.setCount(1);
+			smsRecord.setLasted_data(body);
+			smsRecord.setLasted_contact(System.currentTimeMillis());
+			smsRecordDao.insert(smsRecord);
+			smsRecordCursor.close();
+			return ;
 		}
 	}
 }

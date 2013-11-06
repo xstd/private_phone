@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/RelativeLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:layout_marginTop="20.0dip"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:background="@drawable/private_comm_edit_pressed"
+        android:text="提示" />
+    
+    <TextView
+         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:paddingLeft="35dip"
+         android:text="确定删除此条通话记录?"
+        />
+
+    <LinearLayout
+        android:id="@id/btn_pane"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+              android:background="@drawable/private_comm_spacbtn_selector"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@id/dialog_ok_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_selector"
+            android:text="@string/s_ok"
+            android:textColor="@color/c_common_text" />
+
+        <Button
+            android:id="@id/dialog_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20.0dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_selector"
+            android:text="@string/s_cancel"
+            android:textColor="@color/c_common_text" />
+    </LinearLayout>
+
+</LinearLayout>

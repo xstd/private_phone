@@ -1,6 +1,5 @@
 package com.xstd.pirvatephone.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -33,12 +32,16 @@ public class HandInputActivity extends BaseActivity {
 	private RadioGroup myRadioGroup;
 	private RadioButton myRadioButton1;
 	private RadioButton myRadioButton2;
+	private ContactInfoDao contactInfoDao;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hand_input);
 
+		contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(HandInputActivity.this);
+		
 		initView();
 	}
 
@@ -51,8 +54,8 @@ public class HandInputActivity extends BaseActivity {
 		btn_edit.setVisibility(View.GONE);
 
 		// content
-		et_name = (EditText) findViewById(R.id.et_name);
-		et_phone = (EditText) findViewById(R.id.et_phone);
+		et_name = (EditText) findViewById(R.id.put_et_name);
+		et_phone = (EditText) findViewById(R.id.put_et_phone);
 		// radioGroup
 		myRadioGroup = (RadioGroup) findViewById(R.id.myRadioGroup);
 		myRadioGroup.check(R.id.myRadioButton1);
@@ -76,18 +79,16 @@ public class HandInputActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// 若为空
-				String name = et_name.getText().toString();
-				String phone = et_phone.getText().toString();
-
+				String name = et_name.getText().toString().trim();
+				String phone = et_phone.getText().toString().trim();
+				Tools.logSh("name==="+name+"    phone=="+phone);
 				if (TextUtils.isEmpty(phone)) {
 					Toast.makeText(getApplicationContext(), "请填写正确的电话",
 							Toast.LENGTH_SHORT).show();
 				} else {// 不为空,添加到我们数据库。
-					ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-							.getContactInfoDao(getApplicationContext());
 
-					if (name == null) {
-						name = "";
+					if (name == null || "".equals(name)) {
+						name = phone;
 					}
 					contactInfo.setPhone_number(phone);
 					contactInfo.setDisplay_name(name);
@@ -100,7 +101,7 @@ public class HandInputActivity extends BaseActivity {
 						contactInfo.setType(1);
 					}
 					
-					
+					Tools.logSh("name==="+name+"    phone=="+phone);
 					contactInfoDao.insert(contactInfo);
 					Toast.makeText(getApplicationContext(), "想联系人数据库中添加了一条新数据",
 							Toast.LENGTH_SHORT).show();

@@ -12,7 +12,6 @@ import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.pirvatephone.utils.ArrayUtils;
 import com.xstd.pirvatephone.utils.ContactUtils;
-import com.xstd.pirvatephone.utils.ContactsUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.DelectOurContactUtils;
 import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
@@ -30,8 +29,8 @@ import com.xstd.privatephone.adapter.MyViewPagerAdapter;
 import com.xstd.privatephone.adapter.PhoneRecordAdapter;
 import com.xstd.privatephone.adapter.SmsRecordAdapter;
 import com.xstd.privatephone.tools.Tools;
+import com.xstd.privatephone.view.SureDialog;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,11 +41,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
@@ -56,6 +53,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
@@ -92,8 +90,6 @@ public class PrivateCommActivity extends BaseActivity {
 	private TextView contact_empty;
 	private Cursor contactCursor;
 	boolean showEdit = false;
-	private RelativeLayout contact_edit_content;
-	private RelativeLayout contact_rl_content;
 
 	private ArrayList<String> selectContactsNumber = new ArrayList<String>();;
 	private ListView contact_listview;
@@ -125,13 +121,8 @@ public class PrivateCommActivity extends BaseActivity {
 	private LinearLayout body_layout;
 
 	private EditContactAdapter editContactAdapter;
-	private Button edit_btn_delete_contact;
-	private EditPhoneAdapter editPhoneRecordAdapter;
 	private EditPhoneAdapter editPhoneAdapter;
-	private Button edit_btn_delete_phone;
 	private EditSmsAdapter editSmsAdapter;
-	private Button edit_btn_recover_sms;
-	private Button edit_btn_remove_sms;
 
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
 
@@ -235,19 +226,24 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void initView() {
-		// 1、title栏
+		// 1、title
 		edit = (Button) findViewById(R.id.btn_edit);
 
+		// content-all
 		body_layout = (LinearLayout) findViewById(R.id.body_layout);
 		edit_ll_body = (RelativeLayout) findViewById(R.id.edit_ll_body);
 
+		// edit-checkall
 		edit_rl_select = (RelativeLayout) findViewById(R.id.edit_rl_select);
 		edit_checkbox = (Button) findViewById(R.id.edit_checkbox_all);
 		edit_listview = (ListView) findViewById(R.id.edit_listview);
 
+		// edit-buttom
 		edit_ll_sms_bt = (LinearLayout) findViewById(R.id.edit_ll_sms_bt);
 		edit_ll_contact_bt = (LinearLayout) findViewById(R.id.edit_ll_contact_bt);
 		edit_ll_phone_bt = (LinearLayout) findViewById(R.id.edit_ll_phone_bt);
+
+		// edit-bottom-button
 		btn_recover_sms = (Button) findViewById(R.id.edit_btn_recover_sms);
 		btn_remove_sms = (Button) findViewById(R.id.edit_btn_remove_sms);
 		btn_delete_contact = (Button) findViewById(R.id.edit_btn_delete_contact);
@@ -257,9 +253,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-
 				Tools.logSh("currIndex==" + currIndex);
-
 				if (showEdit) {
 					showNormalUI();
 					textView1.setClickable(true);
@@ -273,7 +267,6 @@ public class PrivateCommActivity extends BaseActivity {
 		});
 
 		ib_back = (Button) findViewById(R.id.btn_back);
-
 		ib_back.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -338,9 +331,7 @@ public class PrivateCommActivity extends BaseActivity {
 					}
 				}
 			});
-			edit_btn_recover_sms = (Button) findViewById(R.id.edit_btn_recover_sms);
-			edit_btn_remove_sms = (Button) findViewById(R.id.edit_btn_remove_sms);
-			edit_btn_remove_sms.setOnClickListener(new OnClickListener() {
+			btn_remove_sms.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -354,11 +345,10 @@ public class PrivateCommActivity extends BaseActivity {
 
 				}
 			});
-			edit_btn_recover_sms.setOnClickListener(new OnClickListener() {
+			btn_recover_sms.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					if (selectContacts == null || selectContacts.size() == 0) {
 						Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目",
 								Toast.LENGTH_SHORT).show();
@@ -398,8 +388,7 @@ public class PrivateCommActivity extends BaseActivity {
 					}
 				}
 			});
-			edit_btn_delete_phone = (Button) findViewById(R.id.edit_btn_delete_phone);
-			edit_btn_delete_phone.setOnClickListener(new OnClickListener() {
+			btn_delete_phone.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -441,8 +430,7 @@ public class PrivateCommActivity extends BaseActivity {
 					}
 				}
 			});
-			edit_btn_delete_contact = (Button) findViewById(R.id.edit_btn_delete_contact);
-			edit_btn_delete_contact.setOnClickListener(new OnClickListener() {
+			btn_delete_contact.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -556,20 +544,6 @@ public class PrivateCommActivity extends BaseActivity {
 
 			updateContact(contact_listview, contact_empty);
 		}
-	}
-
-	private String[] parseArray() {
-		Tools.logSh("parseArray");
-
-		if (selectContactsNumber.size() > 0) {
-			selectPhones = new String[selectContactsNumber.size()];
-			for (int i = 0; i < selectContactsNumber.size(); i++) {
-				selectPhones[i] = selectContactsNumber.get(i);
-				Tools.logSh("selectPhones[i]=" + selectPhones[i]);
-			}
-		}
-
-		return selectPhones;
 	}
 
 	/**
@@ -693,10 +667,14 @@ public class PrivateCommActivity extends BaseActivity {
 				Intent intent = new Intent(PrivateCommActivity.this,
 						PhoneDetailActivity.class);
 				// 联系人带过去
-				TextView sms_tv_num = (TextView) view
-						.findViewById(R.id.dial_tv_phone_num);
-				String name = sms_tv_num.getText().toString().trim();
+				TextView sms_tv_name = (TextView) view
+						.findViewById(R.id.dial_tv_contact);
+				TextView sms_tv_number = (TextView) view
+						.findViewById(R.id.dial_tv_contact_number);
+				String name = sms_tv_name.getText().toString().trim();
+				String number = sms_tv_number.getText().toString().trim();
 				intent.putExtra("Name", name);
+				intent.putExtra("Number", number);
 				startActivity(intent);
 			}
 		});
@@ -706,10 +684,13 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				TextView sms_tv_num = (TextView) view
-						.findViewById(R.id.dial_tv_phone_num);
-				String name = sms_tv_num.getText().toString().trim();
-				showPhoneDialog(name);
+				TextView sms_tv_name = (TextView) view
+						.findViewById(R.id.dial_tv_contact);
+				TextView sms_tv_number = (TextView) view
+						.findViewById(R.id.dial_tv_contact_number);
+				String name = sms_tv_name.getText().toString().trim();
+				String number = sms_tv_number.getText().toString().trim();
+				showPhoneDialog(name, number);
 				return false;
 			}
 		});
@@ -738,13 +719,32 @@ public class PrivateCommActivity extends BaseActivity {
 				Intent intent = new Intent(PrivateCommActivity.this,
 						SmsDetailActivity.class);
 				// 姓名带过去
-				TextView sms_tv_num = (TextView) view
+				TextView sms_tv_name = (TextView) view
 						.findViewById(R.id.sms_tv_name);
-				String name = sms_tv_num.getText().toString().trim();
+				TextView sms_tv_number = (TextView) view
+						.findViewById(R.id.sms_tv_number);
+				String name = sms_tv_name.getText().toString().trim();
+				String number = sms_tv_number.getText().toString().trim();
 				Tools.logSh("Name==" + name);
 				intent.putExtra("Name", name);
+				intent.putExtra("Number", number);
 				startActivity(intent);
 
+			}
+		});
+
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				TextView sms_tv_name = (TextView) view.findViewById(R.id.sms_tv_name);
+				TextView sms_tv_number = (TextView) view.findViewById(R.id.sms_tv_number);
+				String name = sms_tv_name.getText().toString().trim();
+				String number = sms_tv_number.getText().toString().trim();
+				
+				showSmsDialog(name,number);
+				return false;
 			}
 		});
 	}
@@ -764,12 +764,11 @@ public class PrivateCommActivity extends BaseActivity {
 		mContactAdapter = new ContactAdapter(getApplicationContext(),
 				contactCursor);
 		mListView.setAdapter(mContactAdapter);
-		mListView.setOnItemClickListener(new OnItemClickListener() {
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
 				TextView tv_phone_num = (TextView) view
 						.findViewById(R.id.tv_phone_num);
 				TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
@@ -783,16 +782,27 @@ public class PrivateCommActivity extends BaseActivity {
 				} else {
 					type = 0;
 				}
-
 				// 显示编辑
-				showContactItemEditDialog(name, phone_number, type);
+				showContactDialog(name, phone_number, type);
+				return false;
+			}
+		});
 
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				TextView tv_phone_num = (TextView) view
+						.findViewById(R.id.tv_phone_num);
+				String phone_number = tv_phone_num.getText().toString().trim();
+				MakeCallUtils.makeCall(PrivateCommActivity.this, phone_number);
 			}
 		});
 	}
 
-	public void showContactItemEditDialog(final String name,
-			final String address, final int type) {
+	public void showContactDialog(final String name, final String address,
+			final int type) {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setItems(new String[] { "打电话", "发短信", "编辑", "退出" },
 				new DialogInterface.OnClickListener() {
@@ -837,7 +847,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
-	public void showPhoneDialog(final String name) {
+	public void showPhoneDialog(final String name, final String number) {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("" + name);
 		builder.setItems(new String[] { "打电话", "发短信", "删除" },
@@ -866,6 +876,9 @@ public class PrivateCommActivity extends BaseActivity {
 
 							break;
 						case 2:
+
+							showDeletePhoneDialog(number);
+
 							Toast.makeText(PrivateCommActivity.this, "还没做",
 									Toast.LENGTH_SHORT).show();
 							break;
@@ -875,11 +888,54 @@ public class PrivateCommActivity extends BaseActivity {
 		builder.create().show();
 	}
 
+	public void showSmsDialog(final String name, final String number) {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("" + name);
+		builder.setItems(new String[] { "回复短信", "呼叫联系人", "恢复到手机收件箱", "删除此会话" },
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						switch (which) {
+						case 0:
+							Intent intent = new Intent(PrivateCommActivity.this,
+									SmsDetailActivity.class);
+							intent.putExtra("Name", name);
+							intent.putExtra("Number", number);
+							startActivity(intent);
+							break;
+
+						case 1:
+							MakeCallUtils.makeCall(PrivateCommActivity.this,
+									number);
+							break;
+						case 2:
+
+							Toast.makeText(PrivateCommActivity.this, "还没做",
+									Toast.LENGTH_SHORT).show();
+							break;
+						case 3:
+
+							Toast.makeText(PrivateCommActivity.this, "还没做",
+									Toast.LENGTH_SHORT).show();
+							break;
+						}
+					}
+				});
+		builder.create().show();
+	}
+
+	private void showDeletePhoneDialog(String number) {
+		SureDialog dialog = new SureDialog(this, number);
+
+	}
+
 	private void showAddContactDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("添加新的联系人");
-		builder.setItems(new String[] { "从联系人添加", "手工输入号码" },
+		builder.setItems(new String[] { "从联系人添加", "手工输入号码","从通话记录添加","从短信记录添加"},
 				new DialogInterface.OnClickListener() {
 
 					@Override
@@ -898,6 +954,14 @@ public class PrivateCommActivity extends BaseActivity {
 									PrivateCommActivity.this,
 									HandInputActivity.class);
 							startActivity(intent2);
+							break;
+							
+						case 2:
+							Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。", Toast.LENGTH_SHORT).show();
+							break;
+							
+						case 3:
+							Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。", Toast.LENGTH_SHORT).show();
 							break;
 						}
 					}

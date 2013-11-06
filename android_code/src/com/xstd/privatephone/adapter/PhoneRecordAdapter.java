@@ -56,10 +56,10 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		}
 		
 		
-		if(name==null || name==""){
-			views.tv_phone_num.setText(phone_number);
+		if(name==null || "".equals(name)){
+			views.tv_contact.setText(phone_number);
 		}else{
-			views.tv_phone_num.setText(name);
+			views.tv_contact.setText(name);
 		}
 		
 		views.inorout.setBackgroundResource(picId);
@@ -67,9 +67,9 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		if(count!=0){
 			views.tv_count.setText("("+count+")");
 		}else{
-			views.tv_count.setText("(0)");
+			views.tv_count.setText("(1)");
 		}
-		
+		views.tv_number.setText(phone_number);
 		views.tv_date.setText(new Date(date).toLocaleString());
 		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 		
@@ -83,10 +83,11 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		
 		views.inorout = (ImageView) view.findViewById(R.id.dial_iv_inorout);
 		views.tv_type = (TextView) view.findViewById(R.id.dial_tv_phone_type);
-		views.tv_phone_num = (TextView) view.findViewById(R.id.dial_tv_phone_num);
+		views.tv_contact = (TextView) view.findViewById(R.id.dial_tv_contact);
 		views.tv_date = (TextView) view.findViewById(R.id.dial_tv_date);
 		views.tv_count = (TextView) view.findViewById(R.id.dial_tv_count);
 		views.btn_dail = (Button) view.findViewById(R.id.dial_btn_dail);
+		views.tv_number = (TextView) view.findViewById(R.id.dial_tv_contact_number);
 		
 		view.setTag(views);
 		
@@ -98,7 +99,8 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		ImageView inorout;
 		TextView tv_date;
 		TextView tv_type;
-		TextView tv_phone_num;
+		TextView tv_contact;
+		TextView tv_number;
 		TextView tv_count;
 		Button btn_dail;
 	}

@@ -23,7 +23,7 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/dial_tv_contact"
+            android:id="@+id/dial_tv_phone_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 
             android:text="一月一号"/>
@@ -32,7 +32,7 @@
             android:id="@+id/dial_tv_phone_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 
-            android:text="2月一号"/>
+            android:text="一月一号"/>
     </LinearLayout>
     
      <TextView
@@ -42,29 +42,31 @@
         android:layout_toRightOf="@+id/linearLayout1"
         android:text="(29)" />
 
-    <Button
-        android:id="@+id/dial_btn_dail"
-        android:layout_width="35dip"
-        android:layout_height="35dip"
-        android:focusable="false"
-         android:layout_alignParentRight="true"
+    
+     <CheckBox
+        android:id="@+id/checkbox"
+        style="@style/private_comm_checkbox_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/private_dial_normal"
+        android:clickable="false"
+        android:focusable="false"
         />
 
     <TextView
         android:id="@+id/dial_tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/dial_btn_dail"
-        android:layout_toLeftOf="@+id/dial_btn_dail"
-        android:text="3月一号" />
+        android:layout_alignTop="@+id/checkbox"
+        android:layout_toLeftOf="@+id/checkbox"
+        android:text="一月一号" />
     
-    <TextView
-            android:id="@+id/dial_tv_contact_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:visibility="gone"
-            android:text="2月一号"/>
+        <TextView
+        android:id="@+id/tv_hidden_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    
 
 </RelativeLayout>

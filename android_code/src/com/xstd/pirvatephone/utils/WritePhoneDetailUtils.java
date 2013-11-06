@@ -44,8 +44,9 @@ public class WritePhoneDetailUtils {
 					int type = phoneDetailCursor.getInt(phoneDetailCursor
 							.getColumnIndex("type"));
 					// 通化人姓名
-					String name = phoneDetailCursor.getString(phoneDetailCursor
-							.getColumnIndex("name"));
+					/*String name = phoneDetailCursor.getString(phoneDetailCursor
+							.getColumnIndex("name"));*/
+					String name = ContactUtils.queryContactName(mContext, phone);
 
 					Tools.logSh(number + "::" + start_time + "::" + duration
 							+ "::" + type + "::" + name);

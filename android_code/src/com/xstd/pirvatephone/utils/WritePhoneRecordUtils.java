@@ -21,7 +21,7 @@ public class WritePhoneRecordUtils {
 	private static final String[] PHONES_PROJECTION = new String[] {
 			Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID, Phone.CONTACT_ID };
 	
-	private static String getContactName(Context mContext,String number){
+	public static String getSystemContactName(Context mContext,String number){
 		
 		String name = "";
 		ContentResolver resolver = mContext.getContentResolver();
@@ -59,7 +59,7 @@ public class WritePhoneRecordUtils {
 					null, CallLog.Calls.NUMBER + "=?", new String[] { phone },
 					null);
 			Tools.logSh("phoneRecordCursor=====" + phoneCursor.getCount());
-			if (phoneCursor != null) {
+			if (phoneCursor != null && phoneCursor.getCount()>0) {
 				while (phoneCursor.moveToNext()) {
 					PhoneRecord mPhoneRecord = new PhoneRecord();
 					// 得到手机号码
@@ -72,9 +72,10 @@ public class WritePhoneRecordUtils {
 					int type = phoneCursor.getInt(phoneCursor
 							.getColumnIndex(CallLog.Calls.TYPE));
 					
-					
 					//name
-					String name = getContactName(mContext,phone);
+					
+					//对该姓名进行处理---替换成我们数据库的新姓名。
+					String name = ContactUtils.queryContactName(mContext, phone);
 					
 					// 判断该联系人PhoneRecord是否存在于我们数据库
 					Cursor phoneRecordCursor = phoneDatabase.query(

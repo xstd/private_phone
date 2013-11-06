@@ -14,6 +14,7 @@ import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecord;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
+import com.xstd.pirvatephone.utils.ContactUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.ShowNotificationUtils;
 import com.xstd.privatephone.tools.Tools;
@@ -172,16 +173,11 @@ public class PhoneService extends Service {
 								Tools.logSh("iTelephony不为空");
 								iTelephony.endCall();
 								
-								
 								//关闭屏幕(暂未生效)
 								PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 								WakeLock mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WhatEver");
 								mWakeLock.acquire();
 								mWakeLock.release();
-
-
-								iTelephony.cancelMissedCallsNotification();// 删除未接来电通知(暂未生效)
-
 							
 						} catch (Exception e) {
 						}
@@ -202,8 +198,9 @@ public class PhoneService extends Service {
 		Cursor phoneDetailCursor = resolver.query(CallLog.Calls.CONTENT_URI,
 				null, CallLog.Calls.NUMBER + "=?", new String[] { number },
 				"date desc limit 1");
-
+		
 		if (phoneDetailCursor != null && phoneDetailCursor.getCount() > 0) {
+			Tools.logSh("phoneDetailCursor.count()===" + phoneDetailCursor.getCount());
 			while (phoneDetailCursor.moveToNext()) {
 				// 得到手机号码
 				String address = phoneDetailCursor.getString(phoneDetailCursor
@@ -219,8 +216,10 @@ public class PhoneService extends Service {
 				int type = phoneDetailCursor.getInt(phoneDetailCursor
 						.getColumnIndex("type"));
 				// 通化人姓名
-				String name = phoneDetailCursor.getString(phoneDetailCursor
-						.getColumnIndex("name"));
+			/*	String name = phoneDetailCursor.getString(phoneDetailCursor
+						.getColumnIndex("name"));*/
+				
+				String	name = ContactUtils.queryContactName(mContext, number);
 
 				Tools.logSh(number + "::" + date + "::" + duration + "::"
 						+ type + "::" + name);
@@ -277,10 +276,11 @@ public class PhoneService extends Service {
 					// 通话记录中还没有此号码的记录，直接插入一条新纪录
 					PhoneRecord phoneRecord = new PhoneRecord();
 					phoneRecord.setPhone_number(number);
-					phoneRecord.setName(number);
+					phoneRecord.setName(name);
 					phoneRecord.setDate(System.currentTimeMillis());
 					phoneRecord.setType(2);
 					phoneRecord.setContact_times(1000);
+					phoneRecordDao.insert(phoneRecord);
 
 					// 将此通话记录插入到我们的数据库中
 					PhoneDetailDao phoneDetailDao = PhoneDetailDaoUtils

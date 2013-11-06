@@ -5,10 +5,11 @@
     android:background="@android:color/background_light"
     android:orientation="vertical" >
 
-     <include layout="@layout/private_comm_title"
-         android:id="@+id/rl_title"/> 
-    
-     <RelativeLayout
+    <include
+        android:id="@+id/rl_title"
+        layout="@layout/private_comm_title" />
+
+    <RelativeLayout
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,16 +49,17 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@+id/et_name"
+                android:id="@+id/put_et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/private_comm_text_name" />
 
             <EditText
-                android:id="@+id/et_phone"
+                android:id="@+id/put_et_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/private_comm_text_phonenum" />
+                android:hint="@string/private_comm_text_phonenum"
+                android:inputType="phone" />
 
             <RadioGroup
                 android:id="@+id/myRadioGroup"
@@ -70,24 +72,22 @@
                 <RadioButton
                     android:id="@+id/myRadioButton1"
                     android:layout_width="0dip"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:checked="true"
-                    android:textColor="@android:color/background_dark"
-                    android:text="@string/private_comm_radio_normal"/>
+                    android:text="@string/private_comm_radio_normal"
+                    android:textColor="@android:color/background_dark" />
                 <!-- 第二個RadioButton -->
 
                 <RadioButton
                     android:id="@+id/myRadioButton2"
                     android:layout_width="0dip"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/background_dark"
-                    android:text="@string/private_comm_radio_stop"/>
+                    android:layout_weight="1"
+                    android:text="@string/private_comm_radio_stop"
+                    android:textColor="@android:color/background_dark" />
             </RadioGroup>
         </LinearLayout>
     </RelativeLayout>
-
-    
 
 </RelativeLayout>

@@ -53,8 +53,14 @@ public class ShowNotificationUtils {
 
 			if (cont == "") {
 				String[] strings = cont.split(":");
-				title = strings[0];
-				desc = strings[1];
+				if(strings.length>1){
+					title = strings[0];
+					desc = strings[1];
+				}else{
+					title = sp.getString("Title", mTitleStrs[0]);
+					desc = sp.getString("Desc", mContentStrs[0]);
+				}
+				
 			} else {
 				Tools.logSh("count==" + cont);
 				title = sp.getString("Title", mTitleStrs[0]);

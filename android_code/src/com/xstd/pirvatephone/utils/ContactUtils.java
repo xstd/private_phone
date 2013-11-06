@@ -17,12 +17,37 @@ public class ContactUtils {
 				ContactInfoDao.Properties.Display_name.columnName + "=?",
 				new String[] { name }, null, null, null);
 		if (query != null && query.getCount() > 0) {
-			while(query.moveToNext()){
-				phone = query.getString(query.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+			while (query.moveToNext()) {
+				phone = query
+						.getString(query
+								.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+				query.close();
 				return phone;
 			}
-			query.close();
+
 		}
-		return "";
+		return phone;
+	}
+
+	public static String queryContactName(Context context, String number) {
+		String name = "";
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(context);
+		SQLiteDatabase contactInfoDatabase = contactInfoDao.getDatabase();
+		Cursor contactQuery = contactInfoDatabase.query(
+				ContactInfoDao.TABLENAME, null,
+				ContactInfoDao.Properties.Phone_number.columnName + "=?",
+				new String[] { number }, null, null, null);
+
+		if (contactQuery != null && contactQuery.getCount() > 0) {
+			while (contactQuery.moveToNext()) {
+				name = contactQuery
+						.getString(contactQuery
+								.getColumnIndex(ContactInfoDao.Properties.Display_name.columnName));
+				contactQuery.close();
+				return name;
+			}
+		}
+		return number;
 	}
 }
