@@ -43,28 +43,8 @@ public class PhoneDetailActivity extends BaseActivity {
 		name = getIntent().getStringExtra("Name");
 		number = getIntent().getStringExtra("Number");
 
-		//getContactNumber();
 
 		initView();
-	}
-
-	private void getContactNumber() {
-		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-				.getContactInfoDao(this);
-		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-		Cursor query = contactDatabase.query(ContactInfoDao.TABLENAME, null,
-				ContactInfoDao.Properties.Display_name.columnName + "=?",
-				new String[] { name }, null, null, null);
-		if (query != null && query.getCount() > 0) {
-			while (query.moveToNext()) {
-				number = query
-						.getString(query
-								.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
-			}
-			query.close();
-		}
-
-		Tools.logSh("Number====" + number);
 	}
 
 	private void initView() {
@@ -84,7 +64,6 @@ public class PhoneDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});

@@ -278,8 +278,8 @@ public class PhoneService extends Service {
 					phoneRecord.setPhone_number(number);
 					phoneRecord.setName(name);
 					phoneRecord.setDate(System.currentTimeMillis());
-					phoneRecord.setType(2);
-					phoneRecord.setContact_times(1000);
+					phoneRecord.setType(1);
+					phoneRecord.setContact_times(1);
 					phoneRecordDao.insert(phoneRecord);
 
 					// 将此通话记录插入到我们的数据库中
@@ -289,7 +289,7 @@ public class PhoneService extends Service {
 					phoneDetail.setPhone_number(number);
 					phoneDetail.setDate(date);
 					phoneDetail.setDuration(duration);
-					phoneDetail.setType(2);
+					phoneDetail.setType(1);
 					phoneDetailDao.insert(phoneDetail);
 				}
 				phoneRecordCursor.close();

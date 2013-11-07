@@ -22,7 +22,7 @@ import com.xstd.privatephone.tools.Tools;
 
 public class EditPhoneAdapter extends CursorAdapter {
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
-	private static Context mContext;
+	private Context mContext;
 	private String phoneType;
 	private int picId;
 
@@ -60,11 +60,10 @@ public class EditPhoneAdapter extends CursorAdapter {
 		}
 		
 		
-		if(name==null || name==""){
+		if(name==null || "".equals(name)){
 			name = phone_number;
-			views.tv_phone_num.setText(name);
 		}
-		
+		views.dial_tv_name.setText(name);
 		views.tv_hidden_number.setText(phone_number);
 		views.tv_hidden_number.setVisibility(View.GONE);
 		views.inorout.setBackgroundResource(picId);
@@ -106,7 +105,7 @@ public class EditPhoneAdapter extends CursorAdapter {
 		
 		views.inorout = (ImageView) view.findViewById(R.id.dial_iv_inorout);
 		views.tv_type = (TextView) view.findViewById(R.id.dial_tv_phone_type);
-		views.tv_phone_num = (TextView) view.findViewById(R.id.dial_tv_phone_num);
+		views.dial_tv_name = (TextView) view.findViewById(R.id.dial_tv_name);
 		views.tv_hidden_number = (TextView) view.findViewById(R.id.tv_hidden_number);
 		views.tv_date = (TextView) view.findViewById(R.id.dial_tv_date);
 		views.tv_count = (TextView) view.findViewById(R.id.dial_tv_count);
@@ -122,7 +121,7 @@ public class EditPhoneAdapter extends CursorAdapter {
 		ImageView inorout;
 		TextView tv_date;
 		TextView tv_type;
-		TextView tv_phone_num;
+		TextView dial_tv_name;
 		TextView tv_hidden_number;
 		TextView tv_count;
 		CheckBox checkbox;

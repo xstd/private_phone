@@ -1,6 +1,7 @@
 package com.xstd.pirvatephone.activity;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 import com.xstd.pirvatephone.R;
@@ -20,6 +21,7 @@ import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
 import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
 import com.xstd.pirvatephone.utils.MakeCallUtils;
 import com.xstd.pirvatephone.utils.RecordToSysUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemPhoneUtils;
 import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.EditContactAdapter;
@@ -88,41 +90,50 @@ public class PrivateCommActivity extends BaseActivity {
 	private Button contact_add_contacts;
 
 	private TextView contact_empty;
-	private Cursor contactCursor;
-	boolean showEdit = false;
+
+	boolean isEditing = false;
 
 	private ArrayList<String> selectContactsNumber = new ArrayList<String>();;
-	private ListView contact_listview;
 
 	private static final int REMOVE_FINISH = 0;
 	private static final String TAG = "PrivateCommActivity";
 
-	private ContactAdapter mContactAdapter;
-
 	private String[] selectPhones;
-	private Cursor smsRecordCursor;
-	private Cursor phoneRecordCursor;
-	private ListView dial_listview;
-	private TextView dial_empty;
+	private Button edit_checkbox;
+
+	private ListView contact_listview;
+	private ListView phone_listview;
 	private ListView sms_listview;
+	private ListView edit_listview;
+
+	private TextView phone_empty;
 	private TextView sms_empty;
 
 	private RelativeLayout edit_ll_body;
 	private RelativeLayout edit_rl_select;
-	private Button edit_checkbox;
-	private ListView edit_listview;
+
 	private LinearLayout edit_ll_sms_bt;
 	private LinearLayout edit_ll_contact_bt;
 	private LinearLayout edit_ll_phone_bt;
+
 	private Button btn_recover_sms;
 	private Button btn_remove_sms;
 	private Button btn_delete_contact;
 	private Button btn_delete_phone;
+
 	private LinearLayout body_layout;
+
+	private Cursor contactCursor;
+	private Cursor smsRecordCursor;
+	private Cursor phoneRecordCursor;
 
 	private EditContactAdapter editContactAdapter;
 	private EditPhoneAdapter editPhoneAdapter;
 	private EditSmsAdapter editSmsAdapter;
+
+	private ContactAdapter mContactAdapter;
+	private SmsRecordAdapter smsRecordAdapter;
+	private PhoneRecordAdapter phoneRecordAdapter;
 
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
 
@@ -132,7 +143,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 			switch (msg.what) {
 			case REMOVE_FINISH:
-				showEdit = false;
+				isEditing = false;
 
 				textView1.setClickable(true);
 				textView2.setClickable(true);
@@ -140,16 +151,27 @@ public class PrivateCommActivity extends BaseActivity {
 				// 跟新listview
 				Tools.logSh("currIndex=====" + currIndex);
 
-				if (currIndex == 2) {
+				switch (currIndex) {
+				case 0:
+					if (smsRecordAdapter != null) {
+						smsRecordCursor.requery();
+						setSmsRecordAdapter(sms_listview);
+					}
+					break;
+
+				case 1:
+					if (phoneRecordAdapter != null) {
+						phoneRecordCursor.requery();
+						setPhoneRecordAdapter(phone_listview);
+					}
+					break;
+				case 2:
 					if (mContactAdapter != null) {
-						contactCursor.requery();
-						Tools.logSh("contactCursor.size()====="
-								+ contactCursor.getCount());
-						setContactAdapter(contact_listview);
-					} else {
 						contactCursor.requery();
 						setContactAdapter(contact_listview);
 					}
+					break;
+
 				}
 
 				break;
@@ -254,15 +276,15 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				Tools.logSh("currIndex==" + currIndex);
-				if (showEdit) {
+				if (isEditing) {
 					showNormalUI();
 					textView1.setClickable(true);
 					textView2.setClickable(true);
 					textView3.setClickable(true);
 				} else {
-					showEditUI();
+					isEditingUI();
 				}
-				showEdit = !showEdit;
+				isEditing = !isEditing;
 			}
 		});
 
@@ -279,7 +301,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
-	private void showEditBottom() {
+	private void isEditingBottom() {
 		if (currIndex == smsPageNum) {
 			edit_ll_sms_bt.setVisibility(View.VISIBLE);
 			edit_ll_contact_bt.setVisibility(View.GONE);
@@ -296,7 +318,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
-	private void showEditUI() {
+	private void isEditingUI() {
 		textView1.setClickable(false);
 		textView2.setClickable(false);
 		textView3.setClickable(false);
@@ -340,7 +362,7 @@ public class PrivateCommActivity extends BaseActivity {
 						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
 								Toast.LENGTH_SHORT).show();
 					} else {
-						showEditDeleteSmsDialog();
+						isEditingDeleteSmsDialog();
 					}
 
 				}
@@ -353,7 +375,7 @@ public class PrivateCommActivity extends BaseActivity {
 						Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目",
 								Toast.LENGTH_SHORT).show();
 					} else {
-						showEditRecoverSmsDialog();
+						isEditingRecoverSmsDialog();
 					}
 
 				}
@@ -397,7 +419,7 @@ public class PrivateCommActivity extends BaseActivity {
 						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
 								Toast.LENGTH_SHORT).show();
 					} else {
-						showEditPhoneDialog();
+						isEditingPhoneDialog();
 					}
 				}
 			});
@@ -438,12 +460,12 @@ public class PrivateCommActivity extends BaseActivity {
 						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
 								Toast.LENGTH_SHORT).show();
 					} else {
-						showEditContactDialog();
+						isEditingContactDialog();
 					}
 				}
 			});
 		}
-		showEditBottom();
+		isEditingBottom();
 	}
 
 	private void showNormalUI() {
@@ -490,7 +512,7 @@ public class PrivateCommActivity extends BaseActivity {
 			 * viewPager.getCurrentItem() + "页卡", Toast.LENGTH_SHORT).show();
 			 */
 
-			showEdit = false;
+			isEditing = false;
 			// 加载数据
 			fillData();
 			selectContacts.clear();
@@ -517,10 +539,10 @@ public class PrivateCommActivity extends BaseActivity {
 			return;
 		}
 		if (currIndex == dialPageNum) {
-			dial_listview = (ListView) findViewById(R.id.dial_lv_cont);
-			dial_empty = (TextView) findViewById(R.id.dial_tv_empty);
+			phone_listview = (ListView) findViewById(R.id.dial_lv_cont);
+			phone_empty = (TextView) findViewById(R.id.dial_tv_empty);
 
-			updateContact(dial_listview, dial_empty);
+			updateContact(phone_listview, phone_empty);
 
 			return;
 		}
@@ -559,17 +581,6 @@ public class PrivateCommActivity extends BaseActivity {
 
 		// 删除隐私联系人号码同时移除情景模式内该号码相关信息
 		ContextModelUtils.deleteModelDetail(this, selectNumbers);
-	}
-
-	public void updatePhone(ListView mListView, TextView tv) {
-
-		if (contactCursor.getCount() == 0) {
-			mListView.setEmptyView(tv);
-		} else {
-			// 通知数据获取完成
-			setContactAdapter(mListView);
-		}
-
 	}
 
 	private Cursor getSmsRecord() {
@@ -650,12 +661,13 @@ public class PrivateCommActivity extends BaseActivity {
 	private void setPhoneRecordAdapter(ListView mListView) {
 
 		if (phoneRecordCursor.getCount() == 0) {
-			mListView.setEmptyView(dial_empty);
+			mListView.setEmptyView(phone_empty);
 		} else {
 			Tools.logSh("cursor的长度为：" + phoneRecordCursor.getCount());
-			dial_empty.setVisibility(View.GONE);
-			mListView.setAdapter(new PhoneRecordAdapter(
-					getApplicationContext(), phoneRecordCursor));
+			phone_empty.setVisibility(View.GONE);
+			phoneRecordAdapter = new PhoneRecordAdapter(
+					getApplicationContext(), phoneRecordCursor);
+			mListView.setAdapter(phoneRecordAdapter);
 		}
 
 		mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -705,8 +717,9 @@ public class PrivateCommActivity extends BaseActivity {
 		} else {
 			sms_empty.setVisibility(View.GONE);
 			Tools.logSh("cursor的长度为：" + smsRecordCursor.getCount());
-			mListView.setAdapter(new SmsRecordAdapter(getApplicationContext(),
-					smsRecordCursor));
+			smsRecordAdapter = new SmsRecordAdapter(PrivateCommActivity.this,
+					smsRecordCursor);
+			mListView.setAdapter(smsRecordAdapter);
 		}
 
 		mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -738,12 +751,14 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				TextView sms_tv_name = (TextView) view.findViewById(R.id.sms_tv_name);
-				TextView sms_tv_number = (TextView) view.findViewById(R.id.sms_tv_number);
+				TextView sms_tv_name = (TextView) view
+						.findViewById(R.id.sms_tv_name);
+				TextView sms_tv_number = (TextView) view
+						.findViewById(R.id.sms_tv_number);
 				String name = sms_tv_name.getText().toString().trim();
 				String number = sms_tv_number.getText().toString().trim();
-				
-				showSmsDialog(name,number);
+
+				showSmsDialog(name, number);
 				return false;
 			}
 		});
@@ -822,8 +837,8 @@ public class PrivateCommActivity extends BaseActivity {
 									PrivateCommActivity.this,
 									SmsDetailActivity.class);
 							// 姓名带过去
-							Tools.logSh("Name==" + name);
-							smsDetailIntent.putExtra("Name", name);
+							Tools.logSh("Number==" + address);
+							smsDetailIntent.putExtra("Number", address);
 							startActivity(smsDetailIntent);
 							break;
 						case 2:
@@ -870,8 +885,8 @@ public class PrivateCommActivity extends BaseActivity {
 									PrivateCommActivity.this,
 									SmsDetailActivity.class);
 							// 姓名带过去
-							Tools.logSh("Name==" + name);
-							smsDetailIntent.putExtra("Name", name);
+							Tools.logSh("Number==" + number);
+							smsDetailIntent.putExtra("Number", number);
 							startActivity(smsDetailIntent);
 
 							break;
@@ -899,7 +914,8 @@ public class PrivateCommActivity extends BaseActivity {
 
 						switch (which) {
 						case 0:
-							Intent intent = new Intent(PrivateCommActivity.this,
+							Intent intent = new Intent(
+									PrivateCommActivity.this,
 									SmsDetailActivity.class);
 							intent.putExtra("Name", name);
 							intent.putExtra("Number", number);
@@ -911,14 +927,15 @@ public class PrivateCommActivity extends BaseActivity {
 									number);
 							break;
 						case 2:
+							SmsTast task1 = new SmsTast(
+									PrivateCommActivity.this, true, number);
+							task1.execute();
 
-							Toast.makeText(PrivateCommActivity.this, "还没做",
-									Toast.LENGTH_SHORT).show();
 							break;
 						case 3:
-
-							Toast.makeText(PrivateCommActivity.this, "还没做",
-									Toast.LENGTH_SHORT).show();
+							SmsTast task2 = new SmsTast(
+									PrivateCommActivity.this, false, number);
+							task2.execute();
 							break;
 						}
 					}
@@ -926,8 +943,30 @@ public class PrivateCommActivity extends BaseActivity {
 		builder.create().show();
 	}
 
-	private void showDeletePhoneDialog(String number) {
-		SureDialog dialog = new SureDialog(this, number);
+	private void showDeletePhoneDialog(final String number) {
+
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("提示:确定删除此条通话记录?");
+
+		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				DeletePhoneTast task = new DeletePhoneTast(
+						PrivateCommActivity.this, number);
+				task.execute();
+				dialog.dismiss();
+			}
+		});
+		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+
+			}
+		});
+		builder.create().show();
 
 	}
 
@@ -935,42 +974,48 @@ public class PrivateCommActivity extends BaseActivity {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("添加新的联系人");
-		builder.setItems(new String[] { "从联系人添加", "手工输入号码","从通话记录添加","从短信记录添加"},
-				new DialogInterface.OnClickListener() {
+		builder.setItems(new String[] { "从联系人添加", "手工输入号码", "从通话记录添加",
+				"从短信记录添加" }, new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 
-						TextView textView = (TextView) findViewById(R.id.text);
-						switch (which) {
-						case 0:
-							Intent intent = new Intent(
-									PrivateCommActivity.this,
-									AddContactActivity.class);
-							startActivity(intent);
-							break;
-						case 1:
-							Intent intent2 = new Intent(
-									PrivateCommActivity.this,
-									HandInputActivity.class);
-							startActivity(intent2);
-							break;
-							
-						case 2:
-							Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。", Toast.LENGTH_SHORT).show();
-							break;
-							
-						case 3:
-							Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。", Toast.LENGTH_SHORT).show();
-							break;
-						}
-					}
-				});
+				switch (which) {
+				case 0:
+					Intent intent1 = new Intent(PrivateCommActivity.this,
+							AddContactActivity.class);
+					startActivity(intent1);
+					break;
+				case 1:
+					Intent intent2 = new Intent(PrivateCommActivity.this,
+							HandInputActivity.class);
+					startActivity(intent2);
+					break;
+
+				case 2:
+
+					Intent intent3 = new Intent(PrivateCommActivity.this,
+							AddFromPhoneRecordActivity.class);
+					startActivity(intent3);
+					Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。",
+							Toast.LENGTH_SHORT).show();
+					break;
+
+				case 3:
+					Intent intent4 = new Intent(PrivateCommActivity.this,
+							AddFromSmsRecordActivity.class);
+					startActivity(intent4);
+					Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+			}
+		});
 		builder.create().show();
 
 	}
 
-	private void showEditContactDialog() {
+	private void isEditingContactDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("提示:确定将联系人移出隐私空间?");
 
@@ -1003,7 +1048,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
-	private void showEditPhoneDialog() {
+	private void isEditingPhoneDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("提示:确定删除此条通话记录");
@@ -1017,7 +1062,7 @@ public class PrivateCommActivity extends BaseActivity {
 							Toast.LENGTH_SHORT).show();
 				} else {
 					DeletePhoneTast task = new DeletePhoneTast(
-							PrivateCommActivity.this);
+							PrivateCommActivity.this, null);
 					task.execute();
 				}
 			}
@@ -1034,7 +1079,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
-	private void showEditDeleteSmsDialog() {
+	private void isEditingDeleteSmsDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("提示:确定删除整个短信会话");
@@ -1047,8 +1092,8 @@ public class PrivateCommActivity extends BaseActivity {
 					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					DeleteSmsTast task = new DeleteSmsTast(
-							PrivateCommActivity.this);
+					SmsTast task = new SmsTast(PrivateCommActivity.this, null,
+							null);
 					task.execute();
 				}
 				dialog.dismiss();
@@ -1065,7 +1110,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
-	private void showEditRecoverSmsDialog() {
+	private void isEditingRecoverSmsDialog() {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("提示:是否将隐私短信恢复到系统");
@@ -1079,8 +1124,8 @@ public class PrivateCommActivity extends BaseActivity {
 					Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					RestoreSmsTast task = new RestoreSmsTast(
-							PrivateCommActivity.this);
+					SmsTast task = new SmsTast(PrivateCommActivity.this, true,
+							null);
 					task.execute();
 				}
 			}
@@ -1128,9 +1173,9 @@ public class PrivateCommActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (showEdit) {
+		if (isEditing) {
 			showNormalUI();
-			showEdit = !showEdit;
+			isEditing = !isEditing;
 			return false;
 		} else {
 			return super.onKeyDown(keyCode, event);
@@ -1141,9 +1186,11 @@ public class PrivateCommActivity extends BaseActivity {
 	private class DeletePhoneTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
+		private String number;
 
-		public DeletePhoneTast(Context context) {
+		public DeletePhoneTast(Context context, String number) {
 			this.mContext = context;
+			this.number = number;
 		}
 
 		/**
@@ -1167,20 +1214,29 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPostExecute(Integer integer) {
-			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
-			ArrayUtils arrayUtils = new ArrayUtils();
-			DelectOurPhoneDetailsUtils.deletePhoneDetails(
-					PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			DelectOurPhoneRecordsUtils.deletePhoneRecords(
-					PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			selectContacts.clear();
 
+			if (isEditing) {
+				Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
+				ArrayUtils arrayUtils = new ArrayUtils();
+				DelectOurPhoneDetailsUtils.deletePhoneDetails(
+						PrivateCommActivity.this,
+						arrayUtils.listToArray(selectContacts));
+				DelectOurPhoneRecordsUtils.deletePhoneRecords(
+						PrivateCommActivity.this,
+						arrayUtils.listToArray(selectContacts));
+				selectContacts.clear();
+			
+			} else {
+				DelectOurPhoneDetailsUtils.deletePhoneDetails(
+						PrivateCommActivity.this, new String[] { number });
+				DelectOurPhoneRecordsUtils.deletePhoneRecords(
+						PrivateCommActivity.this, new String[] { number });
+
+			}
+			
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
-			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
 
 		}
 
@@ -1243,12 +1299,16 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 	}
 
-	private class RestoreSmsTast extends AsyncTask<Void, Integer, Integer> {
+	private class SmsTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
+		private Boolean flag;
+		private String number;
 
-		public RestoreSmsTast(Context context) {
+		public SmsTast(Context context, Boolean flag, String number) {
 			this.mContext = context;
+			this.flag = flag;
+			this.number = number;
 		}
 
 		/**
@@ -1273,73 +1333,38 @@ public class PrivateCommActivity extends BaseActivity {
 		@Override
 		public void onPostExecute(Integer integer) {
 			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
-			ArrayUtils arrayUtils = new ArrayUtils();
-			RestoreSystemSmsUtils.restoreSms(PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			DelectOurSmsDetailsUtils.deleteSmsDetails(PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			DelectOurSmsRecordsUtils.deleteSmsRecords(PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			selectContacts.clear();
+
+			if (isEditing) {
+				ArrayUtils arrayUtils = new ArrayUtils();
+				if (flag) {// isRestore===true,restore to system
+					RestoreSystemSmsUtils.restoreSms(PrivateCommActivity.this,
+							arrayUtils.listToArray(selectContacts));
+				}
+				DelectOurSmsDetailsUtils.deleteSmsDetails(
+						PrivateCommActivity.this,
+						arrayUtils.listToArray(selectContacts));
+				DelectOurSmsRecordsUtils.deleteSmsRecords(
+						PrivateCommActivity.this,
+						arrayUtils.listToArray(selectContacts));
+				selectContacts.clear();
+
+			} else {
+				if (flag) {// 恢复到系统数据据库
+					RestoreSystemSmsUtils.restoreSms(PrivateCommActivity.this,
+							new String[] { number });
+				}
+
+				DelectOurSmsDetailsUtils.deleteSmsDetails(
+						PrivateCommActivity.this, new String[] { number });
+				DelectOurSmsRecordsUtils.deleteSmsRecords(
+						PrivateCommActivity.this, new String[] { number });
+			}
 
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
+
 			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
-
-		}
-
-		/**
-		 * 在publishProgress()被调用以后执行，publishProgress()用于更新进度
-		 */
-		@Override
-		public void onProgressUpdate(Integer... values) {
-
-		}
-	}
-
-	private class DeleteSmsTast extends AsyncTask<Void, Integer, Integer> {
-
-		private Context mContext;
-
-		public DeleteSmsTast(Context context) {
-			this.mContext = context;
-		}
-
-		/**
-		 * 运行在UI线程中，在调用doInBackground()之前执行
-		 */
-		@Override
-		public void onPreExecute() {
-			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
-		}
-
-		/**
-		 * 后台运行的方法，可以运行非UI线程，可以执行耗时的方法
-		 */
-		@Override
-		protected Integer doInBackground(Void... params) {
-			return null;
-		}
-
-		/**
-		 * 运行在ui线程中，在doInBackground()执行完毕后执行
-		 */
-		@Override
-		public void onPostExecute(Integer integer) {
-			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
-			ArrayUtils arrayUtils = new ArrayUtils();
-			DelectOurSmsDetailsUtils.deleteSmsDetails(PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			DelectOurSmsRecordsUtils.deleteSmsRecords(PrivateCommActivity.this,
-					arrayUtils.listToArray(selectContacts));
-			selectContacts.clear();
-
-			Message msg = new Message();
-			msg.what = REMOVE_FINISH;
-			handler.sendMessage(msg);
-			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
-
 		}
 
 		/**

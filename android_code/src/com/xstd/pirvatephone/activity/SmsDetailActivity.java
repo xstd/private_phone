@@ -59,31 +59,11 @@ public class SmsDetailActivity extends BaseActivity {
 		name = getIntent().getStringExtra("Name");
 		number = getIntent().getStringExtra("Number");
 		Tools.logSh("Name====" + name);
-		// 查询该name对应的number
-		//getContactNumber();
 
 		initData();
 		initView();
 	}
 
-	private void getContactNumber() {
-		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-				.getContactInfoDao(this);
-		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-		Cursor query = contactDatabase.query(ContactInfoDao.TABLENAME, null,
-				ContactInfoDao.Properties.Display_name.columnName + "=?",
-				new String[] { name }, null, null, null);
-		if (query != null && query.getCount() > 0) {
-			while (query.moveToNext()) {
-				number = query
-						.getString(query
-								.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
-			}
-			query.close();
-		}
-
-		Tools.logSh("Number====" + number);
-	}
 
 	private void initView() {
 		// title

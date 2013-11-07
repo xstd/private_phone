@@ -64,8 +64,8 @@
         <activity android:name="com.xstd.pirvatephone.activity.BaseActivity" />
         <activity
             android:name="com.xstd.pirvatephone.activity.HomeActivity"
-            android:launchMode="singleTask"
-            android:label="@string/title_activity_home" />
+            android:label="@string/title_activity_home"
+            android:launchMode="singleTask" />
         <activity
             android:name="com.xstd.pirvatephone.activity.PrivateCommActivity"
             android:label="@string/title_activity_private_comm" />
@@ -163,6 +163,14 @@
         <activity
             android:name="com.xstd.pirvatephone.activity.ShowAllInstallAppActivity"
             android:label="@string/title_activity_show_all_install_app" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.AddFromPhoneRecordActivity"
+            android:label="@string/title_activity_add_from_phone_record" >
+        </activity>
+        <activity
+            android:name="com.xstd.pirvatephone.activity.AddFromSmsRecordActivity"
+            android:label="@string/title_activity_add_from_sms_record" >
         </activity>
     </application>
 

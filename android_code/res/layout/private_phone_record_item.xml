@@ -5,52 +5,56 @@
     android:layout_height="55dip"
     android:gravity="center_vertical"
     android:padding="10dip" >
-    
+
     <ImageView
         android:id="@+id/dial_iv_inorout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:background="@drawable/privacy_incoming"
-        />
+        android:background="@drawable/privacy_incoming" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/dial_iv_inorout"
         android:layout_marginLeft="20dip"
+        android:layout_toRightOf="@+id/dial_iv_inorout"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/dial_tv_contact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:text="一月一号"/>
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/dial_tv_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="一月一号" />
+
+            <TextView
+                android:id="@+id/dial_tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(29)" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/dial_tv_phone_type"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:text="2月一号"/>
+            android:layout_height="wrap_content"
+            android:text="2月一号" />
     </LinearLayout>
-    
-     <TextView
-        android:id="@+id/dial_tv_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/linearLayout1"
-        android:text="(29)" />
 
     <Button
         android:id="@+id/dial_btn_dail"
         android:layout_width="35dip"
         android:layout_height="35dip"
-        android:focusable="false"
-         android:layout_alignParentRight="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@drawable/private_dial_normal"
-        />
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/dial_tv_date"
@@ -59,12 +63,12 @@
         android:layout_alignTop="@+id/dial_btn_dail"
         android:layout_toLeftOf="@+id/dial_btn_dail"
         android:text="3月一号" />
-    
+
     <TextView
-            android:id="@+id/dial_tv_contact_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:visibility="gone"
-            android:text="2月一号"/>
+        android:id="@+id/dial_tv_contact_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2月一号"
+        android:visibility="gone" />
 
 </RelativeLayout>

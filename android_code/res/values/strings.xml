@@ -768,6 +768,8 @@ QQ:903372666
     <string name="private_comm_delete_comm">删除通话记录</string>
     <string name="private_comm_recover_contact">恢复</string>
     <string name="private_comm_delete">删除</string>
+    <string name="private_comm_add_from_phonerecord">从通话记录添加</string>
+    <string name="private_comm_add_from_smsrecord">从短信记录添加</string>
 
     <!-- 入口 -->
     <string name="enter_no_password_tips">提示</string>
@@ -903,5 +905,7 @@ QQ:903372666
     <string name="rs_choose_jump_app">选择一键切出程序</string>
     <string name="rs_set_jump_app">设置一键切出程序</string>
     <string name="rs_set_sure">你确定要设置&lt;font color=\"#ff0000\">%1$s&lt;/font>为一键切出程序吗？</string>
+    <string name="title_activity_add_from_phone_record">AddFromPhoneRecordActivity</string>
+    <string name="title_activity_add_from_sms_record">AddFromSmsRecordActivity</string>
 
 </resources>
