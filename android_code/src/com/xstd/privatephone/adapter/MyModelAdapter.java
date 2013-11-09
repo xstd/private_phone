@@ -11,18 +11,22 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
+import com.xstd.pirvatephone.utils.ContactUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class MyModelAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private ArrayList<Model> mModels;
+	private Integer checkedId = -1;
 
 	/** 选取转换为隐私联系人的号码 **/
 
@@ -49,78 +53,59 @@ public class MyModelAdapter extends BaseAdapter {
 		return position;
 	}
 
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHold hold;
-		if (convertView == null) {
-			hold = new ViewHold();
-			convertView = View.inflate(mContext, R.layout.context_model_item,
+	public View getView(final int position, View convertView, ViewGroup parent) {
+			View view = View.inflate(mContext, R.layout.context_model_item,
 					null);
-			hold = new ViewHold();
-
-			hold.modelName = (TextView) convertView
+			TextView modelName = (TextView) view
 					.findViewById(R.id.tv_modelname);
-			hold.modelType = (CheckBox) convertView
+			CheckBox modelType = (CheckBox) view
 					.findViewById(R.id.btn_check);
 
-			convertView.setTag(hold);
-		} else {
-			hold = (ViewHold) convertView.getTag();
-		}
-
 		final Model mModel = mModels.get(position);
-		// 绘制联系人名称
-		hold.modelName.setText(mModel.getModel_name());
 		int type = mModel.getModel_type();
 		if (type == 1) {
-			hold.modelType.setChecked(true);
+			checkedId = position;
+			Tools.logSh("checkedId===="+checkedId);
+			modelType.setChecked(true);
 		} else {
-			hold.modelType.setChecked(false);
+			modelType.setChecked(false);
 		}
-
-		hold.modelType.setOnClickListener(new OnClickListener() {
-
+		modelName.setText(mModel.getModel_name());
+		
+		modelType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
 			@Override
-			public void onClick(View v) {
-				if (mModel.getModel_type() == 1) {
-					setAllModeType();
-					mModel.setModel_type(0);
-					update();
-				} else {
-					setAllModeType();
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+					if(checkedId!=-1){// hasChecked
+						Tools.logSh("以前备选中的清除了===="+checkedId+"号");
+						mModels.get(checkedId).setModel_type(0);
+						update(mModels.get(checkedId));
+					}
+					
+					checkedId = position;
+					Tools.logSh("新选中了===="+checkedId+"号");
 					mModel.setModel_type(1);
-					update();
+					update(mModels.get(checkedId));
+				ContactUtils.modelChangeContact(mContext);//需要继续修改
+					
+				}else{
+					
+					Tools.logSh("撤消了选中de===="+checkedId+"号");
+					
+					mModel.setModel_type(0);
+					update(mModels.get(checkedId));
 				}
-				Tools.logSh(mModel.getModel_type() + "");
 			}
 		});
-		return convertView;
+		
+		return view;
 	}
 
-	static class ViewHold {
-		TextView modelName;
-		CheckBox modelType;
-	}
-
-	private void setAllModeType() {
-		for (Model modelInfo : mModels) {
-			modelInfo.setModel_type(0);
-		}
-	}
-
-	private void update() {
+	private void update(Model model) {
 		//跟新数据库
 		ModelDao modelDao = ModelDaoUtils.getModelDao(mContext);
-		SQLiteDatabase modelDatabase = modelDao.getDatabase();
-		Cursor query = modelDatabase.query(ModelDao.TABLENAME, null, null, null, null, null, null);
-		
-		if(query!=null && query.getCount()>0){
-			while(query.moveToNext()){
-				for (Model modelInfo : mModels) {
-					modelDao.update(modelInfo);
-				}	
-			}
-			query.close();
-		}
+		modelDao.update(model);
 		
 		// 更新UI
 		Intent intent = new Intent();

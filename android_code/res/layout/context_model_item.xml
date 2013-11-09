@@ -23,7 +23,8 @@
         android:layout_height="match_parent"
         android:layout_marginRight="40dip"
         android:gravity="center_vertical"
+        android:hint="123"
         android:layout_alignParentRight="true"
-        android:text="hellodsafsajkfhdasfhlksdajfsdfasfadsafdsf" />
+        />
 
 </RelativeLayout>

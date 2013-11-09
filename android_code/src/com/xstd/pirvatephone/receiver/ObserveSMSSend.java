@@ -61,7 +61,7 @@ public class ObserveSMSSend extends ContentObserver {
 
 					ContextModelUtils contextModelUtils = new ContextModelUtils();
 					ArrayList<String> numbers = contextModelUtils
-							.getNumbers(mContext);
+							.getIntereptNumbers(mContext,null);
 
 					// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
 					if (numbers != null && numbers.contains(smsNumber)) {

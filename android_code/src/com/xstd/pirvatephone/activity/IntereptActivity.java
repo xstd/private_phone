@@ -150,7 +150,6 @@ public class IntereptActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});
@@ -161,12 +160,14 @@ public class IntereptActivity extends BaseActivity {
 			public void onClick(View v) {
 				String clazzName = getCallingActivity().getShortClassName()
 						.toString();
-				//编辑页面切入
+				//from edit page
 				if (".activity.ModelEditActivity".equals(clazzName)) {
 					ContextModelUtils.saveModelDetail(IntereptActivity.this,
 							modelName, selectContactsNames,
 							selectContactsNumbers, type, delete);
-				} else {//新建情景模式切入
+					
+					
+				} else {//from create context model page
 					
 					Toast.makeText(IntereptActivity.this,
 							"callingActivity！NewContextModelActivity",

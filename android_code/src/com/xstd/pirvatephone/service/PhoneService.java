@@ -140,14 +140,14 @@ public class PhoneService extends Service {
 				break;
 
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
-				Tools.logSh("来电了");
+				Tools.logSh("来电了"+incomingNumber);
 				recevierTime = System.currentTimeMillis();
 				// 判断该号码的拦截状态
 				// 1、获取当前的情景模式-拦截号码
 				ContextModelUtils contextModelUtils = new ContextModelUtils();
 				ArrayList<String> numbers = contextModelUtils
-						.getNumbers(mContext);
-
+						.getIntereptNumbers(mContext,null);
+				Tools.logSh("拦截号码"+numbers);
 				// 第2步:确认该号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(incomingNumber)) {
 					// 查询是立即挂断还是正常接听
@@ -309,7 +309,7 @@ public class PhoneService extends Service {
 		Tools.logSh("removeDail被调用了" + number);
 		// 1、获取当前的情景模式-拦截号码，判断外拨电话是否是拦截号码
 		ContextModelUtils contextModelUtils = new ContextModelUtils();
-		ArrayList<String> numbers = contextModelUtils.getNumbers(mContext);
+		ArrayList<String> numbers = contextModelUtils.getIntereptNumbers(mContext,null);
 		Tools.logSh("numbers===" + numbers);
 
 		if (numbers != null && numbers.contains(number)) {

@@ -174,7 +174,6 @@ public class NewContextModelActivity extends BaseActivity {
 								Toast.makeText(NewContextModelActivity.this, "没有需要移动的2", Toast.LENGTH_SHORT).show();
 							}
 						}
-						
 
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
@@ -210,12 +209,12 @@ public class NewContextModelActivity extends BaseActivity {
 	}
 
 	private void createNewModel(String modelName) {
+		Tools.logSh("createNewModel");
 		// 创建情景模式
 		Model model = new Model();
 		model.setModel_name(modelName);
 		model.setModel_type(0);
 		modelDao.insert(model);
-		Tools.logSh("新建了一种情景模式");
 
 		if (selectContactsNumbers != null && selectContactsNumbers.size() > 0) {
 			ContextModelUtils.saveModelDetail(this, modelName,
