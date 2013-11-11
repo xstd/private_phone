@@ -64,6 +64,9 @@ public class SimulaCommActivity extends BaseActivity implements
     @ViewMapping(ID = R.id.btn_add)
     public Button btn_add;
 
+    @ViewMapping(ID = R.id.btn_add_advance)
+    public Button btn_add_advance;
+
     @ViewMapping(ID = R.id.simulate_sms)
     public TextView simulate_sms;
 
@@ -132,7 +135,9 @@ public class SimulaCommActivity extends BaseActivity implements
     }
 
     private void displayWhich() {
+        btn_add_advance.setVisibility(View.GONE);
         if (type == SIMULATE_PHONE) {
+            btn_add_advance.setVisibility(View.VISIBLE);
             lv_phone.setVisibility(View.VISIBLE);
             lv_sms.setVisibility(View.GONE);
             lv_common_phone.setVisibility(View.GONE);
@@ -225,6 +230,15 @@ public class SimulaCommActivity extends BaseActivity implements
         } else if (type == COMMON_PHONE) {
             intent.setClass(this, AddCommonPhoneActivity.class);
         }
+        startActivity(intent);
+    }
+
+    /**
+     * 增加一条人工模拟电话
+     * @param view
+     */
+    public void addAdvanceSimulate(View view) {
+        Intent intent = new Intent(this,AddAdvanceSimulatePhoneActivity.class);
         startActivity(intent);
     }
 

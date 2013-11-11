@@ -44,6 +44,15 @@
         android:onClick="addSimulate"
         android:text="@string/simula_add_phone" />
 
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_add_advance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:onClick="addAdvanceSimulate"
+        android:text="@string/simula_add_advance_phone" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/ll_title_bar" />
+
+    <ScrollView
+        android:padding="10dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center"
+                    android:text="@string/rs_callin_name"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/callin_name"
+                    android:singleLine="true"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_marginBottom="15dp"
+                android:hint="@string/rs_select_callin_number"
+                android:textColor="@color/c_common_text"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/select_callin_number"
+                android:background="@drawable/choose_selector"
+                android:paddingLeft="@dimen/d_btn_paddingLeft"
+                android:layout_width="@dimen/d_view_width"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center"
+                    android:text="@string/rs_callin_chenghu"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/callin_chenghu"
+                    android:singleLine="true"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_marginBottom="15dp"
+                android:hint="@string/rs_callin_time"
+                android:textColor="@color/c_common_text"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/callin_time"
+                android:background="@drawable/choose_selector"
+                android:paddingLeft="@dimen/d_btn_paddingLeft"
+                android:layout_width="@dimen/d_view_width"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:layout_marginBottom="15dp"
+                android:hint="@string/rs_meet_time"
+                android:textColor="@color/c_common_text"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/meet_time"
+                android:background="@drawable/choose_selector"
+                android:paddingLeft="@dimen/d_btn_paddingLeft"
+                android:layout_width="@dimen/d_view_width"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center"
+                    android:text="@string/rs_meet_location"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/meet_location"
+                    android:singleLine="true"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center"
+                    android:text="@string/rs_meet_why"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/meet_why"
+                    android:singleLine="true"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center"
+                    android:text="@string/rs_other"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/other"
+                    android:gravity="center_vertical"
+                    android:lines="3"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/clear"
+            android:text="@string/s_clear"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/ok"
+            android:text="@string/s_ok"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

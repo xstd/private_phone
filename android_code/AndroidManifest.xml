@@ -172,6 +172,7 @@
             android:name="com.xstd.pirvatephone.activity.AddFromSmsRecordActivity"
             android:label="@string/title_activity_add_from_sms_record" >
         </activity>
+        <activity android:name=".activity.AddAdvanceSimulatePhoneActivity" />
     </application>
 
 </manifest>

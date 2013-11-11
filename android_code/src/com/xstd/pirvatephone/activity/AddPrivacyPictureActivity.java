@@ -127,8 +127,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if(REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {
-    		Uri uri = data.getData();
-    		Log.w(TAG, uri.toString());
+    		Log.w(TAG, data.toString());
     	}
     }
 

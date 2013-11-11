@@ -863,6 +863,7 @@ QQ:903372666
     <string name="simula_comm_phone_title">模拟通话</string>
     <string name="simula_add_sms">新增模拟短信</string>
     <string name="simula_add_phone">新增模拟通话</string>
+    <string name="simula_add_advance_phone">新增人工模拟通话</string>
     <string name="title_activity_phone_detail">PhoneDetailActivity</string>
     <string name="title_activity_context_model">ContextModelActivity</string>
     <string name="title_activity_new_context_model">NewContextModelActivity</string>
@@ -907,5 +908,14 @@ QQ:903372666
     <string name="rs_set_sure">你确定要设置&lt;font color=\"#ff0000\">%1$s&lt;/font>为一键切出程序吗？</string>
     <string name="title_activity_add_from_phone_record">AddFromPhoneRecordActivity</string>
     <string name="title_activity_add_from_sms_record">AddFromSmsRecordActivity</string>
+    <string name="rs_callin_name">来电人名称</string>
+    <string name="rs_select_callin_number">选择来电人号码</string>
+    <string name="rs_callin_chenghu">来电如何称呼您</string>
+    <string name="rs_callin_time">来电时间</string>
+    <string name="rs_meet_time">见面的时间</string>
+    <string name="rs_meet_location">见面的地点</string>
+    <string name="rs_meet_why">见面事由</string>
+    <string name="rs_other">备注</string>
+    <string name="s_clear">清空</string>
 
 </resources>
