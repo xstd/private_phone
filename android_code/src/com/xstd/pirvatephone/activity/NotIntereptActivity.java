@@ -57,7 +57,7 @@ public class NotIntereptActivity extends BaseActivity {
 	private Cursor contactCursor;
 	private EditContactAdapter mContactAdapter;
 	private boolean delete = false;
-	private int type = 1;
+	private int type = 0;
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
@@ -269,7 +269,7 @@ public class NotIntereptActivity extends BaseActivity {
 					intent.putStringArrayListExtra("SelectContactsNames",
 							selectContactsNames);
 					intent.putExtra("delete", delete);
-					setResult(1, intent);
+					setResult(2, intent);
 				}
 				finish();
 			}

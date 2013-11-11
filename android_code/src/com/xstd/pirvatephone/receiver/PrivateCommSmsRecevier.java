@@ -8,6 +8,7 @@ import com.xstd.pirvatephone.dao.sms.SmsDetailDaoUtils;
 import com.xstd.pirvatephone.dao.sms.SmsRecord;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
+import com.xstd.pirvatephone.utils.ContactUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.ShowNotificationUtils;
 import com.xstd.privatephone.tools.Tools;
@@ -52,83 +53,96 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 				Tools.logSh("接收到短信广播事件" + "smsNumber=" + smsNumber + "smsBody"
 						+ smsBody + "smsDate" + smsDate);
 
-				SmsDetailDao smsDetailDao = SmsDetailDaoUtils
-						.getSmsDetailDao(context);
-
 				ContextModelUtils contextModelUtils = new ContextModelUtils();
 				ArrayList<String> numbers = contextModelUtils
 						.getIntereptNumbers(mContext,null);
 
+				ArrayList<String> intereptNumber = ContactUtils
+						.queryIntereptNumber(mContext);
+				
 				// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(smsNumber)) {
-					new ShowNotificationUtils().showNotification(mContext);
-					new ShowNotificationUtils().startShake(mContext);
-				//	ShowNotificationUtils.startVoice(mContext, 1, 1);
-					Tools.logSh("发现需要拦截的号码：：" + smsNumber);
-
-					//2. 若是拦截联系人，将此短信插入到我们的数据库中
-					SmsDetail mSmsDetail = new SmsDetail();
-
-					SmsRecordDao smsRecordDao = SmsRecordDaoUtils
-							.getSmsRecordDao(mContext);
-					SQLiteDatabase smsRecordDatabase = smsRecordDao
-							.getDatabase();
-					Cursor smsRecordCursor = smsRecordDatabase.query(
-							SmsRecordDao.TABLENAME, null,
-							SmsRecordDao.Properties.Phone_number.columnName
-									+ "=?", new String[] { smsNumber }, null,
-							null, null);
-					// 2.1我们数据库中已经有smsRecord
-					if (smsRecordCursor != null
-							&& smsRecordCursor.getCount() > 0) {
-						while (smsRecordCursor.moveToNext()) {
-							SmsRecord smsRecord = new SmsRecord();
-							smsRecord.setPhone_number(smsNumber);
-							smsRecord
-									.setCount(smsRecordCursor.getInt(smsRecordCursor
-											.getColumnIndex(SmsRecordDao.Properties.Count.columnName)) + 1);
-							smsRecord
-									.setId(smsRecordCursor.getLong(smsRecordCursor
-											.getColumnIndex(SmsRecordDao.Properties.Id.columnName)));
-							smsRecord.setLasted_contact(smsDate);
-							smsRecord.setLasted_data(smsBody);
-							// 向我们的数据库跟新SmsRecord
-							smsRecordDao.update(smsRecord);
-							Tools.logSh("向我们smsRecord数据库中跟新了smsRecord");
-							Tools.logSh("短信record" + "address" + smsNumber);
-						}
-					} else {
-						SmsRecord smsRecord = new SmsRecord();
-						smsRecord.setPhone_number(smsNumber);
-						smsRecord.setCount(1);
-						smsRecord.setLasted_contact(smsDate);
-						smsRecord.setLasted_data(smsBody);
-						// 向我们的数据库跟新SmsRecord
-						smsRecordDao.insert(smsRecord);
-						Tools.logSh("向我们smsRecord数据库中插入了一条smsRecord");
-						Tools.logSh("短信record" + "address" + smsNumber);
-					}
-
-					this.mContext.getContentResolver().delete(
-							Uri.parse("content://sms"), "date=?",
-							new String[] { smsDate.toString() });
-
-					mSmsDetail.setThread_id(1);
-					mSmsDetail.setPhone_number(smsNumber);
-					mSmsDetail.setDate(System.currentTimeMillis());
-					mSmsDetail.setData(smsBody);
-
-					Tools.logSh("短信详细" + "type" + 1 + "::" + "phone_number"
-							+ smsNumber + "::" + "date"
-							+ System.currentTimeMillis() + "::" + "body"
-							+ smsBody);
-					smsDetailDao.insert(mSmsDetail);
-					mSmsDetail = null;
-					Tools.logSh("向smsDetail插入了一条数据");
+					intereptSms(smsNumber,smsBody,smsDate);
 					// 第三步:取消掉广播事件
 					this.abortBroadcast();
+					return ;
+				} else if(intereptNumber != null
+						&& intereptNumber.contains(smsNumber)){
+					intereptSms(smsNumber,smsBody,smsDate);
+					this.abortBroadcast();
+					return ;
 				}
 			}
 		}
+	}
+	
+	private void intereptSms(String smsNumber,String smsBody,Long smsDate){
+		
+		SmsDetailDao smsDetailDao = SmsDetailDaoUtils
+				.getSmsDetailDao(mContext);
+		new ShowNotificationUtils().showNotification(mContext);
+		new ShowNotificationUtils().startShake(mContext);
+	//	ShowNotificationUtils.startVoice(mContext, 1, 1);
+		Tools.logSh("发现需要拦截的号码：：" + smsNumber);
+
+		//2. 若是拦截联系人，将此短信插入到我们的数据库中
+		SmsDetail mSmsDetail = new SmsDetail();
+
+		SmsRecordDao smsRecordDao = SmsRecordDaoUtils
+				.getSmsRecordDao(mContext);
+		SQLiteDatabase smsRecordDatabase = smsRecordDao
+				.getDatabase();
+		Cursor smsRecordCursor = smsRecordDatabase.query(
+				SmsRecordDao.TABLENAME, null,
+				SmsRecordDao.Properties.Phone_number.columnName
+						+ "=?", new String[] { smsNumber }, null,
+				null, null);
+		// 2.1我们数据库中已经有smsRecord
+		if (smsRecordCursor != null
+				&& smsRecordCursor.getCount() > 0) {
+			while (smsRecordCursor.moveToNext()) {
+				SmsRecord smsRecord = new SmsRecord();
+				smsRecord.setPhone_number(smsNumber);
+				smsRecord
+						.setCount(smsRecordCursor.getInt(smsRecordCursor
+								.getColumnIndex(SmsRecordDao.Properties.Count.columnName)) + 1);
+				smsRecord
+						.setId(smsRecordCursor.getLong(smsRecordCursor
+								.getColumnIndex(SmsRecordDao.Properties.Id.columnName)));
+				smsRecord.setLasted_contact(smsDate);
+				smsRecord.setLasted_data(smsBody);
+				// 向我们的数据库跟新SmsRecord
+				smsRecordDao.update(smsRecord);
+				Tools.logSh("向我们smsRecord数据库中跟新了smsRecord");
+				Tools.logSh("短信record" + "address" + smsNumber);
+			}
+		} else {
+			SmsRecord smsRecord = new SmsRecord();
+			smsRecord.setPhone_number(smsNumber);
+			smsRecord.setCount(1);
+			smsRecord.setLasted_contact(smsDate);
+			smsRecord.setLasted_data(smsBody);
+			// 向我们的数据库跟新SmsRecord
+			smsRecordDao.insert(smsRecord);
+			Tools.logSh("向我们smsRecord数据库中插入了一条smsRecord");
+			Tools.logSh("短信record" + "address" + smsNumber);
+		}
+
+		this.mContext.getContentResolver().delete(
+				Uri.parse("content://sms"), "date=?",
+				new String[] { smsDate.toString() });
+
+		mSmsDetail.setThread_id(1);
+		mSmsDetail.setPhone_number(smsNumber);
+		mSmsDetail.setDate(System.currentTimeMillis());
+		mSmsDetail.setData(smsBody);
+
+		Tools.logSh("短信详细" + "type" + 1 + "::" + "phone_number"
+				+ smsNumber + "::" + "date"
+				+ System.currentTimeMillis() + "::" + "body"
+				+ smsBody);
+		smsDetailDao.insert(mSmsDetail);
+		mSmsDetail = null;
+		Tools.logSh("向smsDetail插入了一条数据");
 	}
 }

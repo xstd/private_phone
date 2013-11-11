@@ -99,6 +99,7 @@ public class PrivateContactEditActivity extends BaseActivity {
 				// 若为空
 				String name = et_name.getText().toString();
 				String phone = et_phone.getText().toString();
+				int intereptType;
 
 				if (TextUtils.isEmpty(phone)) {
 					Toast.makeText(getApplicationContext(), "请填写正确的电话",
@@ -120,10 +121,12 @@ public class PrivateContactEditActivity extends BaseActivity {
 					// type
 					if (myRadioButton1.isChecked()) {
 						Tools.logSh("type===" + 0);
-						contactInfo.setType(0);
+						intereptType = 0;
+						contactInfo.setType(intereptType);
 					} else {
 						Tools.logSh("type===" + 1);
-						contactInfo.setType(1);
+						intereptType = 1;
+						contactInfo.setType(intereptType);
 					}
 					// 判断改动--1.如果号码没变，直接跟新，2.号码改变，判断号码是否存在
 					if (address.equals(phone)) {
@@ -136,8 +139,11 @@ public class PrivateContactEditActivity extends BaseActivity {
 						Toast.makeText(getApplicationContext(),
 								"想联系人数据库中添加了一条新数据", Toast.LENGTH_SHORT).show();
 
-						//update current model phonenumber interept model.
-						
+						// update current model phonenumber interept model.
+						if (intereptType != type) {
+							updateModel(phone, intereptType);
+						}
+
 						finish();
 					} else {
 						Cursor query = contactDatabase
@@ -167,8 +173,11 @@ public class PrivateContactEditActivity extends BaseActivity {
 									"想联系人数据库中添加了一条新数据", Toast.LENGTH_SHORT)
 									.show();
 							// 返回到联系人界面
-							
-							//update current model phonenumber interept model.
+							if (intereptType != type) {
+								updateModel(phone, intereptType);
+							}
+
+							// update current model phonenumber interept model.
 							finish();
 						}
 					}
@@ -185,9 +194,32 @@ public class PrivateContactEditActivity extends BaseActivity {
 		});
 	}
 
+	public void updateModel(String number, int type) {
+		// 1.
+		ContextModelUtils contextModelUtils = new ContextModelUtils();
+		ArrayList<String> intereptNumbers = contextModelUtils
+				.getIntereptNumbers(PrivateContactEditActivity.this, null);
+		ArrayList<String> notIntereptNumbers = contextModelUtils
+				.getNotIntereptNumbers(PrivateContactEditActivity.this, null);
+		// update
+		// 0 --- normal ,1 ---- interept
+		GetModelUtils getModelUtils = new GetModelUtils(
+				PrivateContactEditActivity.this);
+		String currentModel = getModelUtils.getCurrentModel();
+
+		if (intereptNumbers.contains(number) && type == 0) {
+			getModelUtils.updateModel(number, currentModel, type);
+
+		}
+
+		if (notIntereptNumbers.contains(number) && type == 1) {
+			getModelUtils.updateModel(number, currentModel, type);
+		}
+
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.hand_input, menu);
 		return true;
 	}

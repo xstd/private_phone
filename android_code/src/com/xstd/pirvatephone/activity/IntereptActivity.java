@@ -50,7 +50,7 @@ public class IntereptActivity extends BaseActivity {
 	private CheckBox btn_remove_record;
 	private RelativeLayout rl_remove_record;
 	private boolean delete = false;
-	private int type = 2;
+	private int type = 1;
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();

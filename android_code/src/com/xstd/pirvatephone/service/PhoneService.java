@@ -47,7 +47,7 @@ public class PhoneService extends Service {
 	private Mylistener listener;
 	private String outingNumber = "";
 	private Context mContext;
-	
+
 	private class InnerReceiver extends BroadcastReceiver {
 
 		@Override
@@ -80,10 +80,10 @@ public class PhoneService extends Service {
 
 	@Override
 	public void onCreate() {
-		
+
 		Tools.logSh("PhoneService被创建了");
 		mContext = getApplicationContext();
-		//监听来电
+		// 监听来电
 		tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		listener = new Mylistener();
 		tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -115,13 +115,13 @@ public class PhoneService extends Service {
 					Dtime = System.currentTimeMillis() - Ringtime;// 获得通话时间
 					Tools.logSh("通话持续时间为：" + Dtime);
 					removeDail(outingNumber);
-					
+
 				}
 
 				Ringtime = 0;
 
 				if (recevierTime != 0) {
-				
+
 					// 由于系统产生通话记录需要一会，所以有延时任务
 					TimerTask task = new TimerTask() {
 						public void run() {
@@ -140,52 +140,61 @@ public class PhoneService extends Service {
 				break;
 
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
-				Tools.logSh("来电了"+incomingNumber);
+				Tools.logSh("来电了" + incomingNumber);
 				recevierTime = System.currentTimeMillis();
 				// 判断该号码的拦截状态
 				// 1、获取当前的情景模式-拦截号码
 				ContextModelUtils contextModelUtils = new ContextModelUtils();
 				ArrayList<String> numbers = contextModelUtils
-						.getIntereptNumbers(mContext,null);
-				Tools.logSh("拦截号码"+numbers);
+						.getIntereptNumbers(mContext, null);
+				Tools.logSh("拦截号码" + numbers);
+				ArrayList<String> intereptNumber = ContactUtils
+						.queryIntereptNumber(mContext);
+
 				// 第2步:确认该号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(incomingNumber)) {
-					// 查询是立即挂断还是正常接听
-					new ShowNotificationUtils().showNotification(mContext);
-					new ShowNotificationUtils().startShake(mContext);
-					//ShowNotificationUtils.startVoice(mContext, 1, 1);
-					int type = contextModelUtils.getPhoneModelType(
-							incomingNumber, mContext);
-					
-					Tools.logSh("来电了==="+incomingNumber+"===type==="+type);
-					if (type == 1) {// 立即挂断
-						try {
-							// 反射获取ITelephony对象
-							TelephonyManager telephonyManager = (TelephonyManager) mContext
-									.getSystemService(Context.TELEPHONY_SERVICE);
-							Class<TelephonyManager> telephonyManagerClazz = TelephonyManager.class;
-							Method getITelephonyMethod = telephonyManagerClazz.getDeclaredMethod(
-									"getITelephony", (Class[]) null);
-							getITelephonyMethod.setAccessible(true);//
-							ITelephony iTelephony = (ITelephony) getITelephonyMethod
-									.invoke(telephonyManager, (Object[]) null);
-
-								Tools.logSh("iTelephony不为空");
-								iTelephony.endCall();
-								
-								//关闭屏幕(暂未生效)
-								PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-								WakeLock mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WhatEver");
-								mWakeLock.acquire();
-								mWakeLock.release();
-							
-						} catch (Exception e) {
-						}
-					} 
+					endCall();
+					return;
+				} else if (intereptNumber != null
+						&& intereptNumber.contains(incomingNumber)) {
+					// get contact interept number
+					endCall();
+					return;
 				}
 				break;
 			}
 			super.onCallStateChanged(state, incomingNumber);
+		}
+	}
+
+	private void endCall() {
+
+		new ShowNotificationUtils().showNotification(mContext);
+		new ShowNotificationUtils().startShake(mContext);
+		// ShowNotificationUtils.startVoice(mContext, 1, 1);
+
+		try {
+			// 反射获取ITelephony对象
+			TelephonyManager telephonyManager = (TelephonyManager) mContext
+					.getSystemService(Context.TELEPHONY_SERVICE);
+			Class<TelephonyManager> telephonyManagerClazz = TelephonyManager.class;
+			Method getITelephonyMethod = telephonyManagerClazz
+					.getDeclaredMethod("getITelephony", (Class[]) null);
+			getITelephonyMethod.setAccessible(true);//
+			ITelephony iTelephony = (ITelephony) getITelephonyMethod.invoke(
+					telephonyManager, (Object[]) null);
+
+			Tools.logSh("iTelephony不为空");
+			iTelephony.endCall();
+
+			// 关闭屏幕(暂未生效)
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			WakeLock mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+					"WhatEver");
+			mWakeLock.acquire();
+			mWakeLock.release();
+
+		} catch (Exception e) {
 		}
 	}
 
@@ -198,9 +207,10 @@ public class PhoneService extends Service {
 		Cursor phoneDetailCursor = resolver.query(CallLog.Calls.CONTENT_URI,
 				null, CallLog.Calls.NUMBER + "=?", new String[] { number },
 				"date desc limit 1");
-		
+
 		if (phoneDetailCursor != null && phoneDetailCursor.getCount() > 0) {
-			Tools.logSh("phoneDetailCursor.count()===" + phoneDetailCursor.getCount());
+			Tools.logSh("phoneDetailCursor.count()==="
+					+ phoneDetailCursor.getCount());
 			while (phoneDetailCursor.moveToNext()) {
 				// 得到手机号码
 				String address = phoneDetailCursor.getString(phoneDetailCursor
@@ -216,10 +226,12 @@ public class PhoneService extends Service {
 				int type = phoneDetailCursor.getInt(phoneDetailCursor
 						.getColumnIndex("type"));
 				// 通化人姓名
-			/*	String name = phoneDetailCursor.getString(phoneDetailCursor
-						.getColumnIndex("name"));*/
-				
-				String	name = ContactUtils.queryContactName(mContext, number);
+				/*
+				 * String name = phoneDetailCursor.getString(phoneDetailCursor
+				 * .getColumnIndex("name"));
+				 */
+
+				String name = ContactUtils.queryContactName(mContext, number);
 
 				Tools.logSh(number + "::" + date + "::" + duration + "::"
 						+ type + "::" + name);
@@ -309,7 +321,8 @@ public class PhoneService extends Service {
 		Tools.logSh("removeDail被调用了" + number);
 		// 1、获取当前的情景模式-拦截号码，判断外拨电话是否是拦截号码
 		ContextModelUtils contextModelUtils = new ContextModelUtils();
-		ArrayList<String> numbers = contextModelUtils.getIntereptNumbers(mContext,null);
+		ArrayList<String> numbers = contextModelUtils.getIntereptNumbers(
+				mContext, null);
 		Tools.logSh("numbers===" + numbers);
 
 		if (numbers != null && numbers.contains(number)) {

@@ -64,7 +64,7 @@ public class ModelEditActivity extends BaseActivity {
 	private ArrayList<String> noIntereptNumbers =new ArrayList<String>();
 	private ArrayList<String> noIntereptNames =new ArrayList<String>();
 	private Button add_btn;
-	private int curIndex = 1;
+	private int curIndex = 0;
 	private EditModelAdapter noIntereptAdapter;
 	private EditModelAdapter intereptAdapter;
 
@@ -78,11 +78,11 @@ public class ModelEditActivity extends BaseActivity {
 					setData();
 				}else{
 					switch (curIndex) {
-					case 1:
+					case 0:
 						showNoInterept();
 						break;
 
-					case 2:
+					case 1:
 						showInterept();
 						break;
 
@@ -149,18 +149,18 @@ public class ModelEditActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (curIndex == 1) {
+				if (curIndex == 0) {
 					Intent intent = new Intent(ModelEditActivity.this,
 							NotIntereptActivity.class);
 					intent.putExtra("ModelName", modelName);
-					intent.putExtra("type", 1);
-					startActivityForResult(intent, 3);
+					intent.putExtra("type", 0);
+					startActivityForResult(intent, 1);
 				} else {
 					Intent intent = new Intent(ModelEditActivity.this,
 							IntereptActivity.class);
 					intent.putExtra("ModelName", modelName);
-					intent.putExtra("type", 2);
-					startActivityForResult(intent, 3);
+					intent.putExtra("type", 1);
+					startActivityForResult(intent, 1);
 				}
 
 			}
@@ -187,7 +187,7 @@ public class ModelEditActivity extends BaseActivity {
 	 * 显示拦截
 	 */
 	private void showInterept() {
-		curIndex = 2;
+		curIndex = 1;
 		ll_interept.setVisibility(View.VISIBLE);
 		ll_uninterept.setVisibility(View.GONE);
 		Tools.logSh("intereptNumbers=" + intereptNumbers + ":::"
@@ -211,7 +211,7 @@ public class ModelEditActivity extends BaseActivity {
 	 */
 	private void showNoInterept() {
 
-		curIndex = 1;
+		curIndex = 0;
 		ll_interept.setVisibility(View.GONE);
 		ll_uninterept.setVisibility(View.VISIBLE);
 		noIntereptAdapter = new EditModelAdapter(ModelEditActivity.this,

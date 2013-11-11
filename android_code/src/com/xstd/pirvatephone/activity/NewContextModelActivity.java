@@ -92,7 +92,7 @@ public class NewContextModelActivity extends BaseActivity {
 								NotIntereptActivity.class);
 						intent.putExtra("ModelName", modelName);
 						// startActivity(intent);
-						startActivityForResult(intent, 1);
+						startActivityForResult(intent, 2);
 					} else {
 						Toast.makeText(NewContextModelActivity.this,
 								"情景模式名称不能为空", Toast.LENGTH_SHORT).show();

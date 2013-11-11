@@ -17,21 +17,13 @@ import com.xstd.privatephone.tools.Tools;
 
 public class SmsService extends Service {
 
-
 	private PrivateCommSmsRecevier smsGetRecevier;
-
 	private CommSmsSendRecevier smsSendRecevier;
-
 	private ObserveSMSSend observeSMSsend;
-
 	private ContentResolver resolver;
-
 	private IntentFilter smsRecevierFilter;
-
 	private IntentFilter controlRecevierFilter;
-	
 	private Context mContext;
-
 
 	@Override
 	public void onDestroy() {
@@ -51,7 +43,6 @@ public class SmsService extends Service {
 		if(observeSMSsend != null){
 			unregistObserver();
 		}
-		
 	}
 
 	@Override
@@ -116,9 +107,6 @@ public class SmsService extends Service {
 				Tools.logSh("接收到广播+isOpen===="+isOpen);
 				unregistObserver();
 			}
-
 		}
-
 	}
-
 }

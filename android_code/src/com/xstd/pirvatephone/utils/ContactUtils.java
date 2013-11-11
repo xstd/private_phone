@@ -13,9 +13,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class ContactUtils {
 
-	private ArrayList<String> intereptNumbers = new ArrayList<String>();
-	private ArrayList<String> notIntereptNumbers = new ArrayList<String>();
-
 	public static String queryContactNumber(Context context, String name) {
 		String phone = "";
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
@@ -32,7 +29,6 @@ public class ContactUtils {
 				query.close();
 				return phone;
 			}
-
 		}
 		return phone;
 	}
@@ -59,7 +55,10 @@ public class ContactUtils {
 		return number;
 	}
 
-	public ArrayList<String> queryIntereptNumber(Context context) {
+	public static ArrayList<String> queryIntereptNumber(Context context) {
+		
+		ArrayList<String> intereptNumbers = null;
+		intereptNumbers = new ArrayList<String>();
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(context);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
@@ -76,15 +75,17 @@ public class ContactUtils {
 								.getColumnIndex(ContactInfoDao.Properties.Type.columnName));
 
 				if (numbertype == 1) {
-
 					intereptNumbers.add(number);
 				}
 			}
+			contactQuery.close();
 		}
 		return intereptNumbers;
 	}
 
-	public ArrayList<String> queryNotIntereptNumber(Context context) {
+	public static ArrayList<String> queryNotIntereptNumber(Context context) {
+		ArrayList<String> notIntereptNumbers = null;
+		notIntereptNumbers = new ArrayList<String>();
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(context);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
@@ -105,6 +106,7 @@ public class ContactUtils {
 				}
 
 			}
+			contactQuery.close();
 		}
 		return notIntereptNumbers;
 	}

@@ -181,10 +181,10 @@ public class ContextModelUtils {
 					JSONObject jsonObject = new JSONObject(message);
 
 					Integer type = jsonObject.getInt(modelName);
-					if (type == 1) {
+					if (type == 0) {
 						noIntereptNames.add(name);
 						noIntereptNumbers.add(address);
-					} else if (type == 2) {
+					} else if (type == 1) {
 						intereptNames.add(name);
 						intereptNumbers.add(address);
 					} else {
