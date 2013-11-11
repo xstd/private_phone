@@ -10,6 +10,7 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.ArrayUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
 import com.xstd.privatephone.adapter.AddFromPhoneRecordAdapter;
+import com.xstd.privatephone.tools.Tools;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private static final int UPDATE = 0;
 	private static final int UPDATE_UI = 1;
 	private static final int FINISH = 2;
+	private static final int NULL = 5;
 
 	@ViewMapping(ID = R.id.bt_sure)
 	public Button bt_sure;
@@ -72,6 +74,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private Long start_time;
 	private Long duration;
 	private ArrayList<String> numbers = new ArrayList<String>();
+	private ArrayList<String> names = new ArrayList<String>();
 
 	private Handler handler = new Handler() {
 
@@ -114,24 +117,39 @@ public class AddFromPhoneRecordActivity extends Activity implements
 						CheckBox checkbox = (CheckBox) view
 								.findViewById(R.id.checkbox);
 						checkbox.setChecked(!checkbox.isChecked());
+						TextView tv_hidden = (TextView) view
+								.findViewById(R.id.tv_hidden);
+						TextView tv_name = (TextView) view
+								.findViewById(R.id.tv_name);
+						String number = tv_hidden.getText().toString()
+								.trim();
+						String name = tv_name.getText().toString().trim();
 						if (checkbox.isChecked()) {
-							TextView tv_hidden = (TextView) view
-									.findViewById(R.id.tv_hidden);
-							String number = tv_hidden.getText().toString()
-									.trim();
+							
 							if (!numbers.contains(number)) {
 								numbers.add(number);
-							} else {
+								names.add(name);
+							} 
+						}else{
+							if(numbers.contains(number)){
 								numbers.remove(number);
+								names.remove(name);
 							}
 						}
+						Tools.logSh("numbers==="+numbers);
 					}
 				});
 				break;
-				
+
 			case FINISH:
-				Toast.makeText(AddFromPhoneRecordActivity.this, "增加了联系人", Toast.LENGTH_SHORT).show();
+				Toast.makeText(AddFromPhoneRecordActivity.this, "增加了联系人",
+						Toast.LENGTH_SHORT).show();
 				finish();
+				break;
+				
+			case NULL:
+				Toast.makeText(AddFromPhoneRecordActivity.this, "请选择联系人",
+						Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -201,8 +219,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 		}
 	}
 
-	private class GetAddTast extends
-			AsyncTask<Void, Integer, Integer> {
+	private class GetAddTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
 
@@ -222,21 +239,20 @@ public class AddFromPhoneRecordActivity extends Activity implements
 
 		@Override
 		public void onPostExecute(Integer integer) {
-
+			Message msg = new Message();
 			if (numbers.size() > 0) {
 				WriteContactUtils writeContactUtils = new WriteContactUtils(
 						AddFromPhoneRecordActivity.this);
 				String[] array = new ArrayUtils().listToArray(numbers);
-				writeContactUtils.removeRepeat(array);
-				writeContactUtils.writeContact(array);
+				Tools.logSh("array=="+array[0]);
+				array = writeContactUtils.removeRepeat(array);
+				writeContactUtils.writeContactByPhoneRecord(array);
+				msg.what = FINISH;
+				handler.sendMessage(msg);
 			} else {
-				
+				msg.what = NULL;
+				handler.sendMessage(msg);
 			}
-
-			Message msg = new Message();
-			msg.what = FINISH;
-			handler.sendMessage(msg);
-
 		}
 
 		/**

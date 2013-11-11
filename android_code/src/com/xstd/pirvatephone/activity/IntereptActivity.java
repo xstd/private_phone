@@ -2,23 +2,13 @@ package com.xstd.pirvatephone.activity;
 
 import java.util.ArrayList;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.privatephone.adapter.EditContactAdapter;
-import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -40,7 +30,6 @@ public class IntereptActivity extends BaseActivity {
 	private ListView mListView;
 
 	private Cursor contactCursor;
-	private ModelDetailDao modelDetailDao;
 	private EditContactAdapter mContactAdapter;
 	private Button btn_cancle;
 	private Button btn_sure;
@@ -138,7 +127,7 @@ public class IntereptActivity extends BaseActivity {
 						// 将所有号码添加到选中号码。
 						selectContactsNumbers.add(number);
 						selectContactsNames.add(name);
-
+						
 					}
 
 				}
@@ -212,11 +201,13 @@ public class IntereptActivity extends BaseActivity {
 					checkbox.setChecked(!checkbox.isChecked());
 
 					if (checkbox.isChecked()) {
-						selectContactsNumbers.add(number);
-						selectContactsNames.add(name);
+							selectContactsNumbers.add(number);
+							selectContactsNames.add(name);
 					} else {
-						selectContactsNumbers.remove(number);
-						selectContactsNames.remove(name);
+						if(selectContactsNumbers.contains(number)){
+							selectContactsNumbers.remove(number);
+							selectContactsNames.remove(name);
+						}
 					}
 				}
 			});
@@ -243,12 +234,7 @@ public class IntereptActivity extends BaseActivity {
 	}
 
 	private void initData() {
-
-		modelDetailDao = ModelDetailDaoUtils
-				.getModelDetailDao(IntereptActivity.this);
-		// 获取私密联系人
 		getContact();
-
 	}
 
 	@Override

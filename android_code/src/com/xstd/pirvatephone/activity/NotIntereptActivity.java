@@ -1,30 +1,15 @@
 package com.xstd.pirvatephone.activity;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
-import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.EditContactAdapter;
-import com.xstd.privatephone.bean.ModelJson;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -61,7 +46,6 @@ public class NotIntereptActivity extends BaseActivity {
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
-	private ModelDetailDao modelDetailDao;
 	private RelativeLayout rl_remove_record;
 
 	@Override
@@ -104,11 +88,14 @@ public class NotIntereptActivity extends BaseActivity {
 					checkbox.setChecked(!checkbox.isChecked());
 
 					if (checkbox.isChecked()) {
-						selectContactsNumbers.add(number);
-						selectContactsNames.add(name);
+						// 判断当前情景模式下是否已经不拦截该号码
+							selectContactsNumbers.add(number);
+							selectContactsNames.add(name);
 					} else {
-						selectContactsNumbers.remove(number);
-						selectContactsNames.remove(name);
+						if(selectContactsNumbers.contains(number)){
+							selectContactsNumbers.remove(number);
+							selectContactsNames.remove(name);
+						}
 					}
 				}
 
@@ -147,10 +134,6 @@ public class NotIntereptActivity extends BaseActivity {
 	}
 
 	private void initData() {
-
-		modelDetailDao = ModelDetailDaoUtils
-				.getModelDetailDao(NotIntereptActivity.this);
-		// 获取私密联系人
 		getContact();
 
 	}
@@ -301,11 +284,6 @@ public class NotIntereptActivity extends BaseActivity {
 		});
 
 		builder.create().show();
-	}
-
-	private void updateUI() {
-		initData();
-		mContactAdapter.notifyDataSetChanged();
 	}
 
 	@Override

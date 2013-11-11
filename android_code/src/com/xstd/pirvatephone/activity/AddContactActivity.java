@@ -370,8 +370,8 @@ public class AddContactActivity extends BaseActivity {
 			}
 		} else {
 
-			mWriteContactUtils.removeRepeat(numbers);
-
+			numbers  = mWriteContactUtils.removeRepeat(numbers);
+			mWriteContactUtils.writeContact(numbers);
 			// 选择多个时：剔除重复的联系人
 
 			if (flags_delete) {

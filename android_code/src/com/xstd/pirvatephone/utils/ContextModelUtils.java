@@ -29,14 +29,12 @@ public class ContextModelUtils {
 	private ArrayList<String> noIntereptNames = new ArrayList<String>();
 
 	private String[] parseArray(ArrayList<String> selectContactsNumbers) {
-		Tools.logSh("parseArray");
 		selectPhones = null;
 
 		if (selectContactsNumbers.size() > 0) {
 			selectPhones = new String[selectContactsNumbers.size()];
 			for (int i = 0; i < selectContactsNumbers.size(); i++) {
 				selectPhones[i] = selectContactsNumbers.get(i);
-				Tools.logSh("selectPhones[i]=" + selectPhones[i]);
 			}
 		} else {
 			return null;
@@ -151,7 +149,6 @@ public class ContextModelUtils {
 				return null;
 			}else{
 				modelName = currentModel;
-				Tools.logSh("modelNam===="+modelName);
 			}
 		}
 
@@ -173,8 +170,6 @@ public class ContextModelUtils {
 				String name = modelDetailQuery
 						.getString(modelDetailQuery
 								.getColumnIndex(ModelDetailDao.Properties.Name.columnName));
-				Tools.logSh("name=" + name + ":::" + "address" + address + "::"
-						+ "message==" + message);
 				// JSON.toJSON(message);
 
 				try {
@@ -338,7 +333,7 @@ public class ContextModelUtils {
 		}
 
 		// normal
-		if (type == 1) {
+		if (type == 0) {
 			if (delete) {
 				RecordToSysUtils recordToSysUtils = new RecordToSysUtils(
 						mContext);
@@ -354,7 +349,5 @@ public class ContextModelUtils {
 		}
 		
 		ContactUtils.modelChangeContact(mContext);//需要继续修改
-		
-		
 	}
 }

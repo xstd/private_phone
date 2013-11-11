@@ -56,7 +56,7 @@ public class ContactUtils {
 	}
 
 	public static ArrayList<String> queryIntereptNumber(Context context) {
-		
+
 		ArrayList<String> intereptNumbers = null;
 		intereptNumbers = new ArrayList<String>();
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
@@ -113,18 +113,17 @@ public class ContactUtils {
 
 	public static void modelChangeContact(Context context) {
 		Tools.logSh("modelChangeContact被调用了");
-		
+
 		ContextModelUtils contextModelUtils = new ContextModelUtils();
+		// 1.获取当前拦情景模式下拦截与不拦截的号码
 		String[] intereptNumbers = contextModelUtils.getIntereptNumber(context,
 				null);
 		String[] notIntereptNumbers = contextModelUtils.getNotIntereptNumber(
 				context, null);
-		Tools.logSh("intereptNumbers======"+intereptNumbers);
-		Tools.logSh("notIntereptNumbers======"+notIntereptNumbers);
-		if (intereptNumbers == null || intereptNumbers.length == 0) {
-
-		} else {
-			// 如果以前拦截的号码中有这个号码---设置为
+		Tools.logSh("intereptNumbers======" + intereptNumbers);
+		Tools.logSh("notIntereptNumbers======" + notIntereptNumbers);
+		if (intereptNumbers != null && intereptNumbers.length > 0) {
+			// 2.查看隐私通信中该号码的拦截情况
 			for (int j = 0; j < intereptNumbers.length; j++) {
 				Tools.logSh("intereptNumbers[j]=======" + intereptNumbers[j]);
 
@@ -156,22 +155,22 @@ public class ContactUtils {
 						contactInfo.setId(id);
 						contactInfo.setPhone_number(number);
 						contactInfo.setDisplay_name(name);
-						if (numbertype == 0) {
-							contactInfo.setType(1);
-						}
+						// 若隐私联系人中该号码不是被拦截的，修改其模式为拦截
+						Tools.logSh("number==="+number+"   type=="+numbertype);
 						
-						Tools.logSh(number+"模式被更改===="+1);
-						contactInfoDao.update(contactInfo);
+						if (numbertype != 1) {
+							contactInfo.setType(1);
+							Tools.logSh(number + "模式被更改====" + 1);
+							contactInfoDao.update(contactInfo);
+						}
 					}
 					contactQuery.close();
 				}
 			}
 		}
 
-		if (notIntereptNumbers == null || notIntereptNumbers.length == 0) {
-
-		} else {
-			// 如果以前拦截的号码中有这个号码---设置为
+		if (notIntereptNumbers != null && notIntereptNumbers.length > 0) {
+			// 1.查看隐私通信中该号码的拦截情况
 			for (int j = 0; j < notIntereptNumbers.length; j++) {
 				Tools.logSh("notIntereptNumbers[j]======="
 						+ notIntereptNumbers[j]);
@@ -204,11 +203,13 @@ public class ContactUtils {
 						contactInfo.setId(id);
 						contactInfo.setPhone_number(number);
 						contactInfo.setDisplay_name(name);
-						if (numbertype == 1) {
+						Tools.logSh("number==="+number+"   type=="+numbertype);
+						
+						if (numbertype != 0) {
 							contactInfo.setType(0);
+							Tools.logSh(number + "模式被更改====" + 0);
+							contactInfoDao.update(contactInfo);
 						}
-						Tools.logSh(number+"模式被更改===="+0);
-						contactInfoDao.update(contactInfo);
 					}
 					contactQuery.close();
 				}

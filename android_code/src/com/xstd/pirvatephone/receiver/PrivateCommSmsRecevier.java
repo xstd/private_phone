@@ -144,5 +144,6 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 		smsDetailDao.insert(mSmsDetail);
 		mSmsDetail = null;
 		Tools.logSh("向smsDetail插入了一条数据");
+		smsRecordCursor.close();
 	}
 }

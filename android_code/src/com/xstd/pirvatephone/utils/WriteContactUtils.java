@@ -6,7 +6,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.CallLog;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.text.TextUtils;
 
 import com.xstd.pirvatephone.dao.contact.ContactInfo;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
@@ -15,63 +17,60 @@ import com.xstd.privatephone.tools.Tools;
 
 public class WriteContactUtils {
 	private Context mContext;
-	private String[] mPhones;
+
 	private ArrayList<String> mRepeatePhones = new ArrayList<String>();
 	private ArrayList<String> mNoRepeatPhones = new ArrayList<String>();
-	private ContactInfo contactInfo;
 
 	public WriteContactUtils(Context context) {
 		this.mContext = context;
 	}
 
-	
-	private String[] parseArray(ArrayList<String> selectContactsNumbers) {
+	public String[] parseArray(ArrayList<String> selectContactsNumbers) {
 		Tools.logSh("parseArray");
-		mPhones = null;
+		String[] mPhones = null;
 
 		if (selectContactsNumbers.size() > 0) {
 			mPhones = new String[selectContactsNumbers.size()];
-			for (int i = 0; i <selectContactsNumbers.size(); i++) {
+			for (int i = 0; i < selectContactsNumbers.size(); i++) {
 				mPhones[i] = selectContactsNumbers.get(i);
-				Tools.logSh("selectPhones[i]="+mPhones[i]);
+				Tools.logSh("selectPhones[i]=" + mPhones[i]);
 			}
 		}
-		
-		return  mPhones;
+
+		return mPhones;
 	}
+
 	/**
 	 * 获取未重复的号码
 	 */
-	public void removeRepeat(String[] mSelectPhones){
+	public String[] removeRepeat(String[] mSelectPhones) {
+		String[] noRepeatPhones;
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(mContext);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-		
+
 		for (int i = 0; i < mSelectPhones.length; i++) {
 			String num = mSelectPhones[i];
-			Cursor cursor = contactDatabase.query(
-					ContactInfoDao.TABLENAME, null,
-					ContactInfoDao.Properties.Phone_number.columnName + "=?",
-					new String[] { num }, null, null, null);
-			//该号码已经存在于隐私联系人中
-			if(cursor!=null && cursor.getCount()>0){
+			Cursor cursor = contactDatabase.query(ContactInfoDao.TABLENAME,
+					null, ContactInfoDao.Properties.Phone_number.columnName
+							+ "=?", new String[] { num }, null, null, null);
+			// 该号码已经存在于隐私联系人中
+			if (cursor != null && cursor.getCount() > 0) {
 				mRepeatePhones.add(num);
 			}
 		}
-		
+
 		for (int i = 0; i < mSelectPhones.length; i++) {
-			if(mRepeatePhones.contains(mSelectPhones[i])){
-			
-			}else{
+			if (mRepeatePhones.contains(mSelectPhones[i])) {
+
+			} else {
 				mNoRepeatPhones.add(mSelectPhones[i]);
 			}
 		}
-		
-		String[] noRepeatPhones = parseArray(mNoRepeatPhones);
-		if(noRepeatPhones!=null){
-			writeContact(noRepeatPhones);
-		}
-		
+
+		noRepeatPhones = parseArray(mNoRepeatPhones);
+
+		return noRepeatPhones;
 	}
 
 	/**
@@ -84,63 +83,114 @@ public class WriteContactUtils {
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(mContext);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-		
+
 		String number = mSelectPhones[0];
-		Cursor cursor = contactDatabase.query(
-				ContactInfoDao.TABLENAME, null,
+		Cursor cursor = contactDatabase.query(ContactInfoDao.TABLENAME, null,
 				ContactInfoDao.Properties.Phone_number.columnName + "=?",
 				new String[] { number }, null, null, null);
 
-		if (cursor != null && cursor.getCount()>0) {
+		if (cursor != null && cursor.getCount() > 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
-		
+
 	}
 
-	public void writeContact(String[] mSelectPhones) {
+	public void writeContactByPhoneRecord(String[] mSelectPhones) {
+		if (mSelectPhones != null && mSelectPhones.length > 0) {
 
-		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
-				.getContactInfoDao(mContext);
-		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+			ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+					.getContactInfoDao(mContext);
 
-		ContentResolver resolver = mContext.getContentResolver();
+			ContentResolver resolver = mContext.getContentResolver();
 
-		for (int i = 0; i < mSelectPhones.length; i++) {
-			String num = mSelectPhones[i];
-			// 获取手机联系人
-			Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,
-					new String[] { Phone.CONTACT_ID, Phone.DISPLAY_NAME,
-							Phone.NUMBER }, Phone.NUMBER + "=?",
-					new String[] { num }, null);
+			for (int i = 0; i < mSelectPhones.length; i++) {
+				String num = mSelectPhones[i];
+				// 获取手机联系人
 
-			if (phoneCursor != null) {
-				while (phoneCursor.moveToNext()) {
-					contactInfo = new ContactInfo();
-					// 得到联系人名称
-					String contactName = phoneCursor.getString(1);
-					// 判断该联系人（姓名）是否已存在
-					Cursor query = contactDatabase.query(
-							ContactInfoDao.TABLENAME, null,
-							ContactInfoDao.Properties.Display_name.columnName
-									+ "=?", new String[] { contactName }, null,
-							null, null);
-					if (query != null && query.getCount() > 0) {
-						Tools.logSh("该联系人已经存在");
-						break ;
-					} else {
-						String number = phoneCursor.getString(2);
+				Cursor phoneCursor = resolver.query(CallLog.Calls.CONTENT_URI,
+						null, CallLog.Calls.NUMBER + "=?",
+						new String[] { num }, null);
 
+				if (phoneCursor != null) {
+					while (phoneCursor.moveToNext()) {
+						ContactInfo contactInfo = new ContactInfo();
+						// 得到联系人名称
+						String contactName = phoneCursor.getString(phoneCursor
+								.getColumnIndex("name"));
+
+						// 得到手机号码
+						String number = phoneCursor.getString(phoneCursor
+								.getColumnIndex("number"));
+
+						if(TextUtils.isEmpty(contactName)){
+							contactName = number;
+						}
+						
+						Tools.logSh("name=="+contactName+"    number=="+number);
 						contactInfo.setPhone_number(number);
 						contactInfo.setDisplay_name(contactName);
-						contactInfo.setType(0);//0不拦截
+						contactInfo.setType(0);// 0不拦截
 						// 添加到我们数据库
 						contactInfoDao.insert(contactInfo);
 						Tools.logSh("phoneCursor插入了一条数据");
+
+						phoneCursor.close();
+						break;
 					}
+					phoneCursor.close();
 				}
-				phoneCursor.close();
+			}
+		}
+	}
+
+	public void writeContact(String[] mSelectPhones) {
+		if (mSelectPhones != null && mSelectPhones.length > 0) {
+
+			ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+					.getContactInfoDao(mContext);
+			SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+
+			ContentResolver resolver = mContext.getContentResolver();
+
+			for (int i = 0; i < mSelectPhones.length; i++) {
+				String num = mSelectPhones[i];
+				// 获取手机联系人
+				Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,
+						new String[] { Phone.CONTACT_ID, Phone.DISPLAY_NAME,
+								Phone.NUMBER }, Phone.NUMBER + "=?",
+						new String[] { num }, null);
+
+				if (phoneCursor != null) {
+					while (phoneCursor.moveToNext()) {
+						ContactInfo contactInfo = new ContactInfo();
+						// 得到联系人名称
+						String contactName = phoneCursor.getString(1);
+						// 判断该联系人（姓名）是否已存在
+						Cursor query = contactDatabase
+								.query(ContactInfoDao.TABLENAME,
+										null,
+										ContactInfoDao.Properties.Display_name.columnName
+												+ "=?",
+										new String[] { contactName }, null,
+										null, null);
+						if (query != null && query.getCount() > 0) {
+							Tools.logSh("该联系人已经存在");
+							break;
+						} else {
+							String number = phoneCursor.getString(2);
+
+							contactInfo.setPhone_number(number);
+							contactInfo.setDisplay_name(contactName);
+							contactInfo.setType(0);// 0不拦截
+							// 添加到我们数据库
+							contactInfoDao.insert(contactInfo);
+							Tools.logSh("phoneCursor插入了一条数据");
+						}
+					}
+					phoneCursor.close();
+				}
 			}
 		}
 	}
