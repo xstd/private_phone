@@ -113,7 +113,7 @@
         android:layout_height="60dip"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-            android:background="@drawable/private_comm_spacbtn_selector"
+            android:background="@drawable/private_comm_spac_sms_selector"
         >
         
         <Button

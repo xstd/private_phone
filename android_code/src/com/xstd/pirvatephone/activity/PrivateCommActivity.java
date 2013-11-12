@@ -71,12 +71,13 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private com.xstd.privatephone.view.MyViewPager viewPager;// 页卡内容
 	private ImageView imageView;// 动画图片
-	private Button textView1, textView2, textView3;
+	private LinearLayout textView1, textView2, textView3;
 	private List<View> views;// Tab页面列表
 	private int offset = 0;// 动画图片偏移量
 	private int currIndex;// 当前页卡编号
 	private int bmpW;// 动画图片宽度
 	private View view1, view2, view3;// 各个页卡
+	private Button btn_sms, btn_phone, btn_contact;
 
 	private Button ib_back;
 	private Button edit;
@@ -115,7 +116,6 @@ public class PrivateCommActivity extends BaseActivity {
 	private Button btn_delete_contact;
 	private Button btn_delete_phone;
 
-	
 	private PhoneRecordDao phoneRecordDao;
 	private ContactInfoDao contactInfoDao;
 	private SmsRecordDao smsRecordDao;
@@ -179,8 +179,8 @@ public class PrivateCommActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_private_comm);
 
-		Tools.logSh(PxParseUtils.px2dip(this, 30)+"");
-		
+		Tools.logSh(PxParseUtils.px2dip(this, 30) + "");
+
 		initData();
 		InitImageView();
 		initView();
@@ -201,9 +201,13 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private void InitViewPager() {
 		// 初始化头标
-		textView1 = (Button) findViewById(R.id.text1);
-		textView2 = (Button) findViewById(R.id.text2);
-		textView3 = (Button) findViewById(R.id.text3);
+		textView1 = (LinearLayout) findViewById(R.id.text1);
+		textView2 = (LinearLayout) findViewById(R.id.text2);
+		textView3 = (LinearLayout) findViewById(R.id.text3);
+
+		btn_sms = (Button) findViewById(R.id.btn_sms);
+		btn_phone = (Button) findViewById(R.id.btn_phone);
+		btn_contact = (Button) findViewById(R.id.btn_contact);
 
 		textView1.setOnClickListener(new MyOnClickListener(0));
 		textView2.setOnClickListener(new MyOnClickListener(1));
@@ -294,7 +298,6 @@ public class PrivateCommActivity extends BaseActivity {
 		});
 
 		showNormalUI();
-
 	}
 
 	private void isEditingBottom() {
@@ -346,7 +349,7 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
-						if(selectContacts.size()==0){
+						if (selectContacts.size() == 0) {
 							edit_checkbox.setChecked(false);
 						}
 					}
@@ -429,7 +432,7 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
-						if(selectContacts.size()==0){
+						if (selectContacts.size() == 0) {
 							edit_checkbox.setChecked(false);
 						}
 					}
@@ -498,8 +501,8 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
-						
-						if(selectContacts.size()==0){
+
+						if (selectContacts.size() == 0) {
 							edit_checkbox.setChecked(false);
 						}
 					}
@@ -524,7 +527,7 @@ public class PrivateCommActivity extends BaseActivity {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					edit_checkbox.setChecked(!edit_checkbox.isChecked());
-					Tools.logSh("edit_checkbox==="+edit_checkbox.isChecked());
+					Tools.logSh("edit_checkbox===" + edit_checkbox.isChecked());
 					if (edit_checkbox.isChecked()) {
 						if (contactCursor != null
 								&& contactCursor.getCount() > 0) {
@@ -533,7 +536,9 @@ public class PrivateCommActivity extends BaseActivity {
 								String number = contactCursor.getString(contactCursor
 										.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
 								selectContacts.add(number);
-								Tools.logSh("add number==="+number+"  selectContacts==="+selectContacts);
+								Tools.logSh("add number===" + number
+										+ "  selectContacts==="
+										+ selectContacts);
 							}
 						}
 						editContactAdapter.notifyChange(true);
@@ -558,6 +563,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 		public MyOnClickListener(int i) {
 			index = i;
+
 		}
 
 		public void onClick(View v) {
@@ -579,6 +585,7 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 
 		public void onPageSelected(int arg0) {
+
 			Log.w(TAG, arg0 + "");
 			Animation animation = new TranslateAnimation(one * currIndex, one
 					* arg0, 0, 0);// 显然这个比较简洁，只有一行代码。
@@ -600,10 +607,39 @@ public class PrivateCommActivity extends BaseActivity {
 
 	}
 
+	private void showTab(int currIndex) {
+		switch (currIndex) {
+		case 0:
+			btn_sms.setBackgroundResource(R.drawable.private_comm_tab_sms_pressed);
+			btn_phone
+					.setBackgroundResource(R.drawable.private_comm_tab_phone_normal);
+			btn_contact
+					.setBackgroundResource(R.drawable.private_comm_tab_contact_normal);
+			break;
+
+		case 1:
+			btn_sms.setBackgroundResource(R.drawable.private_comm_tab_sms_normal);
+			btn_phone
+					.setBackgroundResource(R.drawable.private_comm_tab_phone_pressed);
+			btn_contact
+					.setBackgroundResource(R.drawable.private_comm_tab_contact_normal);
+			break;
+		case 2:
+			btn_sms.setBackgroundResource(R.drawable.private_comm_tab_sms_normal);
+			btn_phone
+					.setBackgroundResource(R.drawable.private_comm_tab_phone_normal);
+			btn_contact
+					.setBackgroundResource(R.drawable.private_comm_tab_contact_pressed);
+			break;
+		}
+
+	}
+
 	/**
 	 * 根据当前页面加载不同的控件
 	 */
 	private void fillData() {
+		showTab(currIndex);
 
 		Log.w(TAG, "fillData");
 

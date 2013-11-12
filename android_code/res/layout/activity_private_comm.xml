@@ -13,47 +13,89 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/private_comm_title"
-        android:background="@android:color/background_light"
+        android:background="@android:color/background_dark"
         android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="fill_parent"
             android:layout_height="40.0dip"
-            android:background="#FFFFFF" >
+            android:orientation="horizontal" >
 
-            <Button
+            <LinearLayout
                 android:id="@+id/text1"
-                android:layout_width="fill_parent"
+                android:layout_width="0.0dip"
                 android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:background="@drawable/private_comm_spacbtn_selector"
+                android:layout_weight="1"
+                android:clickable="true"
                 android:gravity="center"
-                android:text="@string/private_comm_sms"
-                android:textColor="#000000"
-                android:textSize="20.0dip" />
+                android:orientation="horizontal" >
 
-            <Button
+                <Button
+                    android:id="@+id/btn_sms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/private_comm_spac_sms_selector"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="20.0dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_comm_sms" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/text2"
-                android:layout_width="fill_parent"
+                android:layout_width="0.0dip"
                 android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:background="@drawable/private_comm_spacbtn_selector"
+                android:layout_weight="1"
+                android:clickable="true"
                 android:gravity="center"
-                android:text="@string/private_comm_dial"
-                android:textColor="#000000"
-                android:textSize="20.0dip" />
+                android:orientation="horizontal" >
 
-            <Button
+                <Button
+                    android:id="@+id/btn_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/private_comm_spac_phone_selector"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="20.0dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_comm_dial" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/text3"
-                android:layout_width="fill_parent"
+                android:layout_width="0.0dip"
                 android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:background="@drawable/private_comm_spacbtn_selector"
+                android:layout_weight="1"
+                android:clickable="true"
                 android:gravity="center"
-                android:text="@string/private_comm_contact"
-                android:textColor="#000000"
-                android:textSize="20.0dip" />
+                android:orientation="horizontal" >
+
+                <Button
+                     android:id="@+id/btn_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/private_comm_spac_contact_selector"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="20.0dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_comm_contact" />
+            </LinearLayout>
         </LinearLayout>
 
         <ImageView
@@ -73,8 +115,7 @@
             android:flipInterval="30"
             android:persistentDrawingCache="animation" />
     </LinearLayout>
-    
-    
+
     <RelativeLayout
         android:id="@+id/edit_ll_body"
         android:layout_width="match_parent"
@@ -82,21 +123,20 @@
         android:layout_below="@id/private_comm_title"
         android:orientation="vertical" >
 
-         <ImageView
+        <ImageView
             android:id="@+id/edit_tab_image"
             android:layout_width="match_parent"
             android:layout_height="40dip"
-            android:background="@drawable/private_comm_edit_pressed"
             android:alpha="0.5"
-            android:focusable="false"
-            />
+            android:background="@drawable/private_comm_edit_pressed"
+            android:focusable="false" />
 
         <RelativeLayout
             android:id="@+id/edit_rl_select"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_tab_image"
-            android:background="@drawable/private_comm_spacbtn_selector"
+              android:background="@android:color/background_light"
             android:clickable="true"
             android:paddingBottom="8dip"
             android:paddingTop="8dip" >
@@ -112,7 +152,7 @@
 
             <CheckBox
                 android:id="@+id/edit_checkbox_all"
-                 style="@style/private_comm_checkbox_style"
+                style="@style/private_comm_checkbox_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -122,29 +162,25 @@
                 android:focusable="false" />
         </RelativeLayout>
 
-        <LinearLayout 
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/edit_rl_select"
-            android:background="@android:color/background_light"
             android:layout_marginBottom="50dip"
-            >
+            android:background="@android:color/background_light" >
+
             <ListView
-            android:id="@+id/edit_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
-            
-            
+                android:id="@+id/edit_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
-        
 
         <LinearLayout
             android:id="@+id/edit_ll_sms_bt"
             android:layout_width="match_parent"
             android:layout_height="50dip"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/private_comm_spacbtn_selector"
+            android:background="@drawable/private_comm_spac_sms_selector"
             android:orientation="horizontal"
             android:padding="5dip" >
 
@@ -160,19 +196,18 @@
                 android:id="@+id/edit_btn_remove_sms"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/private_comm_edit_pressed"
                 android:layout_weight="1"
+                android:background="@drawable/private_comm_edit_pressed"
                 android:text="@string/private_comm_delete"
                 android:textColor="@color/sms_text_content_unseleted" />
         </LinearLayout>
 
-       
         <LinearLayout
             android:id="@+id/edit_ll_phone_bt"
             android:layout_width="match_parent"
             android:layout_height="50dip"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/private_comm_spacbtn_selector"
+            android:background="@drawable/private_comm_spac_sms_selector"
             android:orientation="horizontal"
             android:padding="5dip" >
 
@@ -185,14 +220,13 @@
                 android:text="删除通话记录"
                 android:textColor="@color/sms_text_content_unseleted" />
         </LinearLayout>
-        
-        
-         <LinearLayout
+
+        <LinearLayout
             android:id="@+id/edit_ll_contact_bt"
             android:layout_width="match_parent"
             android:layout_height="50dip"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/private_comm_spacbtn_selector"
+            android:background="@drawable/private_comm_spac_sms_selector"
             android:orientation="vertical"
             android:padding="5dip" >
 
@@ -204,7 +238,6 @@
                 android:text="移出隐私空间"
                 android:textColor="@color/sms_text_content_unseleted" />
         </LinearLayout>
-        
     </RelativeLayout>
 
 </RelativeLayout>

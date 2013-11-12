@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dip"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/private_comm_spacbtn_selector"
+        android:background="@drawable/private_comm_spac_sms_selector"
         android:orientation="horizontal"
         android:padding="5dip" >
 
