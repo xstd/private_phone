@@ -1,119 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/content"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/bg_color"
-        android:orientation="vertical" >
+    <include layout="@layout/ll_title_bar" />
 
-        <include layout="@layout/title_bar" />
+    <TextView
+        android:id="@+id/inbox_divider"
+        style="@style/activity_divider"
+        android:paddingLeft="10.0dip"
+        android:text="@string/strongbox_image_inbox_divider"
+        android:textSize="16.0sp" />
 
-        <TextView
-            android:id="@+id/inbox_divider"
-            style="@style/activity_divider"
-            android:paddingLeft="10.0dip"
-            android:text="@string/strongbox_image_inbox_divider"
-            android:textSize="16.0sp" />
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:listSelector="#00000000"
+        android:numColumns="2" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="0.0dip"
-            android:layout_weight="1.0" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_bar_height"
+        android:background="@drawable/button_bar_dark_bg" >
 
-            <LinearLayout
-                android:id="@+id/strongbox_buttonbar_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/bottom_bar_height"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/button_bar_dark_bg"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="5.0dip" >
+        <LinearLayout
+            android:id="@+id/add_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="7dip"
+            android:layout_marginRight="7dip"
+            android:background="@drawable/selector_compound_btn_green"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center" >
 
-                <RelativeLayout
-                    android:id="@+id/add_pic"
-                    android:layout_width="0.0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4.0dip"
-                    android:layout_marginRight="2.0dip"
-                    android:layout_marginTop="2.0dip"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true" >
-
-                    <Button
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:layout_width="0.0dip"
-                        android:layout_height="0.0dip"
-                        android:layout_alignBottom="@id/content"
-                        android:layout_alignLeft="@id/content"
-                        android:layout_alignRight="@id/content"
-                        android:layout_alignTop="@id/content"
-                        android:background="@drawable/selector_compound_btn_green"
-                        android:ellipsize="start" />
-
-                    <LinearLayout
-                        android:id="@id/content"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingBottom="2.0dip"
-                        android:paddingLeft="@dimen/compound_btn_LR_padding"
-                        android:paddingRight="@dimen/compound_btn_LR_padding" >
-
-                        <ImageView
-                            android:id="@id/icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="5.0dip"
-                            android:paddingRight="10.0dip"
-                            android:paddingTop="5.0dip"
-                            android:src="@drawable/ico_add" />
-
-                        <TextView
-                            android:id="@id/text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="8.0dip"
-                            android:paddingTop="7.0dip"
-                            android:singleLine="true"
-                            android:textColor="@drawable/selector_btn_dark_text"
-                            android:textSize="@dimen/compundbtn_text_size" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="0.0dip"
-                        android:layout_height="0.0dip"
-                        android:layout_alignBottom="@id/content"
-                        android:layout_alignLeft="@id/content"
-                        android:layout_alignRight="@id/content"
-                        android:layout_alignTop="@id/content"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/selector_btn_enable_mask" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <include
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/strongbox_buttonbar_layout"
-                android:layout_alignParentTop="true"
-                layout="@layout/gridview" />
-
-            <include
+            <ImageView
+                android:id="@id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/strongbox_buttonbar_layout"
-                android:layout_alignRight="@id/strongbox_buttonbar_layout"
-                layout="@layout/float_edit_btn_flipper" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="5.0dip"
+                android:paddingRight="10.0dip"
+                android:paddingTop="5.0dip"
+                android:src="@drawable/ico_add" />
 
-</FrameLayout>
+            <TextView
+                android:id="@id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8.0dip"
+                android:paddingTop="7.0dip"
+                android:singleLine="true"
+                android:text="@string/s_hide_image_add"
+                android:textColor="@drawable/selector_btn_dark_text"
+                android:textSize="@dimen/compundbtn_text_size" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

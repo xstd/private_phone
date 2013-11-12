@@ -18,15 +18,12 @@ import java.util.Date;
  */
 public class AddCommonSMSAdapter extends CursorAdapter {
 
-    private Context ctx;
-
     private DateFormat df;
 
     LayoutInflater inflater;
 
     public AddCommonSMSAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
-        ctx = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         df = DateFormat.getDateTimeInstance();
     }

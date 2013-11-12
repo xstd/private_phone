@@ -18,7 +18,6 @@ import com.xstd.pirvatephone.activity.SimulaCommActivity;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.module.SimulaPhone;
 import com.xstd.pirvatephone.module.SimulaSms;
-import com.xstd.pirvatephone.utils.ContactsUtils;
 
 public class SimulateCommAdapter extends BaseAdapter {
 
