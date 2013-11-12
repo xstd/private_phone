@@ -22,6 +22,8 @@ import com.xstd.privatephone.tools.Tools;
 
 public class EditPhoneAdapter extends CursorAdapter {
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
+	private ArrayList<CheckBox> checkBoxs = new ArrayList<CheckBox>();
+
 	private Context mContext;
 	private String phoneType;
 	private int picId;
@@ -78,7 +80,7 @@ public class EditPhoneAdapter extends CursorAdapter {
 		if(selectContacts.contains(phone_number)){
 			views.checkbox.setChecked(true);
 		}
-		
+		checkBoxs.add(views.checkbox);
 		views.checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -114,6 +116,12 @@ public class EditPhoneAdapter extends CursorAdapter {
 		view.setTag(views);
 		
 		return view;
+	}
+	
+	public void notifyChange(boolean flag) {
+		for (int i = 0; i < checkBoxs.size(); i++) {
+			checkBoxs.get(i).setChecked(flag);
+		}
 	}
 	
 	static class ViewHold{

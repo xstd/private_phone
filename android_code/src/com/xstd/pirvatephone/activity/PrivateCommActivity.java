@@ -1,7 +1,6 @@
 package com.xstd.pirvatephone.activity;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import com.xstd.pirvatephone.R;
@@ -20,8 +19,8 @@ import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
 import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
 import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
 import com.xstd.pirvatephone.utils.MakeCallUtils;
+import com.xstd.pirvatephone.utils.PxParseUtils;
 import com.xstd.pirvatephone.utils.RecordToSysUtils;
-import com.xstd.pirvatephone.utils.RestoreSystemPhoneUtils;
 import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
 import com.xstd.privatephone.adapter.ContactAdapter;
 import com.xstd.privatephone.adapter.EditContactAdapter;
@@ -31,7 +30,6 @@ import com.xstd.privatephone.adapter.MyViewPagerAdapter;
 import com.xstd.privatephone.adapter.PhoneRecordAdapter;
 import com.xstd.privatephone.adapter.SmsRecordAdapter;
 import com.xstd.privatephone.tools.Tools;
-import com.xstd.privatephone.view.SureDialog;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,7 +53,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
@@ -93,13 +90,10 @@ public class PrivateCommActivity extends BaseActivity {
 
 	boolean isEditing = false;
 
-	private ArrayList<String> selectContactsNumber = new ArrayList<String>();;
-
 	private static final int REMOVE_FINISH = 0;
 	private static final String TAG = "PrivateCommActivity";
 
-	private String[] selectPhones;
-	private Button edit_checkbox;
+	private CheckBox edit_checkbox;
 
 	private ListView contact_listview;
 	private ListView phone_listview;
@@ -121,7 +115,10 @@ public class PrivateCommActivity extends BaseActivity {
 	private Button btn_delete_contact;
 	private Button btn_delete_phone;
 
-	private LinearLayout body_layout;
+	
+	private PhoneRecordDao phoneRecordDao;
+	private ContactInfoDao contactInfoDao;
+	private SmsRecordDao smsRecordDao;
 
 	private Cursor contactCursor;
 	private Cursor smsRecordCursor;
@@ -144,7 +141,7 @@ public class PrivateCommActivity extends BaseActivity {
 			switch (msg.what) {
 			case REMOVE_FINISH:
 				isEditing = false;
-
+				edit_ll_body.setVisibility(View.GONE);
 				textView1.setClickable(true);
 				textView2.setClickable(true);
 				textView3.setClickable(true);
@@ -171,9 +168,7 @@ public class PrivateCommActivity extends BaseActivity {
 						setContactAdapter(contact_listview);
 					}
 					break;
-
 				}
-
 				break;
 			}
 		};
@@ -184,6 +179,8 @@ public class PrivateCommActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_private_comm);
 
+		Tools.logSh(PxParseUtils.px2dip(this, 30)+"");
+		
 		initData();
 		InitImageView();
 		initView();
@@ -252,12 +249,11 @@ public class PrivateCommActivity extends BaseActivity {
 		edit = (Button) findViewById(R.id.btn_edit);
 
 		// content-all
-		body_layout = (LinearLayout) findViewById(R.id.body_layout);
 		edit_ll_body = (RelativeLayout) findViewById(R.id.edit_ll_body);
 
 		// edit-checkall
 		edit_rl_select = (RelativeLayout) findViewById(R.id.edit_rl_select);
-		edit_checkbox = (Button) findViewById(R.id.edit_checkbox_all);
+		edit_checkbox = (CheckBox) findViewById(R.id.edit_checkbox_all);
 		edit_listview = (ListView) findViewById(R.id.edit_listview);
 
 		// edit-buttom
@@ -350,6 +346,9 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
+						if(selectContacts.size()==0){
+							edit_checkbox.setChecked(false);
+						}
 					}
 				}
 			});
@@ -381,6 +380,29 @@ public class PrivateCommActivity extends BaseActivity {
 				}
 			});
 
+			edit_rl_select.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					getSmsRecord();
+					edit_checkbox.setChecked(!edit_checkbox.isChecked());
+					if (edit_checkbox.isChecked()) {
+						if (smsRecordCursor != null
+								&& smsRecordCursor.getCount() > 0) {
+							while (smsRecordCursor.moveToNext()) {
+								String number = smsRecordCursor.getString(smsRecordCursor
+										.getColumnIndex(SmsRecordDao.Properties.Phone_number.columnName));
+								selectContacts.add(number);
+							}
+						}
+						editContactAdapter.notifyChange(true);
+					} else {
+						selectContacts.clear();
+						editContactAdapter.notifyChange(false);
+					}
+				}
+			});
+
 		} else if (currIndex == dialPageNum) {
 
 			editPhoneAdapter = new EditPhoneAdapter(PrivateCommActivity.this,
@@ -407,6 +429,9 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
+						if(selectContacts.size()==0){
+							edit_checkbox.setChecked(false);
+						}
 					}
 				}
 			});
@@ -420,6 +445,30 @@ public class PrivateCommActivity extends BaseActivity {
 								Toast.LENGTH_SHORT).show();
 					} else {
 						isEditingPhoneDialog();
+					}
+				}
+			});
+
+			edit_rl_select.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					getPhoneRecord();
+					edit_checkbox.setChecked(!edit_checkbox.isChecked());
+					if (edit_checkbox.isChecked()) {
+						if (phoneRecordCursor != null
+								&& phoneRecordCursor.getCount() > 0) {
+							while (phoneRecordCursor.moveToNext()) {
+								String number = phoneRecordCursor.getString(phoneRecordCursor
+										.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
+								selectContacts.add(number);
+							}
+						}
+						editContactAdapter.notifyChange(true);
+					} else {
+						selectContacts.clear();
+						editContactAdapter.notifyChange(false);
 					}
 				}
 			});
@@ -449,6 +498,10 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
+						
+						if(selectContacts.size()==0){
+							edit_checkbox.setChecked(false);
+						}
 					}
 				}
 			});
@@ -461,6 +514,32 @@ public class PrivateCommActivity extends BaseActivity {
 								Toast.LENGTH_SHORT).show();
 					} else {
 						isEditingContactDialog();
+					}
+				}
+			});
+
+			edit_rl_select.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					edit_checkbox.setChecked(!edit_checkbox.isChecked());
+					Tools.logSh("edit_checkbox==="+edit_checkbox.isChecked());
+					if (edit_checkbox.isChecked()) {
+						if (contactCursor != null
+								&& contactCursor.getCount() > 0) {
+							getContact();
+							while (contactCursor.moveToNext()) {
+								String number = contactCursor.getString(contactCursor
+										.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+								selectContacts.add(number);
+								Tools.logSh("add number==="+number+"  selectContacts==="+selectContacts);
+							}
+						}
+						editContactAdapter.notifyChange(true);
+					} else {
+						selectContacts.clear();
+						editContactAdapter.notifyChange(false);
 					}
 				}
 			});
@@ -584,7 +663,7 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private Cursor getSmsRecord() {
-		SmsRecordDao smsRecordDao = SmsRecordDaoUtils
+		smsRecordDao = SmsRecordDaoUtils
 				.getSmsRecordDao(getApplicationContext());
 		SQLiteDatabase database = smsRecordDao.getDatabase();
 		Tools.logSh("getSmsRecord()执行了");
@@ -600,7 +679,7 @@ public class PrivateCommActivity extends BaseActivity {
 	 */
 	private Cursor getContact() {
 
-		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+		contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(getApplicationContext());
 		SQLiteDatabase database = contactInfoDao.getDatabase();
 
@@ -614,7 +693,7 @@ public class PrivateCommActivity extends BaseActivity {
 	 */
 	private Cursor getPhoneRecord() {
 
-		PhoneRecordDao phoneRecordDao = PhoneRecordDaoUtils
+		phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(getApplicationContext());
 		SQLiteDatabase database = phoneRecordDao.getDatabase();
 
@@ -1225,7 +1304,7 @@ public class PrivateCommActivity extends BaseActivity {
 						PrivateCommActivity.this,
 						arrayUtils.listToArray(selectContacts));
 				selectContacts.clear();
-			
+
 			} else {
 				DelectOurPhoneDetailsUtils.deletePhoneDetails(
 						PrivateCommActivity.this, new String[] { number });
@@ -1233,7 +1312,7 @@ public class PrivateCommActivity extends BaseActivity {
 						PrivateCommActivity.this, new String[] { number });
 
 			}
-			
+
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);

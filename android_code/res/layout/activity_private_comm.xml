@@ -110,14 +110,15 @@
                 android:text="@string/private_comm_select_all"
                 android:textSize="15sp" />
 
-            <Button
+            <CheckBox
                 android:id="@+id/edit_checkbox_all"
+                 style="@style/private_comm_checkbox_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="17dp"
-                android:background="@drawable/shield_checkbox_alert_unchecked"
+                android:clickable="false"
                 android:focusable="false" />
         </RelativeLayout>
 

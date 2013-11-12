@@ -4,38 +4,10 @@
     android:layout_height="match_parent"
     >
 
-    
-     <LinearLayout
-        android:id="@+id/sms_ll_remove"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:layout_alignParentBottom="true"
-         android:background="@drawable/private_comm_spacbtn_selector"
-         android:orientation="horizontal"
-         >
-
-        <Button
-            android:id="@+id/sms_bt_recover"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="@string/private_comm_recover_contact"
-            android:textColor="@color/sms_text_content_unseleted" />
-        
-         <Button
-            android:id="@+id/sms_bt_delete"
-           android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="@string/private_comm_delete"
-            android:textColor="@color/sms_text_content_unseleted" />
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/sms_ll_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="51dip"
         android:orientation="vertical" >
 
         <TextView

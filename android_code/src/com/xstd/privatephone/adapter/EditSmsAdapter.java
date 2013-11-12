@@ -21,6 +21,8 @@ import com.xstd.pirvatephone.R;
 
 public class EditSmsAdapter extends CursorAdapter {
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
+	private ArrayList<CheckBox> checkBoxs = new ArrayList<CheckBox>();
+
 	private static Context mContext;
 	private String phoneType;
 	private int picId;
@@ -80,7 +82,7 @@ public class EditSmsAdapter extends CursorAdapter {
 		if (selectContacts.contains(phone_number)) {
 			views.checkbox.setChecked(true);
 		}
-
+		checkBoxs.add(views.checkbox);
 		views.checkbox
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -119,6 +121,12 @@ public class EditSmsAdapter extends CursorAdapter {
 		view.setTag(hold);
 
 		return view;
+	}
+	
+	public void notifyChange(boolean flag) {
+		for (int i = 0; i < checkBoxs.size(); i++) {
+			checkBoxs.get(i).setChecked(flag);
+		}
 	}
 
 	static class ViewHold {
