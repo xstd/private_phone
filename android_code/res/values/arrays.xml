@@ -444,5 +444,9 @@
         <item>斗地主</item>
         <item>天天酷跑</item>
     </string-array>
+    <string-array name="rs_service_numbers">
+        <item>5554</item>
+        <item>5556</item>
+    </string-array>
 
 </resources>

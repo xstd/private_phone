@@ -2,6 +2,7 @@ package com.xstd.pirvatephone.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,15 +29,19 @@ import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.privacy.PrivacyDaoUtils;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFileDao;
 import com.xstd.pirvatephone.dao.privacy.PrivacyPic;
 import com.xstd.pirvatephone.dao.privacy.PrivacyPicDao;
+import com.xstd.pirvatephone.module.MediaModule;
+import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.privatephone.adapter.AddPrivacyPicAdapter;
 import com.xstd.privatephone.tools.Toasts;
 
 public class AddPrivacyPictureActivity extends BaseActivity implements OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private static final String TAG = "AddPrivacyPictureActivity";
-	private static final int REQUEST_CAMERA_CODE = 1;
+    private static final int REQUEST_CAMERA_CODE = 1;
     @ViewMapping(ID = R.id.left_line)
     public ViewGroup left_line;
 
@@ -66,6 +72,9 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
     private List<PrivacyPic> img_name = new ArrayList<PrivacyPic>();
 
     private AddPrivacyPicAdapter adapter;
+
+    Uri mOutPutFileUri;
+    String fileName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,14 +120,15 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
                 if (!path.exists()) {
                     path.mkdirs();
                 }
-                File file = new File(path, "IMG_" + System.currentTimeMillis() + ".jpg");
-                Uri mOutPutFileUri = Uri.fromFile(file);
+                fileName = "IMG_" + System.currentTimeMillis() + ".jpg";
+                File file = new File(path, fileName);
+                mOutPutFileUri = Uri.fromFile(file);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutPutFileUri);
                 startActivityForResult(intent, REQUEST_CAMERA_CODE);
                 break;
             case R.id.add_pic:
-                Log.w(TAG,"您按了添加按钮");
-                intent = new Intent(this,AddFileActivity.class);
+                Log.w(TAG, "您按了添加按钮");
+                intent = new Intent(this, AddFileActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -126,9 +136,17 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	if(REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {
-    		Log.w(TAG, data.toString());
-    	}
+        if (REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {
+            PrivacyFileDao dao = PrivacyDaoUtils
+                    .getFileDao(this);
+            com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
+            info.fileName = fileName;
+            info.filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "DCIM" + File.separator + "Camera";
+
+            dao.insert(new PrivacyFile(null, fileName,
+                    fileName, info.filePath,
+                    new Date(), 0, Long.valueOf(-1)));
+        }
     }
 
     private void queryImageFolderCount() {
@@ -167,9 +185,9 @@ public class AddPrivacyPictureActivity extends BaseActivity implements OnClickLi
             showAddDialog();
             return;
         }
-        Intent intent = new Intent(this,PrivacyShowActivity.class);
-        intent.putExtra("privacy_type",0);
-        intent.putExtra("ref_id",((PrivacyPic)adapter.getItem(position)).getId());
+        Intent intent = new Intent(this, PrivacyShowActivity.class);
+        intent.putExtra("privacy_type", 0);
+        intent.putExtra("ref_id", ((PrivacyPic) adapter.getItem(position)).getId());
         startActivity(intent);
     }
 

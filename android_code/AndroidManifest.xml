@@ -143,14 +143,13 @@
         </activity>
         <activity
             android:name="com.xstd.pirvatephone.activity.AddCommonPhoneActivity"
-            android:theme="@android:style/Theme.DeviceDefault" />
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.xstd.pirvatephone.activity.AddCommonSmsActivity"
-            android:theme="@android:style/Theme.DeviceDefault" />
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.xstd.pirvatephone.activity.UserCenterActivity"
-            android:label="@string/title_activity_user_center"
-            android:theme="@android:style/Theme.DeviceDefault" >
+            android:label="@string/title_activity_user_center" >
         </activity>
         <activity
             android:name="com.xstd.pirvatephone.activity.SettingActivity"
