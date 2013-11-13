@@ -65,7 +65,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_privacy_picture);
-
+		
 		initUI();
 	}
 
@@ -119,12 +119,12 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 			startActivityForResult(intent, REQUEST_CAMERA_CODE);
 			break;
 		case R.id.add_pic:
-			intent = new Intent(this, AddFileActivity.class);
+			intent = new Intent(this, ShowSDCardMediaActivity.class);
 			startActivity(intent);
 			break;
 		}
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {

@@ -922,5 +922,24 @@ QQ:903372666
     <string name="rs_error_data">除备注外其余都为必填项！</string>
     <string name="warning_msg_for_delete_single_image_album">"您确认要删除选中的相册吗？
 这将导致该相册中的所有加密图片都被删除且无法恢复。如果您只想删除相册而保留相册中的图片，请先将相册中的图片移动到其它相册后重新删除。"</string>
+    <!-- label for the folder that contains Camera pictures in the gallery -->
+    <string name="gallery_camera_bucket_name">Camera pictures</string>
+
+    <!-- label for the folder that contains Camera videos in the gallery -->
+    <string name="gallery_camera_videos_bucket_name">Camera videos</string>
+
+    <!-- label for the folder that contains Camera videos in the gallery -->
+    <string name="gallery_camera_media_bucket_name">Camera media</string>
+
+    <!-- label for the icon meaning 'show me all the images' -->
+    <string name="all_images">All pictures</string>
+
+    <!-- label for the icon meaning 'show me all the videos' -->
+    <string name="all_videos">All videos</string>
+
+    <!-- alert to the user to that the shared storage is too full to complete the operation [CHAR LIMIT=NONE] -->
+    <string name="not_enough_space" product="nosdcard">Your shared storage is full.</string>
+    <!-- alert to the user to that the SD card is too full to complete the operation -->
+    <string name="not_enough_space" product="default">Your SD card is full.</string>
 
 </resources>

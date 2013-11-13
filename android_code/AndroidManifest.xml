@@ -172,6 +172,7 @@
             android:label="@string/title_activity_add_from_sms_record" >
         </activity>
         <activity android:name=".activity.AddAdvanceSimulatePhoneActivity" />
+        <activity android:name=".activity.ShowSDCardMediaActivity" />
     </application>
 
 </manifest>
