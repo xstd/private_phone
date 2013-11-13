@@ -42,14 +42,14 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		picId = 0; 
 		if(type == 1){//
 			phoneType = "拨入电话";
-			picId = R.drawable.privacy_incoming;
+			picId = R.drawable.private_comm_pic_incomming;
 		}else if(type == 2){
 			phoneType = "呼出电话";
-			picId = R.drawable.privacy_outgoing;
+			picId = R.drawable.private_comm_pic_outgoing;
 			
 		}else if(type == 3){
 			phoneType = "来电未接通";
-			picId = R.drawable.privacy_incoming;
+			picId = R.drawable.private_comm_pic_missing;
 		}else{
 			phoneType = "其它";
 			picId = R.drawable.privacy_incoming;
@@ -57,22 +57,16 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		
 		
 		if(name==null || "".equals(name)){
-			views.tv_contact.setText(phone_number);
+			views.tv_name.setText("未知联系人");
 		}else{
-			views.tv_contact.setText(name);
+			views.tv_name.setText(name);
 		}
 		
-		views.inorout.setBackgroundResource(picId);
-		views.tv_type.setText(phoneType);
-		if(count!=0){
-			views.tv_count.setText("("+count+")");
-		}else{
-			views.tv_count.setText("(1)");
-		}
+		views.iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		views.tv_number.setText(phone_number);
 		views.tv_date.setText(new Date(date).toLocaleString());
-		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
-		
+		views.iv_type.setBackgroundResource(picId);
+		views.tv_phone_belong.setText("    北京");
 	}
 
 	@Override
@@ -81,13 +75,12 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		View view = LayoutInflater.from(mContext).inflate(R.layout.private_phone_record_item, null);
 		ViewHold views = new ViewHold();
 		
-		views.inorout = (ImageView) view.findViewById(R.id.dial_iv_inorout);
-		views.tv_type = (TextView) view.findViewById(R.id.dial_tv_phone_type);
-		views.tv_contact = (TextView) view.findViewById(R.id.dial_tv_contact);
-		views.tv_date = (TextView) view.findViewById(R.id.dial_tv_date);
-		views.tv_count = (TextView) view.findViewById(R.id.dial_tv_count);
-		views.btn_dail = (Button) view.findViewById(R.id.dial_btn_dail);
-		views.tv_number = (TextView) view.findViewById(R.id.dial_tv_contact_number);
+		views.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
+		views.tv_name = (TextView) view.findViewById(R.id.tv_name);
+		views.tv_number = (TextView) view.findViewById(R.id.tv_number);
+		views.tv_date = (TextView) view.findViewById(R.id.tv_phone_date);
+		views.iv_type = (ImageView) view.findViewById(R.id.iv_type);
+		views.tv_phone_belong = (TextView) view.findViewById(R.id.tv_phone_belong);
 		
 		view.setTag(views);
 		
@@ -96,13 +89,12 @@ public class PhoneRecordAdapter extends CursorAdapter {
 	
 	static class ViewHold{
 		
-		ImageView inorout;
-		TextView tv_date;
-		TextView tv_type;
-		TextView tv_contact;
+		ImageView iv_pic;
+		TextView tv_name;
 		TextView tv_number;
-		TextView tv_count;
-		Button btn_dail;
+		TextView tv_phone_belong;
+		TextView tv_date;
+		ImageView iv_type;
 	}
 
 }

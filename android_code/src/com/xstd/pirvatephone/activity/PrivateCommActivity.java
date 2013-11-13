@@ -104,7 +104,7 @@ public class PrivateCommActivity extends BaseActivity {
 	private TextView phone_empty;
 	private TextView sms_empty;
 
-	private RelativeLayout edit_ll_body;
+	private LinearLayout edit_ll_body;
 	private RelativeLayout edit_rl_select;
 
 	private LinearLayout edit_ll_sms_bt;
@@ -253,7 +253,7 @@ public class PrivateCommActivity extends BaseActivity {
 		edit = (Button) findViewById(R.id.btn_edit);
 
 		// content-all
-		edit_ll_body = (RelativeLayout) findViewById(R.id.edit_ll_body);
+		edit_ll_body = (LinearLayout) findViewById(R.id.edit_ll_body);
 
 		// edit-checkall
 		edit_rl_select = (RelativeLayout) findViewById(R.id.edit_rl_select);
@@ -795,9 +795,9 @@ public class PrivateCommActivity extends BaseActivity {
 						PhoneDetailActivity.class);
 				// 联系人带过去
 				TextView sms_tv_name = (TextView) view
-						.findViewById(R.id.dial_tv_contact);
+						.findViewById(R.id.tv_name);
 				TextView sms_tv_number = (TextView) view
-						.findViewById(R.id.dial_tv_contact_number);
+						.findViewById(R.id.tv_number);
 				String name = sms_tv_name.getText().toString().trim();
 				String number = sms_tv_number.getText().toString().trim();
 				intent.putExtra("Name", name);
@@ -812,9 +812,9 @@ public class PrivateCommActivity extends BaseActivity {
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				TextView sms_tv_name = (TextView) view
-						.findViewById(R.id.dial_tv_contact);
+						.findViewById(R.id.tv_name);
 				TextView sms_tv_number = (TextView) view
-						.findViewById(R.id.dial_tv_contact_number);
+						.findViewById(R.id.tv_number);
 				String name = sms_tv_name.getText().toString().trim();
 				String number = sms_tv_number.getText().toString().trim();
 				showPhoneDialog(name, number);

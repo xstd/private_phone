@@ -50,5 +50,24 @@
     <dimen name="bottom_bar_height">60.0dip</dimen>
     <dimen name="compound_btn_LR_padding">5dp</dimen>
     <dimen name="compundbtn_text_size">18sp</dimen>
+    <!-- swj -->
+    <dimen name="private_comm_pic_margin_left">18px</dimen>
+    <dimen name="private_comm_pic_margin_right">34px</dimen>
+    <dimen name="private_comm_name_margin_top">35px</dimen>
+    <dimen name="private_comm_tab_bkg_height">20px</dimen>
+    <dimen name="private_comm_item_margin_bottom">23px</dimen>
+    <dimen name="private_comm_edit_margin_right">24px</dimen>
+    <dimen name="private_comm_item_phone_size">30px</dimen>
+    <dimen name="private_comm_item_name_size">36px</dimen>
+    <dimen name="private_comm_back_margin_left">48px</dimen>
+    <dimen name="private_comm_item_btn_right">80px</dimen>
+    <dimen name="private_comm_contact_item_height">130px</dimen>
+    <dimen name="private_comm_phone_item_height">140px</dimen>
+    <dimen name="private_comm_tab_spac_wid">184px</dimen>
+    <dimen name="private_comm_tab_spac_height">10px</dimen>
+    
+    
+    
+    <dimen name="private_comm_tab_bkg_height">108px</dimen>
 
 </resources>

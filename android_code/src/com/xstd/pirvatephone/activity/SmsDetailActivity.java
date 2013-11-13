@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class SmsDetailActivity extends BaseActivity {
 	private SmsDetailAdapter smsDetailAdapter;
 	private String name = "";
 	private String number = "";
-	private RelativeLayout sms_detail_title;
+	private LinearLayout sms_detail_title;
 	private SmsDetailDao smsDetailDao;
 	private SmsRecordDao smsRecordDao;
 	private SQLiteDatabase smsDetailDatabase;
@@ -67,7 +68,7 @@ public class SmsDetailActivity extends BaseActivity {
 
 	private void initView() {
 		// title
-		sms_detail_title = (RelativeLayout) findViewById(R.id.sms_detail_title);
+		sms_detail_title = (LinearLayout) findViewById(R.id.sms_detail_title);
 		btn_back = (Button) sms_detail_title.findViewById(R.id.btn_back);
 		btn_edit = (Button) sms_detail_title.findViewById(R.id.btn_edit);
 		tv_title = (TextView) sms_detail_title.findViewById(R.id.tv_title);

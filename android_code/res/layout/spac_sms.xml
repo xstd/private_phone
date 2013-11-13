@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+        android:background="@color/private_comm_listview_bkg"
     >
 
     <RelativeLayout
@@ -22,6 +23,7 @@
             android:id="@+id/sms_lv_cont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent" />
 
         

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
@@ -46,10 +47,12 @@ public class ContactAdapter extends CursorAdapter {
 			typeStr = "[" + "立即挂断" + "]";
 		}
 
+		views.iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		views.tv_name.setText(name);
 		views.tv_type.setText(typeStr);
 		views.tv_phone_num.setText(phone_number.replace(" ", "").replace("-",
 				""));
+		views.tv_phone_belong.setText("   北京");
 		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 
 	}
@@ -60,8 +63,10 @@ public class ContactAdapter extends CursorAdapter {
 		View view = LayoutInflater.from(mContext).inflate(
 				R.layout.private_contact_item, null);
 		ViewHold views = new ViewHold();
+		views.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
 		views.tv_name = (TextView) view.findViewById(R.id.tv_name);
 		views.tv_phone_num = (TextView) view.findViewById(R.id.tv_phone_num);
+		views.tv_phone_belong = (TextView) view.findViewById(R.id.tv_phone_belong);
 		views.tv_type = (TextView) view.findViewById(R.id.tv_type);
 		views.btn_dail = (Button) view.findViewById(R.id.contact_btn_dail);
 
@@ -71,8 +76,10 @@ public class ContactAdapter extends CursorAdapter {
 	}
 
 	static class ViewHold {
+		ImageView iv_pic;
 		TextView tv_name;
 		TextView tv_phone_num;
+		TextView tv_phone_belong;
 		TextView tv_type;
 		Button btn_dail;
 	}
