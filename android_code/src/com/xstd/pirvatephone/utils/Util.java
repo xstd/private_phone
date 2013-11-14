@@ -114,6 +114,12 @@ public class Util {
 		}
 	}
 
+	public static void Assert(boolean cond) {
+		if (!cond) {
+			throw new AssertionError();
+		}
+	}
+
 	public static <T> int indexOf(T[] array, T s) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(s)) {

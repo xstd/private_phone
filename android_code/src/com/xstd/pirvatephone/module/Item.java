@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.provider.MediaStore.Images;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.activity.ShowFolderMediaActivity;
 import com.xstd.pirvatephone.utils.ImageManager;
 
 public class Item {
@@ -58,9 +59,11 @@ public class Item {
 			uri = uri.buildUpon().appendQueryParameter("bucketId", mBucketId)
 					.build();
 		}
-		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-		intent.putExtra("windowTitle", mName);
-		intent.putExtra("mediaTypes", getIncludeMediaTypes());
+		// Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		// intent.putExtra("windowTitle", mName);
+		// intent.putExtra("mediaTypes", getIncludeMediaTypes());
+		Intent intent = new Intent(activity, ShowFolderMediaActivity.class);
+		intent.setData(uri);
 		activity.startActivity(intent);
 	}
 

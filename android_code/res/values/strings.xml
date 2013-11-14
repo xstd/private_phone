@@ -941,5 +941,7 @@ QQ:903372666
     <string name="not_enough_space" product="nosdcard">Your shared storage is full.</string>
     <!-- alert to the user to that the SD card is too full to complete the operation -->
     <string name="not_enough_space" product="default">Your SD card is full.</string>
+    <!-- alert to the user to wait for some operation to complete -->
+    <string name="wait">Please wait\u2026</string>
 
 </resources>

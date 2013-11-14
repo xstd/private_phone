@@ -173,6 +173,7 @@
         </activity>
         <activity android:name=".activity.AddAdvanceSimulatePhoneActivity" />
         <activity android:name=".activity.ShowSDCardMediaActivity" />
+        <activity android:name=".activity.ShowFolderMediaActivity" />
     </application>
 
 </manifest>

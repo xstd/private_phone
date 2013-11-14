@@ -102,8 +102,7 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
-
+				launchFolderGallery(position);
 			}
 		});
 
@@ -151,6 +150,31 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 		mUnmounted = false;
 		mScanning = false;
 		startWorker();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+
+		abortWorker();
+
+		unregisterReceiver(mReceiver);
+		getContentResolver().unregisterContentObserver(mDbObserver);
+
+		// free up some ram
+		mAdapter = null;
+		lv.setAdapter(null);
+		unloadDrawable();
+	}
+
+	private void unloadDrawable() {
+		mFrameGalleryMask = null;
+		mCellOutline = null;
+		mVideoOverlay = null;
+	}
+
+	private void launchFolderGallery(int position) {
+		mAdapter.mItems.get(position).launch(this);
 	}
 
 	// This is called when we receive media-related broadcast.
@@ -669,7 +693,7 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 			new ImageListData(Item.TYPE_CAMERA_IMAGES,
 					ImageManager.INCLUDE_IMAGES,
 					ImageManager.CAMERA_IMAGE_BUCKET_ID,
-					R.string.gallery_camera_bucket_name),
+					R.string.gallery_camera_bucket_name)/*,
 			// Camera Videos
 			new ImageListData(Item.TYPE_CAMERA_VIDEOS,
 					ImageManager.INCLUDE_VIDEOS,
@@ -688,6 +712,6 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 
 			// All Videos
 			new ImageListData(Item.TYPE_ALL_VIDEOS,
-					ImageManager.INCLUDE_VIDEOS, null, R.string.all_videos), };
+					ImageManager.INCLUDE_VIDEOS, null, R.string.all_videos),*/ };
 
 }
