@@ -140,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.5"
-            android:background="@drawable/private_comm_tab_edit_bkg" />
+            android:background="@drawable/private_comm_tab_bkg" />
 
         <RelativeLayout
             android:id="@+id/edit_rl_select"

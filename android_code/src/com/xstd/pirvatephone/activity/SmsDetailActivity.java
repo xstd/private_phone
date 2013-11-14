@@ -6,8 +6,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.BoringLayout.Metrics;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
@@ -39,7 +41,7 @@ public class SmsDetailActivity extends BaseActivity {
 	private Button btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
-	private Button btn_send;
+	private RelativeLayout btn_send;
 	private EditText send_content;
 	private Cursor smsDetailCursor;
 	private SmsDetailAdapter smsDetailAdapter;
@@ -60,7 +62,6 @@ public class SmsDetailActivity extends BaseActivity {
 		name = getIntent().getStringExtra("Name");
 		number = getIntent().getStringExtra("Number");
 		Tools.logSh("Name====" + name);
-
 		initData();
 		initView();
 	}
@@ -78,7 +79,7 @@ public class SmsDetailActivity extends BaseActivity {
 		listview = (ListView) findViewById(R.id.sms_detail_listview);
 		// bottom
 		send_content = (EditText) findViewById(R.id.et_send_content);
-		btn_send = (Button) findViewById(R.id.btn_send);
+		btn_send = (RelativeLayout) findViewById(R.id.btn_send);
 
 		smsDetailAdapter = new SmsDetailAdapter(getApplicationContext(),
 				smsDetailCursor);

@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dip"
         android:layout_marginLeft="11dip"
@@ -30,14 +30,14 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                style="@style/private_comm_item_text1_style"
+                style="@style/private_comm_item_name_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="明明" />
 
             <TextView
                 android:id="@+id/tv_number"
-                style="@style/private_comm_item_text1_style"
+                style="@style/private_comm_item_content_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="(110)" />
@@ -59,12 +59,14 @@
                 android:id="@+id/tv_phone_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                 style="@style/private_comm_item_content_style"
                 android:hint="11/1 下午 2:20" />
 
             <TextView
                 android:id="@+id/tv_phone_belong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                 style="@style/private_comm_item_content_style"
                 android:hint="     北京" />
         </LinearLayout>
     </LinearLayout>
@@ -83,10 +85,16 @@
             android:background="@drawable/private_comm_pic_incomming" />
 
         <TextView
-            style="@style/private_comm_item_text3_style"
+            style="@style/private_comm_item_duration_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="23:12" />
     </LinearLayout>
+    
+     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="@color/private_comm_listview_line" />
 
 </RelativeLayout>

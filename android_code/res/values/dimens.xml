@@ -51,23 +51,30 @@
     <dimen name="compound_btn_LR_padding">5dp</dimen>
     <dimen name="compundbtn_text_size">18sp</dimen>
     <!-- swj -->
-    <dimen name="private_comm_pic_margin_left">18px</dimen>
-    <dimen name="private_comm_pic_margin_right">34px</dimen>
-    <dimen name="private_comm_name_margin_top">35px</dimen>
-    <dimen name="private_comm_tab_bkg_height">20px</dimen>
-    <dimen name="private_comm_item_margin_bottom">23px</dimen>
-    <dimen name="private_comm_edit_margin_right">24px</dimen>
-    <dimen name="private_comm_item_phone_size">30px</dimen>
-    <dimen name="private_comm_item_name_size">36px</dimen>
-    <dimen name="private_comm_back_margin_left">48px</dimen>
-    <dimen name="private_comm_item_btn_right">80px</dimen>
-    <dimen name="private_comm_contact_item_height">130px</dimen>
-    <dimen name="private_comm_phone_item_height">140px</dimen>
-    <dimen name="private_comm_tab_spac_wid">184px</dimen>
-    <dimen name="private_comm_tab_spac_height">10px</dimen>
+    <dimen name="private_comm_pic_margin_left">9dp</dimen>
+    <dimen name="private_comm_pic_margin_right">17dp</dimen>
+    <dimen name="private_comm_name_margin_top">13dp</dimen>
+    <dimen name="private_comm_tab_bkg_height">10.0dp</dimen>
+    <dimen name="private_comm_item_margin_bottom">12dp</dimen>
+    <dimen name="private_comm_edit_margin_right">12dp</dimen>
+    <dimen name="private_comm_item_all">14dp</dimen>
+    <dimen name="private_comm_item_phone_size">15dp</dimen>
+    <dimen name="private_comm_item_name_size">18dp</dimen>
+    <dimen name="private_comm_back_margin_left">24dp</dimen>
+    <dimen name="private_comm_item_btn_right">40.0dp</dimen>
+    <dimen name="private_comm_contact_icon_width">48dp</dimen>
+    <dimen name="private_comm_contact_item_height">65dp</dimen>
+    <dimen name="private_comm_phone_item_height">70.0dp</dimen>
+    <dimen name="private_comm_tab_spac_wid">92dp</dimen>
+    <dimen name="private_comm_tab_spac_height">5dp</dimen>
+    <dimen name="private_comm_sms_input_length">240.0dp</dimen>
+    <dimen name="private_comm_sms_detail_margin_right">74dp</dimen>
+    <dimen name="private_comm_sms_input_margin_left">20.0dp</dimen>
+    <dimen name="private_comm_sms_detail_right">58dp</dimen>
+    <dimen name="private_comm_sms_send_bkg_width">64dp</dimen>
     
     
     
-    <dimen name="private_comm_tab_bkg_height">108px</dimen>
+    <dimen name="private_comm_tab_bkg_height">54dp</dimen>
 
 </resources>

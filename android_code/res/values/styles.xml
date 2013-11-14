@@ -73,34 +73,43 @@
     </style>
 
     <!-- swj -->
-    <style name="private_comm_item_text1_style">
-        <item name="android:layout_gravity">center</item>
+    <style name="private_comm_item_name_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#212121</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">@dimen/private_comm_item_name_size</item>
     </style>
-    <style name="private_comm_item_text2_style">
-        <item name="android:layout_gravity">center</item>
+    <style name="private_comm_item_content_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#999999</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/private_comm_item_phone_size</item>
     </style>
-    <style name="private_comm_item_text3_style">
-        <item name="android:layout_gravity">center</item>
+    <style name="private_comm_item_duration_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#212121</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/private_comm_item_phone_size</item>
     </style>
-    <style name="private_comm_item_text4_style">
-        <item name="android:layout_gravity">center</item>
+    <style name="private_comm_item_contact_all_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#6d6d6d</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/private_comm_item_all</item>
     </style>
+     <style name="private_comm_item_sms_date_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#208ecd</item>
+        <item name="android:textSize">@dimen/private_comm_item_all</item>
+    </style>
+     <style name="private_comm_bubble_date_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#999999</item>
+        <item name="android:textSize">@dimen/private_comm_edit_margin_right</item>
+    </style>
+     
     
     <style name="private_comm_title_style">
         <item name="android:layout_gravity">center</item>

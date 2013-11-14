@@ -58,7 +58,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 		views.tv_phone_number.setText(phone_number);
 		views.sms_tv_count.setText("(" + msg_count + ")");
 
-		views.isopen.setBackgroundResource(R.drawable.private_sms_read);
+		views.sms_iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		
 
 		views.sms_tv_date.setText(new Date(lastedContact).toLocaleString());
@@ -73,7 +73,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 				R.layout.private_sms_record_item, null);
 		ViewHold hold = new ViewHold();
 
-		hold.isopen = (ImageView) view.findViewById(R.id.sms_iv_inorout);
+		hold.sms_iv_pic = (ImageView) view.findViewById(R.id.sms_iv_pic);
 		hold.tv_phone_name = (TextView) view.findViewById(R.id.sms_tv_name);
 		hold.tv_phone_number = (TextView) view.findViewById(R.id.sms_tv_number);
 		hold.sms_tv_content = (TextView) view.findViewById(R.id.sms_tv_content);
@@ -87,7 +87,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 
 	static class ViewHold {
 
-		ImageView isopen;
+		ImageView sms_iv_pic;
 		TextView sms_tv_date;
 		TextView sms_tv_content;
 		TextView tv_phone_name;
