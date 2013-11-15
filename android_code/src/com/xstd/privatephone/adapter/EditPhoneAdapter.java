@@ -48,35 +48,31 @@ public class EditPhoneAdapter extends CursorAdapter {
 		picId = 0; 
 		if(type == 1){//
 			phoneType = "拨入电话";
-			picId = R.drawable.privacy_incoming;
+			picId = R.drawable.private_comm_pic_incomming;
 		}else if(type == 2){
 			phoneType = "呼出电话";
-			picId = R.drawable.privacy_outgoing;
+			picId = R.drawable.private_comm_pic_outgoing;
 			
 		}else if(type == 3){
 			phoneType = "来电未接通";
-			picId = R.drawable.privacy_incoming;
+			picId = R.drawable.private_comm_pic_missing;
 		}else{
 			phoneType = "其它";
-			picId = R.drawable.privacy_incoming;
+			picId = R.drawable.private_comm_pic_missing;
 		}
 		
 		
 		if(name==null || "".equals(name)){
 			name = phone_number;
 		}
-		views.dial_tv_name.setText(name);
-		views.tv_hidden_number.setText(phone_number);
-		views.tv_hidden_number.setVisibility(View.GONE);
-		views.inorout.setBackgroundResource(picId);
-		views.tv_type.setText(phoneType);
-		if(count!=0){
-			views.tv_count.setText("("+count+")");
-		}else{
-			views.tv_count.setText("(0)");
-		}
+		views.tv_name.setText(name);
+		views.tv_duration.setText(name);
+		views.tv_number.setText(" ( "+phone_number+" )");
+		views.iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
+		views.tv_type.setBackgroundResource(picId);
+		views.tv_phone_belong.setText("  北京");
 		
-		views.tv_date.setText(new Date(date).toLocaleString());
+		views.tv_date.setText(new Date(date).toLocaleString()+" )");
 		if(selectContacts.contains(phone_number)){
 			views.checkbox.setChecked(true);
 		}
@@ -105,13 +101,14 @@ public class EditPhoneAdapter extends CursorAdapter {
 		View view = LayoutInflater.from(mContext).inflate(R.layout.private_phone_edit_item, null);
 		ViewHold views = new ViewHold();
 		
-		views.inorout = (ImageView) view.findViewById(R.id.dial_iv_inorout);
-		views.tv_type = (TextView) view.findViewById(R.id.dial_tv_phone_type);
-		views.dial_tv_name = (TextView) view.findViewById(R.id.dial_tv_name);
-		views.tv_hidden_number = (TextView) view.findViewById(R.id.tv_hidden_number);
-		views.tv_date = (TextView) view.findViewById(R.id.dial_tv_date);
-		views.tv_count = (TextView) view.findViewById(R.id.dial_tv_count);
-		views.checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+		views.checkbox = (CheckBox) view.findViewById(R.id.iv_check);
+		views.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
+		views.tv_type = (ImageView) view.findViewById(R.id.iv_type);
+		views.tv_name = (TextView) view.findViewById(R.id.tv_name);
+		views.tv_duration = (TextView) view.findViewById(R.id.tv_duration);
+		views.tv_number = (TextView) view.findViewById(R.id.tv_number);
+		views.tv_date = (TextView) view.findViewById(R.id.tv_phone_date);
+		views.tv_phone_belong = (TextView) view.findViewById(R.id.tv_phone_belong);
 		
 		view.setTag(views);
 		
@@ -126,12 +123,13 @@ public class EditPhoneAdapter extends CursorAdapter {
 	
 	static class ViewHold{
 		
-		ImageView inorout;
+		ImageView iv_pic;
 		TextView tv_date;
-		TextView tv_type;
-		TextView dial_tv_name;
-		TextView tv_hidden_number;
-		TextView tv_count;
+		ImageView tv_type;
+		TextView tv_name;
+		TextView tv_number;
+		TextView tv_duration;
+		TextView tv_phone_belong;
 		CheckBox checkbox;
 	}
 

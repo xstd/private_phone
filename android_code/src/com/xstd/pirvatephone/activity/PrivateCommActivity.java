@@ -419,10 +419,10 @@ public class PrivateCommActivity extends BaseActivity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					CheckBox checkbox = (CheckBox) view
-							.findViewById(R.id.checkbox);
+							.findViewById(R.id.iv_check);
 					checkbox.setChecked(!checkbox.isChecked());
 					TextView tv_phone_num = (TextView) view
-							.findViewById(R.id.tv_hidden_number);
+							.findViewById(R.id.tv_number);
 					String phone_number = tv_phone_num.getText().toString()
 							.trim();
 

@@ -138,7 +138,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="54dip"
             android:alpha="0.5"
             android:background="@drawable/private_comm_tab_bkg" />
 
@@ -182,7 +182,9 @@
             <ListView
                 android:id="@+id/edit_listview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                 />
         </LinearLayout>
 
         <LinearLayout
