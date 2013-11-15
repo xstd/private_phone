@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -73,7 +74,7 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private int mSelectedIndex = GridViewSpecial.INDEX_NONE;
 
-	private HashSet<IImage> mMultiSelected = null;
+	private HashSet<IImage> mMultiSelected = new HashSet<IImage>();
 
 	private boolean mLayoutComplete;
 
@@ -87,6 +88,8 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private static final String STATE_SCROLL_POSITION = "scroll_position";
 	private static final String STATE_SELECTED_INDEX = "first_index";
+
+	private static final String TAG = "ShowFolderMediaActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -160,14 +163,6 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 		};
 		registerReceiver(mReceiver, intentFilter);
 		rebake(false, ImageManager.isMediaScannerScanning(getContentResolver()));
-		openMultiSelectMode();
-	}
-
-	private void openMultiSelectMode() {
-		if (mMultiSelected != null)
-			return;
-		mMultiSelected = new HashSet<IImage>();
-		gv.invalidate();
 	}
 
 	@Override
@@ -229,8 +224,6 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 		gv.setDrawAdapter(this);
 		gv.setLoader(mLoader);
 		gv.start();
-		// mNoImagesView.setVisibility(mAllImages.getCount() > 0 ? View.GONE
-		// : View.VISIBLE);
 	}
 
 	// Returns the image list parameter which contains the subset of image/video
@@ -308,38 +301,28 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	}
 
-	private boolean isInMultiSelectMode() {
-		return mMultiSelected != null;
-	}
-
 	private void toggleMultiSelected(IImage image) {
-		int original = mMultiSelected.size();
 		if (!mMultiSelected.add(image)) {
 			mMultiSelected.remove(image);
 		}
-		gv.invalidate();
-		// if (original == 0)
-		// showFooter();
-		// if (mMultiSelected.size() == 0)
-		// hideFooter();
+//		gv.invalidate();
 	}
 
 	@Override
 	public void onImageClicked(int index) {
+		Log.i(TAG, "onImageClicked");
 	}
 
 	@Override
 	public void onImageTapped(int index) {
-		if (isInMultiSelectMode()) {
-			gv.setSelectedIndex(GridViewSpecial.INDEX_NONE);
-			toggleMultiSelected(mAllImages.getImageAt(index));
-		} else {
-			onImageClicked(index);
-		}
+		Log.i(TAG, "onImageTapped");
+		gv.setSelectedIndex(GridViewSpecial.INDEX_NONE);
+		toggleMultiSelected(mAllImages.getImageAt(index));
 	}
 
 	@Override
 	public void onLayoutComplete(boolean changed) {
+		Log.i(TAG, "onLayoutComplete");
 		mLayoutComplete = true;
 		if (mCropResultUri != null) {
 			IImage image = mAllImages.getImageForUri(mCropResultUri);
@@ -442,28 +425,23 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 		}
 	}
 
-	private Drawable mVideoOverlay;
-	private Drawable mVideoMmsErrorOverlay;
 	private Drawable mMultiSelectTrue;
 	private Drawable mMultiSelectFalse;
 
 	@Override
 	public void drawDecoration(Canvas canvas, IImage image, int xPos, int yPos,
 			int w, int h) {
-		if (mMultiSelected != null) {
-			initializeMultiSelectDrawables();
+		initializeMultiSelectDrawables();
 
-			Drawable checkBox = mMultiSelected.contains(image) ? mMultiSelectTrue
-					: mMultiSelectFalse;
-			int width = checkBox.getIntrinsicWidth();
-			int height = checkBox.getIntrinsicHeight();
-			int left = 5 + xPos;
-			int top = h - height - 5 + yPos;
-			mSrcRect.set(left, top, left + width, top + height);
-			checkBox.setBounds(mSrcRect);
-			checkBox.draw(canvas);
-		}
-
+		Drawable checkBox = mMultiSelected.contains(image) ? mMultiSelectTrue
+				: mMultiSelectFalse;
+		int width = checkBox.getIntrinsicWidth();
+		int height = checkBox.getIntrinsicHeight();
+		int left = 5 + xPos;
+		int top = h - height - 5 + yPos;
+		mSrcRect.set(left, top, left + width, top + height);
+		checkBox.setBounds(mSrcRect);
+		checkBox.draw(canvas);
 	}
 
 	private void initializeMultiSelectDrawables() {

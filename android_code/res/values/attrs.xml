@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+         Attributes that can be used with {@link android.view.View} or
+         any of its subclasses.  Also see {@link #ViewGroup_Layout} for
+         attributes that are processed by the view's parent.
+    -->
+    <declare-styleable name="View">
+
+        <!--
+             Supply an identifier name for this view, to later retrieve it
+             with {@link android.view.View#findViewById View.findViewById()} or
+             {@link android.app.Activity#findViewById Activity.findViewById()}.
+             This must be a
+             resource reference; typically you set this using the
+             <code>@+</code> syntax to create a new ID resources.
+             For example: <code>android:id="@+id/my_id"</code> which
+             allows you to later retrieve the view
+             with <code>findViewById(R.id.my_id)</code>.
+        -->
+        <attr name="id" format="reference" />
+
+        <!--
+             Supply a tag for this view containing a String, to be retrieved
+             later with {@link android.view.View#getTag View.getTag()} or
+             searched for with {@link android.view.View#findViewWithTag
+             View.findViewWithTag()}.  It is generally preferable to use
+             IDs (through the android:id attribute) instead of tags because
+             they are faster and allow for compile-time type checking.
+        -->
+        <attr name="tag" format="string" />
+
+        <!-- The initial horizontal scroll offset, in pixels. -->
+        <attr name="scrollX" format="dimension" />
+
+        <!-- The initial vertical scroll offset, in pixels. -->
+        <attr name="scrollY" format="dimension" />
+
+        <!--
+             A drawable to use as the background.  This can be either a reference
+             to a full drawable resource (such as a PNG image, 9-patch,
+             XML state list description, etc), or a solid color such as "#ff000000"
+            (black).
+        -->
+        <attr name="background" format="reference|color" />
+
+        <!--
+             Sets the padding, in pixels, of all four edges.  Padding is defined as
+             space between the edges of the view and the view's content. A views size
+             will include it's padding.  If a {@link android.R.attr#background}
+             is provided, the padding will initially be set to that (0 if the
+             drawable does not have padding).  Explicitly setting a padding value
+             will override the corresponding padding found in the background.
+        -->
+        <attr name="padding" format="dimension" />
+        <!-- Sets the padding, in pixels, of the left edge; see {@link android.R.attr#padding}. -->
+        <attr name="paddingLeft" format="dimension" />
+        <!-- Sets the padding, in pixels, of the top edge; see {@link android.R.attr#padding}. -->
+        <attr name="paddingTop" format="dimension" />
+        <!-- Sets the padding, in pixels, of the right edge; see {@link android.R.attr#padding}. -->
+        <attr name="paddingRight" format="dimension" />
+        <!-- Sets the padding, in pixels, of the bottom edge; see {@link android.R.attr#padding}. -->
+        <attr name="paddingBottom" format="dimension" />
+        <!-- Sets the padding, in pixels, of the start edge; see {@link android.R.attr#padding}. -->
+        <attr name="paddingStart" format="dimension" />
+        <!-- Sets the padding, in pixels, of the end edge; see {@link android.R.attr#padding}. -->
+        <attr name="paddingEnd" format="dimension" />
+
+        <!--
+             Boolean that controls whether a view can take focus.  By default the user can not
+             move focus to a view; by setting this attribute to true the view is
+             allowed to take focus.  This value does not impact the behavior of
+             directly calling {@link android.view.View#requestFocus}, which will
+             always request focus regardless of this view.  It only impacts where
+             focus navigation will try to move focus.
+        -->
+        <attr name="focusable" format="boolean" />
+
+        <!--
+             Boolean that controls whether a view can take focus while in touch mode.
+             If this is true for a view, that view can gain focus when clicked on, and can keep
+             focus if another view is clicked on that doesn't have this attribute set to true.
+        -->
+        <attr name="focusableInTouchMode" format="boolean" />
+
+        <!-- Controls the initial visibility of the view. -->
+        <attr name="visibility">
+
+            <!-- Visible on screen; the default value. -->
+            <enum name="visible" value="0" />
+            <!-- Not displayed, but taken into account during layout (space is left for it). -->
+            <enum name="invisible" value="1" />
+            <!-- Completely hidden, as if the view had not been added. -->
+            <enum name="gone" value="2" />
+        </attr>
+
+        <!--
+             Boolean internal attribute to adjust view layout based on
+             system windows such as the status bar.
+             If true, adjusts the padding of this view to leave space for the system windows.
+             Will only take effect if this view is in a non-embedded activity.
+        -->
+        <attr name="fitsSystemWindows" format="boolean" />
+
+        <!-- Defines which scrollbars should be displayed on scrolling or not. -->
+        <attr name="scrollbars">
+
+            <!-- No scrollbar is displayed. -->
+            <flag name="none" value="0x00000000" />
+            <!-- Displays horizontal scrollbar only. -->
+            <flag name="horizontal" value="0x00000100" />
+            <!-- Displays vertical scrollbar only. -->
+            <flag name="vertical" value="0x00000200" />
+        </attr>
+
+        <!--
+             Controls the scrollbar style and position. The scrollbars can be overlaid or
+             inset. When inset, they add to the padding of the view. And the
+             scrollbars can be drawn inside the padding area or on the edge of
+             the view. For example, if a view has a background drawable and you
+             want to draw the scrollbars inside the padding specified by the
+             drawable, you can use insideOverlay or insideInset. If you want them
+             to appear at the edge of the view, ignoring the padding, then you can
+             use outsideOverlay or outsideInset.
+        -->
+        <attr name="scrollbarStyle">
+
+            <!-- Inside the padding and overlaid -->
+            <enum name="insideOverlay" value="0x0" />
+            <!-- Inside the padding and inset -->
+            <enum name="insideInset" value="0x01000000" />
+            <!-- Edge of the view and overlaid -->
+            <enum name="outsideOverlay" value="0x02000000" />
+            <!-- Edge of the view and inset -->
+            <enum name="outsideInset" value="0x03000000" />
+        </attr>
+
+        <!--
+             Set this if the view will serve as a scrolling container, meaing
+             that it can be resized to shrink its overall window so that there
+             will be space for an input method.  If not set, the default
+             value will be true if "scrollbars" has the vertical scrollbar
+             set, else it will be false.
+        -->
+        <attr name="isScrollContainer" format="boolean" />
+
+        <!-- Defines whether to fade out scrollbars when they are not in use. -->
+        <attr name="fadeScrollbars" format="boolean" />
+        <!-- Defines the delay in milliseconds that a scrollbar takes to fade out. -->
+        <attr name="scrollbarFadeDuration" format="integer" />
+        <!-- Defines the delay in milliseconds that a scrollbar waits before fade out. -->
+        <attr name="scrollbarDefaultDelayBeforeFade" format="integer" />
+        <!-- Sets the width of vertical scrollbars and height of horizontal scrollbars. -->
+        <attr name="scrollbarSize" format="dimension" />
+        <!-- Defines the horizontal scrollbar thumb drawable. -->
+        <attr name="scrollbarThumbHorizontal" format="reference" />
+        <!-- Defines the vertical scrollbar thumb drawable. -->
+        <attr name="scrollbarThumbVertical" format="reference" />
+        <!-- Defines the horizontal scrollbar track drawable. -->
+        <attr name="scrollbarTrackHorizontal" format="reference" />
+        <!-- Defines the vertical scrollbar track drawable. -->
+        <attr name="scrollbarTrackVertical" format="reference" />
+        <!-- Defines whether the horizontal scrollbar track should always be drawn. -->
+        <attr name="scrollbarAlwaysDrawHorizontalTrack" format="boolean" />
+        <!-- Defines whether the vertical scrollbar track should always be drawn. -->
+        <attr name="scrollbarAlwaysDrawVerticalTrack" format="boolean" />
+
+        <!--
+             This attribute is deprecated and will be ignored as of
+             API level 14 ({@link android.os.Build.VERSION_CODES#ICE_CREAM_SANDWICH}).
+             Using fading edges may introduce noticeable performance
+             degradations and should be used only when required by the application's
+             visual design. To request fading edges with API level 14 and above,
+             use the <code>android:requiresFadingEdge</code> attribute instead.
+        -->
+        <attr name="fadingEdge">
+
+            <!-- No edge is faded. -->
+            <flag name="none" value="0x00000000" />
+            <!-- Fades horizontal edges only. -->
+            <flag name="horizontal" value="0x00001000" />
+            <!-- Fades vertical edges only. -->
+            <flag name="vertical" value="0x00002000" />
+        </attr>
+        <!-- Defines which edges should be faded on scrolling. -->
+        <attr name="requiresFadingEdge">
+
+            <!-- No edge is faded. -->
+            <flag name="none" value="0x00000000" />
+            <!-- Fades horizontal edges only. -->
+            <flag name="horizontal" value="0x00001000" />
+            <!-- Fades vertical edges only. -->
+            <flag name="vertical" value="0x00002000" />
+        </attr>
+        <!-- Defines the length of the fading edges. -->
+        <attr name="fadingEdgeLength" format="dimension" />
+
+        <!--
+             Defines the next view to give focus to when the next focus is
+             {@link android.view.View#FOCUS_LEFT}.
+
+             If the reference refers to a view that does not exist or is part
+             of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
+             will result when the reference is accessed.
+        -->
+        <attr name="nextFocusLeft" format="reference" />
+
+        <!--
+             Defines the next view to give focus to when the next focus is
+             {@link android.view.View#FOCUS_RIGHT}
+
+             If the reference refers to a view that does not exist or is part
+             of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
+             will result when the reference is accessed.
+        -->
+        <attr name="nextFocusRight" format="reference" />
+
+        <!--
+             Defines the next view to give focus to when the next focus is
+             {@link android.view.View#FOCUS_UP}
+
+             If the reference refers to a view that does not exist or is part
+             of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
+             will result when the reference is accessed.
+        -->
+        <attr name="nextFocusUp" format="reference" />
+
+        <!--
+             Defines the next view to give focus to when the next focus is
+             {@link android.view.View#FOCUS_DOWN}
+
+             If the reference refers to a view that does not exist or is part
+             of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
+             will result when the reference is accessed.
+        -->
+        <attr name="nextFocusDown" format="reference" />
+
+        <!--
+             Defines the next view to give focus to when the next focus is
+             {@link android.view.View#FOCUS_FORWARD}
+
+             If the reference refers to a view that does not exist or is part
+             of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
+             will result when the reference is accessed.
+        -->
+        <attr name="nextFocusForward" format="reference" />
+
+        <!-- Defines whether this view reacts to click events. -->
+        <attr name="clickable" format="boolean" />
+
+        <!-- Defines whether this view reacts to long click events. -->
+        <attr name="longClickable" format="boolean" />
+
+        <!--
+             If unset, no state will be saved for this view when it is being
+             frozen. The default is true, allowing the view to be saved
+             (however it also must have an ID assigned to it for its
+             state to be saved).  Setting this to false only disables the
+             state for this view, not for its children which may still
+             be saved.
+        -->
+        <attr name="saveEnabled" format="boolean" />
+
+        <!--
+             Specifies whether to filter touches when the view's window is obscured by
+             another visible window.  When set to true, the view will not receive touches
+             whenever a toast, dialog or other window appears above the view's window.
+             Refer to the {@link android.view.View} security documentation for more details.
+        -->
+        <attr name="filterTouchesWhenObscured" format="boolean" />
+
+        <!--
+             Defines the quality of translucent drawing caches. This property is used
+             only when the drawing cache is enabled and translucent. The default value is auto.
+        -->
+        <attr name="drawingCacheQuality">
+
+            <!--
+                 Lets the framework decide what quality level should be used
+                 for the drawing cache.
+            -->
+            <enum name="auto" value="0" />
+            <!--
+                 Low quality. When set to low quality, the drawing cache uses a lower color
+                 depth, thus losing precision in rendering gradients, but uses less memory.
+            -->
+            <enum name="low" value="1" />
+            <!--
+                 High quality. When set to high quality, the drawing cache uses a higher
+                 color depth but uses more memory.
+            -->
+            <enum name="high" value="2" />
+        </attr>
+
+        <!--
+             Controls whether the view's window should keep the screen on
+             while visible.
+        -->
+        <attr name="keepScreenOn" format="boolean" />
+
+        <!--
+             When this attribute is set to true, the view gets its drawable state
+             (focused, pressed, etc.) from its direct parent rather than from itself.
+        -->
+        <attr name="duplicateParentState" format="boolean" />
+
+        <!--
+             Defines the minimum height of the view. It is not guaranteed
+             the view will be able to achieve this minimum height (for example,
+             if its parent layout constrains it with less available height).
+        -->
+        <attr name="minHeight" format="dimension" />
+
+        <!--
+             Defines the minimum width of the view. It is not guaranteed
+             the view will be able to achieve this minimum width (for example,
+             if its parent layout constrains it with less available width).
+        -->
+        <attr name="minWidth" format="dimension" />
+
+        <!--
+             Boolean that controls whether a view should have sound effects
+             enabled for events such as clicking and touching.
+        -->
+        <attr name="soundEffectsEnabled" format="boolean" />
+
+        <!--
+             Boolean that controls whether a view should have haptic feedback
+             enabled for events such as long presses.
+        -->
+        <attr name="hapticFeedbackEnabled" format="boolean" />
+
+        <!--
+             Defines text that briefly describes content of the view. This property is used
+             primarily for accessibility. Since some views do not have textual
+             representation this attribute can be used for providing such.
+        -->
+        <attr name="contentDescription" format="string" localization="suggested" />
+
+        <!--
+             Name of the method in this View's context to invoke when the view is
+             clicked. This name must correspond to a public method that takes
+             exactly one parameter of type View. For instance, if you specify
+             <code>android:onClick="sayHello"</code>, you must declare a
+             <code>public void sayHello(View v)</code> method of your context
+             (typically, your Activity).
+        -->
+        <attr name="onClick" format="string" />
+
+        <!--
+             Defines over-scrolling behavior. This property is used only if the
+             View is scrollable. Over-scrolling is the ability for the user to
+             receive feedback when attempting to scroll beyond meaningful content.
+        -->
+        <attr name="overScrollMode">
+
+            <!--
+                 Always show over-scroll effects, even if the content fits entirely
+                 within the available space.
+            -->
+            <enum name="always" value="0" />
+            <!--
+                 Only show over-scroll effects if the content is large
+                 enough to meaningfully scroll.
+            -->
+            <enum name="ifContentScrolls" value="1" />
+            <!-- Never show over-scroll effects. -->
+            <enum name="never" value="2" />
+        </attr>
+
+        <!--
+             alpha property of the view, as a value between 0 (completely transparent) and 1
+             (completely opaque).
+        -->
+        <attr name="alpha" format="float" />
+
+        <!--
+             translation in x of the view. This value is added post-layout to the left
+             property of the view, which is set by its layout.
+        -->
+        <attr name="translationX" format="dimension" />
+
+        <!--
+             translation in y of the view. This value is added post-layout to the left
+             property of the view, which is set by its layout.
+        -->
+        <attr name="translationY" format="dimension" />
+
+        <!--
+             x location of the pivot point around which the view will rotate and scale.
+             This xml attribute sets the pivotX property of the View.
+        -->
+        <attr name="transformPivotX" format="dimension" />
+
+        <!--
+             y location of the pivot point around which the view will rotate and scale.
+             This xml attribute sets the pivotY property of the View.
+        -->
+        <attr name="transformPivotY" format="dimension" />
+
+        <!-- rotation of the view, in degrees. -->
+        <attr name="rotation" format="float" />
+
+        <!-- rotation of the view around the x axis, in degrees. -->
+        <attr name="rotationX" format="float" />
+
+        <!-- rotation of the view around the y axis, in degrees. -->
+        <attr name="rotationY" format="float" />
+
+        <!-- scale of the view in the x direction. -->
+        <attr name="scaleX" format="float" />
+
+        <!-- scale of the view in the y direction. -->
+        <attr name="scaleY" format="float" />
+
+        <!-- Determines which side the vertical scroll bar should be placed on. -->
+        <attr name="verticalScrollbarPosition">
+
+            <!-- Place the scroll bar wherever the system default determines. -->
+            <enum name="defaultPosition" value="0" />
+            <!-- Place the scroll bar on the left. -->
+            <enum name="left" value="1" />
+            <!-- Place the scroll bar on the right. -->
+            <enum name="right" value="2" />
+        </attr>
+
+        <!--
+             Specifies the type of layer backing this view. The default value is none.
+             Refer to {@link android.view.View#setLayerType(int, android.graphics.Paint)}
+             for more information.
+        -->
+        <attr name="layerType">
+
+            <!-- Don't use a layer. -->
+            <enum name="none" value="0" />
+            <!--
+                 Use a software layer. Refer to
+                 {@link android.view.View#setLayerType(int, android.graphics.Paint)} for
+                 more information.
+            -->
+            <enum name="software" value="1" />
+            <!--
+                 Use a hardware layer. Refer to
+                 {@link android.view.View#setLayerType(int, android.graphics.Paint)} for
+                 more information.
+            -->
+            <enum name="hardware" value="2" />
+        </attr>
+
+        <!--
+             Defines the direction of layout drawing. This typically is associated with writing
+             direction of the language script used. The possible values are "ltr" for Left-to-Right,
+             "rtl" for Right-to-Left, "locale" and "inherit" from parent view. If there is nothing
+             to inherit, "locale" is used. "locale" falls back to "en-US". "ltr" is the direction
+             used in "en-US". The default for this attribute is "inherit".
+        -->
+        <attr name="layoutDirection">
+
+            <!-- Left-to-Right -->
+            <enum name="ltr" value="0" />
+            <!-- Right-to-Left -->
+            <enum name="rtl" value="1" />
+            <!-- Inherit from parent -->
+            <enum name="inherit" value="2" />
+            <!-- Locale -->
+            <enum name="locale" value="3" />
+        </attr>
+
+        <!--
+             Defines the direction of the text. A heuristic is used to determine the resolved text
+              direction of paragraphs.
+        -->
+        <attr name="textDirection" format="integer">
+
+            <!-- Default -->
+            <enum name="inherit" value="0" />
+            <!--
+                 Default for the root view. The first strong directional character determines the
+                 paragraph direction.  If there is no strong directional character, the paragraph
+                 direction is the view’s resolved layout direction.
+            -->
+            <enum name="firstStrong" value="1" />
+            <!--
+                 The paragraph direction is RTL if it contains any strong RTL character, otherwise
+                 it is LTR if it contains any strong LTR characters.  If there are neither, the
+                 paragraph direction is the view’s resolved layout direction.
+            -->
+            <enum name="anyRtl" value="2" />
+            <!-- The paragraph direction is left to right. -->
+            <enum name="ltr" value="3" />
+            <!-- The paragraph direction is right to left. -->
+            <enum name="rtl" value="4" />
+            <!-- The paragraph direction is coming from the system Locale. -->
+            <enum name="locale" value="5" />
+        </attr>
+
+        <!--
+             Defines the alignment of the text. A heuristic is used to determine the resolved
+            text alignment.
+        -->
+        <attr name="textAlignment" format="integer">
+
+            <!-- Default -->
+            <enum name="inherit" value="0" />
+            <!--
+                 Default for the root view. The gravity determines the alignment, ALIGN_NORMAL,
+                ALIGN_CENTER, or ALIGN_OPPOSITE, which are relative to each paragraph’s
+                text direction
+            -->
+            <enum name="gravity" value="1" />
+            <!-- Align to the start of the paragraph, e.g. ALIGN_NORMAL. -->
+            <enum name="textStart" value="2" />
+            <!-- Align to the end of the paragraph, e.g. ALIGN_OPPOSITE. -->
+            <enum name="textEnd" value="3" />
+            <!-- Center the paragraph, e.g. ALIGN_CENTER. -->
+            <enum name="center" value="4" />
+            <!--
+                 Align to the start of the view, which is ALIGN_LEFT if the view’s resolved
+                layoutDirection is LTR, and ALIGN_RIGHT otherwise.
+            -->
+            <enum name="viewStart" value="5" />
+            <!--
+                 Align to the end of the view, which is ALIGN_RIGHT if the view’s resolved
+                layoutDirection is LTR, and ALIGN_LEFT otherwise
+            -->
+            <enum name="viewEnd" value="6" />
+        </attr>
+
+        <!--
+             Controls how this View is important for accessibility which is if it fires
+             accessibility events and if it is reported to accessibility services that
+             query the screen. Note: While not recommended, an accessibility service may
+             decide to ignore this attribute and operate on all views in the view tree.
+        -->
+        <attr name="importantForAccessibility" format="integer">
+
+            <!--
+                 The system determines whether the view is important for accessibility - default
+                 (recommended).
+            -->
+            <enum name="auto" value="0" />
+            <!-- The view is important for accessibility. -->
+            <enum name="yes" value="1" />
+            <!-- The view is not important for accessibility. -->
+            <enum name="no" value="2" />
+            <!--
+                 The view is not important for accessibility, nor are any of its descendant
+                 views.
+            -->
+            <enum name="noHideDescendants" value="4" />
+        </attr>
+
+        <!--
+             Indicates to accessibility services whether the user should be notified when
+             this view changes.
+        -->
+        <attr name="accessibilityLiveRegion" format="integer">
+
+            <!-- Accessibility services should not announce changes to this view. -->
+            <enum name="none" value="0" />
+            <!-- Accessibility services should announce changes to this view. -->
+            <enum name="polite" value="1" />
+            <!--
+                 Accessibility services should interrupt ongoing speech to immediately
+                 announce changes to this view.
+            -->
+            <enum name="assertive" value="2" />
+        </attr>
+
+        <!--
+             Specifies the id of a view for which this view serves as a label for
+             accessibility purposes. For example, a TextView before an EditText in
+             the UI usually specifies what infomation is contained in the EditText.
+             Hence, the TextView is a label for the EditText.
+        -->
+        <attr name="labelFor" format="integer" />
+    </declare-styleable>
+
+</resources>
