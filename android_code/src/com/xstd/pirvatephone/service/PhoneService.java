@@ -226,10 +226,9 @@ public class PhoneService extends Service {
 				int type = phoneDetailCursor.getInt(phoneDetailCursor
 						.getColumnIndex("type"));
 				// 通化人姓名
-				/*
-				 * String name = phoneDetailCursor.getString(phoneDetailCursor
-				 * .getColumnIndex("name"));
-				 */
+
+				/*String name = phoneDetailCursor.getString(phoneDetailCursor
+						.getColumnIndex("name"));*/
 
 				String name = ContactUtils.queryContactName(mContext, number);
 
@@ -277,6 +276,7 @@ public class PhoneService extends Service {
 						phoneDetail.setDate(date);
 						phoneDetail.setDuration(duration);
 						phoneDetail.setType(type);
+						phoneDetail.setName(name);
 						phoneDetailDao.insert(phoneDetail);
 
 						// 查询该联系人名称
@@ -302,6 +302,7 @@ public class PhoneService extends Service {
 					phoneDetail.setDate(date);
 					phoneDetail.setDuration(duration);
 					phoneDetail.setType(1);
+					phoneDetail.setName(name);
 					phoneDetailDao.insert(phoneDetail);
 				}
 				phoneRecordCursor.close();

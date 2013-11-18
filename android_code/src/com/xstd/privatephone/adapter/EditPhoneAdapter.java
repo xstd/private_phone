@@ -66,7 +66,7 @@ public class EditPhoneAdapter extends CursorAdapter {
 			name = phone_number;
 		}
 		views.tv_name.setText(name);
-		views.tv_duration.setText(name);
+		views.tv_duration.setText("23:10");
 		views.tv_number.setText(" ( "+phone_number+" )");
 		views.iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		views.tv_type.setBackgroundResource(picId);

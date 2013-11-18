@@ -1,12 +1,13 @@
 package com.xstd.pirvatephone.dao.phone;
 
 
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public class PhoneDetailDaoUtils {
 
-	private static final String DATABASE_NAME = "phone_detail.db";
+	private static final String DATABASE_NAME = "phone.db";
 
     private static DaoSession sDaoSession;
 

@@ -15,7 +15,8 @@ public class ContactInfo implements Serializable {
     private String phone_number;
     /** Not-null value. */
     private String display_name;
-    private Integer type;
+    private Long icon_id;
+    private int type;
 
     public ContactInfo() {
     }
@@ -24,10 +25,11 @@ public class ContactInfo implements Serializable {
         this.id = id;
     }
 
-    public ContactInfo(Long id, String phone_number, String display_name, Integer type) {
+    public ContactInfo(Long id, String phone_number, String display_name, Long icon_id, int type) {
         this.id = id;
         this.phone_number = phone_number;
         this.display_name = display_name;
+        this.icon_id = icon_id;
         this.type = type;
     }
 
@@ -59,17 +61,25 @@ public class ContactInfo implements Serializable {
         this.display_name = display_name;
     }
 
-    public Integer getType() {
+    public Long getIcon_id() {
+        return icon_id;
+    }
+
+    public void setIcon_id(Long icon_id) {
+        this.icon_id = icon_id;
+    }
+
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
     @Override
     public String toString() {
-        return "[ContactInfo]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "display_name = " + display_name + ", " + "type = " + type + "\r\n";
+        return "[ContactInfo]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "display_name = " + display_name + ", " + "icon_id = " + icon_id + ", " + "type = " + type + "\r\n";
     }
 
 }

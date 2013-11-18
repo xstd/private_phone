@@ -37,14 +37,22 @@ public class PMDaoGenerator {
         pic.addStringProperty("name").notNull();*/
         
 
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.contact");
+       /* Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.contact");
 
         Entity contact = schema.addEntity("ContactInfo");
         contact.addIdProperty();
         contact.addStringProperty("phone_number").notNull();
         contact.addStringProperty("display_name").notNull();
-        contact.addIntProperty("type");
-
+        contact.addIntProperty("type");*/
+        
+        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.contact");
+        Entity contactInfo = schema.addEntity("ContactInfo");
+        contactInfo.addIdProperty();
+        contactInfo.addStringProperty("phone_number").notNull();
+        contactInfo.addStringProperty("display_name").notNull();
+        contactInfo.addLongProperty("icon_id");
+        contactInfo.addIntProperty("type").notNull();
+        
         try {
             new DaoGenerator().generateAll(schema, "../../src");
         } catch (Exception e) {

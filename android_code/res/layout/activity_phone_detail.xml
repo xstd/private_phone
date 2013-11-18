@@ -2,42 +2,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
     android:orientation="vertical" >
-    
-     <include layout="@layout/private_comm_title"
-        android:id="@+id/phone_detail_title"/> 
 
-
-    <ListView
-        android:id="@+id/phone_detail_listview"
-        android:layout_height="0dip"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        />
+    <include
+        android:id="@+id/phone_detail_title"
+        layout="@layout/private_comm_title" />
 
     <LinearLayout
-        android:id="@+id/phone_ll_remove"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/private_comm_spac_sms_selector" >
+        android:layout_height="match_parent"
+        android:background="@color/private_comm_listview_bkg"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/btn_dial"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="拨打电话"
-            android:textColor="@color/sms_text_content_unseleted" />
+        <ListView
+            android:id="@+id/phone_detail_listview"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/btn_send_sms"
-             android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="发送短信"
-            android:textColor="@color/sms_text_content_unseleted" />
+        <LinearLayout
+            android:id="@+id/phone_ll_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/private_comm_spac_sms_selector"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_dial"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="拨打电话"
+                android:textColor="@color/sms_text_content_unseleted" />
+
+            <Button
+                android:id="@+id/btn_send_sms"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="发送短信"
+                android:textColor="@color/sms_text_content_unseleted" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

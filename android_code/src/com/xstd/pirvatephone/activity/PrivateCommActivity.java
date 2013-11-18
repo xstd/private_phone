@@ -107,12 +107,12 @@ public class PrivateCommActivity extends BaseActivity {
 	private LinearLayout edit_ll_body;
 	private RelativeLayout edit_rl_select;
 
-	private LinearLayout edit_ll_sms_bt;
+	private RelativeLayout edit_ll_sms_bt;
 	private LinearLayout edit_ll_contact_bt;
 	private LinearLayout edit_ll_phone_bt;
 
-	private Button btn_recover_sms;
-	private Button btn_remove_sms;
+	private RelativeLayout btn_recover_sms;
+	private RelativeLayout btn_remove_sms;
 	private Button btn_delete_contact;
 	private Button btn_delete_phone;
 
@@ -261,13 +261,13 @@ public class PrivateCommActivity extends BaseActivity {
 		edit_listview = (ListView) findViewById(R.id.edit_listview);
 
 		// edit-buttom
-		edit_ll_sms_bt = (LinearLayout) findViewById(R.id.edit_ll_sms_bt);
+		edit_ll_sms_bt = (RelativeLayout) findViewById(R.id.edit_ll_sms_bt);
 		edit_ll_contact_bt = (LinearLayout) findViewById(R.id.edit_ll_contact_bt);
 		edit_ll_phone_bt = (LinearLayout) findViewById(R.id.edit_ll_phone_bt);
 
 		// edit-bottom-button
-		btn_recover_sms = (Button) findViewById(R.id.edit_btn_recover_sms);
-		btn_remove_sms = (Button) findViewById(R.id.edit_btn_remove_sms);
+		btn_recover_sms = (RelativeLayout) findViewById(R.id.edit_btn_recover_sms);
+		btn_remove_sms = (RelativeLayout) findViewById(R.id.edit_btn_remove_sms);
 		btn_delete_contact = (Button) findViewById(R.id.edit_btn_delete_contact);
 		btn_delete_phone = (Button) findViewById(R.id.edit_btn_delete_phone);
 
@@ -477,7 +477,7 @@ public class PrivateCommActivity extends BaseActivity {
 			});
 
 		} else if (currIndex == contactPageNum) {
-
+			
 			editContactAdapter = new EditContactAdapter(
 					PrivateCommActivity.this, contactCursor);
 			edit_listview.setAdapter(editContactAdapter);
@@ -799,7 +799,7 @@ public class PrivateCommActivity extends BaseActivity {
 				TextView sms_tv_number = (TextView) view
 						.findViewById(R.id.tv_number);
 				String name = sms_tv_name.getText().toString().trim();
-				String number = sms_tv_number.getText().toString().trim();
+				String number = sms_tv_number.getText().toString().replace("( ", "").replace(" )", "").trim();
 				intent.putExtra("Name", name);
 				intent.putExtra("Number", number);
 				startActivity(intent);

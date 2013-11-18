@@ -29,7 +29,7 @@ public class PhoneDetailActivity extends BaseActivity {
 	private ListView listview;
 	private String number;
 	private String name;
-	private LinearLayout phone_detail_title;
+	private RelativeLayout phone_detail_title;
 	private Button btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
@@ -43,14 +43,14 @@ public class PhoneDetailActivity extends BaseActivity {
 
 		name = getIntent().getStringExtra("Name");
 		number = getIntent().getStringExtra("Number");
-
+		Tools.logSh("number==="+number);
 
 		initView();
 	}
 
 	private void initView() {
 		//title
-		phone_detail_title = (LinearLayout) findViewById(R.id.phone_detail_title);
+		phone_detail_title = (RelativeLayout) findViewById(R.id.phone_detail_title);
 		btn_back = (Button) phone_detail_title.findViewById(R.id.btn_back);
 		btn_edit = (Button) phone_detail_title.findViewById(R.id.btn_edit);
 		btn_edit.setVisibility(View.GONE);

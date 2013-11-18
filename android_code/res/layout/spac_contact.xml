@@ -24,16 +24,17 @@
         android:id="@+id/contact_ll_lv"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_marginBottom="65dip"
         android:layout_weight="1"
         android:orientation="vertical" >
 
         <ListView
             android:id="@+id/contact_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
-            android:divider="@android:color/transparent" />
+            android:divider="@color/private_comm_listview_line"
+            android:dividerHeight="1dip"
+             />
 
         <TextView
             android:id="@+id/contact_tv_empty"
@@ -46,10 +47,10 @@
     <LinearLayout
         android:id="@+id/contact_ll_add"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dip"
         android:background="@drawable/private_comm_spac_sms_selector"
         android:orientation="vertical"
-        android:padding="5dip" >
+         >
 
         <Button
             android:id="@+id/contact_add_contacts"

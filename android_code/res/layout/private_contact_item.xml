@@ -2,12 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_contact"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/private_comm_contact_item_height"
-    android:gravity="center_vertical"
-     >
+    android:layout_height="@dimen/private_comm_contact_item_height" >
 
     <ImageView
-        android:id="@+id/iv_pic"
+        android:id="@+id/contact_iv_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -18,10 +16,8 @@
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/private_comm_item_margin_bottom"
         android:layout_marginLeft="@dimen/private_comm_pic_margin_right"
-        android:layout_marginTop="@dimen/private_comm_name_margin_top"
-        android:layout_toRightOf="@id/iv_pic"
+        android:layout_toRightOf="@id/contact_iv_pic"
         android:orientation="vertical" >
 
         <TextView
@@ -29,32 +25,33 @@
             style="@style/private_comm_item_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/private_comm_name_margin_top2"
             android:text="110" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/private_comm_item_margin_bottom"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="[正常接听]"
-                />
+                android:hint="[正常接听]" />
 
             <TextView
                 android:id="@+id/tv_phone_num"
+                style="@style/private_comm_item_content_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 style="@style/private_comm_item_content_style"
                 android:hint="110" />
 
             <TextView
                 android:id="@+id/tv_phone_belong"
+                style="@style/private_comm_item_content_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 style="@style/private_comm_item_content_style"
                 android:hint="     北京" />
         </LinearLayout>
     </LinearLayout>
@@ -68,11 +65,5 @@
         android:clickable="false"
         android:focusable="false"
         android:visibility="gone" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_alignParentBottom="true"
-        android:background="@color/private_comm_listview_line" />
 
 </RelativeLayout>

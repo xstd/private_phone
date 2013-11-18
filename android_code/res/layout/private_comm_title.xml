@@ -1,50 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/private_comm_title_bkg"
     android:orientation="horizontal" >
 
-    <LinearLayout
-        android:layout_width="0.0dip"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center_vertical" >
-
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/private_comm_back_margin_left"
-            android:background="@drawable/private_comm_backbtn_selector" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="0.0dip"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
         style="@style/private_comm_title_style"
-        android:text="@string/private_comm_title_privatesms"
-     	 />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/private_comm_title_privatesms" />
 
-    <LinearLayout
-        android:layout_width="0.0dip"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center_vertical" >
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="24dip"
+        android:background="@drawable/private_comm_backbtn_selector" />
 
-        <Button
-            android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/private_comm_editbtn_selector"
-            android:layout_marginRight="@dimen/private_comm_edit_margin_right"
-            android:padding="5.0dip"
-            android:textColor="@color/text_title_style_select_color" />
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tv_title"
+        android:layout_alignBottom="@+id/tv_title"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dip"
+        android:background="@drawable/private_comm_editbtn_selector"
+        android:textColor="@color/text_title_style_select_color" />
 
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

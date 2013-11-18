@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-        android:background="@color/private_comm_listview_bkg"
-    >
+    android:background="@color/private_comm_listview_bkg" >
 
     <RelativeLayout
         android:id="@+id/sms_ll_lv"
@@ -15,18 +14,17 @@
             android:id="@+id/sms_tv_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/private_comm_select_privatecontact"
             android:gravity="center"
+            android:text="@string/private_comm_select_privatecontact"
             android:textColor="@color/sms_text_content_seleted" />
-        
+
         <ListView
             android:id="@+id/sms_lv_cont"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/transparent"
-            android:cacheColorHint="@android:color/transparent" />
-
-        
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@color/private_comm_listview_line"
+            android:dividerHeight="1dip" />
     </RelativeLayout>
 
 </RelativeLayout>

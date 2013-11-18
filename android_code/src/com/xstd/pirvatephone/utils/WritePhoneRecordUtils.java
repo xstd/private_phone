@@ -72,6 +72,8 @@ public class WritePhoneRecordUtils {
 					int type = phoneCursor.getInt(phoneCursor
 							.getColumnIndex(CallLog.Calls.TYPE));
 					
+					long duration = phoneCursor.getLong(phoneCursor.getColumnIndex(CallLog.Calls.DURATION));
+					
 					//name
 					
 					//对该姓名进行处理---替换成我们数据库的新姓名。
@@ -100,6 +102,7 @@ public class WritePhoneRecordUtils {
 							mPhoneRecord.setDate(date);
 							mPhoneRecord.setName(name);
 							mPhoneRecord.setType(type);
+							mPhoneRecord.setDuration(duration);
 							// 向我们的数据库跟新SmsRecord
 							phoneRecordDao.update(mPhoneRecord);
 							Tools.logSh(number + "::" + date + "::" + type + "::"
@@ -127,7 +130,7 @@ public class WritePhoneRecordUtils {
 
 						mPhoneRecord.setContact_times(count);
 						mPhoneRecord.setPhone_number(number);
-
+						mPhoneRecord.setDuration(duration);
 						// 添加到我们数据库
 						phoneRecordDao.insert(mPhoneRecord);
 						mPhoneRecord = null;

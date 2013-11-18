@@ -4,41 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/private_comm_phone_item_height"
     android:gravity="center_vertical" >
-    
+
     <CheckBox
         android:id="@+id/iv_check"
+        style="@style/private_comm_checkbox_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        style="@style/private_comm_checkbox_style"
-                android:clickable="false"
-        android:focusable="false"
         android:layout_marginLeft="15dip"
         android:background="@drawable/private_comm_checkbox_selector"
-        />
+        android:clickable="false"
+        android:focusable="false" />
 
     <ImageView
         android:id="@+id/iv_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/iv_check"
         android:layout_marginLeft="6dip"
+        android:layout_toRightOf="@id/iv_check"
         android:background="@drawable/private_comm_contact_icon_bkg" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dip"
         android:layout_marginLeft="11dip"
-        android:layout_marginTop="12dip"
         android:layout_toRightOf="@id/iv_pic"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dip"
             android:orientation="horizontal" >
 
             <TextView
@@ -59,20 +57,21 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dip"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/tv_phone_date"
+                style="@style/private_comm_item_content_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 style="@style/private_comm_item_content_style"
                 android:hint="11/1 下午 2:20" />
 
             <TextView
                 android:id="@+id/tv_phone_belong"
+                style="@style/private_comm_item_content_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 style="@style/private_comm_item_content_style"
                 android:hint="     北京" />
         </LinearLayout>
     </LinearLayout>
@@ -81,13 +80,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:gravity="center"
+        android:layout_centerVertical="true"
         android:orientation="vertical" >
 
         <ImageView
             android:id="@+id/iv_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="40dip"
             android:background="@drawable/private_comm_pic_incomming" />
 
         <TextView
@@ -97,11 +97,5 @@
             android:layout_height="wrap_content"
             android:text="23:12" />
     </LinearLayout>
-    
-     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_alignParentBottom="true"
-        android:background="@color/private_comm_listview_line" />
 
 </RelativeLayout>

@@ -37,6 +37,7 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		String phone_number = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
 		Long date = cursor.getLong(cursor.getColumnIndex(PhoneRecordDao.Properties.Date.columnName));
 		String name = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Name.columnName));
+		Long duration = cursor.getLong(cursor.getColumnIndex(PhoneRecordDao.Properties.Duration.columnName));
 		Tools.logSh("name======================="+name);
 		phoneType = "";
 		picId = 0; 
@@ -52,7 +53,7 @@ public class PhoneRecordAdapter extends CursorAdapter {
 			picId = R.drawable.private_comm_pic_missing;
 		}else{
 			phoneType = "其它";
-			picId = R.drawable.privacy_incoming;
+			picId = R.drawable.private_comm_pic_missing;
 		}
 		
 		
@@ -63,10 +64,11 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		}
 		
 		views.iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
-		views.tv_number.setText(phone_number);
+		views.tv_number.setText("( "+phone_number+" )");
 		views.tv_date.setText(new Date(date).toLocaleString());
 		views.iv_type.setBackgroundResource(picId);
 		views.tv_phone_belong.setText("    北京");
+		views.tv_phone_duration.setText("( "+duration+" )");
 	}
 
 	@Override
@@ -75,12 +77,13 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		View view = LayoutInflater.from(mContext).inflate(R.layout.private_phone_record_item, null);
 		ViewHold views = new ViewHold();
 		
-		views.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
+		views.iv_pic = (ImageView) view.findViewById(R.id.phone_iv_pic);
 		views.tv_name = (TextView) view.findViewById(R.id.tv_name);
 		views.tv_number = (TextView) view.findViewById(R.id.tv_number);
 		views.tv_date = (TextView) view.findViewById(R.id.tv_phone_date);
 		views.iv_type = (ImageView) view.findViewById(R.id.iv_type);
 		views.tv_phone_belong = (TextView) view.findViewById(R.id.tv_phone_belong);
+		views.tv_phone_duration = (TextView) view.findViewById(R.id.tv_phone_duration);
 		
 		view.setTag(views);
 		
@@ -93,6 +96,7 @@ public class PhoneRecordAdapter extends CursorAdapter {
 		TextView tv_name;
 		TextView tv_number;
 		TextView tv_phone_belong;
+		TextView tv_phone_duration;
 		TextView tv_date;
 		ImageView iv_type;
 	}

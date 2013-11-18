@@ -11,11 +11,14 @@ public class PhoneRecord implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Long id;
+    /** Not-null value. */
     private String phone_number;
+    /** Not-null value. */
     private String name;
-    private Integer type;
-    private Long date;
-    private Integer contact_times;
+    private int type;
+    private long date;
+    private int contact_times;
+    private long duration;
 
     public PhoneRecord() {
     }
@@ -24,13 +27,14 @@ public class PhoneRecord implements Serializable {
         this.id = id;
     }
 
-    public PhoneRecord(Long id, String phone_number, String name, Integer type, Long date, Integer contact_times) {
+    public PhoneRecord(Long id, String phone_number, String name, int type, long date, int contact_times, long duration) {
         this.id = id;
         this.phone_number = phone_number;
         this.name = name;
         this.type = type;
         this.date = date;
         this.contact_times = contact_times;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -41,49 +45,61 @@ public class PhoneRecord implements Serializable {
         this.id = id;
     }
 
+    /** Not-null value. */
     public String getPhone_number() {
         return phone_number;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 
+    /** Not-null value. */
     public String getName() {
         return name;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setName(String name) {
         this.name = name;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
-    public Long getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Long date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
-    public Integer getContact_times() {
+    public int getContact_times() {
         return contact_times;
     }
 
-    public void setContact_times(Integer contact_times) {
+    public void setContact_times(int contact_times) {
         this.contact_times = contact_times;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     @Override
     public String toString() {
-        return "[PhoneRecord]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "name = " + name + ", " + "type = " + type + ", " + "date = " + date + ", " + "contact_times = " + contact_times + "\r\n";
+        return "[PhoneRecord]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "name = " + name + ", " + "type = " + type + ", " + "date = " + date + ", " + "contact_times = " + contact_times + ", " + "duration = " + duration + "\r\n";
     }
 
 }

@@ -14,9 +14,10 @@
         <ListView
             android:id="@+id/dial_lv_cont"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/transparent"
+            android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
+            android:divider="@color/private_comm_listview_line"
+            android:dividerHeight="1dip"
              />
 
         <TextView
