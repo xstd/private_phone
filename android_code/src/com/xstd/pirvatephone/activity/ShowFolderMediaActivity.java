@@ -1,5 +1,6 @@
 package com.xstd.pirvatephone.activity;
 
+import java.util.Date;
 import java.util.HashSet;
 
 import android.app.Dialog;
@@ -8,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,10 +16,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,10 +27,16 @@ import android.widget.TextView;
 import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.privacy.PrivacyDaoUtils;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
+import com.xstd.pirvatephone.dao.privacy.PrivacyFileDao;
 import com.xstd.pirvatephone.module.IImage;
 import com.xstd.pirvatephone.module.IImageList;
+import com.xstd.pirvatephone.module.MediaModule;
+import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.pirvatephone.utils.ImageManager;
 import com.xstd.privatephone.tools.ImageLoader;
+import com.xstd.privatephone.tools.Toasts;
 import com.xstd.privatephone.view.GridViewSpecial;
 
 public class ShowFolderMediaActivity extends BaseActivity implements
@@ -56,11 +62,7 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private int mInclusion;
 
-	private SharedPreferences mPrefs;
-
 	boolean mSortAscending = false;
-
-	private boolean mPausing = true;
 
 	private final Handler mHandler = new Handler();
 
@@ -76,8 +78,6 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private HashSet<IImage> mMultiSelected = new HashSet<IImage>();
 
-	private boolean mLayoutComplete;
-
 	private float mScrollPosition = INVALID_POSITION;
 
 	private static final float INVALID_POSITION = -1f;
@@ -86,16 +86,10 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private boolean mConfigurationChanged = false;
 
-	private static final String STATE_SCROLL_POSITION = "scroll_position";
-	private static final String STATE_SELECTED_INDEX = "first_index";
-
-	private static final String TAG = "ShowFolderMediaActivity";
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_show_folder_media);
 
 		initUI();
@@ -121,16 +115,8 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 	protected void onResume() {
 		super.onResume();
 
-		gv.setSizeChoice(Integer.parseInt(mPrefs.getString(
-				"pref_gallery_size_key", "1")));
+		gv.setSizeChoice(1);
 		gv.requestFocus();
-
-		String sortOrder = mPrefs.getString("pref_gallery_sort_key", null);
-		if (sortOrder != null) {
-			mSortAscending = sortOrder.equals("ascending");
-		}
-
-		mPausing = false;
 
 		// install an intent filter to receive SD card related events.
 		IntentFilter intentFilter = new IntentFilter(
@@ -147,8 +133,8 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 				String action = intent.getAction();
 				if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 					// SD card available
-					// TODO put up a "please wait" message
-					// TODO also listen for the media scanner finished message
+					Toasts.getInstance(getApplicationContext()).show(
+							"SDCARD MOUNTED! PLEASE WAIT!", 1);
 				} else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
 					// SD card unavailable
 					rebake(true, false);
@@ -168,7 +154,6 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 	@Override
 	public void onPause() {
 		super.onPause();
-		mPausing = true;
 
 		mLoader.stop();
 
@@ -183,21 +168,6 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 		// safe to close it.
 		mAllImages.close();
 		mAllImages = null;
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle state) {
-		super.onSaveInstanceState(state);
-		state.putFloat(STATE_SCROLL_POSITION, mScrollPosition);
-		state.putInt(STATE_SELECTED_INDEX, mSelectedIndex);
-	}
-
-	@Override
-	protected void onRestoreInstanceState(Bundle state) {
-		super.onRestoreInstanceState(state);
-		mScrollPosition = state.getFloat(STATE_SCROLL_POSITION,
-				INVALID_POSITION);
-		mSelectedIndex = state.getInt(STATE_SELECTED_INDEX, 0);
 	}
 
 	private void rebake(boolean unmounted, boolean scanning) {
@@ -291,39 +261,80 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 	 * 全选按钮
 	 */
 	private void selectAllOrNone() {
-
+		for (int i = 0; i < mAllImages.getCount(); i++) {
+			mMultiSelected.add(mAllImages.getImageAt(i));
+		}
+		gv.invalidate();
 	}
+
+	ProgressDialog dialog;
 
 	/**
 	 * 把选中的文件移入隐藏文件夹
 	 */
 	private void moveSelectFiletoMissFolder() {
+		new AsyncTask<Void, Void, Void>() {
 
+			protected void onPreExecute() {
+				dialog = new ProgressDialog(ShowFolderMediaActivity.this);
+				dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				dialog.setMax(mMultiSelected.size());
+				dialog.show();
+			};
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				PrivacyFileDao dao = PrivacyDaoUtils
+						.getFileDao(getApplicationContext());
+				int current = 0;
+				for (IImage module : mMultiSelected) {
+					current++;
+					dialog.setProgress(current);
+					com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
+					info.fileName = module.getTitle();
+					info.filePath = module.getDataPath();
+					FileUtils.moveFile(
+							module.getDataPath(),
+							ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH
+									+ module.getTitle());
+					dao.insert(new PrivacyFile(null, module.getTitle(), module
+							.getTitle(), module.getDataPath(), new Date(), 0,
+							Long.valueOf(-1)));
+					FileUtils.DeleteFile(info);
+					SystemClock.sleep(500);
+				}
+				return null;
+			}
+
+			protected void onPostExecute(Void result) {
+				if (dialog != null && dialog.isShowing()) {
+					dialog.dismiss();
+				}
+				dialog = null;
+				setResult(RESULT_OK);
+				finish();
+			};
+		}.execute();
 	}
 
 	private void toggleMultiSelected(IImage image) {
 		if (!mMultiSelected.add(image)) {
 			mMultiSelected.remove(image);
 		}
-//		gv.invalidate();
 	}
 
 	@Override
 	public void onImageClicked(int index) {
-		Log.i(TAG, "onImageClicked");
 	}
 
 	@Override
 	public void onImageTapped(int index) {
-		Log.i(TAG, "onImageTapped");
 		gv.setSelectedIndex(GridViewSpecial.INDEX_NONE);
 		toggleMultiSelected(mAllImages.getImageAt(index));
 	}
 
 	@Override
 	public void onLayoutComplete(boolean changed) {
-		Log.i(TAG, "onLayoutComplete");
-		mLayoutComplete = true;
 		if (mCropResultUri != null) {
 			IImage image = mAllImages.getImageForUri(mCropResultUri);
 			mCropResultUri = null;

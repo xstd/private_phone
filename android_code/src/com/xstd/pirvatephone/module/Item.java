@@ -8,6 +8,7 @@ import android.provider.MediaStore.Images;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.activity.ShowFolderMediaActivity;
+import com.xstd.pirvatephone.activity.ShowSDCardMediaActivity;
 import com.xstd.pirvatephone.utils.ImageManager;
 
 public class Item {
@@ -64,7 +65,8 @@ public class Item {
 		// intent.putExtra("mediaTypes", getIncludeMediaTypes());
 		Intent intent = new Intent(activity, ShowFolderMediaActivity.class);
 		intent.setData(uri);
-		activity.startActivity(intent);
+		activity.startActivityForResult(intent,
+				ShowSDCardMediaActivity.REQUEST_FINISH_CODE);
 	}
 
 	public int getIncludeMediaTypes() {

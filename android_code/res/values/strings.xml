@@ -923,7 +923,7 @@ QQ:903372666
     <string name="warning_msg_for_delete_single_image_album">"您确认要删除选中的相册吗？
 这将导致该相册中的所有加密图片都被删除且无法恢复。如果您只想删除相册而保留相册中的图片，请先将相册中的图片移动到其它相册后重新删除。"</string>
     <!-- label for the folder that contains Camera pictures in the gallery -->
-    <string name="gallery_camera_bucket_name">Camera pictures</string>
+    <string name="gallery_camera_bucket_name">相机</string>
 
     <!-- label for the folder that contains Camera videos in the gallery -->
     <string name="gallery_camera_videos_bucket_name">Camera videos</string>

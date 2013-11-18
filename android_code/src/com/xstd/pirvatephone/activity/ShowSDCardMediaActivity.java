@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -49,6 +51,7 @@ import com.xstd.pirvatephone.utils.BitmapManager;
 import com.xstd.pirvatephone.utils.ImageManager;
 import com.xstd.pirvatephone.utils.Util;
 import com.xstd.privatephone.adapter.ShowSDCardMediaAdapter;
+import com.xstd.privatephone.tools.Toasts;
 
 public class ShowSDCardMediaActivity extends BaseActivity implements
 		View.OnClickListener {
@@ -182,7 +185,8 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			// SD card available
-			// TODO put up a "please wait" message
+			Toasts.getInstance(getApplicationContext()).show(
+					"SDCARD MOUNTED! PLEASE WAIT!", 1);
 		} else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
 			// SD card unavailable
 			rebake(true, false);
@@ -202,12 +206,26 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 		abortWorker();
 		mUnmounted = unmounted;
 		mScanning = scanning;
-		// updateScanningDialog(mScanning);
-		if (mUnmounted) {
-			showNoImagesView();
-		} else {
-			hideNoImagesView();
+		updateScanningDialog(mScanning);
+		if (!mUnmounted) {
 			startWorker();
+		}
+	}
+
+	Dialog mMediaScanningDialog;
+
+	// Display a dialog if the storage is being scanned now.
+	public void updateScanningDialog(boolean scanning) {
+		boolean prevScanning = (mMediaScanningDialog != null);
+		if (prevScanning == scanning && mAdapter.mItems.size() == 0)
+			return;
+		// Now we are certain the state is changed.
+		if (prevScanning) {
+			mMediaScanningDialog.cancel();
+			mMediaScanningDialog = null;
+		} else if (scanning && mAdapter.mItems.size() == 0) {
+			mMediaScanningDialog = ProgressDialog.show(this, null,
+					getResources().getString(R.string.wait), true, true);
 		}
 	}
 
@@ -259,6 +277,7 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 	private static final long LOW_STORAGE_THRESHOLD = 1024 * 1024 * 2;
 
 	// This is run in the worker thread.
+	@SuppressWarnings("deprecation")
 	private void checkLowStorage() {
 		// Check available space only if we are writable
 		if (ImageManager.hasStorage()) {
@@ -266,7 +285,7 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 					.toString();
 			StatFs stat = new StatFs(storageDirectory);
 			long remaining = (long) stat.getAvailableBlocks()
-					* (long) stat.getBlockSize();
+					* stat.getBlockSize();
 			if (remaining < LOW_STORAGE_THRESHOLD) {
 				mHandler.post(new Runnable() {
 					public void run() {
@@ -280,7 +299,8 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 	// This is run in the main thread.
 	// This is called only if the storage is low.
 	private void checkLowStorageFinished() {
-		Toast.makeText(this, R.string.not_enough_space, 5000).show();
+		Toast.makeText(this, R.string.not_enough_space, Toast.LENGTH_LONG)
+				.show();
 	}
 
 	// This is run in the worker thread.
@@ -518,24 +538,23 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 				});
 			}
 		}
-
-		mHandler.post(new Runnable() {
-			public void run() {
-				checkBucketIdsFinished();
-			}
-		});
+		// 如果目前为止还只有一个文件夹，就进入文件夹，并关闭当前activity
+		// mHandler.post(new Runnable() {
+		// public void run() {
+		// checkBucketIdsFinished();
+		// }
+		// });
 	}
 
 	// This is run in the main thread.
+	@SuppressWarnings("unused")
 	private void checkBucketIdsFinished() {
 
 		// If we just have one folder, open it.
 		// If we have zero folder, show the "no images" icon.
 		if (!mScanning) {
 			int numItems = mAdapter.mItems.size();
-			if (numItems == 0) {
-				showNoImagesView();
-			} else if (numItems == 1) {
+			if (numItems == 1) {
 				mAdapter.mItems.get(0).launch(this);
 				finish();
 				return;
@@ -545,10 +564,6 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 
 	// This is run in the main thread.
 	private void updateItem(Item item) {
-		// Hide NoImageView if we are going to add the first item
-		if (mAdapter.getCount() == 0) {
-			hideNoImagesView();
-		}
 		mAdapter.addItem(item);
 		mAdapter.updateDisplay();
 	}
@@ -566,25 +581,7 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 
 	// This is run in the main thread.
 	private void checkScanningFinished(boolean scanning) {
-		// updateScanningDialog(scanning);
-	}
-
-	private View mNoImagesView;
-
-	// Show/Hide the "no images" icon and text. Load resources on demand.
-	private void showNoImagesView() {
-		// if (mNoImagesView == null) {
-		// ViewGroup root = (ViewGroup) findViewById(R.id.root);
-		// getLayoutInflater().inflate(R.layout.gallerypicker_no_images, root);
-		// mNoImagesView = findViewById(R.id.no_images);
-		// }
-		// mNoImagesView.setVisibility(View.VISIBLE);
-	}
-
-	private void hideNoImagesView() {
-		if (mNoImagesView != null) {
-			mNoImagesView.setVisibility(View.GONE);
-		}
+		updateScanningDialog(scanning);
 	}
 
 	private void abortWorker() {
@@ -632,7 +629,8 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 
 	private Uri mOutPutFileUri;
 	private String fileName;
-	private static final int REQUEST_CAMERA_CODE = 1;
+	public static final int REQUEST_CAMERA_CODE = (1 << 0);
+	public static final int REQUEST_FINISH_CODE = (1 << 1);
 
 	@Override
 	public void onClick(View v) {
@@ -659,7 +657,9 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {
+		if (RESULT_OK != resultCode)
+			return;
+		if (REQUEST_CAMERA_CODE == requestCode) {
 			PrivacyFileDao dao = PrivacyDaoUtils.getFileDao(this);
 			com.plugin.common.utils.files.FileInfo info = new com.plugin.common.utils.files.FileInfo();
 			info.fileName = fileName;
@@ -668,6 +668,10 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 
 			dao.insert(new PrivacyFile(null, fileName, fileName, info.filePath,
 					new Date(), 0, Long.valueOf(-1)));
+		}
+		if (REQUEST_FINISH_CODE == requestCode) {
+			Log.w(TAG, TAG + " will finished!");
+			finish();
 		}
 	}
 
@@ -689,29 +693,42 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 	}
 
 	private static final ImageListData[] IMAGE_LIST_DATA = {
-			// Camera Images
-			new ImageListData(Item.TYPE_CAMERA_IMAGES,
-					ImageManager.INCLUDE_IMAGES,
-					ImageManager.CAMERA_IMAGE_BUCKET_ID,
-					R.string.gallery_camera_bucket_name)/*,
-			// Camera Videos
-			new ImageListData(Item.TYPE_CAMERA_VIDEOS,
-					ImageManager.INCLUDE_VIDEOS,
-					ImageManager.CAMERA_IMAGE_BUCKET_ID,
-					R.string.gallery_camera_videos_bucket_name),
-
-			// Camera Medias
-			new ImageListData(Item.TYPE_CAMERA_MEDIAS,
-					ImageManager.INCLUDE_VIDEOS | ImageManager.INCLUDE_IMAGES,
-					ImageManager.CAMERA_IMAGE_BUCKET_ID,
-					R.string.gallery_camera_media_bucket_name),
-
-			// All Images
-			new ImageListData(Item.TYPE_ALL_IMAGES,
-					ImageManager.INCLUDE_IMAGES, null, R.string.all_images),
-
-			// All Videos
-			new ImageListData(Item.TYPE_ALL_VIDEOS,
-					ImageManager.INCLUDE_VIDEOS, null, R.string.all_videos),*/ };
+	// Camera Images
+	new ImageListData(Item.TYPE_CAMERA_IMAGES, ImageManager.INCLUDE_IMAGES,
+			ImageManager.CAMERA_IMAGE_BUCKET_ID,
+			R.string.gallery_camera_bucket_name) /*
+												 * , // Camera Videos new
+												 * ImageListData
+												 * (Item.TYPE_CAMERA_VIDEOS,
+												 * ImageManager.INCLUDE_VIDEOS,
+												 * ImageManager
+												 * .CAMERA_IMAGE_BUCKET_ID,
+												 * R.string.
+												 * gallery_camera_videos_bucket_name
+												 * ),
+												 * 
+												 * // Camera Medias new
+												 * ImageListData
+												 * (Item.TYPE_CAMERA_MEDIAS,
+												 * ImageManager.INCLUDE_VIDEOS |
+												 * ImageManager.INCLUDE_IMAGES,
+												 * ImageManager
+												 * .CAMERA_IMAGE_BUCKET_ID,
+												 * R.string
+												 * .gallery_camera_media_bucket_name
+												 * ),
+												 * 
+												 * // All Images new
+												 * ImageListData
+												 * (Item.TYPE_ALL_IMAGES,
+												 * ImageManager.INCLUDE_IMAGES,
+												 * null, R.string.all_images),
+												 * 
+												 * // All Videos new
+												 * ImageListData
+												 * (Item.TYPE_ALL_VIDEOS,
+												 * ImageManager.INCLUDE_VIDEOS,
+												 * null, R.string.all_videos),
+												 */};
 
 }
