@@ -64,6 +64,10 @@ public class Item {
 		// intent.putExtra("windowTitle", mName);
 		// intent.putExtra("mediaTypes", getIncludeMediaTypes());
 		Intent intent = new Intent(activity, ShowFolderMediaActivity.class);
+		intent.putExtra("privacy_type",
+				activity.getIntent().getIntExtra("privacy_type", 0));
+		intent.putExtra("ref_id",
+				activity.getIntent().getLongExtra("ref_id", -1));
 		intent.setData(uri);
 		activity.startActivityForResult(intent,
 				ShowSDCardMediaActivity.REQUEST_FINISH_CODE);

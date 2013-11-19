@@ -106,7 +106,7 @@ public class PrivacyShowActivity extends BaseActivity {
 		Intent intent;
 		switch (privacy_type) {
 		case 0:
-			intent = new Intent(PrivacyShowActivity.this, AddFileActivity.class);
+			intent = new Intent(PrivacyShowActivity.this, ShowSDCardMediaActivity.class);
 			intent.putExtra("privacy_type", privacy_type);
 			intent.putExtra("ref_id", getIntent().getLongExtra("ref_id", -1));
 			startActivity(intent);

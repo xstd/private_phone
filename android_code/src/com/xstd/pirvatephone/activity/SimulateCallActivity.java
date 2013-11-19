@@ -2,12 +2,15 @@ package com.xstd.pirvatephone.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +21,8 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.simulacomm.SimulateComm;
 import com.xstd.pirvatephone.service.LightScreenService;
 
-public class SimulateCallActivity extends BaseActivity implements OnClickListener {
+public class SimulateCallActivity extends BaseActivity implements
+		OnClickListener {
 
 	private MediaPlayer mMediaPlayer;
 	private Vibrator vibrator;
@@ -46,7 +50,18 @@ public class SimulateCallActivity extends BaseActivity implements OnClickListene
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_simulate_call);
+		View view = getLayoutInflater().inflate(
+				R.layout.activity_simulate_call, null);
+		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+		params.type = android.view.WindowManager.LayoutParams.TYPE_PHONE;
+		params.format = PixelFormat.RGBA_8888;
+		params.flags = android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+				| android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+
+		params.gravity = Gravity.LEFT | Gravity.TOP;
+		view.setLayoutParams(params);
+		
+		setContentView(view);
 
 		simu = (SimulateComm) getIntent().getSerializableExtra("simu");
 
@@ -54,7 +69,8 @@ public class SimulateCallActivity extends BaseActivity implements OnClickListene
 
 		try {
 			mMediaPlayer = new MediaPlayer();
-			mMediaPlayer.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+			mMediaPlayer.setDataSource(this, RingtoneManager
+					.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 			mMediaPlayer.setLooping(true);
 			mMediaPlayer.prepare();
@@ -115,7 +131,8 @@ public class SimulateCallActivity extends BaseActivity implements OnClickListene
 		}
 		if (v == pickup) {
 			Intent intent = new Intent();
-			intent.setClass(getApplicationContext(), SimulateIncallActivity.class);
+			intent.setClass(getApplicationContext(),
+					SimulateIncallActivity.class);
 			intent.putExtra("simu", simu);
 			startActivity(intent);
 			finish();

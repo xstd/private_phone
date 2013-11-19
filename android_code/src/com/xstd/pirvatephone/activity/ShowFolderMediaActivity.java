@@ -32,7 +32,6 @@ import com.xstd.pirvatephone.dao.privacy.PrivacyFile;
 import com.xstd.pirvatephone.dao.privacy.PrivacyFileDao;
 import com.xstd.pirvatephone.module.IImage;
 import com.xstd.pirvatephone.module.IImageList;
-import com.xstd.pirvatephone.module.MediaModule;
 import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.pirvatephone.utils.ImageManager;
 import com.xstd.privatephone.tools.ImageLoader;
@@ -91,6 +90,9 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_show_folder_media);
+
+		privacy_type = getIntent().getIntExtra("privacy_type", 0);
+		ref_id = getIntent().getLongExtra("ref_id", -1);
 
 		initUI();
 	}
@@ -298,8 +300,8 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 							ShowSDCardFilesActivity.PRIVACY_SAPCE_PATH
 									+ module.getTitle());
 					dao.insert(new PrivacyFile(null, module.getTitle(), module
-							.getTitle(), module.getDataPath(), new Date(), 0,
-							Long.valueOf(-1)));
+							.getTitle(), module.getDataPath(), new Date(),
+							privacy_type, ref_id));
 					FileUtils.DeleteFile(info);
 					SystemClock.sleep(500);
 				}
@@ -438,6 +440,10 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private Drawable mMultiSelectTrue;
 	private Drawable mMultiSelectFalse;
+
+	private int privacy_type;
+
+	private long ref_id;
 
 	@Override
 	public void drawDecoration(Canvas canvas, IImage image, int xPos, int yPos,
