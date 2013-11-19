@@ -325,7 +325,6 @@ public class PrivacyShowActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(List<PrivacyFile> result) {
-			FileUtils.updateSystemFile(PrivacyShowActivity.this);
 			if (result == null || result.size() < 1) {
 				empty_view.setVisibility(View.VISIBLE);
 				lv.setVisibility(View.GONE);
@@ -370,6 +369,7 @@ public class PrivacyShowActivity extends BaseActivity {
 										PrivacyFileDao dao = PrivacyDaoUtils
 												.getFileDao(PrivacyShowActivity.this);
 										dao.delete(mapping);
+										FileUtils.updateSystemFile(PrivacyShowActivity.this);
 										new QueryPrivacyFile().execute();
 										Toast.makeText(
 												PrivacyShowActivity.this,
@@ -381,7 +381,6 @@ public class PrivacyShowActivity extends BaseActivity {
 												R.string.privacy_backfile_failed_msg,
 												Toast.LENGTH_SHORT).show();
 									}
-									 FileUtils.updateSystemFile(PrivacyShowActivity.this);
 									window.dismiss();
 								}
 

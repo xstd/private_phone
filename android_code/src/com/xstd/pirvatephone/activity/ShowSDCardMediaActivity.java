@@ -185,8 +185,6 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			// SD card available
-			Toasts.getInstance(getApplicationContext()).show(
-					"SDCARD MOUNTED! PLEASE WAIT!", 1);
 		} else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
 			// SD card unavailable
 			rebake(true, false);
