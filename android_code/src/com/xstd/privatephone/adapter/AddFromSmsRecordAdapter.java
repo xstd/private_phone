@@ -86,7 +86,7 @@ public class AddFromSmsRecordAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
 		View view = inflater.inflate(
-				R.layout.private_contact_edit_item, null);
+				R.layout.private_add_from_sms_item, null);
 		ViewHold holder = new ViewHold();
 		holder.tv_name = (TextView) view.findViewById(R.id.tv_name);
 		holder.date = (TextView) view.findViewById(R.id.tv_phone_num);

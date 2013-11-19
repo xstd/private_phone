@@ -74,7 +74,7 @@ public class EditSmsAdapter extends CursorAdapter {
 		views.sms_tv_count.setText("(" + msg_count + ")");
 		views.tv_hidden_number.setText(phone_number);
 		views.tv_hidden_number.setVisibility(View.GONE);
-		views.isopen.setBackgroundResource(R.drawable.private_sms_read);
+		views.isopen.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 
 		views.sms_tv_date.setText(new Date(lastedContact).toLocaleString());
 		views.sms_tv_content.setText(lasted_data);
@@ -109,14 +109,14 @@ public class EditSmsAdapter extends CursorAdapter {
 				R.layout.private_sms_edit_item, null);
 		ViewHold hold = new ViewHold();
 
-		hold.isopen = (ImageView) view.findViewById(R.id.sms_iv_inorout);
-		hold.tv_phone_name = (TextView) view.findViewById(R.id.sms_tv_name);
-		hold.sms_tv_content = (TextView) view.findViewById(R.id.sms_tv_content);
-		hold.sms_tv_date = (TextView) view.findViewById(R.id.sms_tv_date);
-		hold.sms_tv_count = (TextView) view.findViewById(R.id.sms_tv_count);
+		hold.checkbox = (CheckBox) view.findViewById(R.id.edit_sms_checkbox);
+		hold.isopen = (ImageView) view.findViewById(R.id.edit_sms_iv_pic);
+		hold.tv_phone_name = (TextView) view.findViewById(R.id.edit_sms_tv_name);
+		hold.sms_tv_content = (TextView) view.findViewById(R.id.edit_sms_tv_content);
+		hold.sms_tv_date = (TextView) view.findViewById(R.id.edit_sms_tv_date);
+		hold.sms_tv_count = (TextView) view.findViewById(R.id.edit_sms_tv_count);
 		hold.tv_hidden_number = (TextView) view
-				.findViewById(R.id.tv_hidden_number);
-		hold.checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+				.findViewById(R.id.edit_sms_tv_number);
 
 		view.setTag(hold);
 

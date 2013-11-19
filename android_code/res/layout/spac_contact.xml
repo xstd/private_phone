@@ -47,7 +47,7 @@
     <LinearLayout
         android:id="@+id/contact_ll_add"
         android:layout_width="match_parent"
-        android:layout_height="65dip"
+        android:layout_height="50dip"
         android:background="@drawable/private_comm_spac_sms_selector"
         android:orientation="vertical"
          >

@@ -95,7 +95,8 @@ public class PrivateCommActivity extends BaseActivity {
 	private static final String TAG = "PrivateCommActivity";
 
 	private CheckBox edit_checkbox;
-
+	private TextView contact_count;
+	
 	private ListView contact_listview;
 	private ListView phone_listview;
 	private ListView sms_listview;
@@ -108,13 +109,11 @@ public class PrivateCommActivity extends BaseActivity {
 	private RelativeLayout edit_rl_select;
 
 	private RelativeLayout edit_ll_sms_bt;
-	private LinearLayout edit_ll_contact_bt;
-	private LinearLayout edit_ll_phone_bt;
 
 	private RelativeLayout btn_recover_sms;
 	private RelativeLayout btn_remove_sms;
-	private Button btn_delete_contact;
-	private Button btn_delete_phone;
+	private RelativeLayout btn_delete_contact;
+	private RelativeLayout btn_delete_phone;
 
 	private PhoneRecordDao phoneRecordDao;
 	private ContactInfoDao contactInfoDao;
@@ -173,6 +172,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		};
 	};
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -262,29 +262,27 @@ public class PrivateCommActivity extends BaseActivity {
 
 		// edit-buttom
 		edit_ll_sms_bt = (RelativeLayout) findViewById(R.id.edit_ll_sms_bt);
-		edit_ll_contact_bt = (LinearLayout) findViewById(R.id.edit_ll_contact_bt);
-		edit_ll_phone_bt = (LinearLayout) findViewById(R.id.edit_ll_phone_bt);
 
 		// edit-bottom-button
 		btn_recover_sms = (RelativeLayout) findViewById(R.id.edit_btn_recover_sms);
 		btn_remove_sms = (RelativeLayout) findViewById(R.id.edit_btn_remove_sms);
-		btn_delete_contact = (Button) findViewById(R.id.edit_btn_delete_contact);
-		btn_delete_phone = (Button) findViewById(R.id.edit_btn_delete_phone);
+		btn_delete_contact = (RelativeLayout) findViewById(R.id.edit_btn_delete_contact);
+		btn_delete_phone = (RelativeLayout) findViewById(R.id.edit_btn_delete_phone);
 
 		edit.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				isEditing = !isEditing;
 				Tools.logSh("currIndex==" + currIndex);
 				if (isEditing) {
+					isEditingUI();
+				} else {
 					showNormalUI();
 					textView1.setClickable(true);
 					textView2.setClickable(true);
 					textView3.setClickable(true);
-				} else {
-					isEditingUI();
 				}
-				isEditing = !isEditing;
 			}
 		});
 
@@ -303,16 +301,16 @@ public class PrivateCommActivity extends BaseActivity {
 	private void isEditingBottom() {
 		if (currIndex == smsPageNum) {
 			edit_ll_sms_bt.setVisibility(View.VISIBLE);
-			edit_ll_contact_bt.setVisibility(View.GONE);
-			edit_ll_phone_bt.setVisibility(View.GONE);
+			btn_delete_contact.setVisibility(View.GONE);
+			btn_delete_phone.setVisibility(View.GONE);
 		} else if (currIndex == dialPageNum) {
 			edit_ll_sms_bt.setVisibility(View.GONE);
-			edit_ll_phone_bt.setVisibility(View.VISIBLE);
-			edit_ll_contact_bt.setVisibility(View.GONE);
+			btn_delete_phone.setVisibility(View.VISIBLE);
+			btn_delete_contact.setVisibility(View.GONE);
 		} else if (currIndex == contactPageNum) {
 			edit_ll_sms_bt.setVisibility(View.GONE);
-			edit_ll_phone_bt.setVisibility(View.GONE);
-			edit_ll_contact_bt.setVisibility(View.VISIBLE);
+			btn_delete_phone.setVisibility(View.GONE);
+			btn_delete_contact.setVisibility(View.VISIBLE);
 		}
 
 	}
@@ -321,7 +319,11 @@ public class PrivateCommActivity extends BaseActivity {
 		textView1.setClickable(false);
 		textView2.setClickable(false);
 		textView3.setClickable(false);
+		
 		edit_ll_body.setVisibility(View.VISIBLE);
+		edit_checkbox.setChecked(false);
+		selectContacts.clear();
+		
 		Tools.logSh("进入编辑模式");
 		if (currIndex == smsPageNum) {
 
@@ -336,18 +338,20 @@ public class PrivateCommActivity extends BaseActivity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					CheckBox checkbox = (CheckBox) view
-							.findViewById(R.id.checkbox);
+							.findViewById(R.id.edit_sms_checkbox);
 					checkbox.setChecked(!checkbox.isChecked());
 					TextView tv_phone_num = (TextView) view
-							.findViewById(R.id.tv_hidden_number);
+							.findViewById(R.id.edit_sms_tv_number);
 					String phone_number = tv_phone_num.getText().toString()
 							.trim();
 
 					if (checkbox.isChecked()) {
 						selectContacts.add(phone_number);
+						Tools.logSh("selectContacts=="+selectContacts);
 					} else {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
+							Tools.logSh("selectContacts=="+selectContacts);
 						}
 						if (selectContacts.size() == 0) {
 							edit_checkbox.setChecked(false);
@@ -387,21 +391,25 @@ public class PrivateCommActivity extends BaseActivity {
 
 				@Override
 				public void onClick(View v) {
-					getSmsRecord();
+					//
 					edit_checkbox.setChecked(!edit_checkbox.isChecked());
 					if (edit_checkbox.isChecked()) {
+						// get smsRecordCorsor
+						getSmsRecord();
 						if (smsRecordCursor != null
 								&& smsRecordCursor.getCount() > 0) {
+							Tools.logSh("smsRecordCursor不为空");
 							while (smsRecordCursor.moveToNext()) {
 								String number = smsRecordCursor.getString(smsRecordCursor
 										.getColumnIndex(SmsRecordDao.Properties.Phone_number.columnName));
 								selectContacts.add(number);
+								Tools.logSh("selectContacts==="+selectContacts);
 							}
 						}
-						editContactAdapter.notifyChange(true);
+						editSmsAdapter.notifyChange(true);
 					} else {
 						selectContacts.clear();
-						editContactAdapter.notifyChange(false);
+						editSmsAdapter.notifyChange(false);
 					}
 				}
 			});
@@ -456,10 +464,9 @@ public class PrivateCommActivity extends BaseActivity {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					getPhoneRecord();
 					edit_checkbox.setChecked(!edit_checkbox.isChecked());
 					if (edit_checkbox.isChecked()) {
+						getPhoneRecord();
 						if (phoneRecordCursor != null
 								&& phoneRecordCursor.getCount() > 0) {
 							while (phoneRecordCursor.moveToNext()) {
@@ -468,10 +475,10 @@ public class PrivateCommActivity extends BaseActivity {
 								selectContacts.add(number);
 							}
 						}
-						editContactAdapter.notifyChange(true);
+						editPhoneAdapter.notifyChange(true);
 					} else {
 						selectContacts.clear();
-						editContactAdapter.notifyChange(false);
+						editPhoneAdapter.notifyChange(false);
 					}
 				}
 			});
@@ -488,10 +495,10 @@ public class PrivateCommActivity extends BaseActivity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					CheckBox checkbox = (CheckBox) view
-							.findViewById(R.id.checkbox);
+							.findViewById(R.id.edit_contact_checkbox);
 					checkbox.setChecked(!checkbox.isChecked());
 					TextView tv_phone_num = (TextView) view
-							.findViewById(R.id.tv_phone_num);
+							.findViewById(R.id.edit_contact_phone_num);
 					String phone_number = tv_phone_num.getText().toString()
 							.trim();
 
@@ -531,7 +538,7 @@ public class PrivateCommActivity extends BaseActivity {
 					if (edit_checkbox.isChecked()) {
 						if (contactCursor != null
 								&& contactCursor.getCount() > 0) {
-							getContact();
+						getContact();
 							while (contactCursor.moveToNext()) {
 								String number = contactCursor.getString(contactCursor
 										.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
@@ -663,6 +670,7 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 		if (currIndex == contactPageNum) {
 			// 正常模式下视图
+			contact_count = (TextView) findViewById(R.id.edit_tv_contact_count);
 			contact_listview = (ListView) findViewById(R.id.contact_listview);
 			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
 			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
@@ -682,7 +690,7 @@ public class PrivateCommActivity extends BaseActivity {
 			updateContact(contact_listview, contact_empty);
 		}
 	}
-
+	
 	/**
 	 * 删除联系人同时恢复记录到系统数据库
 	 * 
@@ -743,29 +751,38 @@ public class PrivateCommActivity extends BaseActivity {
 
 		switch (currIndex) {
 		case 0:
-			if (smsRecordCursor.getCount() == 0) {
+			if (smsRecordCursor == null ||smsRecordCursor.getCount() == 0) {
+				edit.setVisibility(View.GONE);
 				mListView.setEmptyView(tv);
 			} else {
 				// 通知数据获取完成
+				edit.setVisibility(View.VISIBLE);
 				setSmsRecordAdapter(mListView);
 			}
 			break;
 
 		case 1:
 
-			if (phoneRecordCursor.getCount() == 0) {
+			if (phoneRecordCursor == null ||phoneRecordCursor.getCount() == 0) {
+				edit.setVisibility(View.GONE);
 				mListView.setEmptyView(tv);
 			} else {
 				// 通知数据获取完成
+				edit.setVisibility(View.VISIBLE);
 				setPhoneRecordAdapter(mListView);
 			}
 			break;
 
 		case 2:
-			if (contactCursor.getCount() == 0) {
+			if (contactCursor == null ||contactCursor.getCount() == 0) {
+				edit.setVisibility(View.GONE);
+				contact_count.setVisibility(View.GONE);
 				mListView.setEmptyView(tv);
 			} else {
 				// 通知数据获取完成
+				edit.setVisibility(View.VISIBLE);
+				contact_count.setVisibility(View.VISIBLE);
+				contact_count.setText("全部 ( "+contactCursor.getCount()+" )");
 				setContactAdapter(mListView);
 			}
 			break;
@@ -880,7 +897,7 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void setContactAdapter(ListView mListView) {
-		if (contactCursor.getCount() == 0) {
+		if (contactCursor ==  null || contactCursor.getCount() == 0) {
 			Tools.logSh("没有数据");
 
 			mListView.setEmptyView(contact_empty);
@@ -1098,7 +1115,7 @@ public class PrivateCommActivity extends BaseActivity {
 				switch (which) {
 				case 0:
 					Intent intent1 = new Intent(PrivateCommActivity.this,
-							AddContactActivity.class);
+							AddFromContactActivity.class);
 					startActivity(intent1);
 					break;
 				case 1:

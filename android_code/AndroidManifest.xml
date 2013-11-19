@@ -73,7 +73,7 @@
         <activity android:name="com.xstd.pirvatephone.activity.PrivacyShowActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.ShowSDCardFilesActivity" />
         <activity
-            android:name="com.xstd.pirvatephone.activity.AddContactActivity"
+            android:name="com.xstd.pirvatephone.activity.AddFromContactActivity"
             android:label="@string/title_activity_contact" />
         <activity
             android:name="com.xstd.pirvatephone.activity.HandInputActivity"

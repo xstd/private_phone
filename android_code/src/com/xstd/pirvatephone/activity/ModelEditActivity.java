@@ -58,11 +58,11 @@ public class ModelEditActivity extends BaseActivity {
 	private ListView lv_uninterept;
 	private String modelName;
 
-	private ArrayList<String> intereptNumbers =new ArrayList<String>();
-	private ArrayList<String> intereptNames =new ArrayList<String>();
+	private ArrayList<String> intereptNumbers = new ArrayList<String>();
+	private ArrayList<String> intereptNames = new ArrayList<String>();
 
-	private ArrayList<String> noIntereptNumbers =new ArrayList<String>();
-	private ArrayList<String> noIntereptNames =new ArrayList<String>();
+	private ArrayList<String> noIntereptNumbers = new ArrayList<String>();
+	private ArrayList<String> noIntereptNames = new ArrayList<String>();
 	private Button add_btn;
 	private int curIndex = 0;
 	private EditModelAdapter noIntereptAdapter;
@@ -74,9 +74,9 @@ public class ModelEditActivity extends BaseActivity {
 			switch (msg.what) {
 			case UPDATE:
 
-				if(tag==1){
+				if (tag == 1) {
 					setData();
-				}else{
+				} else {
 					switch (curIndex) {
 					case 0:
 						showNoInterept();
@@ -99,6 +99,9 @@ public class ModelEditActivity extends BaseActivity {
 			}
 		}
 	};
+	private TextView tv_title;
+	private Button btn_back;
+	private Button btn_edit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +171,13 @@ public class ModelEditActivity extends BaseActivity {
 	}
 
 	private void initView() {
+
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText("编辑");
+		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_edit = (Button) findViewById(R.id.btn_edit);
+		btn_edit.setVisibility(View.GONE);
+
 		tv_uninterept = (TextView) findViewById(R.id.tv_uninterept);
 		tv_interept = (TextView) findViewById(R.id.tv_interept);
 
@@ -180,6 +190,15 @@ public class ModelEditActivity extends BaseActivity {
 		lv_uninterept = (ListView) findViewById(R.id.lv_uninterept);
 
 		add_btn = (Button) findViewById(R.id.add_btn);
+
+		btn_back.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 
 	}
 

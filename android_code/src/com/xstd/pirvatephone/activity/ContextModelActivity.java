@@ -51,6 +51,9 @@ public class ContextModelActivity extends BaseActivity {
 	private ArrayList<Model> models;
 	private GetModelUtils modeUtils;
 	private Button btn_callforwarding;
+	private TextView tv_title;
+	private Button btn_back;
+	private Button btn_edit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -112,10 +115,27 @@ public class ContextModelActivity extends BaseActivity {
 	}
 
 	private void initView() {
+		
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_edit = (Button) findViewById(R.id.btn_edit);
+		btn_edit.setVisibility(View.GONE);
+		
 		model_lv = (ListView) findViewById(R.id.model_lv);
 		add_btn = (Button) findViewById(R.id.btn_add);
 		btn_callforwarding = (Button) findViewById(R.id.btn_callforwarding);
+		
 
+		tv_title.setText("情景模式");
+		
+		btn_back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
 		add_btn.setOnClickListener(new OnClickListener() {
 
 			@Override

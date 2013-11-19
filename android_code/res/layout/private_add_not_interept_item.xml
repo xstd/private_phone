@@ -2,26 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_contact"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/private_comm_contact_item_height" >
-    
-    <CheckBox
-        android:id="@+id/edit_contact_checkbox"
-        style="@style/private_comm_checkbox_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dip"
-        android:background="@drawable/private_comm_checkbox_selector"
-        android:clickable="false"
-        android:focusable="false" />
+    android:layout_height="@dimen/private_comm_contact_item_height"
+     >
 
     <ImageView
-        android:id="@+id/edit_contact_iv_pic"
+        android:id="@+id/not_interept_iv_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/edit_contact_checkbox"
         android:layout_centerVertical="true"
         android:layout_marginLeft="6dip"
+        android:visibility="gone"
         android:background="@drawable/private_comm_contact_icon_bkg" />
 
     <LinearLayout
@@ -29,11 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/private_comm_pic_margin_right"
-        android:layout_toRightOf="@id/edit_contact_iv_pic"
+        android:layout_toRightOf="@id/not_interept_iv_pic"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/edit_contact_tv_name"
+            android:id="@+id/not_interept_tv_name"
             style="@style/private_comm_item_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,20 +37,20 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/edit_contact_tv_type"
+                android:id="@+id/not_interept_tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="[正常接听]" />
 
             <TextView
-                android:id="@+id/edit_contact_phone_num"
+                android:id="@+id/not_interept_tv_phone_num"
                 style="@style/private_comm_item_content_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="110" />
 
             <TextView
-                android:id="@+id/edit_contact_phone_belong"
+                android:id="@+id/not_interept_tv_phone_belong"
                 style="@style/private_comm_item_content_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,14 +58,14 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/edit_contact_btn_dail"
+    <CheckBox
+        android:id="@+id/not_interept_checkbox"
+        style="@style/private_comm_checkbox_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/private_dial_normal"
+        android:layout_centerVertical="true"
         android:clickable="false"
-        android:focusable="false"
-        android:visibility="gone" />
+        android:focusable="false" />
 
 </RelativeLayout>

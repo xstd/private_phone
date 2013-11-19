@@ -6,6 +6,7 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
+import com.xstd.privatephone.adapter.AddNotIntereptAdapter;
 import com.xstd.privatephone.adapter.EditContactAdapter;
 import com.xstd.privatephone.tools.Tools;
 
@@ -40,13 +41,15 @@ public class NotIntereptActivity extends BaseActivity {
 	private Button btn_sure;
 	private String modelName;
 	private Cursor contactCursor;
-	private EditContactAdapter mContactAdapter;
+	private AddNotIntereptAdapter addNotIntereptAdapter;
 	private boolean delete = false;
 	private int type = 0;
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
 	private RelativeLayout rl_remove_record;
+	private Button btn_back;
+	private Button btn_edit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +68,9 @@ public class NotIntereptActivity extends BaseActivity {
 	private void setData() {
 
 		if (contactCursor != null && contactCursor.getCount() > 0) {
-			mContactAdapter = new EditContactAdapter(getApplicationContext(),
+			addNotIntereptAdapter = new AddNotIntereptAdapter(getApplicationContext(),
 					contactCursor);
-			mListView.setAdapter(mContactAdapter);
+			mListView.setAdapter(addNotIntereptAdapter);
 
 			mListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -76,11 +79,11 @@ public class NotIntereptActivity extends BaseActivity {
 						int position, long id) {
 					// TODO Auto-generated method stub
 					CheckBox checkbox = (CheckBox) view
-							.findViewById(R.id.checkbox);
+							.findViewById(R.id.not_interept_checkbox);
 					TextView tv_phone_num = (TextView) view
-							.findViewById(R.id.tv_phone_num);
+							.findViewById(R.id.not_interept_tv_phone_num);
 					TextView tv_name = (TextView) view
-							.findViewById(R.id.tv_name);
+							.findViewById(R.id.not_interept_tv_name);
 
 					String number = tv_phone_num.getText().toString();
 					String name = tv_name.getText().toString();
@@ -141,6 +144,10 @@ public class NotIntereptActivity extends BaseActivity {
 	private void initView() {
 		// title
 		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText("新增拦截联系人");
+		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_edit = (Button) findViewById(R.id.btn_edit);
+		btn_edit.setVisibility(View.GONE);
 
 		// content
 		select_all = (RelativeLayout) findViewById(R.id.rl_add_all);
@@ -154,7 +161,16 @@ public class NotIntereptActivity extends BaseActivity {
 		btn_cancle = (Button) findViewById(R.id.btn_cancle);
 		btn_sure = (Button) findViewById(R.id.btn_sure);
 
-		tv_title.setText(modelName + ":新增不拦截联系人");
+		tv_title.setText(":新增不拦截联系人");
+		
+		btn_back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 
 		rl_remove_record.setOnClickListener(new OnClickListener() {
 
@@ -194,11 +210,11 @@ public class NotIntereptActivity extends BaseActivity {
 						RelativeLayout layout = (RelativeLayout) mListView
 								.getChildAt(index);
 						CheckBox checkBox = (CheckBox) layout
-								.findViewById(R.id.checkbox);
+								.findViewById(R.id.not_interept_checkbox);
 						TextView tv_phone_num = (TextView) layout
-								.findViewById(R.id.tv_phone_num);
+								.findViewById(R.id.not_interept_tv_phone_num);
 						TextView tv_name = (TextView) layout
-								.findViewById(R.id.tv_name);
+								.findViewById(R.id.not_interept_tv_name);
 
 						String number = tv_phone_num.getText().toString()
 								.trim();

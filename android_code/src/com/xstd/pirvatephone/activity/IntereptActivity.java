@@ -6,7 +6,7 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
-import com.xstd.privatephone.adapter.EditContactAdapter;
+import com.xstd.privatephone.adapter.AddIntereptAdapter;
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -30,7 +30,7 @@ public class IntereptActivity extends BaseActivity {
 	private ListView mListView;
 
 	private Cursor contactCursor;
-	private EditContactAdapter mContactAdapter;
+	private AddIntereptAdapter addIntereptAdapter;
 	private Button btn_cancle;
 	private Button btn_sure;
 	private TextView tv_title;
@@ -43,6 +43,8 @@ public class IntereptActivity extends BaseActivity {
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
+	private Button btn_back;
+	private Button btn_edit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,9 +63,13 @@ public class IntereptActivity extends BaseActivity {
 	private void initView() {
 		//title
 		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText("新增拦截联系人");
+		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_edit = (Button) findViewById(R.id.btn_edit);
+		btn_edit.setVisibility(View.GONE);
+		
 		select_all = (RelativeLayout) findViewById(R.id.rl_add_all);
 		btn_check_all = (CheckBox) findViewById(R.id.btn_check_all);
-		tv_title.setText(modelName + ":新增加拦截联系人");
 
 		// bottm
 		btn_cancle = (Button) findViewById(R.id.btn_cancle);
@@ -73,6 +79,15 @@ public class IntereptActivity extends BaseActivity {
 		mListView = (ListView) findViewById(R.id.listview);
 		btn_remove_record = (CheckBox) findViewById(R.id.btn_remove_record);
 		rl_remove_record = (RelativeLayout) findViewById(R.id.rl_remove_record);
+		
+		btn_back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 		
 		rl_remove_record.setOnClickListener(new OnClickListener() {
 			
@@ -112,11 +127,11 @@ public class IntereptActivity extends BaseActivity {
 						RelativeLayout layout = (RelativeLayout) mListView
 								.getChildAt(index);
 						CheckBox checkBox = (CheckBox) layout
-								.findViewById(R.id.checkbox);
+								.findViewById(R.id.interept_checkbox);
 						TextView tv_phone_num = (TextView) layout
 								.findViewById(R.id.tv_phone_num);
 						TextView tv_name = (TextView) layout
-								.findViewById(R.id.tv_name);
+								.findViewById(R.id.interept_tv_name);
 
 						String number = tv_phone_num.getText().toString()
 								.trim();
@@ -178,9 +193,9 @@ public class IntereptActivity extends BaseActivity {
 	private void setData() {
 
 		if (contactCursor != null && contactCursor.getCount() > 0) {
-			mContactAdapter = new EditContactAdapter(getApplicationContext(),
+			addIntereptAdapter = new AddIntereptAdapter(getApplicationContext(),
 					contactCursor);
-			mListView.setAdapter(mContactAdapter);
+			mListView.setAdapter(addIntereptAdapter);
 
 			mListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -189,11 +204,11 @@ public class IntereptActivity extends BaseActivity {
 						int position, long id) {
 					// TODO Auto-generated method stub
 					CheckBox checkbox = (CheckBox) view
-							.findViewById(R.id.checkbox);
+							.findViewById(R.id.interept_checkbox);
 					TextView tv_phone_num = (TextView) view
-							.findViewById(R.id.tv_phone_num);
+							.findViewById(R.id.interept_tv_phone_num);
 					TextView tv_name = (TextView) view
-							.findViewById(R.id.tv_name);
+							.findViewById(R.id.interept_tv_name);
 
 					String number = tv_phone_num.getText().toString();
 					String name = tv_name.getText().toString();

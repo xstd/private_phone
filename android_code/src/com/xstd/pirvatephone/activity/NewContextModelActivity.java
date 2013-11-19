@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewContextModelActivity extends BaseActivity {
@@ -50,11 +51,14 @@ public class NewContextModelActivity extends BaseActivity {
 	private Button btn_sure;
 	private ModelDao modelDao;
 	private String modelName;
-	private int type=1;
+	private int type = 1;
 	private ArrayList<String> selectContactsNumbers;
 	private ArrayList<String> selectContactsNames;
 	private String[] selectPhones;
 	private boolean delete = false;
+	private Button btn_back;
+	private Button btn_edit;
+	private TextView tv_title;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,12 @@ public class NewContextModelActivity extends BaseActivity {
 
 	private void initView() {
 
+		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_edit = (Button) findViewById(R.id.btn_edit);
+		btn_edit.setVisibility(View.GONE);
+		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title.setText("新建情景模式");
+
 		// add_name
 		model_name = (EditText) findViewById(R.id.et_model_name);
 
@@ -76,6 +86,14 @@ public class NewContextModelActivity extends BaseActivity {
 		// bottom
 		btn_cancle = (Button) findViewById(R.id.btn_cancle);
 		btn_sure = (Button) findViewById(R.id.btn_sure);
+
+		btn_back.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 
 		add_notinterept.setOnClickListener(new OnClickListener() {
 
@@ -155,23 +173,31 @@ public class NewContextModelActivity extends BaseActivity {
 						// 还没有该情景模式。增加一种情景模式
 						createNewModel(modelName);
 						finish();
-						if(type==2){//拦截
+						if (type == 2) {// 拦截
 							if (delete) {// 转移指定号码通信记录
-								RecordToUsUtils recordToUsUtils = new RecordToUsUtils(NewContextModelActivity.this);
-								recordToUsUtils.removeContactRecord(selectContactsNumbers, delete);
-								
-								Tools.logSh("selectContactsNumbers=="+selectContactsNumbers);
-								Toast.makeText(NewContextModelActivity.this, "正在移动", Toast.LENGTH_SHORT).show();
+								RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+										NewContextModelActivity.this);
+								recordToUsUtils.removeContactRecord(
+										selectContactsNumbers, delete);
+
+								Tools.logSh("selectContactsNumbers=="
+										+ selectContactsNumbers);
+								Toast.makeText(NewContextModelActivity.this,
+										"正在移动", Toast.LENGTH_SHORT).show();
 							} else {
-								Toast.makeText(NewContextModelActivity.this, "没有需要移动的1", Toast.LENGTH_SHORT).show();
+								Toast.makeText(NewContextModelActivity.this,
+										"没有需要移动的1", Toast.LENGTH_SHORT).show();
 							}
-						}else{//不拦截
-							if (delete){
-								RecordToSysUtils recordToSysUtils = new RecordToSysUtils(NewContextModelActivity.this);
-								recordToSysUtils.restoreContact(selectContactsNumbers);
-							
-							}else{
-								Toast.makeText(NewContextModelActivity.this, "没有需要移动的2", Toast.LENGTH_SHORT).show();
+						} else {// 不拦截
+							if (delete) {
+								RecordToSysUtils recordToSysUtils = new RecordToSysUtils(
+										NewContextModelActivity.this);
+								recordToSysUtils
+										.restoreContact(selectContactsNumbers);
+
+							} else {
+								Toast.makeText(NewContextModelActivity.this,
+										"没有需要移动的2", Toast.LENGTH_SHORT).show();
 							}
 						}
 
@@ -218,7 +244,7 @@ public class NewContextModelActivity extends BaseActivity {
 
 		if (selectContactsNumbers != null && selectContactsNumbers.size() > 0) {
 			ContextModelUtils.saveModelDetail(this, modelName,
-					selectContactsNames, selectContactsNumbers, type ,delete);
+					selectContactsNames, selectContactsNumbers, type, delete);
 		}
 	}
 
@@ -231,7 +257,7 @@ public class NewContextModelActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(data!=null){
+		if (data != null) {
 			type = data.getIntExtra("Type", 1);
 			selectContactsNumbers = data
 					.getStringArrayListExtra("SelectContactsNumbers");

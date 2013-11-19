@@ -18,13 +18,13 @@ import android.widget.TextView;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 
-public class EditContactAdapter extends CursorAdapter {
+public class AddIntereptAdapter extends CursorAdapter {
 	private Context mContext;
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
 	private ArrayList<CheckBox> checkBoxs = new ArrayList<CheckBox>();
 
 	@SuppressWarnings("deprecation")
-	public EditContactAdapter(Context context, Cursor cursor) {
+	public AddIntereptAdapter(Context context, Cursor cursor) {
 		super(context, cursor);
 		mContext = context;
 	}
@@ -52,7 +52,7 @@ public class EditContactAdapter extends CursorAdapter {
 		}
 		
 		
-		views.iv_icon.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
+		//views.iv_icon.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		views.tv_name.setText(name);
 		views.tv_type.setText(typeStr);
 		views.tv_phone_num.setText(phone_number.replace(" ", "").replace("-",
@@ -87,15 +87,15 @@ public class EditContactAdapter extends CursorAdapter {
 	public View newView(Context arg0, Cursor arg1, ViewGroup arg2) {
 		// TODO Auto-generated method stub
 		View view = LayoutInflater.from(mContext).inflate(
-				R.layout.private_contact_edit_item, null);
+				R.layout.private_add_interept_item, null);
 		ViewHold views = new ViewHold();
-		views.checkbox = (CheckBox) view.findViewById(R.id.edit_contact_checkbox);
-		views.iv_icon = (ImageView) view.findViewById(R.id.edit_contact_iv_pic);
+		views.checkbox = (CheckBox) view.findViewById(R.id.interept_checkbox);
+		//views.iv_icon = (ImageView) view.findViewById(R.id.interept_iv_pic);
 		
-		views.tv_name = (TextView) view.findViewById(R.id.edit_contact_tv_name);
-		views.tv_phone_num = (TextView) view.findViewById(R.id.edit_contact_phone_num);
-		views.tv_type = (TextView) view.findViewById(R.id.edit_contact_tv_type);
-		views.tv_phone_belong = (TextView) view.findViewById(R.id.edit_contact_phone_belong);
+		views.tv_name = (TextView) view.findViewById(R.id.interept_tv_name);
+		views.tv_phone_num = (TextView) view.findViewById(R.id.interept_tv_phone_num);
+		views.tv_type = (TextView) view.findViewById(R.id.interept_tv_type);
+		views.tv_phone_belong = (TextView) view.findViewById(R.id.interept_tv_phone_belong);
 
 		view.setTag(views);
 
@@ -114,7 +114,7 @@ public class EditContactAdapter extends CursorAdapter {
 		TextView tv_type;
 		TextView tv_phone_belong;
 		CheckBox checkbox;
-		ImageView iv_icon;
+		//ImageView iv_icon;
 	}
 
 }

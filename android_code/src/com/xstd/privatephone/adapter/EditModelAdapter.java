@@ -59,7 +59,7 @@ public class EditModelAdapter extends BaseAdapter {
 		if (convertView == null ) {
 			hold = new ViewHold();
 			convertView = View.inflate(mContext,
-					R.layout.private_contact_edit_item, null);
+					R.layout.private_edit_model_item, null);
 			hold = new ViewHold();
 
 			hold.name = (TextView) convertView.findViewById(R.id.tv_name);

@@ -35,11 +35,11 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.GetContactUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
-import com.xstd.privatephone.adapter.AddContactAdapter;
+import com.xstd.privatephone.adapter.AddFromContactAdapter;
 import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 
-public class AddContactActivity extends BaseActivity {
+public class AddFromContactActivity extends BaseActivity {
 
 	private Button btn_back;
 	private Button bt_sure;
@@ -82,7 +82,7 @@ public class AddContactActivity extends BaseActivity {
 				Tools.logSh("接受到消息");
 				mListView.setEmptyView(iv_empty_bg);
 				pb_empty.setVisibility(View.GONE);
-				AddContactAdapter mAdapter = new AddContactAdapter(
+				AddFromContactAdapter mAdapter = new AddFromContactAdapter(
 						getApplicationContext(), mContactInfos);
 				mListView.setAdapter(mAdapter);
 				mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -113,7 +113,7 @@ public class AddContactActivity extends BaseActivity {
 				refreshListView(msg.getData().get("value").toString());
 
 			case SHOW_TOAST:
-				Toast.makeText(AddContactActivity.this, "已经存在该隐私联系人！！",
+				Toast.makeText(AddFromContactActivity.this, "已经存在该隐私联系人！！",
 						Toast.LENGTH_SHORT).show();
 
 			}
@@ -128,7 +128,7 @@ public class AddContactActivity extends BaseActivity {
 
 		initView();
 
-		task = new GetContactTast(AddContactActivity.this);
+		task = new GetContactTast(AddFromContactActivity.this);
 		task.execute();
 
 	}
@@ -216,7 +216,7 @@ public class AddContactActivity extends BaseActivity {
 					// 显示选择对话框
 					showDeleteDialog(selectPhones);
 				} else {
-					Toast.makeText(AddContactActivity.this, "选择联系人不能为空！！",
+					Toast.makeText(AddFromContactActivity.this, "选择联系人不能为空！！",
 							Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -258,7 +258,7 @@ public class AddContactActivity extends BaseActivity {
 
 							// 删除系统库中的联系人的相关信息,移动相关的通信信息
 							DeleteSystemTast tast = new DeleteSystemTast(
-									AddContactActivity.this);
+									AddFromContactActivity.this);
 							tast.execute();
 							break;
 						case 1:
@@ -266,7 +266,7 @@ public class AddContactActivity extends BaseActivity {
 
 							// 不删除系统库中的联系人,移动相关的通信信息
 							DeleteSystemTast tast2 = new DeleteSystemTast(
-									AddContactActivity.this);
+									AddFromContactActivity.this);
 							tast2.execute();
 							break;
 						}
@@ -280,7 +280,7 @@ public class AddContactActivity extends BaseActivity {
 		param = value;
 		// 根据search条件查询
 		mContactInfos.clear();
-		task = new GetContactTast(AddContactActivity.this);
+		task = new GetContactTast(AddFromContactActivity.this);
 		task.execute();
 		
 	}
@@ -359,7 +359,7 @@ public class AddContactActivity extends BaseActivity {
 					Tools.logSh("执行删除系统数据库信息");
 
 					RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
-							AddContactActivity.this);
+							AddFromContactActivity.this);
 					recordToUsUtils.removeContactRecord(numbers,
 							flags_delete);
 					finish();
@@ -378,7 +378,7 @@ public class AddContactActivity extends BaseActivity {
 				Tools.logSh("执行删除系统数据库信息");
 
 				RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
-						AddContactActivity.this);
+						AddFromContactActivity.this);
 				recordToUsUtils.removeContactRecord(numbers, flags_delete);
 				finish();
 			} else {
@@ -413,7 +413,7 @@ public class AddContactActivity extends BaseActivity {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			getContactUtils = new GetContactUtils(
-					AddContactActivity.this);
+					AddFromContactActivity.this);
 			if(param==null){
 				mContactInfos = getContactUtils.getContacts();
 			}else{

@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
     tools:context=".AddFromPhoneRecordActivity" >
 
     <include
@@ -14,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/rl_title"
-        android:orientation="vertical" >
+        android:background="@color/private_comm_listview_bkg" >
 
         <LinearLayout
             android:id="@+id/sms_ll_remove"
@@ -22,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="@drawable/private_comm_spac_sms_selector"
             android:orientation="horizontal"
             android:padding="5dip" >
 
