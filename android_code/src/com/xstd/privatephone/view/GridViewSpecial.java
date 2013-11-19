@@ -17,10 +17,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
 import com.xstd.pirvatephone.module.IImage;
@@ -87,12 +85,12 @@ public class GridViewSpecial extends View {
 		a.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		mCellSizeChoices = new LayoutSpec[] {
 				new LayoutSpec(67, 67, 8, 0, metrics),
-				new LayoutSpec(92, 92, 8, 0, metrics), };
+				new LayoutSpec(102, 102, 8, 0, metrics), };
 	}
 
 	// Converts dp to pixel.
 	private static int dpToPx(int dp, DisplayMetrics metrics) {
-		return (int) (metrics.density * dp);
+		return (int) (metrics.density * dp + 0.5);
 	}
 
 	// These are set in init().
@@ -119,7 +117,6 @@ public class GridViewSpecial extends View {
 	private int mCurrentSelection = INDEX_NONE;
 	private int mCurrentPressState = 0;
 	private static final int TAPPING_FLAG = 1;
-	private static final int CLICKING_FLAG = 2;
 
 	// These are cached derived information.
 	private int mCount; // Cache mImageList.getCount();
@@ -268,9 +265,9 @@ public class GridViewSpecial extends View {
 				.setState(PRESSED_ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
 		cellOutline.draw(canvas);
 
-		canvas.setBitmap(mOutline[OUTLINE_SELECTED]);
-		cellOutline.setState(ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
-		cellOutline.draw(canvas);
+		// canvas.setBitmap(mOutline[OUTLINE_SELECTED]);
+		// cellOutline.setState(ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
+		// cellOutline.draw(canvas);
 	}
 
 	private void moveDataWindow() {
@@ -457,7 +454,6 @@ public class GridViewSpecial extends View {
 	public void stop() {
 		// Remove the long press callback from the queue if we are going to
 		// stop.
-		mHandler.removeCallbacks(mLongPressCallback);
 		mScroller = null;
 		if (mImageBlockManager != null) {
 			mImageBlockManager.recycle();
@@ -562,93 +558,6 @@ public class GridViewSpecial extends View {
 
 	private boolean canHandleEvent() {
 		return mRunning && mLayoutComplete;
-	}
-
-	private final Runnable mLongPressCallback = new Runnable() {
-		public void run() {
-			mCurrentPressState &= ~CLICKING_FLAG;
-			showContextMenu();
-		}
-	};
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (!canHandleEvent())
-			return false;
-		int sel = mCurrentSelection;
-		if (sel != INDEX_NONE) {
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				if (sel != mCount - 1 && (sel % mColumns < mColumns - 1)) {
-					sel += 1;
-				}
-				break;
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-				if (sel > 0 && (sel % mColumns != 0)) {
-					sel -= 1;
-				}
-				break;
-			case KeyEvent.KEYCODE_DPAD_UP:
-				if (sel >= mColumns) {
-					sel -= mColumns;
-				}
-				break;
-			case KeyEvent.KEYCODE_DPAD_DOWN:
-				sel = Math.min(mCount - 1, sel + mColumns);
-				break;
-			case KeyEvent.KEYCODE_DPAD_CENTER:
-				if (event.getRepeatCount() == 0) {
-					mCurrentPressState |= CLICKING_FLAG;
-					mHandler.postDelayed(mLongPressCallback,
-							ViewConfiguration.getLongPressTimeout());
-				}
-				break;
-			default:
-				return super.onKeyDown(keyCode, event);
-			}
-		} else {
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-			case KeyEvent.KEYCODE_DPAD_UP:
-			case KeyEvent.KEYCODE_DPAD_DOWN:
-				int startRow = (getScrollY() - mSpec.mCellSpacing)
-						/ mBlockHeight;
-				int topPos = startRow * mColumns;
-				Rect r = getRectForPosition(topPos);
-				if (r.top < getScrollY()) {
-					topPos += mColumns;
-				}
-				topPos = Math.min(mCount - 1, topPos);
-				sel = topPos;
-				break;
-			default:
-				return super.onKeyDown(keyCode, event);
-			}
-		}
-		setSelectedIndex(sel);
-		return true;
-	}
-
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (!canHandleEvent())
-			return false;
-
-		if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-			mCurrentPressState &= ~CLICKING_FLAG;
-			invalidate();
-
-			// The keyUp doesn't get called when the longpress menu comes up. We
-			// only get here when the user lets go of the center key before the
-			// longpress menu comes up.
-			mHandler.removeCallbacks(mLongPressCallback);
-
-			// open the photo
-			mListener.onImageClicked(mCurrentSelection);
-			return true;
-		}
-		return super.onKeyUp(keyCode, event);
 	}
 
 	private void paintDecoration(Canvas canvas) {

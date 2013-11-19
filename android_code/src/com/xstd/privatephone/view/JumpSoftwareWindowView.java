@@ -1,7 +1,5 @@
 package com.xstd.privatephone.view;
 
-import com.xstd.pirvatephone.app.PrivatePhoneApplication;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
