@@ -193,7 +193,7 @@ public class NewContextModelActivity extends BaseActivity {
 								RecordToSysUtils recordToSysUtils = new RecordToSysUtils(
 										NewContextModelActivity.this);
 								recordToSysUtils
-										.restoreContact(selectContactsNumbers);
+										.restoreContact(selectContactsNumbers,true);
 
 							} else {
 								Toast.makeText(NewContextModelActivity.this,

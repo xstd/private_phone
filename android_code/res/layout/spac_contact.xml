@@ -6,13 +6,13 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/linearlayout"
+        android:id="@+id/contact_ll_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/private_comm_contact_count_bkg" >
 
         <TextView
-            android:id="@+id/edit_tv_contact_count"
+            android:id="@+id/contact_tv_count"
             style="@style/private_comm_item_contact_all_style"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

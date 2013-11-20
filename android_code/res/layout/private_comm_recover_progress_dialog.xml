@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dip"
+    android:layout_height="500dip"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="  提示" />
+
+
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="        正在移动。。。"
+            />
+        
+        <ProgressBar
+            android:id="@+id/recover_progress"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+             style="@android:style/Widget.ProgressBar.Horizontal"
+            />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+         
+        <TextView
+            android:id="@+id/recover_tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  34%"
+            />
+        
+        <TextView
+            android:id="@+id/recover_tv_progress_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="   34/100"
+            />
+    
+    </RelativeLayout>
+
+</LinearLayout>

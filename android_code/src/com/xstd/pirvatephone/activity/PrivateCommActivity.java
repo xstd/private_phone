@@ -63,6 +63,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,11 +93,15 @@ public class PrivateCommActivity extends BaseActivity {
 	boolean isEditing = false;
 
 	private static final int REMOVE_FINISH = 0;
+	private static final int START_REVORSE = 1;
+	private static final int UPDATE_PROGRESS = 2;
+	private static final int FINISH_PROGRESS = 3;
 	private static final String TAG = "PrivateCommActivity";
 
 	private CheckBox edit_checkbox;
+	private LinearLayout contact_ll_count;
 	private TextView contact_count;
-	
+
 	private ListView contact_listview;
 	private ListView phone_listview;
 	private ListView sms_listview;
@@ -130,6 +135,12 @@ public class PrivateCommActivity extends BaseActivity {
 	private ContactAdapter mContactAdapter;
 	private SmsRecordAdapter smsRecordAdapter;
 	private PhoneRecordAdapter phoneRecordAdapter;
+
+	private AlertDialog deleteContactDialog;
+	private AlertDialog recoverContactProgressdialog;
+	private TextView recover_tv_progress;
+	private TextView recover_tv_progress_detail;
+	private ProgressBar recover_progress;
 
 	private final ArrayList<String> selectContacts = new ArrayList<String>();
 
@@ -169,10 +180,24 @@ public class PrivateCommActivity extends BaseActivity {
 					break;
 				}
 				break;
+
+			case UPDATE_PROGRESS:
+
+				break;
+			case FINISH_PROGRESS:
+				recoverContactProgressdialog.dismiss();
+				Message msg2 = new Message();
+				msg2.what = REMOVE_FINISH;
+				handler.sendMessage(msg2);
+
+				break;
+			case START_REVORSE:
+				deleteContactDialog.dismiss();
+				new RecoverContactProgressDialog(PrivateCommActivity.this);
+				break;
 			}
 		};
 	};
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -319,11 +344,11 @@ public class PrivateCommActivity extends BaseActivity {
 		textView1.setClickable(false);
 		textView2.setClickable(false);
 		textView3.setClickable(false);
-		
+
 		edit_ll_body.setVisibility(View.VISIBLE);
 		edit_checkbox.setChecked(false);
 		selectContacts.clear();
-		
+
 		Tools.logSh("进入编辑模式");
 		if (currIndex == smsPageNum) {
 
@@ -347,11 +372,11 @@ public class PrivateCommActivity extends BaseActivity {
 
 					if (checkbox.isChecked()) {
 						selectContacts.add(phone_number);
-						Tools.logSh("selectContacts=="+selectContacts);
+						Tools.logSh("selectContacts==" + selectContacts);
 					} else {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
-							Tools.logSh("selectContacts=="+selectContacts);
+							Tools.logSh("selectContacts==" + selectContacts);
 						}
 						if (selectContacts.size() == 0) {
 							edit_checkbox.setChecked(false);
@@ -403,7 +428,8 @@ public class PrivateCommActivity extends BaseActivity {
 								String number = smsRecordCursor.getString(smsRecordCursor
 										.getColumnIndex(SmsRecordDao.Properties.Phone_number.columnName));
 								selectContacts.add(number);
-								Tools.logSh("selectContacts==="+selectContacts);
+								Tools.logSh("selectContacts==="
+										+ selectContacts);
 							}
 						}
 						editSmsAdapter.notifyChange(true);
@@ -484,7 +510,7 @@ public class PrivateCommActivity extends BaseActivity {
 			});
 
 		} else if (currIndex == contactPageNum) {
-			
+
 			editContactAdapter = new EditContactAdapter(
 					PrivateCommActivity.this, contactCursor);
 			edit_listview.setAdapter(editContactAdapter);
@@ -523,7 +549,7 @@ public class PrivateCommActivity extends BaseActivity {
 						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
 								Toast.LENGTH_SHORT).show();
 					} else {
-						isEditingContactDialog();
+						showDeleteContactDialog();
 					}
 				}
 			});
@@ -532,13 +558,12 @@ public class PrivateCommActivity extends BaseActivity {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					edit_checkbox.setChecked(!edit_checkbox.isChecked());
 					Tools.logSh("edit_checkbox===" + edit_checkbox.isChecked());
 					if (edit_checkbox.isChecked()) {
 						if (contactCursor != null
 								&& contactCursor.getCount() > 0) {
-						getContact();
+							getContact();
 							while (contactCursor.moveToNext()) {
 								String number = contactCursor.getString(contactCursor
 										.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
@@ -669,8 +694,8 @@ public class PrivateCommActivity extends BaseActivity {
 			return;
 		}
 		if (currIndex == contactPageNum) {
-			// 正常模式下视图
-			contact_count = (TextView) findViewById(R.id.edit_tv_contact_count);
+			contact_ll_count = (LinearLayout) findViewById(R.id.contact_ll_count);
+			contact_count = (TextView) findViewById(R.id.contact_tv_count);
 			contact_listview = (ListView) findViewById(R.id.contact_listview);
 			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
 			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
@@ -690,17 +715,16 @@ public class PrivateCommActivity extends BaseActivity {
 			updateContact(contact_listview, contact_empty);
 		}
 	}
-	
+
 	/**
 	 * 删除联系人同时恢复记录到系统数据库
 	 * 
 	 * @param selectNumbers
 	 */
-	public void deleteContacts(String[] selectNumbers) {
+	public void deleteContacts(String[] selectNumbers, boolean flag) {
 		DelectOurContactUtils.deleteContacts(this, selectNumbers);
-
 		RecordToSysUtils recordToSysUtils = new RecordToSysUtils(this);
-		recordToSysUtils.restoreContact(selectNumbers);
+		recordToSysUtils.restoreContact(selectNumbers, flag);
 
 		// 删除隐私联系人号码同时移除情景模式内该号码相关信息
 		ContextModelUtils.deleteModelDetail(this, selectNumbers);
@@ -751,7 +775,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 		switch (currIndex) {
 		case 0:
-			if (smsRecordCursor == null ||smsRecordCursor.getCount() == 0) {
+			if (smsRecordCursor == null || smsRecordCursor.getCount() == 0) {
 				edit.setVisibility(View.GONE);
 				mListView.setEmptyView(tv);
 			} else {
@@ -763,7 +787,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 		case 1:
 
-			if (phoneRecordCursor == null ||phoneRecordCursor.getCount() == 0) {
+			if (phoneRecordCursor == null || phoneRecordCursor.getCount() == 0) {
 				edit.setVisibility(View.GONE);
 				mListView.setEmptyView(tv);
 			} else {
@@ -774,15 +798,16 @@ public class PrivateCommActivity extends BaseActivity {
 			break;
 
 		case 2:
-			if (contactCursor == null ||contactCursor.getCount() == 0) {
+			if (contactCursor == null || contactCursor.getCount() == 0) {
 				edit.setVisibility(View.GONE);
-				contact_count.setVisibility(View.GONE);
+				contact_ll_count.setVisibility(View.GONE);
 				mListView.setEmptyView(tv);
 			} else {
 				// 通知数据获取完成
 				edit.setVisibility(View.VISIBLE);
-				contact_count.setVisibility(View.VISIBLE);
-				contact_count.setText("全部 ( "+contactCursor.getCount()+" )");
+				contact_ll_count.setVisibility(View.VISIBLE);
+				contact_count
+						.setText("全部 ( " + contactCursor.getCount() + " )");
 				setContactAdapter(mListView);
 			}
 			break;
@@ -794,8 +819,10 @@ public class PrivateCommActivity extends BaseActivity {
 
 		if (phoneRecordCursor.getCount() == 0) {
 			mListView.setEmptyView(phone_empty);
+
 		} else {
 			Tools.logSh("cursor的长度为：" + phoneRecordCursor.getCount());
+
 			phone_empty.setVisibility(View.GONE);
 			phoneRecordAdapter = new PhoneRecordAdapter(
 					getApplicationContext(), phoneRecordCursor);
@@ -816,7 +843,8 @@ public class PrivateCommActivity extends BaseActivity {
 				TextView sms_tv_number = (TextView) view
 						.findViewById(R.id.tv_number);
 				String name = sms_tv_name.getText().toString().trim();
-				String number = sms_tv_number.getText().toString().replace("( ", "").replace(" )", "").trim();
+				String number = sms_tv_number.getText().toString()
+						.replace("( ", "").replace(" )", "").trim();
 				intent.putExtra("Name", name);
 				intent.putExtra("Number", number);
 				startActivity(intent);
@@ -897,12 +925,13 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void setContactAdapter(ListView mListView) {
-		if (contactCursor ==  null || contactCursor.getCount() == 0) {
+		if (contactCursor == null || contactCursor.getCount() == 0) {
 			Tools.logSh("没有数据");
-
+			contact_count.setVisibility(View.GONE);
 			mListView.setEmptyView(contact_empty);
 
 		} else {
+			contact_count.setVisibility(View.VISIBLE);
 			contact_empty.setVisibility(View.GONE);
 			Tools.logSh("cursor的长度为：" + contactCursor.getCount());
 		}
@@ -943,9 +972,35 @@ public class PrivateCommActivity extends BaseActivity {
 				TextView tv_phone_num = (TextView) view
 						.findViewById(R.id.tv_phone_num);
 				String phone_number = tv_phone_num.getText().toString().trim();
-				MakeCallUtils.makeCall(PrivateCommActivity.this, phone_number);
+
+				showMakeDailDialog(phone_number);
+
 			}
 		});
+	}
+
+	private void showMakeDailDialog(final String number) {
+
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("提示:呼叫联系人");
+
+		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				MakeCallUtils.makeCall(PrivateCommActivity.this, number);
+				dialog.dismiss();
+			}
+		});
+		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();
+
 	}
 
 	public void showContactDialog(final String name, final String address,
@@ -990,7 +1045,9 @@ public class PrivateCommActivity extends BaseActivity {
 						}
 					}
 				});
-		builder.create().show();
+		AlertDialog contactDialog = builder.create();
+		contactDialog.setCanceledOnTouchOutside(false);
+		contactDialog.show();
 
 	}
 
@@ -1032,7 +1089,9 @@ public class PrivateCommActivity extends BaseActivity {
 						}
 					}
 				});
-		builder.create().show();
+		AlertDialog phoneDialog = builder.create();
+		phoneDialog.setCanceledOnTouchOutside(false);
+		phoneDialog.show();
 	}
 
 	public void showSmsDialog(final String name, final String number) {
@@ -1072,7 +1131,9 @@ public class PrivateCommActivity extends BaseActivity {
 						}
 					}
 				});
-		builder.create().show();
+		AlertDialog smsDialog = builder.create();
+		smsDialog.setCanceledOnTouchOutside(false);
+		smsDialog.show();
 	}
 
 	private void showDeletePhoneDialog(final String number) {
@@ -1098,7 +1159,9 @@ public class PrivateCommActivity extends BaseActivity {
 
 			}
 		});
-		builder.create().show();
+		AlertDialog deletePhoneDialog = builder.create();
+		deletePhoneDialog.setCanceledOnTouchOutside(false);
+		deletePhoneDialog.show();
 
 	}
 
@@ -1143,40 +1206,14 @@ public class PrivateCommActivity extends BaseActivity {
 				}
 			}
 		});
-		builder.create().show();
+		AlertDialog addContactDialog = builder.create();
+		addContactDialog.setCanceledOnTouchOutside(false);
+		addContactDialog.show();
 
 	}
 
-	private void isEditingContactDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("提示:确定将联系人移出隐私空间?");
-
-		builder.setPositiveButton("移出", new Dialog.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-
-				if (selectContacts == null || selectContacts.size() == 0) {
-
-					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
-							Toast.LENGTH_SHORT).show();
-				} else {
-					RestoreContactTast tast = new RestoreContactTast(
-							PrivateCommActivity.this);
-					tast.execute();
-
-				}
-			}
-		});
-		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-
-			}
-		});
-		builder.create().show();
+	private void showDeleteContactDialog() {
+		new DeleteContactDialog(this);
 
 	}
 
@@ -1207,7 +1244,9 @@ public class PrivateCommActivity extends BaseActivity {
 
 			}
 		});
-		builder.create().show();
+		AlertDialog editingPhoneDialog = builder.create();
+		editingPhoneDialog.setCanceledOnTouchOutside(false);
+		editingPhoneDialog.show();
 
 	}
 
@@ -1238,7 +1277,9 @@ public class PrivateCommActivity extends BaseActivity {
 				dialog.dismiss();
 			}
 		});
-		builder.create().show();
+		AlertDialog editingDeleteSmsDialog = builder.create();
+		editingDeleteSmsDialog.setCanceledOnTouchOutside(false);
+		editingDeleteSmsDialog.show();
 
 	}
 
@@ -1270,7 +1311,87 @@ public class PrivateCommActivity extends BaseActivity {
 
 			}
 		});
-		builder.create().show();
+		AlertDialog editingRecoverSmsDialog = builder.create();
+		editingRecoverSmsDialog.setCanceledOnTouchOutside(false);
+		editingRecoverSmsDialog.show();
+
+	}
+
+	private class DeleteContactDialog extends Dialog implements
+			View.OnClickListener {
+
+		private CheckBox dialog_contact_checkbox;
+		private Button dialog_contact_btn_cancel;
+		private Button dialog_contact_btn_sure;
+
+		public DeleteContactDialog(Context context) {
+			super(context);
+			AlertDialog.Builder builder = new Builder(context);
+
+			View dialogView = LayoutInflater.from(context).inflate(
+					R.layout.private_comm_delete_contact_dialog, null, true);
+			builder.setView(dialogView);
+			dialog_contact_checkbox = (CheckBox) dialogView
+					.findViewById(R.id.dialog_contact_checkbox);
+			dialog_contact_checkbox.setOnClickListener(this);
+			dialog_contact_btn_cancel = (Button) dialogView
+					.findViewById(R.id.dialog_contact_btn_cancel);
+			dialog_contact_btn_cancel.setOnClickListener(this);
+			dialog_contact_btn_sure = (Button) dialogView
+					.findViewById(R.id.dialog_contact_btn_sure);
+			dialog_contact_btn_sure.setOnClickListener(this);
+			deleteContactDialog = builder.create();
+			deleteContactDialog.setCanceledOnTouchOutside(false);
+			deleteContactDialog.show();
+		}
+
+		@Override
+		public void onClick(View paramView) {
+			if (paramView == dialog_contact_btn_cancel) {
+				deleteContactDialog.dismiss();
+			} else if (paramView == dialog_contact_btn_sure) {
+
+				if (selectContacts == null || selectContacts.size() == 0) {
+
+					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
+							Toast.LENGTH_SHORT).show();
+				} else {
+
+					boolean flag = false;
+					if (dialog_contact_checkbox.isChecked()) {
+						// recover to system
+						flag = true;
+					} else {
+						flag = false;
+					}
+					RestoreContactTast tast = new RestoreContactTast(
+							PrivateCommActivity.this, flag);
+					tast.execute();
+				}
+			}
+		}
+	}
+
+	public class RecoverContactProgressDialog extends Dialog {
+		private AlertDialog.Builder builder;
+		private Context mContext;
+
+		public RecoverContactProgressDialog(Context context) {
+			super(context);
+			mContext = context;
+			builder = new Builder(mContext);
+			View dialogView = LayoutInflater.from(mContext).inflate(
+					R.layout.private_comm_recover_progress_dialog, null, true);
+			builder.setView(dialogView);
+			recover_tv_progress = (TextView) dialogView
+					.findViewById(R.id.recover_tv_progress);
+			recover_tv_progress_detail = (TextView) dialogView
+					.findViewById(R.id.recover_tv_progress_detail);
+			recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
+			recoverContactProgressdialog = builder.create();
+			recoverContactProgressdialog.show();
+			recoverContactProgressdialog.setCanceledOnTouchOutside(false);
+		}
 
 	}
 
@@ -1284,8 +1405,6 @@ public class PrivateCommActivity extends BaseActivity {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
-
 		Tools.logSh("currIndex=============" + currIndex);
 		// 当从增加联系人页面返回时，跟新数据
 		if (currIndex == 2) {
@@ -1384,9 +1503,11 @@ public class PrivateCommActivity extends BaseActivity {
 	private class RestoreContactTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
+		private boolean mFlag;
 
-		public RestoreContactTast(Context context) {
+		public RestoreContactTast(Context context, boolean flag) {
 			this.mContext = context;
+			this.mFlag = flag;
 		}
 
 		/**
@@ -1394,6 +1515,10 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPreExecute() {
+			Message msg = new Message();
+			msg.what = START_REVORSE;
+			handler.sendMessage(msg);
+
 			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
 		}
 
@@ -1412,11 +1537,12 @@ public class PrivateCommActivity extends BaseActivity {
 		public void onPostExecute(Integer integer) {
 			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
 			ArrayUtils arrayUtils = new ArrayUtils();
-			deleteContacts(arrayUtils.listToArray(selectContacts));
+
+			deleteContacts(arrayUtils.listToArray(selectContacts), mFlag);
 			selectContacts.clear();
 
 			Message msg = new Message();
-			msg.what = REMOVE_FINISH;
+			msg.what = FINISH_PROGRESS;
 			handler.sendMessage(msg);
 			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
 
@@ -1507,5 +1633,4 @@ public class PrivateCommActivity extends BaseActivity {
 
 		}
 	}
-
 }

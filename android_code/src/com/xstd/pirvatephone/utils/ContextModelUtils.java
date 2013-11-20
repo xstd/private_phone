@@ -337,7 +337,7 @@ public class ContextModelUtils {
 			if (delete) {
 				RecordToSysUtils recordToSysUtils = new RecordToSysUtils(
 						mContext);
-				recordToSysUtils.restoreContact(selectContactsNumbers);
+				recordToSysUtils.restoreContact(selectContactsNumbers,true);
 			}
 
 		} else {// interept

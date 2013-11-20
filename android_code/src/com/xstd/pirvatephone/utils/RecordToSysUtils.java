@@ -33,23 +33,27 @@ public class RecordToSysUtils {
 	/**
 	 * 将选定联系人信息移除我们数据库，返回到系统数据库中
 	 */
-	public void restoreContact(ArrayList<String> selectContactsNumbers) {
+	public void restoreContact(ArrayList<String> selectContactsNumbers,boolean flag) {
 		
 		String[] selectNumbers = parseArray(selectContactsNumbers);
 
 		Tools.logSh("selectNumbers===" + selectNumbers.length);
 
-		restoreContact(selectNumbers);
+		restoreContact(selectNumbers,flag);
 
 	}
 	
-	public void restoreContact(String[] selectNumbers){
-		// 短信恢复，向系统短信数据库添加短信
-		RestoreSystemSmsUtils.restoreSms(mContext, selectNumbers);
+	public void restoreContact(String[] selectNumbers, boolean flag){
+		
+		if(flag){
+			// 短信恢复，向系统短信数据库添加短信
+			RestoreSystemSmsUtils.restoreSms(mContext, selectNumbers);
 
-		// 通话记录恢复到手机上
-		RestoreSystemPhoneUtils.restorePhone(mContext, selectNumbers);
+			// 通话记录恢复到手机上
+			RestoreSystemPhoneUtils.restorePhone(mContext, selectNumbers);
 
+		}
+		
 		// record短信息移除
 		DelectOurSmsRecordsUtils.deleteSmsRecords(mContext, selectNumbers);
 

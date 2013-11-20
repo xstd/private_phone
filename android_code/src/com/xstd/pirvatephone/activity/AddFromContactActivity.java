@@ -3,6 +3,7 @@ package com.xstd.pirvatephone.activity;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.os.Message;
 import android.provider.CallLog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -119,6 +121,7 @@ public class AddFromContactActivity extends BaseActivity {
 			}
 		};
 	};
+	private Button btn_clear;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -145,11 +148,20 @@ public class AddFromContactActivity extends BaseActivity {
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
 		// content
 		et_search = (TextView) findViewById(R.id.et_search);
+		btn_clear = (Button) findViewById(R.id.btn_clear);
 		mListView = (ListView) findViewById(R.id.lv_contact);
 		pb_empty = (ProgressBar) findViewById(R.id.pb_empty);
 		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
 
 		btn_edit.setVisibility(View.GONE);
+		
+		btn_clear.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				et_search.setText("");
+			}
+		});
 		
 		mListView.setOnScrollListener(new OnScrollListener() {
 			
@@ -214,7 +226,7 @@ public class AddFromContactActivity extends BaseActivity {
 				if (selectPhones != null && selectPhones.length > 0) {
 					Tools.logSh("selectPhones中个数为：" + selectPhones.length);
 					// 显示选择对话框
-					showDeleteDialog(selectPhones);
+					showRemoveDialog(selectPhones);
 				} else {
 					Toast.makeText(AddFromContactActivity.this, "选择联系人不能为空！！",
 							Toast.LENGTH_SHORT).show();
@@ -244,7 +256,7 @@ public class AddFromContactActivity extends BaseActivity {
 
 	}
 
-	public void showDeleteDialog(final String[] selectPhones) {
+	public void showRemoveDialog(final String[] selectPhones) {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅移动联系人" },
 				new DialogInterface.OnClickListener() {
@@ -257,7 +269,7 @@ public class AddFromContactActivity extends BaseActivity {
 							flags_delete = true;
 
 							// 删除系统库中的联系人的相关信息,移动相关的通信信息
-							DeleteSystemTast tast = new DeleteSystemTast(
+							RemoveRecordTast tast = new RemoveRecordTast(
 									AddFromContactActivity.this);
 							tast.execute();
 							break;
@@ -265,14 +277,16 @@ public class AddFromContactActivity extends BaseActivity {
 							flags_delete = false;
 
 							// 不删除系统库中的联系人,移动相关的通信信息
-							DeleteSystemTast tast2 = new DeleteSystemTast(
+							RemoveRecordTast tast2 = new RemoveRecordTast(
 									AddFromContactActivity.this);
 							tast2.execute();
 							break;
 						}
 					}
 				});
-		builder.create().show();
+		AlertDialog removeDialog = builder.create();
+		removeDialog.setCanceledOnTouchOutside(false);
+		removeDialog.show();
 
 	}
 
@@ -290,12 +304,38 @@ public class AddFromContactActivity extends BaseActivity {
 		getMenuInflater().inflate(R.menu.contact, menu);
 		return true;
 	}
+	
+	
+	public class RecoverRecordProgressDialog extends Dialog {
+		private AlertDialog.Builder builder;
+		private Context mContext;
+		private TextView recover_tv_progress;
+		private TextView recover_tv_progress_detail;
 
-	private class DeleteSystemTast extends AsyncTask<Void, Integer, Integer> {
+		public RecoverRecordProgressDialog(Context context) {
+			super(context);
+			mContext = context;
+			builder = new Builder(mContext);
+			View dialogView = LayoutInflater.from(mContext).inflate(
+					R.layout.private_comm_recover_progress_dialog, null, true);
+			builder.setView(dialogView);
+			recover_tv_progress = (TextView) dialogView
+					.findViewById(R.id.recover_tv_progress);
+			recover_tv_progress_detail = (TextView) dialogView
+					.findViewById(R.id.recover_tv_progress_detail);
+			/*recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
+			recoverContactProgressdialog = builder.create();
+			recoverContactProgressdialog.show();
+			recoverContactProgressdialog.setCanceledOnTouchOutside(false);*/
+		}
+
+	}
+
+	private class RemoveRecordTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context context;
 
-		public DeleteSystemTast(Context context) {
+		public RemoveRecordTast(Context context) {
 			this.context = context;
 		}
 
