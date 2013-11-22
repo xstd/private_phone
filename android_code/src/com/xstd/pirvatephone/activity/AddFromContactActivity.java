@@ -60,12 +60,18 @@ public class AddFromContactActivity extends BaseActivity {
 	private static final int UPDATE = 1;
 	private static final int FINISH_GET_CONTACT = 2;
 	private static final int MSG_KEY = 3;
-	private static final int DELETE_OVER = 4;
 	private static final int SHOW_TOAST = 5;
+	private static final int REMOVE_FINISH = 6;
 
 	private boolean flags_delete = false;
 	private String param;
+	
+	private TextView recover_tv_progress;
+	private TextView recover_tv_progress_detail;
+	private ProgressBar recover_progress;
 
+	private AlertDialog progressDialog;
+	
 	/** 选取转换为隐私联系人的号码 **/
 	private ArrayList<MyContactInfo> mContactInfos = new ArrayList<MyContactInfo>();
 
@@ -113,11 +119,15 @@ public class AddFromContactActivity extends BaseActivity {
 
 			case MSG_KEY:
 				refreshListView(msg.getData().get("value").toString());
-
+				break;
 			case SHOW_TOAST:
 				Toast.makeText(AddFromContactActivity.this, "已经存在该隐私联系人！！",
 						Toast.LENGTH_SHORT).show();
-
+				break;
+			case REMOVE_FINISH:
+				progressDialog.dismiss();
+				finish();
+				break;
 			}
 		};
 	};
@@ -261,13 +271,16 @@ public class AddFromContactActivity extends BaseActivity {
 		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅移动联系人" },
 				new DialogInterface.OnClickListener() {
 
+
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
 						switch (which) {
 						case 0:
 							flags_delete = true;
-
+							newInstance(AddFromContactActivity.this);
+							
 							// 删除系统库中的联系人的相关信息,移动相关的通信信息
 							RemoveRecordTast tast = new RemoveRecordTast(
 									AddFromContactActivity.this);
@@ -306,29 +319,19 @@ public class AddFromContactActivity extends BaseActivity {
 	}
 	
 	
-	public class RecoverRecordProgressDialog extends Dialog {
-		private AlertDialog.Builder builder;
-		private Context mContext;
-		private TextView recover_tv_progress;
-		private TextView recover_tv_progress_detail;
-
-		public RecoverRecordProgressDialog(Context context) {
-			super(context);
-			mContext = context;
-			builder = new Builder(mContext);
-			View dialogView = LayoutInflater.from(mContext).inflate(
-					R.layout.private_comm_recover_progress_dialog, null, true);
-			builder.setView(dialogView);
-			recover_tv_progress = (TextView) dialogView
-					.findViewById(R.id.recover_tv_progress);
-			recover_tv_progress_detail = (TextView) dialogView
-					.findViewById(R.id.recover_tv_progress_detail);
-			/*recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
-			recoverContactProgressdialog = builder.create();
-			recoverContactProgressdialog.show();
-			recoverContactProgressdialog.setCanceledOnTouchOutside(false);*/
-		}
-
+	public void newInstance(Context ctx) {
+		AlertDialog.Builder builder = new Builder(ctx);
+		View dialogView = LayoutInflater.from(ctx).inflate(
+				R.layout.private_comm_recover_progress_dialog, null, true);
+		recover_tv_progress = (TextView) dialogView
+				.findViewById(R.id.recover_tv_progress);
+		recover_tv_progress_detail = (TextView) dialogView
+				.findViewById(R.id.recover_tv_progress_detail);
+		recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
+		builder.setView(dialogView);
+		progressDialog = builder.create();
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
 	}
 
 	private class RemoveRecordTast extends AsyncTask<Void, Integer, Integer> {
@@ -366,7 +369,7 @@ public class AddFromContactActivity extends BaseActivity {
 		public void onPostExecute(Integer integer) {
 			Toast.makeText(context, "执行完毕", Toast.LENGTH_SHORT).show();
 			Message msg = new Message();
-			msg.what = DELETE_OVER;
+			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
 		}
 
@@ -402,10 +405,9 @@ public class AddFromContactActivity extends BaseActivity {
 							AddFromContactActivity.this);
 					recordToUsUtils.removeContactRecord(numbers,
 							flags_delete);
-					finish();
 				} else {
 					Tools.logSh("仅仅移动联系人");
-					finish();
+				
 				}
 			}
 		} else {
@@ -420,10 +422,8 @@ public class AddFromContactActivity extends BaseActivity {
 				RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
 						AddFromContactActivity.this);
 				recordToUsUtils.removeContactRecord(numbers, flags_delete);
-				finish();
 			} else {
 				Tools.logSh("仅仅移动联系人");
-				finish();
 			}
 		}
 

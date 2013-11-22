@@ -61,7 +61,6 @@ public class HandInputActivity extends BaseActivity {
 		myRadioGroup.check(R.id.myRadioButton1);
 		myRadioButton1 = (RadioButton) findViewById(R.id.myRadioButton1);
 		myRadioButton2 = (RadioButton) findViewById(R.id.myRadioButton2);
-
 		// bottom
 		bt_sure = (Button) findViewById(R.id.bt_sure);
 		bt_cancle = (Button) findViewById(R.id.bt_cancle);
