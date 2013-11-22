@@ -55,10 +55,9 @@ public class RecordToUsUtils {
 
 			// 将系统sms record复制到我们数据库
 			WriteSmsRecordUtils.writeSmsRecord(mContext,selectNumbers);
-		}
-		
-		if(delete){
-			 deleteSytemDetail(selectNumbers);
+			if(delete){
+				 deleteSytemDetail(selectNumbers);
+			}
 		}
 	}
 	

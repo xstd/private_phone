@@ -8,10 +8,12 @@ import com.xstd.privatephone.tools.Tools;
 public class DelectSystemPhoneUtils {
 	
 	public static void deletePhone(Context mContext,String[] mPhoneNumbers){
-		
+		if(mPhoneNumbers==null || mPhoneNumbers.length==0){
+			return;
+		}
 		for (int i = 0; i < mPhoneNumbers.length; i++) {
 			String number = mPhoneNumbers[i];
-
+			Tools.logSh(number);
 			int deletePhone = mContext.getContentResolver().delete(
 					CallLog.Calls.CONTENT_URI, "number=?",
 					new String[] { number });

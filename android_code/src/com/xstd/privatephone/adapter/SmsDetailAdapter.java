@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
+import com.xstd.pirvatephone.utils.DateUtils;
 
 public class SmsDetailAdapter extends CursorAdapter {
 	private Context mContext;
@@ -51,7 +52,7 @@ public class SmsDetailAdapter extends CursorAdapter {
 			views.tv_right_time.setVisibility(View.GONE);
 			views.iv_left_icon.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 			views.tv_content_in_left.setText(body);
-			views.tv_left_time.setText(DateFormat.format("yyyy-MM-dd kk.mm.ss", date).toString());
+			views.tv_left_time.setText(DateUtils.parseDate(date));
 			
 		}else{
 			views.iv_left_icon.setVisibility(View.GONE);
@@ -63,7 +64,7 @@ public class SmsDetailAdapter extends CursorAdapter {
 			
 			views.iv_right_icon.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 			views.tv_content_in_right.setText(body);
-			views.tv_right_time.setText(DateFormat.format("yyyy-MM-dd kk.mm.ss", date).toString());
+			views.tv_right_time.setText(DateUtils.parseDate(date));
 		}
 	}
 

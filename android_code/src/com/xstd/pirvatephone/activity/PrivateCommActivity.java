@@ -1468,7 +1468,6 @@ public class PrivateCommActivity extends BaseActivity {
 		} else {
 			return super.onKeyDown(keyCode, event);
 		}
-
 	}
 
 	private class DeletePhoneTast extends AsyncTask<Void, Integer, Integer> {

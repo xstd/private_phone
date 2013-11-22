@@ -111,7 +111,7 @@
                 android:layout_width="@dimen/private_comm_tab_spac_wid"
                 android:layout_height="@dimen/private_comm_tab_spac_height"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dip"
+                android:layout_marginLeft="15dip"
                 android:background="@color/private_comm_tab_spac"
                 android:scaleType="matrix"
                 android:src="@drawable/private_comm_spac" />

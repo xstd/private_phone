@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.ContactUtils;
+import com.xstd.pirvatephone.utils.DateUtils;
 
 public class SmsRecordAdapter extends CursorAdapter {
 	private static Context mContext;
@@ -61,7 +62,7 @@ public class SmsRecordAdapter extends CursorAdapter {
 		views.sms_iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		
 
-		views.sms_tv_date.setText(new Date(lastedContact).toLocaleString());
+		views.sms_tv_date.setText(DateUtils.parseDate(lastedContact));
 		views.sms_tv_content.setText(lasted_data);
 
 	}

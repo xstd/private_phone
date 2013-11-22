@@ -47,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="15dip"
                 android:text="10/16 上午 11:20" />
         </RelativeLayout>
 
@@ -56,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dip"
+             android:layout_marginRight="15dip"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="你好么" />
