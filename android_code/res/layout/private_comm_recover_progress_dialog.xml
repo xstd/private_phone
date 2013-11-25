@@ -12,6 +12,7 @@
 
         
         <TextView
+            android:id="@+id/tv_dialog_show"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="        正在移动。。。"
@@ -21,13 +22,14 @@
             android:id="@+id/recover_progress"
             android:layout_width="match_parent"
             android:layout_height="10dip"
-             style="@android:style/Widget.ProgressBar.Horizontal"
             />
+           <!--   style="@android:style/Widget.ProgressBar.Horizontal" -->
     
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:visibility="gone"
         >
          
         <TextView

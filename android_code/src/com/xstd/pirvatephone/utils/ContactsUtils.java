@@ -58,12 +58,16 @@ public class ContactsUtils {
 				ContactsContract.CommonDataKinds.Phone.NUMBER + "=?",
 				new String[] { String.valueOf(number) }, null);
 		if (cursor != null && cursor.getCount() > 0) {
-			name = cursor
-					.getString(cursor
-							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+			while(cursor.moveToNext()){
+				name = cursor
+						.getString(cursor
+								.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+				cursor.close();
+				return name;
+			}
 		}
-		cursor.close();
 		return name;
+		
 	}
 
     public static Cursor getSmsByPeople(Context ctx) {

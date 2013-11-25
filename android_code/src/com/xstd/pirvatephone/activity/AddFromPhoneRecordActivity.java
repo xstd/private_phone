@@ -82,10 +82,9 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private Long duration;
 	private ArrayList<String> numbers = new ArrayList<String>();
 	private ArrayList<String> names = new ArrayList<String>();
-	private String[] selectPhones;
 
 	private boolean flags_delete = false;
-	
+
 	private TextView recover_tv_progress;
 	private TextView recover_tv_progress_detail;
 	private ProgressBar recover_progress;
@@ -155,15 +154,12 @@ public class AddFromPhoneRecordActivity extends Activity implements
 				break;
 
 			case FINISH:
+				progressDialog.dismiss();
 				Toast.makeText(AddFromPhoneRecordActivity.this, "增加了联系人",
 						Toast.LENGTH_SHORT).show();
 				finish();
 				break;
 
-			case NULL:
-				Toast.makeText(AddFromPhoneRecordActivity.this, "请选择联系人",
-						Toast.LENGTH_SHORT).show();
-				break;
 			}
 		}
 	};
@@ -223,42 +219,21 @@ public class AddFromPhoneRecordActivity extends Activity implements
 			finish();
 			break;
 		case R.id.bt_sure:
-			
+
 			if (numbers != null && numbers.size() > 0) {
-				//Tools.logSh("selectPhones中个数为：" + selectPhones.length);
+				// Tools.logSh("selectPhones中个数为：" + selectPhones.length);
 				// 显示选择对话框
-				parseArray();
+				
 				showRemoveDialog();
 			} else {
 				Toast.makeText(AddFromPhoneRecordActivity.this, "选择联系人不能为空！！",
 						Toast.LENGTH_SHORT).show();
 			}
-			WriteContactUtils mWriteContactUtils = new WriteContactUtils(
-					AddFromPhoneRecordActivity.this);
-
 			break;
 		case R.id.bt_cancle:
 			finish();
 			break;
 		}
-	}
-	
-	private void parseArray() {
-
-		/*for (int i = 0; i < numbers.size(); i++) {
-			if (mContactInfos.get(i).isChecked()) {
-				mSelectContactInfos.add(mContactInfos.get(i));
-			}
-		}
-		Tools.logSh(mContactInfos.size() + "");
-
-		selectPhones = new String[numbers.size()];
-		Object[] obj = numbers.toArray();
-		for (int i = 0; i < obj.length; i++) {
-			selectPhones[i] = ((MyContactInfo) (obj[i])).getAddress();
-			Tools.logSh(selectPhones[i]);
-		}*/
-
 	}
 
 	public void showRemoveDialog() {
@@ -270,21 +245,26 @@ public class AddFromPhoneRecordActivity extends Activity implements
 					public void onClick(DialogInterface dialog, int which) {
 						AddPhoneRecordTast addPhoneRecordTast = new AddPhoneRecordTast(
 								AddFromPhoneRecordActivity.this);
+						WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+								AddFromPhoneRecordActivity.this);
+						
 						switch (which) {
 						case 0:
 							flags_delete = true;
-
-							// 删除系统库中的联系人的相关信息,移动相关的通信信息
+							mWriteContactUtils
+							.writeContactByPhoneRecord(ArrayUtils.listToArray(numbers));
 							addPhoneRecordTast.execute();
-
+							// 删除系统库中的联系人的相关信息,移动相关的通信信息
 							break;
 						case 1:
 							flags_delete = false;
-
+							mWriteContactUtils
+							.writeContactByPhoneRecord(ArrayUtils.listToArray(numbers));
 							// 不删除系统库中的联系人,移动相关的通信信息
 							addPhoneRecordTast.execute();
 							break;
 						}
+						
 					}
 				});
 		AlertDialog removeDialog = builder.create();
@@ -292,7 +272,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 		removeDialog.show();
 
 	}
-	
+
 	public void newInstance(Context ctx) {
 		AlertDialog.Builder builder = new Builder(ctx);
 		View dialogView = LayoutInflater.from(ctx).inflate(
@@ -311,7 +291,6 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private class AddPhoneRecordTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
-		private Message msg;
 
 		public AddPhoneRecordTast(Context context) {
 			this.mContext = context;
@@ -325,24 +304,19 @@ public class AddFromPhoneRecordActivity extends Activity implements
 
 		@Override
 		protected Integer doInBackground(Void... params) {
-			msg = new Message();
-			if (numbers.size() > 0) {
-				
-				msg.what = FINISH;
-				handler.sendMessage(msg);
-			} else {
-				msg.what = NULL;
-			}
 			
 			RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
 					AddFromPhoneRecordActivity.this);
-			recordToUsUtils.removeContactRecord(numbers, flags_delete);
+			recordToUsUtils.removeContactRecord(ArrayUtils.listToArray(numbers), flags_delete);
 			return null;
 		}
 
 		@Override
 		public void onPostExecute(Integer integer) {
+			Message msg = new Message();
+			msg.what = FINISH;
 			handler.sendMessage(msg);
+
 		}
 
 		/**

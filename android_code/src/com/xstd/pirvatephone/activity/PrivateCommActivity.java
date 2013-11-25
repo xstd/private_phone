@@ -93,8 +93,6 @@ public class PrivateCommActivity extends BaseActivity {
 	boolean isEditing = false;
 
 	private static final int REMOVE_FINISH = 0;
-	private static final int START_REVORSE = 1;
-	private static final int UPDATE_PROGRESS = 2;
 	private static final int FINISH_PROGRESS = 3;
 	private static final String TAG = "PrivateCommActivity";
 
@@ -138,6 +136,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private AlertDialog deleteContactDialog;
 	private AlertDialog recoverContactProgressdialog;
+	private TextView tv_dialog_show;
 	private TextView recover_tv_progress;
 	private TextView recover_tv_progress_detail;
 	private ProgressBar recover_progress;
@@ -150,6 +149,16 @@ public class PrivateCommActivity extends BaseActivity {
 
 			switch (msg.what) {
 			case REMOVE_FINISH:
+				
+				if(recoverContactProgressdialog!=null && recoverContactProgressdialog.isShowing()){
+					recoverContactProgressdialog.dismiss();
+					recoverContactProgressdialog = null;
+				}
+				if(deleteContactDialog!=null && deleteContactDialog.isShowing()){
+					deleteContactDialog.dismiss();
+					deleteContactDialog= null;
+				}
+				
 				isEditing = false;
 				edit_ll_body.setVisibility(View.GONE);
 				textView1.setClickable(true);
@@ -180,12 +189,15 @@ public class PrivateCommActivity extends BaseActivity {
 				}
 				break;
 
-			case UPDATE_PROGRESS:
-
-				break;
 			case FINISH_PROGRESS:
-				recoverContactProgressdialog.dismiss();
-				recoverContactProgressdialog = null;
+				if(recoverContactProgressdialog!=null && recoverContactProgressdialog.isShowing()){
+					recoverContactProgressdialog.dismiss();
+					recoverContactProgressdialog = null;
+				}
+				if(deleteContactDialog!=null && deleteContactDialog.isShowing()){
+					deleteContactDialog.dismiss();
+					deleteContactDialog = null;
+				}
 				Message msg2 = new Message();
 				msg2.what = REMOVE_FINISH;
 				handler.sendMessage(msg2);
@@ -905,7 +917,8 @@ public class PrivateCommActivity extends BaseActivity {
 				TextView sms_tv_number = (TextView) view
 						.findViewById(R.id.tv_number);
 				String name = sms_tv_name.getText().toString().trim();
-				String number = sms_tv_number.getText().toString().trim();
+				String number = sms_tv_number.getText().toString()
+						.replace("( ", "").replace(" )", "").trim();
 				showPhoneDialog(name, number);
 				return false;
 			}
@@ -1107,10 +1120,8 @@ public class PrivateCommActivity extends BaseActivity {
 						switch (which) {
 						case 0:
 							// 获取号码
-							String phone = ContactUtils.queryContactNumber(
-									PrivateCommActivity.this, name);
 							MakeCallUtils.makeCall(PrivateCommActivity.this,
-									phone);
+									number);
 							break;
 
 						case 1:
@@ -1127,8 +1138,6 @@ public class PrivateCommActivity extends BaseActivity {
 
 							showDeletePhoneDialog(number);
 
-							Toast.makeText(PrivateCommActivity.this, "还没做",
-									Toast.LENGTH_SHORT).show();
 							break;
 						}
 					}
@@ -1189,10 +1198,11 @@ public class PrivateCommActivity extends BaseActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
 				DeletePhoneTast task = new DeletePhoneTast(
 						PrivateCommActivity.this, number);
 				task.execute();
-				dialog.dismiss();
+				
 			}
 		});
 		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
@@ -1200,7 +1210,6 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-
 			}
 		});
 		AlertDialog deletePhoneDialog = builder.create();
@@ -1399,7 +1408,6 @@ public class PrivateCommActivity extends BaseActivity {
 
 				deleteContactDialog.dismiss();
 
-				newRecoverDialogInstance(PrivateCommActivity.this);
 				boolean flag = false;
 				if (dialog_contact_checkbox.isChecked()) {
 					// recover to system
@@ -1419,6 +1427,8 @@ public class PrivateCommActivity extends BaseActivity {
 		AlertDialog.Builder builder = new Builder(ctx);
 		View dialogView = LayoutInflater.from(ctx).inflate(
 				R.layout.private_comm_recover_progress_dialog, null, true);
+		tv_dialog_show = (TextView) dialogView
+				.findViewById(R.id.tv_dialog_show);
 		recover_tv_progress = (TextView) dialogView
 				.findViewById(R.id.recover_tv_progress);
 		recover_tv_progress_detail = (TextView) dialogView
@@ -1442,15 +1452,6 @@ public class PrivateCommActivity extends BaseActivity {
 	protected void onResume() {
 		Tools.logSh("currIndex=============" + currIndex);
 		// 当从增加联系人页面返回时，跟新数据
-
-		/*
-		 * if (currIndex == 2) { if (mContactAdapter != null) {
-		 * contactCursor.requery();
-		 * Tools.logSh("contactCursor.getCount()=============" +
-		 * contactCursor.getCount()); mContactAdapter.notifyDataSetChanged(); }
-		 * else { contactCursor.requery(); setContactAdapter(contact_listview);
-		 * } }
-		 */
 
 		Message msg2 = new Message();
 		msg2.what = REMOVE_FINISH;
@@ -1485,7 +1486,8 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPreExecute() {
-			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
+			newRecoverDialogInstance(mContext);
+			Toast.makeText(mContext, "开始执行+number==="+number, Toast.LENGTH_SHORT).show();
 		}
 
 		/**
@@ -1493,24 +1495,13 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			return null;
-		}
-
-		/**
-		 * 运行在ui线程中，在doInBackground()执行完毕后执行
-		 */
-		@Override
-		public void onPostExecute(Integer integer) {
-
 			if (isEditing) {
-				Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
-				ArrayUtils arrayUtils = new ArrayUtils();
 				DelectOurPhoneDetailsUtils.deletePhoneDetails(
 						PrivateCommActivity.this,
-						arrayUtils.listToArray(selectContacts));
+						ArrayUtils.listToArray(selectContacts));
 				DelectOurPhoneRecordsUtils.deletePhoneRecords(
 						PrivateCommActivity.this,
-						arrayUtils.listToArray(selectContacts));
+						ArrayUtils.listToArray(selectContacts));
 				selectContacts.clear();
 
 			} else {
@@ -1520,6 +1511,14 @@ public class PrivateCommActivity extends BaseActivity {
 						PrivateCommActivity.this, new String[] { number });
 
 			}
+			return null;
+		}
+
+		/**
+		 * 运行在ui线程中，在doInBackground()执行完毕后执行
+		 */
+		@Override
+		public void onPostExecute(Integer integer) {
 
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
@@ -1551,6 +1550,7 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPreExecute() {
+			newRecoverDialogInstance(mContext);
 			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
 		}
 
@@ -1559,9 +1559,7 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			ArrayUtils arrayUtils = new ArrayUtils();
-
-			deleteContacts(arrayUtils.listToArray(selectContacts), mFlag);
+			deleteContacts(ArrayUtils.listToArray(selectContacts), mFlag);
 			selectContacts.clear();
 			return null;
 		}
@@ -1605,6 +1603,7 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPreExecute() {
+			newRecoverDialogInstance(mContext);
 			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
 		}
 
@@ -1613,28 +1612,17 @@ public class PrivateCommActivity extends BaseActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			return null;
-		}
-
-		/**
-		 * 运行在ui线程中，在doInBackground()执行完毕后执行
-		 */
-		@Override
-		public void onPostExecute(Integer integer) {
-			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
-
 			if (isEditing) {
-				ArrayUtils arrayUtils = new ArrayUtils();
 				if (flag) {// isRestore===true,restore to system
 					RestoreSystemSmsUtils.restoreSms(PrivateCommActivity.this,
-							arrayUtils.listToArray(selectContacts));
+							ArrayUtils.listToArray(selectContacts));
 				}
 				DelectOurSmsDetailsUtils.deleteSmsDetails(
 						PrivateCommActivity.this,
-						arrayUtils.listToArray(selectContacts));
+						ArrayUtils.listToArray(selectContacts));
 				DelectOurSmsRecordsUtils.deleteSmsRecords(
 						PrivateCommActivity.this,
-						arrayUtils.listToArray(selectContacts));
+						ArrayUtils.listToArray(selectContacts));
 				selectContacts.clear();
 
 			} else {
@@ -1648,12 +1636,20 @@ public class PrivateCommActivity extends BaseActivity {
 				DelectOurSmsRecordsUtils.deleteSmsRecords(
 						PrivateCommActivity.this, new String[] { number });
 			}
+			return null;
+		}
+
+		/**
+		 * 运行在ui线程中，在doInBackground()执行完毕后执行
+		 */
+		@Override
+		public void onPostExecute(Integer integer) {
+			Toast.makeText(mContext, "正在执行", Toast.LENGTH_SHORT).show();
 
 			Message msg = new Message();
 			msg.what = REMOVE_FINISH;
 			handler.sendMessage(msg);
 
-			Toast.makeText(mContext, "执行完毕", Toast.LENGTH_SHORT).show();
 		}
 
 		/**

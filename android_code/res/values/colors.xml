@@ -323,6 +323,7 @@
     <color name="private_comm_tab_bkg">#5500ff4a</color>
     <color name="private_comm_title_bkg">#205583</color>
     <color name="private_comm_title_text">#205583</color>
+    <color name="private_comm_tab_text">#979797</color>
     <color name="private_comm_tab_spac">#72a8d8</color>
     <color name="private_comm_contact_count_text">#6d6d6d</color>
     <color name="private_comm_listview_line">#d8d9da</color>

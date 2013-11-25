@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import com.xstd.privatephone.tools.Tools;
 
 public class ArrayUtils {
-	
-	private String[] selectPhones;
 
-	public String[] listToArray(ArrayList<String> arrays){
-		if(selectPhones!=null && selectPhones.length>0){
-			selectPhones = null;
-		}
+	public static String[] listToArray(ArrayList<String> arrays){
+		String[] selectPhones = null ;
 		
 		if (arrays.size() > 0) {
 			selectPhones = new String[arrays.size()];

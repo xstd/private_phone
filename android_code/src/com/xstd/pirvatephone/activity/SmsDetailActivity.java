@@ -45,7 +45,6 @@ public class SmsDetailActivity extends BaseActivity {
 	private EditText send_content;
 	private Cursor smsDetailCursor;
 	private SmsDetailAdapter smsDetailAdapter;
-	private String name = "";
 	private String number = "";
 	private RelativeLayout sms_detail_title;
 	private SmsDetailDao smsDetailDao;
@@ -59,9 +58,7 @@ public class SmsDetailActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sms_detail);
 
-		name = getIntent().getStringExtra("Name");
 		number = getIntent().getStringExtra("Number");
-		Tools.logSh("Name====" + name);
 		initData();
 		initView();
 	}

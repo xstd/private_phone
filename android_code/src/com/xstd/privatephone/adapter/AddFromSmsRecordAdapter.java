@@ -53,7 +53,6 @@ public class AddFromSmsRecordAdapter extends CursorAdapter {
 			name = phone_number;
 		} 
 		
-		
 		holder.tv_hidden.setText(phone_number);
 		holder.date.setText(body);
 		holder.tv_name.setText(name);

@@ -71,6 +71,7 @@ public class AddFromContactActivity extends BaseActivity {
 	private ProgressBar recover_progress;
 
 	private AlertDialog progressDialog;
+	private Button btn_clear;
 	
 	/** 选取转换为隐私联系人的号码 **/
 	private ArrayList<MyContactInfo> mContactInfos = new ArrayList<MyContactInfo>();
@@ -88,28 +89,9 @@ public class AddFromContactActivity extends BaseActivity {
 			switch (msg.what) {
 			case UPDATE:
 				Tools.logSh("接受到消息");
-				mListView.setEmptyView(iv_empty_bg);
-				pb_empty.setVisibility(View.GONE);
-				AddFromContactAdapter mAdapter = new AddFromContactAdapter(
-						getApplicationContext(), mContactInfos);
-				mListView.setAdapter(mAdapter);
-				mListView.setOnItemClickListener(new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						// 保存已选择联系人。
-						Tools.logSh("条目被点击了");
-						CheckBox btn_check = (CheckBox) view
-								.findViewById(R.id.btn_check);
-						btn_check.setChecked(!btn_check.isChecked());
-						// 记录选项
-							mContactInfos.get(position).setChecked(
-									btn_check.isChecked());
-
-						Tools.logSh("选中了" + mContactInfos.get(position));
-					}
-				});
+				
+				showUpdateUI();
+				
 				break;
 
 			case FINISH_GET_CONTACT:
@@ -129,9 +111,35 @@ public class AddFromContactActivity extends BaseActivity {
 				finish();
 				break;
 			}
-		};
+		}
 	};
-	private Button btn_clear;
+	
+	
+	private void showUpdateUI() {
+		mListView.setEmptyView(iv_empty_bg);
+		pb_empty.setVisibility(View.GONE);
+		AddFromContactAdapter mAdapter = new AddFromContactAdapter(
+				getApplicationContext(), mContactInfos);
+		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// 保存已选择联系人。
+				Tools.logSh("条目被点击了");
+				CheckBox btn_check = (CheckBox) view
+						.findViewById(R.id.btn_check);
+				btn_check.setChecked(!btn_check.isChecked());
+				// 记录选项
+					mContactInfos.get(position).setChecked(
+							btn_check.isChecked());
+
+				Tools.logSh("选中了" + mContactInfos.get(position));
+			}
+		});
+	};
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -274,25 +282,23 @@ public class AddFromContactActivity extends BaseActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
+						RemoveRecordTast tast = new RemoveRecordTast(
+								AddFromContactActivity.this);
+						
 						switch (which) {
 						case 0:
 							flags_delete = true;
-							newInstance(AddFromContactActivity.this);
-							
-							// 删除系统库中的联系人的相关信息,移动相关的通信信息
-							RemoveRecordTast tast = new RemoveRecordTast(
-									AddFromContactActivity.this);
 							tast.execute();
+							// 删除系统库中的联系人的相关信息,移动相关的通信信息
+							
 							break;
 						case 1:
 							flags_delete = false;
-
+							tast.execute();
 							// 不删除系统库中的联系人,移动相关的通信信息
-							RemoveRecordTast tast2 = new RemoveRecordTast(
-									AddFromContactActivity.this);
-							tast2.execute();
 							break;
 						}
+					
 					}
 				});
 		AlertDialog removeDialog = builder.create();
@@ -345,6 +351,7 @@ public class AddFromContactActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPreExecute() {
+			newInstance(AddFromContactActivity.this);
 			Toast.makeText(context, "开始执行", Toast.LENGTH_SHORT).show();
 		}
 
@@ -410,7 +417,6 @@ public class AddFromContactActivity extends BaseActivity {
 			}
 		} else {
 
-			numbers  = mWriteContactUtils.removeRepeat(numbers);
 			mWriteContactUtils.writeContact(numbers);
 			// 选择多个时：剔除重复的联系人
 
