@@ -53,21 +53,23 @@
     <!-- swj -->
     <dimen name="private_comm_pic_margin_left">9dip</dimen>
     <dimen name="private_comm_pic_margin_right">17dip</dimen>
+    <dimen name="private_comm_tab_text_size">15dip</dimen>
     <dimen name="private_comm_tab_bkg_height">10.0dip</dimen>
+    <dimen name="private_comm_tab_height">54.0dip</dimen>
+    <dimen name="private_comm_tab_spac_wid">92dip</dimen>
+    <dimen name="private_comm_tab_spac_height">5dip</dimen>
     <dimen name="private_comm_name_margin_top">18dip</dimen>
     <dimen name="private_comm_name_margin_top2">13dip</dimen>
-    <dimen name="private_comm_item_margin_bottom">12dip</dimen>
     <dimen name="private_comm_edit_margin_right">12dip</dimen>
     <dimen name="private_comm_item_all">14dip</dimen>
     <dimen name="private_comm_item_phone_size">15dip</dimen>
+    <dimen name="private_comm_item_margin_bottom">12dip</dimen>
     <dimen name="private_comm_item_name_size">18dip</dimen>
-    <dimen name="private_comm_back_margin_left">24dip</dimen>
     <dimen name="private_comm_item_btn_right">40.0dip</dimen>
+    <dimen name="private_comm_back_margin_left">24dip</dimen>
     <dimen name="private_comm_contact_icon_width">48dip</dimen>
     <dimen name="private_comm_contact_item_height">65dip</dimen>
     <dimen name="private_comm_phone_item_height">70.0dip</dimen>
-    <dimen name="private_comm_tab_spac_wid">92dip</dimen>
-    <dimen name="private_comm_tab_spac_height">5dip</dimen>
     <dimen name="private_comm_sms_input_length">240.0dip</dimen>
     <dimen name="private_comm_sms_detail_margin_right">74dip</dimen>
     <dimen name="private_comm_sms_input_margin_left">20.0dip</dimen>

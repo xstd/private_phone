@@ -8,6 +8,7 @@ import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.ArrayUtils;
+import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
 import com.xstd.privatephone.adapter.AddFromSmsRecordAdapter;
 import com.xstd.privatephone.tools.Tools;
@@ -18,8 +19,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +36,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -72,12 +78,18 @@ public class AddFromSmsRecordActivity extends Activity implements
 	private static final int UPDATE_UI = 1;
 	private static final int FINISH = 2;
 	private static final int NULL = 5;
-	
+
 	private Cursor recordCursor;
 	private AddFromSmsRecordAdapter recordAdapter;
-	
+
 	private ArrayList<String> numbers = new ArrayList<String>();
-	private ArrayList<String> names = new ArrayList<String>();
+
+	private boolean flags_delete = false;
+
+	private TextView recover_tv_progress;
+	private TextView recover_tv_progress_detail;
+	private ProgressBar recover_progress;
+	private AlertDialog progressDialog;
 
 	private Handler handler = new Handler() {
 
@@ -106,51 +118,17 @@ public class AddFromSmsRecordActivity extends Activity implements
 				break;
 
 			case UPDATE_UI:
-				img_outside.clearAnimation();
-
-				rl_loading.setVisibility(View.GONE);
-				recordAdapter = new AddFromSmsRecordAdapter(
-						AddFromSmsRecordActivity.this, recordCursor);
-				lv_contact.setAdapter(recordAdapter);
-				lv_contact.setOnItemClickListener(new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						CheckBox checkbox = (CheckBox) view
-								.findViewById(R.id.checkbox);
-						checkbox.setChecked(!checkbox.isChecked());
-						if (checkbox.isChecked()) {
-							TextView tv_hidden = (TextView) view
-									.findViewById(R.id.tv_hidden);
-							TextView tv_name = (TextView) view
-									.findViewById(R.id.tv_name);
-							String number = tv_hidden.getText().toString()
-									.trim();
-							String name = tv_name.getText().toString().trim();
-							if (checkbox.isChecked()) {
-								
-								if (!numbers.contains(number)) {
-									numbers.add(number);
-									names.add(name);
-								} 
-							}else{
-								if(numbers.contains(number)){
-									numbers.remove(number);
-									names.remove(name);
-								}
-							}
-							Tools.logSh("numbers==="+numbers);
-						}
-					}
-				});
-				break;
+				showUpdateUI();
 				
+				break;
+
 			case FINISH:
-				Toast.makeText(AddFromSmsRecordActivity.this, "增加了联系人", Toast.LENGTH_SHORT).show();
+				progressDialog.dismiss();
+				Toast.makeText(AddFromSmsRecordActivity.this, "增加了联系人",
+						Toast.LENGTH_SHORT).show();
 				finish();
-			break;
-			
+				break;
+
 			case NULL:
 				Toast.makeText(AddFromSmsRecordActivity.this, "请选择联系人",
 						Toast.LENGTH_SHORT).show();
@@ -158,7 +136,45 @@ public class AddFromSmsRecordActivity extends Activity implements
 			}
 		}
 	};
+	
+	private void showUpdateUI() {
+		img_outside.clearAnimation();
 
+		rl_loading.setVisibility(View.GONE);
+		recordAdapter = new AddFromSmsRecordAdapter(
+				AddFromSmsRecordActivity.this, recordCursor);
+		lv_contact.setAdapter(recordAdapter);
+		lv_contact.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				CheckBox checkbox = (CheckBox) view
+						.findViewById(R.id.checkbox);
+				checkbox.setChecked(!checkbox.isChecked());
+				if (checkbox.isChecked()) {
+					TextView tv_hidden = (TextView) view
+							.findViewById(R.id.tv_hidden);
+					String number = tv_hidden.getText().toString()
+							.trim();
+					if (checkbox.isChecked()) {
+						if (!numbers.contains(number)) {
+							Tools.logSh("增加了number===" + number);
+							numbers.add(number);
+						}
+					} else {
+						if (numbers.contains(number)) {
+							Tools.logSh("移除了number===" + number);
+							numbers.remove(number);
+						}
+					}
+					Tools.logSh("numbers===" + numbers);
+				}
+			}
+		});
+	}
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -206,8 +222,15 @@ public class AddFromSmsRecordActivity extends Activity implements
 			finish();
 			break;
 		case R.id.bt_sure:
-			GetAddTast task = new GetAddTast(AddFromSmsRecordActivity.this);
-			task.execute();
+			if (numbers != null && numbers.size() > 0) {
+				Tools.logSh("selectPhones中个数为：" + numbers.size());
+				// 显示选择对话框
+				showRemoveDialog();
+			} else {
+				Toast.makeText(AddFromSmsRecordActivity.this, "选择联系人不能为空！！",
+						Toast.LENGTH_SHORT).show();
+			}
+
 			break;
 		case R.id.bt_cancle:
 			finish();
@@ -216,40 +239,88 @@ public class AddFromSmsRecordActivity extends Activity implements
 
 	}
 
-	private class GetAddTast extends AsyncTask<Void, Integer, Integer> {
+	public void showRemoveDialog() {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅添加联系人" },
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Tools.logSh("numbers=="+numbers+"   数组元素="+ArrayUtils.listToArray(numbers).length);
+						AddSmsRecordTast task = new AddSmsRecordTast(
+								AddFromSmsRecordActivity.this);
+						WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+								AddFromSmsRecordActivity.this);
+						switch (which) {
+						case 0:
+							Tools.logSh("0被点击了");
+							flags_delete = true;
+							mWriteContactUtils
+									.writeContactBySmsRecord(ArrayUtils.listToArray(numbers));
+							// 删除系统库中的联系人的相关信息,移动相关的通信信息
+							task.execute();
+							break;
+						case 1:
+							Tools.logSh("1被点击了");
+							flags_delete = false;
+							mWriteContactUtils
+									.writeContactBySmsRecord(ArrayUtils.listToArray(numbers));
+							finish();
+							// 不删除系统库中的联系人,移动相关的通信信息
+							break;
+						}
+					
+					}
+				});
+		AlertDialog removeDialog = builder.create();
+		removeDialog.setCanceledOnTouchOutside(false);
+		removeDialog.show();
+
+	}
+
+	public void newInstance(Context ctx) {
+		AlertDialog.Builder builder = new Builder(ctx);
+		View dialogView = LayoutInflater.from(ctx).inflate(
+				R.layout.private_comm_recover_progress_dialog, null, true);
+		recover_tv_progress = (TextView) dialogView
+				.findViewById(R.id.recover_tv_progress);
+		recover_tv_progress_detail = (TextView) dialogView
+				.findViewById(R.id.recover_tv_progress_detail);
+		recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
+		builder.setView(dialogView);
+		progressDialog = builder.create();
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
+	}
+
+	private class AddSmsRecordTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
 
-		public GetAddTast(Context context) {
+		public AddSmsRecordTast(Context context) {
 			this.mContext = context;
 		}
 
 		@Override
 		public void onPreExecute() {
+			newInstance(mContext);
 			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		protected Integer doInBackground(Void... params) {
+			RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+					AddFromSmsRecordActivity.this);
+			recordToUsUtils.removeContactRecord(
+					ArrayUtils.listToArray(numbers), flags_delete);
 			return null;
 		}
 
 		@Override
 		public void onPostExecute(Integer integer) {
 			Message msg = new Message();
-			if (numbers.size() > 0) {
-				WriteContactUtils writeContactUtils = new WriteContactUtils(
-						AddFromSmsRecordActivity.this);
-				String[] array = new ArrayUtils().listToArray(numbers);
-				Tools.logSh("array=="+array[0]);
-				array = writeContactUtils.removeRepeat(array);
-				writeContactUtils.writeContactByPhoneRecord(array);
-				msg.what = FINISH;
-				handler.sendMessage(msg);
-			} else {
-				msg.what = NULL;
-				handler.sendMessage(msg);
-			}
+			msg.what = FINISH;
+			handler.sendMessage(msg);
 
 		}
 

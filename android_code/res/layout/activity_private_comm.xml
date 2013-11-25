@@ -16,7 +16,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/private_comm_tab_bkg_height"
+            android:layout_height="@dimen/private_comm_tab_height"
             android:background="@drawable/private_comm_tab_bkg" >
 
             <LinearLayout
@@ -50,7 +50,8 @@
                         style="@style/private_comm_tab_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/private_comm_sms" />
+                        android:text="@string/private_comm_sms"
+                         />
                 </LinearLayout>
 
                 <LinearLayout
