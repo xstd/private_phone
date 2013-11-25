@@ -52,7 +52,7 @@ public class RecordToSysUtils {
 			// 通话记录恢复到手机上
 			RestoreSystemPhoneUtils.restorePhone(mContext, selectNumbers);
 
-		}
+		}else{
 		
 		// record短信息移除
 		DelectOurSmsRecordsUtils.deleteSmsRecords(mContext, selectNumbers);
@@ -65,6 +65,7 @@ public class RecordToSysUtils {
 
 		// 通话记录record移除
 		DelectOurPhoneRecordsUtils.deletePhoneRecords(mContext, selectNumbers);
+		}
 	}
 
 }

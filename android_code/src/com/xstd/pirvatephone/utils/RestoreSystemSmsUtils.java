@@ -70,6 +70,12 @@ public class RestoreSystemSmsUtils {
 					Tools.logSh("成功的向系统联系人数据库插入一个联系人address+" + address
 							+ ":::body=" + body + "::type=" + type + "::date="
 							+ date + "::uri=" + inserted);
+					
+					// record短信息移除
+					DelectOurSmsRecordsUtils.deleteSmsRecords(mContext, new String[]{phone});
+
+					// detail短信息移除
+					DelectOurSmsDetailsUtils.deleteSmsDetails(mContext, new String[]{phone});
 
 				}
 				smsDetailCursor.close();

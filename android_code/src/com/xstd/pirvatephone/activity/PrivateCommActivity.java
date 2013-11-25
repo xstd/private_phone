@@ -1399,7 +1399,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 				deleteContactDialog.dismiss();
 
-				newInstance(PrivateCommActivity.this);
+				newRecoverDialogInstance(PrivateCommActivity.this);
 				boolean flag = false;
 				if (dialog_contact_checkbox.isChecked()) {
 					// recover to system
@@ -1415,7 +1415,7 @@ public class PrivateCommActivity extends BaseActivity {
 		}
 	}
 
-	public void newInstance(Context ctx) {
+	public void newRecoverDialogInstance(Context ctx) {
 		AlertDialog.Builder builder = new Builder(ctx);
 		View dialogView = LayoutInflater.from(ctx).inflate(
 				R.layout.private_comm_recover_progress_dialog, null, true);

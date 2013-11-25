@@ -8,8 +8,10 @@ import com.plugin.common.utils.view.ViewMapUtil;
 import com.plugin.common.utils.view.ViewMapping;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.ArrayUtils;
+import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
 import com.xstd.privatephone.adapter.AddFromPhoneRecordAdapter;
+import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.AsyncTask;
@@ -18,8 +20,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.CallLog;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
@@ -31,6 +37,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +82,14 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private Long duration;
 	private ArrayList<String> numbers = new ArrayList<String>();
 	private ArrayList<String> names = new ArrayList<String>();
+	private String[] selectPhones;
+
+	private boolean flags_delete = false;
+	
+	private TextView recover_tv_progress;
+	private TextView recover_tv_progress_detail;
+	private ProgressBar recover_progress;
+	private AlertDialog progressDialog;
 
 	private Handler handler = new Handler() {
 
@@ -121,22 +136,20 @@ public class AddFromPhoneRecordActivity extends Activity implements
 								.findViewById(R.id.tv_hidden);
 						TextView tv_name = (TextView) view
 								.findViewById(R.id.tv_name);
-						String number = tv_hidden.getText().toString()
-								.trim();
+						String number = tv_hidden.getText().toString().trim();
 						String name = tv_name.getText().toString().trim();
 						if (checkbox.isChecked()) {
-							
 							if (!numbers.contains(number)) {
 								numbers.add(number);
 								names.add(name);
-							} 
-						}else{
-							if(numbers.contains(number)){
+							}
+						} else {
+							if (numbers.contains(number)) {
 								numbers.remove(number);
 								names.remove(name);
 							}
 						}
-						Tools.logSh("numbers==="+numbers);
+						Tools.logSh("numbers===" + numbers);
 					}
 				});
 				break;
@@ -146,7 +159,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 						Toast.LENGTH_SHORT).show();
 				finish();
 				break;
-				
+
 			case NULL:
 				Toast.makeText(AddFromPhoneRecordActivity.this, "请选择联系人",
 						Toast.LENGTH_SHORT).show();
@@ -210,49 +223,126 @@ public class AddFromPhoneRecordActivity extends Activity implements
 			finish();
 			break;
 		case R.id.bt_sure:
-			GetAddTast task = new GetAddTast(AddFromPhoneRecordActivity.this);
-			task.execute();
+			
+			if (numbers != null && numbers.size() > 0) {
+				//Tools.logSh("selectPhones中个数为：" + selectPhones.length);
+				// 显示选择对话框
+				parseArray();
+				showRemoveDialog();
+			} else {
+				Toast.makeText(AddFromPhoneRecordActivity.this, "选择联系人不能为空！！",
+						Toast.LENGTH_SHORT).show();
+			}
+			WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+					AddFromPhoneRecordActivity.this);
+
 			break;
 		case R.id.bt_cancle:
 			finish();
 			break;
 		}
 	}
+	
+	private void parseArray() {
 
-	private class GetAddTast extends AsyncTask<Void, Integer, Integer> {
+		/*for (int i = 0; i < numbers.size(); i++) {
+			if (mContactInfos.get(i).isChecked()) {
+				mSelectContactInfos.add(mContactInfos.get(i));
+			}
+		}
+		Tools.logSh(mContactInfos.size() + "");
+
+		selectPhones = new String[numbers.size()];
+		Object[] obj = numbers.toArray();
+		for (int i = 0; i < obj.length; i++) {
+			selectPhones[i] = ((MyContactInfo) (obj[i])).getAddress();
+			Tools.logSh(selectPhones[i]);
+		}*/
+
+	}
+
+	public void showRemoveDialog() {
+		final Builder builder = new AlertDialog.Builder(this);
+		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅添加联系人" },
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						AddPhoneRecordTast addPhoneRecordTast = new AddPhoneRecordTast(
+								AddFromPhoneRecordActivity.this);
+						switch (which) {
+						case 0:
+							flags_delete = true;
+
+							// 删除系统库中的联系人的相关信息,移动相关的通信信息
+							addPhoneRecordTast.execute();
+
+							break;
+						case 1:
+							flags_delete = false;
+
+							// 不删除系统库中的联系人,移动相关的通信信息
+							addPhoneRecordTast.execute();
+							break;
+						}
+					}
+				});
+		AlertDialog removeDialog = builder.create();
+		removeDialog.setCanceledOnTouchOutside(false);
+		removeDialog.show();
+
+	}
+	
+	public void newInstance(Context ctx) {
+		AlertDialog.Builder builder = new Builder(ctx);
+		View dialogView = LayoutInflater.from(ctx).inflate(
+				R.layout.private_comm_recover_progress_dialog, null, true);
+		recover_tv_progress = (TextView) dialogView
+				.findViewById(R.id.recover_tv_progress);
+		recover_tv_progress_detail = (TextView) dialogView
+				.findViewById(R.id.recover_tv_progress_detail);
+		recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
+		builder.setView(dialogView);
+		progressDialog = builder.create();
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
+	}
+
+	private class AddPhoneRecordTast extends AsyncTask<Void, Integer, Integer> {
 
 		private Context mContext;
+		private Message msg;
 
-		public GetAddTast(Context context) {
+		public AddPhoneRecordTast(Context context) {
 			this.mContext = context;
 		}
 
 		@Override
 		public void onPreExecute() {
+			newInstance(mContext);
 			Toast.makeText(mContext, "开始执行", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		protected Integer doInBackground(Void... params) {
+			msg = new Message();
+			if (numbers.size() > 0) {
+				
+				msg.what = FINISH;
+				handler.sendMessage(msg);
+			} else {
+				msg.what = NULL;
+			}
+			
+			RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
+					AddFromPhoneRecordActivity.this);
+			recordToUsUtils.removeContactRecord(numbers, flags_delete);
 			return null;
 		}
 
 		@Override
 		public void onPostExecute(Integer integer) {
-			Message msg = new Message();
-			if (numbers.size() > 0) {
-				WriteContactUtils writeContactUtils = new WriteContactUtils(
-						AddFromPhoneRecordActivity.this);
-				String[] array = new ArrayUtils().listToArray(numbers);
-				Tools.logSh("array=="+array[0]);
-				array = writeContactUtils.removeRepeat(array);
-				writeContactUtils.writeContactByPhoneRecord(array);
-				msg.what = FINISH;
-				handler.sendMessage(msg);
-			} else {
-				msg.what = NULL;
-				handler.sendMessage(msg);
-			}
+			handler.sendMessage(msg);
 		}
 
 		/**

@@ -59,10 +59,15 @@ public class RestoreSystemPhoneUtils {
 
 					mContext.getContentResolver().insert(
 							CallLog.Calls.CONTENT_URI, values);
+					
+					// 通话记details录移除
+					DelectOurPhoneDetailsUtils.deletePhoneDetails(mContext, new String[]{number});
+
+					// 通话记录record移除
+					DelectOurPhoneRecordsUtils.deletePhoneRecords(mContext, new String[]{number});
 				}
+				phoneDetailCursor.close();
 			}
-
 		}
-
 	}
 }

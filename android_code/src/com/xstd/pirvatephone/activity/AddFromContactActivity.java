@@ -234,7 +234,7 @@ public class AddFromContactActivity extends BaseActivity {
 			public void onClick(View v) {
 				parseArray();
 				if (selectPhones != null && selectPhones.length > 0) {
-					Tools.logSh("selectPhones中个数为：" + selectPhones.length);
+					//Tools.logSh("selectPhones中个数为：" + selectPhones.length);
 					// 显示选择对话框
 					showRemoveDialog(selectPhones);
 				} else {
@@ -270,8 +270,6 @@ public class AddFromContactActivity extends BaseActivity {
 		final Builder builder = new AlertDialog.Builder(this);
 		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅移动联系人" },
 				new DialogInterface.OnClickListener() {
-
-
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -384,7 +382,7 @@ public class AddFromContactActivity extends BaseActivity {
 
 	private void remove(String[] numbers) {
 		WriteContactUtils mWriteContactUtils = new WriteContactUtils(
-				getApplicationContext());
+				AddFromContactActivity.this);
 		// 仅选择一个时：判断私密通信联系人是否已有该联系人
 		if (numbers.length == 1) {
 			Tools.logSh("仅仅选择一个联系人");
