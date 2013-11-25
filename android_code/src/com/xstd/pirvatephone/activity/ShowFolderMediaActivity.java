@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.plugin.common.utils.view.ViewMapUtil;
@@ -35,7 +36,6 @@ import com.xstd.pirvatephone.module.IImageList;
 import com.xstd.pirvatephone.utils.FileUtils;
 import com.xstd.pirvatephone.utils.ImageManager;
 import com.xstd.privatephone.tools.ImageLoader;
-import com.xstd.privatephone.tools.Toasts;
 import com.xstd.privatephone.view.GridViewSpecial;
 
 public class ShowFolderMediaActivity extends BaseActivity implements
@@ -43,7 +43,7 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 		GridViewSpecial.DrawAdapter {
 
 	@ViewMapping(ID = R.id.ll_return_btn)
-	public TextView ll_return_btn;
+	public ImageButton ll_return_btn;
 
 	@ViewMapping(ID = R.id.ll_title_text)
 	public TextView ll_title_text;

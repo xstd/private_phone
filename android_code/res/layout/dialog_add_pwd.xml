@@ -1,112 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="329dp"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:text="@string/add_pwd_title"
+        android:textColor="#1D5A92"
+        android:textSize="23sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/blue" />
+
+    <EditText
+        android:id="@+id/et_pwd_name"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="18dp"
+        android:hint="@string/add_pwd_name"
+        android:inputType="text"
+        android:textColorHint="#E1E1E1"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/et_pwd_site"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="9dp"
+        android:hint="@string/add_pwd_site"
+        android:inputType="text"
+        android:textColorHint="#E1E1E1"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/et_pwd_number"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="9dp"
+        android:hint="@string/add_pwd_number"
+        android:inputType="text"
+        android:textColorHint="#E1E1E1"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/et_pwd_pwd"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="9dp"
+        android:hint="@string/add_pwd_pwd"
+        android:inputType="text"
+        android:textColorHint="#E1E1E1"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="9dp"
+        android:background="@color/grey" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="60dp"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/btn_cancle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@android:string/cancel"
+            android:textColor="#4C4C4C"
+            android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/add_pwd_name"
-                android:textSize="16sp" />
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="@color/grey" />
 
-            <EditText
-                android:id="@+id/et_pwd_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:hint="@string/add_pwd_msg1"
-                android:inputType="text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/add_pwd_site"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/et_pwd_site"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:hint="@string/add_pwd_msg2"
-                android:inputType="text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/add_pwd_number"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/et_pwd_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:hint="@string/add_pwd_msg2"
-                android:inputType="text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/add_pwd_pwd"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/et_pwd_pwd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:hint="@string/add_pwd_msg1"
-                android:inputType="text" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@android:string/ok"
+            android:textColor="#4C4C4C"
+            android:textSize="20sp" />
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

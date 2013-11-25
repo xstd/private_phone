@@ -1,5 +1,9 @@
 package com.xstd.pirvatephone.activity;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -27,18 +32,13 @@ import com.xstd.privatephone.tools.Toasts;
 import com.xstd.privatephone.view.MyDatePickerDialog;
 import com.xstd.privatephone.view.MyTimePickerDialog;
 
-import java.net.URI;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by Chrain on 13-10-31.
  */
 public class AddCommonSmsActivity extends BaseActivity implements View.OnClickListener {
 
     @ViewMapping(ID = R.id.ll_return_btn)
-    public TextView ll_return_btn;
+    public ImageButton ll_return_btn;
 
     @ViewMapping(ID = R.id.ll_title_text)
     public TextView ll_title_text;

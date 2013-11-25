@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ public class ShowAllInstallAppActivity extends BaseActivity implements
 		OnClickListener {
 
 	@ViewMapping(ID = R.id.ll_return_btn)
-	public TextView ll_return_btn;
+	public ImageButton ll_return_btn;
 
 	@ViewMapping(ID = R.id.ll_title_text)
 	public TextView ll_title_text;

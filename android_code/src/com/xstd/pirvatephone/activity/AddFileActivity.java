@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,10 +41,13 @@ public class AddFileActivity extends BaseActivity implements
 	public ListView lv;
 
 	@ViewMapping(ID = R.id.ll_return_btn)
-	public TextView ll_return_btn;
+	public ImageButton ll_return_btn;
 
 	@ViewMapping(ID = R.id.ll_title_text)
 	public TextView ll_title_text;
+
+	@ViewMapping(ID = R.id.ll_toools)
+	public ImageButton ll_toools;
 
 	@ViewMapping(ID = R.id.ll_edit)
 	public ViewGroup ll_edit;
@@ -55,8 +59,6 @@ public class AddFileActivity extends BaseActivity implements
 
 	private int privacy_type;
 
-	private long ref_id;// 用来标识图片是哪个图库的。
-
 	private boolean isEdit = false;
 
 	private Map<String, ArrayList<MediaModule>> data = new HashMap<String, ArrayList<MediaModule>>();
@@ -65,14 +67,10 @@ public class AddFileActivity extends BaseActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState); // To change body of overridden
-											// methods use File | Settings |
-											// File Templates.
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_file);
 
 		privacy_type = getIntent().getIntExtra("privacy_type", 0);
-
-		ref_id = getIntent().getLongExtra("ref_id", -1);
 
 		initUI();
 	}
@@ -81,6 +79,16 @@ public class AddFileActivity extends BaseActivity implements
 		ViewMapUtil.viewMapping(this, getWindow());
 
 		ll_return_btn.setOnClickListener(this);
+		ll_toools.setVisibility(View.VISIBLE);
+		if (privacy_type == 1) {
+			ll_title_text.setText(R.string.title_select_add_audio);
+			ll_toools
+					.setBackgroundResource(R.drawable.selector_title_bar_audio_btn_bg);
+		} else if (privacy_type == 2) {
+			ll_title_text.setText(R.string.title_select_add_vedio);
+			ll_toools
+					.setBackgroundResource(R.drawable.selector_title_bar_vedio_btn_bg);
+		}
 		adapter = new AddFileAdapter(getApplicationContext());
 		lv.setAdapter(adapter);
 		lv.setOnItemClickListener(this);
@@ -89,13 +97,6 @@ public class AddFileActivity extends BaseActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (privacy_type == 1) {
-			ll_title_text.setText(R.string.title_select_add_audio);
-		} else if (privacy_type == 2) {
-			ll_title_text.setText(R.string.title_select_add_vedio);
-		} else if (privacy_type == 0) {
-			ll_title_text.setText(R.string.title_select_add_image);
-		}
 		new QueryMediaTask().execute(privacy_type);
 	}
 
@@ -197,7 +198,7 @@ public class AddFileActivity extends BaseActivity implements
 									+ module.getDisplay_name());
 					dao.insert(new PrivacyFile(null, module.getDisplay_name(),
 							module.getDisplay_name(), module.getPath(),
-							new Date(), privacy_type, ref_id));
+							new Date(), privacy_type, null));
 					FileUtils.DeleteFile(info);
 				}
 				return null;

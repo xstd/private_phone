@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ public class SimulaCommActivity extends BaseActivity implements
     public static final int COMMON_PHONE = 4;
 
     @ViewMapping(ID = R.id.ll_return_btn)
-    public TextView ll_return_btn;
+    public ImageButton ll_return_btn;
 
     @ViewMapping(ID = R.id.ll_title_text)
     public TextView ll_title_text;

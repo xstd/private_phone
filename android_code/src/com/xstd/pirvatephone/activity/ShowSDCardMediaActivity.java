@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,7 +52,6 @@ import com.xstd.pirvatephone.utils.BitmapManager;
 import com.xstd.pirvatephone.utils.ImageManager;
 import com.xstd.pirvatephone.utils.Util;
 import com.xstd.privatephone.adapter.ShowSDCardMediaAdapter;
-import com.xstd.privatephone.tools.Toasts;
 
 public class ShowSDCardMediaActivity extends BaseActivity implements
 		View.OnClickListener {
@@ -59,7 +59,7 @@ public class ShowSDCardMediaActivity extends BaseActivity implements
 	private static final String TAG = "ShowSDCardMediaActivity";
 
 	@ViewMapping(ID = R.id.ll_return_btn)
-	public TextView ll_return_btn;
+	public ImageButton ll_return_btn;
 
 	@ViewMapping(ID = R.id.ll_title_text)
 	public TextView ll_title_text;

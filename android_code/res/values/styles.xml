@@ -79,38 +79,42 @@
         <item name="android:textColor">#212121</item>
         <item name="android:textSize">@dimen/private_comm_item_name_size</item>
     </style>
+
     <style name="private_comm_item_content_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#999999</item>
         <item name="android:textSize">@dimen/private_comm_item_phone_size</item>
     </style>
+
     <style name="private_comm_item_duration_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#212121</item>
         <item name="android:textSize">@dimen/private_comm_item_phone_size</item>
     </style>
+
     <style name="private_comm_item_contact_all_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#6d6d6d</item>
         <item name="android:textSize">@dimen/private_comm_item_all</item>
     </style>
-     <style name="private_comm_item_sms_date_style">
+
+    <style name="private_comm_item_sms_date_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#208ecd</item>
         <item name="android:textSize">@dimen/private_comm_item_all</item>
     </style>
-     <style name="private_comm_bubble_date_style">
+
+    <style name="private_comm_bubble_date_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#999999</item>
         <item name="android:textSize">@dimen/private_comm_edit_margin_right</item>
     </style>
-     
-    
+
     <style name="private_comm_title_style">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_width">wrap_content</item>
@@ -118,6 +122,7 @@
         <item name="android:textColor">#D7ECFF</item>
         <item name="android:textSize">25sp</item>
     </style>
+
     <style name="private_comm_tab_text_style">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_width">wrap_content</item>
@@ -130,13 +135,14 @@
     </style>
 
     <style name="activity_divider">
-        <item name="android:textAppearance">?android:textAppearanceSmall</item>
-        <item name="android:textColor">@color/activity_divider_text_color</item>
+        <item name="android:textColor">#486680</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@drawable/activity_divider_bg</item>
-        <item name="android:paddingLeft">5.0dip</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/privacy_background_edit_btn</item>
+        <item name="android:paddingLeft">13.0dip</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:ellipsize">marquee</item>
     </style>
 
     <style name="btn_gray">
@@ -190,6 +196,18 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="MyDialog" parent="@android:Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/privacy_background_dialog</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="mycheckbox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/my_checkbox</item>
     </style>
 
 </resources>

@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ import java.util.Date;
 public class AddAdvanceSimulatePhoneActivity extends BaseActivity implements View.OnClickListener {
 
     @ViewMapping(ID = R.id.ll_return_btn)
-    public TextView ll_return_btn;
+    public ImageButton ll_return_btn;
 
     @ViewMapping(ID = R.id.ll_title_text)
     public TextView ll_title_text;

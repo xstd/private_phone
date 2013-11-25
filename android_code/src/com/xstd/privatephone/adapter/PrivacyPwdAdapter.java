@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
@@ -44,7 +43,6 @@ public class PrivacyPwdAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			convertView = View.inflate(mContext, R.layout.item_privacy_pwd,
 					null);
-			holder.icon = (ImageView) convertView.findViewById(R.id.icon);
 			holder.pwdname = (TextView) convertView.findViewById(R.id.pwdname);
 			holder.pwdnum = (TextView) convertView.findViewById(R.id.pwdnum);
 			convertView.setTag(holder);
@@ -58,7 +56,6 @@ public class PrivacyPwdAdapter extends BaseAdapter {
 	}
 
 	static class ViewHolder {
-		ImageView icon;
 		TextView pwdname;
 		TextView pwdnum;
 	}

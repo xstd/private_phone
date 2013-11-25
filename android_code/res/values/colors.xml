@@ -327,5 +327,6 @@
     <color name="private_comm_contact_count_text">#6d6d6d</color>
     <color name="private_comm_listview_line">#d8d9da</color>
     <color name="private_comm_listview_bkg">#e5e7ec</color>
+    <color name="item_press_color">#C3E4FF</color>
     
 </resources>

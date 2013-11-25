@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 	private static final int REQUEST_CAMERA_CODE = 1;
 
 	@ViewMapping(ID = R.id.ll_return_btn)
-	public TextView ll_return_btn;
+	public ImageButton ll_return_btn;
 
 	@ViewMapping(ID = R.id.ll_title_text)
 	public TextView ll_title_text;

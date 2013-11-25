@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -47,7 +49,9 @@ public class PrivacyShowActivity extends BaseActivity {
 	 * 请求隐藏文件的请求码
 	 */
 	private static final int REQUEST_RECORDER_CODE = 2;
-	private TextView return_bt;
+	private ImageButton return_bt;
+	private ImageButton ll_toools;
+	private TextView inbox_divider;
 	/**
 	 * 上个页面传来的隐藏文件类型int
 	 */
@@ -80,14 +84,42 @@ public class PrivacyShowActivity extends BaseActivity {
 				finish();
 			}
 		});
+		ll_toools.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				switch (privacy_type) {
+				case 1:
+					intent.setAction(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+					startActivityForResult(intent, REQUEST_RECORDER_CODE);
+					break;
+				case 2:
+					// intent.setAction(MediaStore.Video.Media.);
+					// startActivityForResult(intent, REQUEST_RECORDER_CODE);
+					break;
+				}
+			}
+		});
 	}
 
 	private void initViews() {
-		return_bt = (TextView) findViewById(R.id.ll_return_btn);
+		return_bt = (ImageButton) findViewById(R.id.ll_return_btn);
 		TextView title_text = (TextView) findViewById(R.id.ll_title_text);
 		title_text.setText(getString(R.string.privacy)
 				+ PrivacySpaceActivity.home_privacy_title[privacy_type]);
-		Button add_privacy = (Button) findViewById(R.id.add_privacy);
+		ll_toools = (ImageButton) findViewById(R.id.ll_toools);
+		if (privacy_type == 1) {
+			ll_toools.setVisibility(View.VISIBLE);
+			ll_toools
+					.setBackgroundResource(R.drawable.selector_title_bar_audio_btn_bg);
+		} else if (privacy_type == 2) {
+			ll_toools.setVisibility(View.VISIBLE);
+			ll_toools
+					.setBackgroundResource(R.drawable.selector_title_bar_vedio_btn_bg);
+		}
+		inbox_divider = (TextView) findViewById(R.id.inbox_divider);
+		TextView add_privacy = (TextView) findViewById(R.id.add_privacy);
 		empty_view = (RelativeLayout) findViewById(R.id.empty_view);
 		lv = (ListView) findViewById(R.id.lv);
 		add_privacy.setText(getString(R.string.privacy_add_msg)
@@ -105,12 +137,6 @@ public class PrivacyShowActivity extends BaseActivity {
 	public void add(View view) {
 		Intent intent;
 		switch (privacy_type) {
-		case 0:
-			intent = new Intent(PrivacyShowActivity.this, ShowSDCardMediaActivity.class);
-			intent.putExtra("privacy_type", privacy_type);
-			intent.putExtra("ref_id", getIntent().getLongExtra("ref_id", -1));
-			startActivity(intent);
-			break;
 		case 1:
 			showAudioSelectDialog();
 			break;
@@ -166,48 +192,54 @@ public class PrivacyShowActivity extends BaseActivity {
 	 * 添加密码本对话框
 	 */
 	private void showAddPwdDialog() {
+
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+
 		View view = View.inflate(this, R.layout.dialog_add_pwd, null);
 		final EditText et_name = (EditText) view.findViewById(R.id.et_pwd_name);
 		final EditText et_site = (EditText) view.findViewById(R.id.et_pwd_site);
 		final EditText et_num = (EditText) view
 				.findViewById(R.id.et_pwd_number);
 		final EditText et_pwd = (EditText) view.findViewById(R.id.et_pwd_pwd);
-		AlertDialog builder = new AlertDialog.Builder(this)
-				.setTitle(R.string.add_pwd_title)
-				.setView(view)
-				.setNegativeButton(android.R.string.cancel, null)
-				.setPositiveButton(android.R.string.ok,
-						new DialogInterface.OnClickListener() {
+		final TextView btn_cancle = (TextView) view
+				.findViewById(R.id.btn_cancle);
+		final TextView btn_ok = (TextView) view.findViewById(R.id.btn_ok);
+		btn_cancle.setOnClickListener(new OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								String name = et_name.getText().toString()
-										.trim();
-								String pwd = et_pwd.getText().toString().trim();
-								String num = et_num.getText().toString().trim();
-								String site = et_site.getText().toString()
-										.trim();
-								if (TextUtils.isEmpty(name)
-										|| TextUtils.isEmpty(pwd)) {
-									Toast.makeText(PrivacyShowActivity.this,
-											R.string.error_empty_name,
-											Toast.LENGTH_SHORT).show();
-									showAddPwdDialog();
-								} else {
-									PrivacyPwdDao dao = PrivacyDaoUtils
-											.getPwdDao(PrivacyShowActivity.this);
-									dao.insert(new PrivacyPwd(null, name, site,
-											num, pwd));
-									new QueryPrivacyPwd().execute();
-									Toast.makeText(PrivacyShowActivity.this,
-											R.string.success_empty_name,
-											Toast.LENGTH_SHORT).show();
-								}
-							}
-						}).create();
-		builder.setCanceledOnTouchOutside(false);
-		builder.show();
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		btn_ok.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String name = et_name.getText().toString().trim();
+				String pwd = et_pwd.getText().toString().trim();
+				String num = et_num.getText().toString().trim();
+				String site = et_site.getText().toString().trim();
+				if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)) {
+					Toast.makeText(PrivacyShowActivity.this,
+							R.string.error_empty_name, Toast.LENGTH_SHORT)
+							.show();
+					showAddPwdDialog();
+				} else {
+					PrivacyPwdDao dao = PrivacyDaoUtils
+							.getPwdDao(PrivacyShowActivity.this);
+					dao.insert(new PrivacyPwd(null, name, site, num, pwd));
+					new QueryPrivacyPwd().execute();
+					Toast.makeText(PrivacyShowActivity.this,
+							R.string.success_empty_name, Toast.LENGTH_SHORT)
+							.show();
+				}
+				dialog.dismiss();
+			}
+		});
+
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -259,8 +291,8 @@ public class PrivacyShowActivity extends BaseActivity {
 			}
 
 			protected void onPostExecute(Void result) {
-                new QueryPrivacyFile().execute();
-                dialog.dismiss();
+				new QueryPrivacyFile().execute();
+				dialog.dismiss();
 			}
 
 		}.execute(fileName, filePath);
@@ -281,21 +313,11 @@ public class PrivacyShowActivity extends BaseActivity {
 			PrivacyFileDao dao = PrivacyDaoUtils
 					.getFileDao(PrivacyShowActivity.this);
 			String type = String.valueOf(privacy_type);
-			String ref_id = String.valueOf(getIntent().getLongExtra("ref_id",
-					-1));
 			String orderBy = PrivacyFileDao.Properties.SrcName.columnName
 					+ " COLLATE LOCALIZED ASC";
-			Cursor cursor = null;
-
-			if (privacy_type == 0) {
-				cursor = dao.getDatabase().query(dao.getTablename(),
-						dao.getAllColumns(), "type=? and ref_id=?",
-						new String[] { type, ref_id }, null, null, orderBy);
-			} else {
-				cursor = dao.getDatabase().query(dao.getTablename(),
-						dao.getAllColumns(), "type=?", new String[] { type },
-						null, null, orderBy);
-			}
+			Cursor cursor = dao.getDatabase().query(dao.getTablename(),
+					dao.getAllColumns(), "type=?", new String[] { type }, null,
+					null, orderBy);
 
 			List<PrivacyFile> result = new ArrayList<PrivacyFile>();
 			if (cursor != null && cursor.getCount() > 0) {
@@ -328,13 +350,36 @@ public class PrivacyShowActivity extends BaseActivity {
 			if (result == null || result.size() < 1) {
 				empty_view.setVisibility(View.VISIBLE);
 				lv.setVisibility(View.GONE);
+				switch (privacy_type) {
+				case 1:
+					inbox_divider.setText("已加密保护的音频(0)");
+					break;
+				case 2:
+					inbox_divider.setText("已加密保护的视频(0)");
+					break;
+				case 3:
+					inbox_divider.setText("已加密保护的文件(0)");
+					break;
+				}
 				return;
+			}
+			switch (privacy_type) {
+			case 1:
+				inbox_divider.setText("已加密保护的音频(" + result.size() + ")");
+				break;
+			case 2:
+				inbox_divider.setText("已加密保护的视频(" + result.size() + ")");
+				break;
+			case 3:
+				inbox_divider.setText("已加密保护的文件(" + result.size() + ")");
+				break;
 			}
 			empty_view.setVisibility(View.GONE);
 			lv.setVisibility(View.VISIBLE);
 			final PrivacyFileAdapter adapter = new PrivacyFileAdapter(
 					PrivacyShowActivity.this, result);
 			lv.setAdapter(adapter);
+			lv.setSelector(R.drawable.privacy_space_lv_item_selector);
 			lv.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -369,7 +414,8 @@ public class PrivacyShowActivity extends BaseActivity {
 										PrivacyFileDao dao = PrivacyDaoUtils
 												.getFileDao(PrivacyShowActivity.this);
 										dao.delete(mapping);
-										FileUtils.updateSystemFile(PrivacyShowActivity.this);
+										FileUtils
+												.updateSystemFile(PrivacyShowActivity.this);
 										new QueryPrivacyFile().execute();
 										Toast.makeText(
 												PrivacyShowActivity.this,
@@ -471,13 +517,16 @@ public class PrivacyShowActivity extends BaseActivity {
 			if (result == null || result.size() < 1) {
 				empty_view.setVisibility(View.VISIBLE);
 				lv.setVisibility(View.GONE);
+				inbox_divider.setText("已加密保护的密码本(0)");
 				return;
 			}
+			inbox_divider.setText("已加密保护的密码本(" + result.size() + ")");
 			empty_view.setVisibility(View.GONE);
 			lv.setVisibility(View.VISIBLE);
 			final PrivacyPwdAdapter adapter = new PrivacyPwdAdapter(
 					PrivacyShowActivity.this, result);
 			lv.setAdapter(adapter);
+			lv.setSelector(R.drawable.privacy_space_lv_item_selector);
 			lv.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -516,90 +565,92 @@ public class PrivacyShowActivity extends BaseActivity {
 			});
 		}
 
-		/**
-		 * 显示详细信息
-		 * 
-		 * @param privacyPwd
-		 */
-		private void showDetailInfo(PrivacyPwd privacyPwd) {
-			modifyInfo(privacyPwd, false);
-		}
+	}
 
-		/**
-		 * 修改
-		 * 
-		 * @param privacyPwd
-		 */
-		private void modifyInfo(final PrivacyPwd privacyPwd, final boolean flag) {
-			View view = View.inflate(PrivacyShowActivity.this,
-					R.layout.dialog_add_pwd, null);
-			final EditText et_name = (EditText) view
-					.findViewById(R.id.et_pwd_name);
-			et_name.setText(privacyPwd.getName());
-			final EditText et_site = (EditText) view
-					.findViewById(R.id.et_pwd_site);
-			et_site.setText(privacyPwd.getSite());
-			final EditText et_num = (EditText) view
-					.findViewById(R.id.et_pwd_number);
-			et_num.setText(privacyPwd.getNumber());
-			final EditText et_pwd = (EditText) view
-					.findViewById(R.id.et_pwd_pwd);
-			et_pwd.setText(privacyPwd.getPassword());
-			if (!flag) {
-				et_name.setEnabled(false);
-				et_name.setFocusable(false);
-				et_site.setEnabled(false);
-				et_site.setFocusable(false);
-				et_num.setEnabled(false);
-				et_num.setFocusable(false);
-				et_pwd.setEnabled(false);
-				et_pwd.setFocusable(false);
+	/**
+	 * 显示详细信息
+	 * 
+	 * @param privacyPwd
+	 */
+	private void showDetailInfo(PrivacyPwd privacyPwd) {
+		modifyInfo(privacyPwd, false);
+	}
+
+	/**
+	 * 修改
+	 * 
+	 * @param privacyPwd
+	 */
+	private void modifyInfo(final PrivacyPwd privacyPwd, final boolean flag) {
+		final Dialog dialog = new Dialog(PrivacyShowActivity.this,
+				R.style.MyDialog);
+
+		View view = View.inflate(PrivacyShowActivity.this,
+				R.layout.dialog_add_pwd, null);
+		final EditText et_name = (EditText) view.findViewById(R.id.et_pwd_name);
+		et_name.setText(privacyPwd.getName());
+		final EditText et_site = (EditText) view.findViewById(R.id.et_pwd_site);
+		et_site.setText(privacyPwd.getSite());
+		final EditText et_num = (EditText) view
+				.findViewById(R.id.et_pwd_number);
+		et_num.setText(privacyPwd.getNumber());
+		final EditText et_pwd = (EditText) view.findViewById(R.id.et_pwd_pwd);
+		et_pwd.setText(privacyPwd.getPassword());
+		if (!flag) {
+			et_name.setEnabled(false);
+			et_name.setFocusable(false);
+			et_site.setEnabled(false);
+			et_site.setFocusable(false);
+			et_num.setEnabled(false);
+			et_num.setFocusable(false);
+			et_pwd.setEnabled(false);
+			et_pwd.setFocusable(false);
+		}
+		final TextView btn_cancle = (TextView) view
+				.findViewById(R.id.btn_cancle);
+		final TextView btn_ok = (TextView) view.findViewById(R.id.btn_ok);
+		btn_cancle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
 			}
-			AlertDialog builder = new AlertDialog.Builder(
-					PrivacyShowActivity.this)
-					.setTitle(R.string.add_pwd_title)
-					.setView(view)
-					.setNegativeButton(android.R.string.cancel, null)
-					.setPositiveButton(android.R.string.ok,
-							new DialogInterface.OnClickListener() {
+		});
+		btn_ok.setOnClickListener(new OnClickListener() {
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									if (!flag)
-										return;
-									String name = et_name.getText().toString()
-											.trim();
-									String pwd = et_pwd.getText().toString()
-											.trim();
-									String num = et_num.getText().toString()
-											.trim();
-									String site = et_site.getText().toString()
-											.trim();
-									if (TextUtils.isEmpty(name)
-											|| TextUtils.isEmpty(pwd)) {
-										Toast.makeText(
-												PrivacyShowActivity.this,
-												R.string.error_empty_name,
-												Toast.LENGTH_LONG).show();
-									} else {
-										PrivacyPwdDao dao = PrivacyDaoUtils
-												.getPwdDao(PrivacyShowActivity.this);
-										privacyPwd.setName(name);
-										privacyPwd.setSite(site);
-										privacyPwd.setNumber(num);
-										privacyPwd.setPassword(pwd);
-										dao.update(privacyPwd);
-										new QueryPrivacyPwd().execute();
-										Toast.makeText(
-												PrivacyShowActivity.this,
-												R.string.success_modify,
-												Toast.LENGTH_SHORT).show();
-									}
-								}
-							}).create();
-			builder.setCanceledOnTouchOutside(false);
-			builder.show();
-		}
+			@Override
+			public void onClick(View v) {
+				if (!flag) {
+					dialog.dismiss();
+					return;
+				}
+				String name = et_name.getText().toString().trim();
+				String pwd = et_pwd.getText().toString().trim();
+				String num = et_num.getText().toString().trim();
+				String site = et_site.getText().toString().trim();
+				if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)) {
+					Toast.makeText(PrivacyShowActivity.this,
+							R.string.error_empty_name, Toast.LENGTH_LONG)
+							.show();
+				} else {
+					PrivacyPwdDao dao = PrivacyDaoUtils
+							.getPwdDao(PrivacyShowActivity.this);
+					privacyPwd.setName(name);
+					privacyPwd.setSite(site);
+					privacyPwd.setNumber(num);
+					privacyPwd.setPassword(pwd);
+					dao.update(privacyPwd);
+					new QueryPrivacyPwd().execute();
+					Toast.makeText(PrivacyShowActivity.this,
+							R.string.success_modify, Toast.LENGTH_SHORT).show();
+				}
+				dialog.dismiss();
+			}
+		});
+
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+
 	}
 }

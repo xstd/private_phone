@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    android:minHeight="63dp"
     android:orientation="horizontal" >
 
     <ImageView
@@ -10,34 +11,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:contentDescription="@string/app_name" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1000"
+        android:gravity="center_vertical"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/filename"
-            style="?android:attr/textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="#303030"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/filemodify"
-            style="?android:attr/textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:layout_marginTop="8dp"
+            android:singleLine="true"
+            android:textColor="#797979"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <CheckBox
         android:id="@+id/cb"
+        style="@style/mycheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="7dp"
+        android:layout_marginRight="30dp"
         android:focusable="false" />
 
 </LinearLayout>
