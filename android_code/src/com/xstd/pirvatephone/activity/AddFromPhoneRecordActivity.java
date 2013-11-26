@@ -80,8 +80,9 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private long end_time;
 	private Long start_time;
 	private Long duration;
-	private ArrayList<String> numbers = new ArrayList<String>();
+	private ArrayList<Long> ids = new ArrayList<Long>();
 	private ArrayList<String> names = new ArrayList<String>();
+	private ArrayList<String> numbers = new ArrayList<String>();
 
 	private boolean flags_delete = false;
 
@@ -131,24 +132,26 @@ public class AddFromPhoneRecordActivity extends Activity implements
 						CheckBox checkbox = (CheckBox) view
 								.findViewById(R.id.checkbox);
 						checkbox.setChecked(!checkbox.isChecked());
-						TextView tv_hidden = (TextView) view
-								.findViewById(R.id.tv_hidden);
+						TextView tv_id = (TextView) view
+								.findViewById(R.id.tv_id);
 						TextView tv_name = (TextView) view
 								.findViewById(R.id.tv_name);
-						String number = tv_hidden.getText().toString().trim();
+						Long _id = Long.valueOf(tv_id.getText().toString().trim());
 						String name = tv_name.getText().toString().trim();
 						if (checkbox.isChecked()) {
-							if (!numbers.contains(number)) {
-								numbers.add(number);
+							if (!ids.contains(_id)) {
+								ids.add(_id);
 								names.add(name);
 							}
 						} else {
-							if (numbers.contains(number)) {
-								numbers.remove(number);
+							if (ids.contains(_id)) {
+								ids.remove(_id);
 								names.remove(name);
 							}
 						}
-						Tools.logSh("numbers===" + numbers);
+						recordAdapter.notifyChange(ids);
+						Tools.logSh("ids===" + ids);
+						
 					}
 				});
 				break;
@@ -220,7 +223,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 			break;
 		case R.id.bt_sure:
 
-			if (numbers != null && numbers.size() > 0) {
+			if (ids != null && ids.size() > 0) {
 				// Tools.logSh("selectPhones中个数为：" + selectPhones.length);
 				// 显示选择对话框
 				
