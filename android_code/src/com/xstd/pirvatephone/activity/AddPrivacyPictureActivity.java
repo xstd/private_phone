@@ -66,7 +66,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_privacy_picture);
-		
+
 		initUI();
 	}
 
@@ -95,7 +95,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 
 	private void refershFolderCount(Cursor cursor) {
 		cursor.requery();
-		String str = getString(R.string.strongbox_image_inbox_divider);
+		String str = getString(R.string.strongbox_image_folder_inbox_divider);
 		inbox_divider.setText(String.format(str, cursor.getCount() - 1));
 	}
 
@@ -125,7 +125,7 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 			break;
 		}
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (REQUEST_CAMERA_CODE == requestCode && RESULT_OK == resultCode) {

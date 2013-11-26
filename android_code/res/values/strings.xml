@@ -810,6 +810,7 @@ QQ:903372666
     <string name="setting">设置</string>
     <string name="title_bar_btn_edit">编辑</string>
     <string name="strongbox_image_inbox_divider">已加密保护的图片(%d)</string>
+    <string name="strongbox_image_folder_inbox_divider">已加密保护的相冊(%d)</string>
     <string name="strongbox_buttonbar_delete">销毁</string>
     <string name="strongbox_buttonbar_descryption">移出保险箱</string>
     <string name="strongbox_buttonbar_selectall">全选</string>
@@ -942,5 +943,8 @@ QQ:903372666
     <string name="not_enough_space" product="default">Your SD card is full.</string>
     <!-- alert to the user to wait for some operation to complete -->
     <string name="wait">Please wait\u2026</string>
+    <string name="privacy_pop_see">查看</string>
+    <string name="privacy_pop_destory">销毁</string>
+    <string name="privacy_pop_restore">还原</string>
 
 </resources>

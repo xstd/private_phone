@@ -79,7 +79,8 @@ public class AddFileActivity extends BaseActivity implements
 		ViewMapUtil.viewMapping(this, getWindow());
 
 		ll_return_btn.setOnClickListener(this);
-		ll_toools.setVisibility(View.VISIBLE);
+		if (privacy_type == 1)
+			ll_toools.setVisibility(View.VISIBLE);
 		if (privacy_type == 1) {
 			ll_title_text.setText(R.string.title_select_add_audio);
 			ll_toools
@@ -201,6 +202,7 @@ public class AddFileActivity extends BaseActivity implements
 							new Date(), privacy_type, null));
 					FileUtils.DeleteFile(info);
 				}
+				FileUtils.updateSystemFile(getApplicationContext());
 				return null;
 			}
 

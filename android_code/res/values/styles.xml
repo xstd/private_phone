@@ -144,6 +144,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">15.0sp</item>
         <item name="android:ellipsize">marquee</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="btn_gray">

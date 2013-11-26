@@ -56,12 +56,14 @@ public class PrivacyShowActivity extends BaseActivity {
 	 * 上个页面传来的隐藏文件类型int
 	 */
 	private int privacy_type;
+	private long ref_id;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_privacy_show);
 		privacy_type = getIntent().getIntExtra("privacy_type", 0);
+		ref_id = getIntent().getLongExtra("ref_id", -1);
 		initViews();
 		setListener();
 	}
@@ -113,11 +115,11 @@ public class PrivacyShowActivity extends BaseActivity {
 			ll_toools.setVisibility(View.VISIBLE);
 			ll_toools
 					.setBackgroundResource(R.drawable.selector_title_bar_audio_btn_bg);
-		} else if (privacy_type == 2) {
-			ll_toools.setVisibility(View.VISIBLE);
-			ll_toools
-					.setBackgroundResource(R.drawable.selector_title_bar_vedio_btn_bg);
-		}
+		} /*
+		 * else if (privacy_type == 2) { ll_toools.setVisibility(View.VISIBLE);
+		 * ll_toools
+		 * .setBackgroundResource(R.drawable.selector_title_bar_vedio_btn_bg); }
+		 */
 		inbox_divider = (TextView) findViewById(R.id.inbox_divider);
 		TextView add_privacy = (TextView) findViewById(R.id.add_privacy);
 		empty_view = (RelativeLayout) findViewById(R.id.empty_view);
@@ -287,6 +289,7 @@ public class PrivacyShowActivity extends BaseActivity {
 				dao.insert(new PrivacyFile(null, params[0], params[0],
 						params[1], new Date(), privacy_type, null));
 				FileUtils.DeleteFile(info);
+				FileUtils.updateSystemFile(getApplicationContext());
 				return null;
 			}
 
@@ -312,12 +315,21 @@ public class PrivacyShowActivity extends BaseActivity {
 		protected List<PrivacyFile> doInBackground(Void... params) {
 			PrivacyFileDao dao = PrivacyDaoUtils
 					.getFileDao(PrivacyShowActivity.this);
-			String type = String.valueOf(privacy_type);
+			String selection = "type=?";
+			String[] selectionArgs = new String[] { String
+					.valueOf(privacy_type) };
 			String orderBy = PrivacyFileDao.Properties.SrcName.columnName
 					+ " COLLATE LOCALIZED ASC";
+
+			if (privacy_type == 0) {
+				selection = "ref_id=?";
+				selectionArgs = new String[] { String.valueOf(ref_id) };
+
+			}
+
 			Cursor cursor = dao.getDatabase().query(dao.getTablename(),
-					dao.getAllColumns(), "type=?", new String[] { type }, null,
-					null, orderBy);
+					dao.getAllColumns(), selection, selectionArgs, null, null,
+					orderBy);
 
 			List<PrivacyFile> result = new ArrayList<PrivacyFile>();
 			if (cursor != null && cursor.getCount() > 0) {
@@ -351,6 +363,9 @@ public class PrivacyShowActivity extends BaseActivity {
 				empty_view.setVisibility(View.VISIBLE);
 				lv.setVisibility(View.GONE);
 				switch (privacy_type) {
+				case 0:
+					inbox_divider.setText("已加密保护的图片(0)");
+					break;
 				case 1:
 					inbox_divider.setText("已加密保护的音频(0)");
 					break;
@@ -364,6 +379,9 @@ public class PrivacyShowActivity extends BaseActivity {
 				return;
 			}
 			switch (privacy_type) {
+			case 0:
+				inbox_divider.setText("已加密保护的图片(" + result.size() + ")");
+				break;
 			case 1:
 				inbox_divider.setText("已加密保护的音频(" + result.size() + ")");
 				break;
@@ -379,7 +397,6 @@ public class PrivacyShowActivity extends BaseActivity {
 			final PrivacyFileAdapter adapter = new PrivacyFileAdapter(
 					PrivacyShowActivity.this, result);
 			lv.setAdapter(adapter);
-			lv.setSelector(R.drawable.privacy_space_lv_item_selector);
 			lv.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -410,6 +427,8 @@ public class PrivacyShowActivity extends BaseActivity {
 								}
 
 								protected void onPostExecute(Boolean result) {
+									FileUtils
+											.updateSystemFile(getApplicationContext());
 									if (result) {
 										PrivacyFileDao dao = PrivacyDaoUtils
 												.getFileDao(PrivacyShowActivity.this);
@@ -472,7 +491,7 @@ public class PrivacyShowActivity extends BaseActivity {
 					});
 					ColorDrawable cd = new ColorDrawable(0xFFFFFF);
 					window.setBackgroundDrawable(cd);
-					window.showAsDropDown(view);
+					window.showAsDropDown(view, 0, 1);
 				}
 			});
 		}
@@ -526,7 +545,6 @@ public class PrivacyShowActivity extends BaseActivity {
 			final PrivacyPwdAdapter adapter = new PrivacyPwdAdapter(
 					PrivacyShowActivity.this, result);
 			lv.setAdapter(adapter);
-			lv.setSelector(R.drawable.privacy_space_lv_item_selector);
 			lv.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override

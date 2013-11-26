@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/privacy_background_edit"
+    android:gravity="center_vertical"
     android:orientation="horizontal" >
 
     <Button
         android:id="@+id/btn1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_weight="1"
-        android:text="还原" />
+        android:background="@drawable/private_comm_sms_send_selector"
+        android:text="@string/privacy_pop_restore" />
 
     <Button
         android:id="@+id/btn2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_weight="1"
-        android:text="销毁" />
+        android:background="@drawable/private_comm_sms_send_selector"
+        android:text="@string/privacy_pop_destory" />
 
     <Button
         android:id="@+id/btn3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:text="查看" />
+        android:background="@drawable/private_comm_sms_send_selector"
+        android:text="@string/privacy_pop_see" />
 
 </LinearLayout>
