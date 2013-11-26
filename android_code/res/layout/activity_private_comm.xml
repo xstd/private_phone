@@ -50,8 +50,7 @@
                         style="@style/private_comm_tab_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/private_comm_sms"
-                         />
+                        android:text="@string/private_comm_sms" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -175,7 +174,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_marginBottom="50dip"
             android:layout_weight="1"
             android:background="@color/private_comm_listview_bkg" >
 
@@ -189,79 +187,83 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/edit_ll_sms_bt"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/private_comm_sms_send_bkg"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dip"
-            android:paddingRight="15dip" >
+            android:layout_gravity="bottom" >
 
             <RelativeLayout
-                android:id="@+id/edit_btn_recover_sms"
-                android:layout_width="138dip"
+                android:id="@+id/edit_ll_sms_bt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/private_comm_sms_send_bkg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="15dip"
+                android:paddingRight="15dip" >
+
+                <RelativeLayout
+                    android:id="@+id/edit_btn_recover_sms"
+                    android:layout_width="138dip"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/private_comm_sms_send_selector"
+                    android:clickable="true"
+                    android:gravity="center" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/private_comm_btn_recover"
+                        android:textColor="@color/sms_text_content_unseleted" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/edit_btn_remove_sms"
+                    android:layout_width="138dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/private_comm_sms_send_selector"
+                    android:clickable="true"
+                    android:gravity="center" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/private_comm_btn_delete"
+                        android:textColor="@color/sms_text_content_unseleted" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/edit_btn_delete_phone"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
                 android:clickable="true"
-                android:background="@drawable/private_comm_sms_send_selector"
-                android:gravity="center" >
+                android:orientation="horizontal" >
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/private_comm_btn_recover"
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="删除通话记录"
                     android:textColor="@color/sms_text_content_unseleted" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/edit_btn_remove_sms"
-                android:layout_width="138dip"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                 android:clickable="true"
-                android:background="@drawable/private_comm_sms_send_selector"
-                android:gravity="center" >
+                android:id="@+id/edit_btn_delete_contact"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:clickable="true"
+                android:orientation="vertical" >
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/private_comm_btn_delete"
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="移出隐私空间"
                     android:textColor="@color/sms_text_content_unseleted" />
             </RelativeLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/edit_btn_delete_phone"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:clickable="true"
-            android:orientation="horizontal"
-            >
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="false"
-                android:clickable="false"
-                android:text="删除通话记录"
-                android:textColor="@color/sms_text_content_unseleted" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/edit_btn_delete_contact"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:orientation="vertical"
-            android:clickable="true"
-             >
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 android:focusable="false"
-                android:clickable="false"
-                android:text="移出隐私空间"
-                android:textColor="@color/sms_text_content_unseleted" />
         </RelativeLayout>
     </LinearLayout>
 

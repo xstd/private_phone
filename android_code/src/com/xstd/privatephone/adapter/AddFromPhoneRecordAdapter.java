@@ -19,7 +19,7 @@ import android.widget.TextView;
 public class AddFromPhoneRecordAdapter extends CursorAdapter {
 	private Context mContext;
 	private LayoutInflater inflater;
-	private ArrayList<Long> selectChecks = new ArrayList<Long>();
+	private ArrayList<Long> _ids = new ArrayList<Long>();
 	private ArrayList<String> numbers = new ArrayList<String>();
 
 	@SuppressWarnings("deprecation")
@@ -33,6 +33,7 @@ public class AddFromPhoneRecordAdapter extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		ViewHold holder = (ViewHold) view.getTag();
+		final Long _id = cursor.getLong(cursor.getColumnIndex("_id"));
 		// 得到手机号码
 		final String number = cursor.getString(cursor.getColumnIndex("number"));
 		// 得到联系人名称
@@ -64,30 +65,14 @@ public class AddFromPhoneRecordAdapter extends CursorAdapter {
 		holder.tv_hidden.setText(number);
 		holder.date.setText(strType);
 		holder.tv_name.setText(name);
+		holder.tv_id.setText(_id+"");
 		holder.tv_type.setText("["+new Date(start_time).toLocaleString()+"]");
-
-		if(selectChecks.contains(start_time)){
+		
+		if(_ids.contains(_id)){
 			holder.checkbox.setChecked(true);
 		}else{
 			holder.checkbox.setChecked(false);
 		}
-		
-		holder.checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked){
-					if(!numbers.contains(number)){
-						numbers.add(number);
-					}
-					selectChecks.add(start_time);
-					
-				}else{
-					selectChecks.remove(start_time);
-					numbers.remove(number);
-				}
-			}
-		});
 	}
 
 	@Override
@@ -99,18 +84,25 @@ public class AddFromPhoneRecordAdapter extends CursorAdapter {
 		holder.date = (TextView) view.findViewById(R.id.tv_phone_num);
 		holder.tv_type = (TextView) view.findViewById(R.id.tv_type);
 		holder.tv_hidden = (TextView) view.findViewById(R.id.tv_hidden);
+		holder.tv_id = (TextView) view.findViewById(R.id.tv_id);
 		holder.checkbox = (CheckBox) view.findViewById(R.id.checkbox);
 
 		view.setTag(holder);
 		return view;
 	}
 
-	static class ViewHold {
-		TextView tv_name;
-		TextView tv_hidden;
-		TextView date;
-		TextView tv_type;
-		CheckBox checkbox;
+	public static class ViewHold {
+		public TextView tv_name;
+		public TextView tv_hidden;
+		public TextView tv_id;
+		public TextView date;
+		public TextView tv_type;
+		public CheckBox checkbox;
+	}
+	
+	public void notifyChange(ArrayList<Long> ids){
+		_ids = ids;
+		notifyDataSetChanged();
 	}
 
 }

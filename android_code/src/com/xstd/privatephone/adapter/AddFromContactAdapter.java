@@ -70,7 +70,7 @@ public class AddFromContactAdapter extends BaseAdapter {
 		// 绘制联系人号码
 		hold.phone.setText(mContactInfo.getAddress());
 		hold.check.setChecked(mContactInfo.isChecked);
-		hold.check.setOnClickListener(new OnClickListener() {
+		/*hold.check.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -81,7 +81,7 @@ public class AddFromContactAdapter extends BaseAdapter {
 				}
 				Tools.logSh(mContactInfo.isChecked + "");
 			}
-		});
+		});*/
 		return convertView;
 	}
 
