@@ -413,9 +413,11 @@ public class PrivateCommActivity extends BaseActivity {
 							selectContacts.remove(phone_number);
 							Tools.logSh("selectContacts==" + selectContacts);
 						}
-						if (selectContacts.size() == 0) {
+						if (selectContacts.size() < smsRecordCursor.getCount()) {
 							edit_checkbox.setChecked(false);
 						}
+						
+						editSmsAdapter.notifyChange(selectContacts);
 					}
 				}
 			});
@@ -467,11 +469,10 @@ public class PrivateCommActivity extends BaseActivity {
 										+ selectContacts);
 							}
 						}
-						editSmsAdapter.notifyChange(true);
 					} else {
 						selectContacts.clear();
-						editSmsAdapter.notifyChange(false);
 					}
+					editSmsAdapter.notifyChange(selectContacts);
 				}
 			});
 
@@ -501,16 +502,15 @@ public class PrivateCommActivity extends BaseActivity {
 						if(selectContacts.size() == phoneRecordCursor.getCount()){
 							edit_checkbox.setChecked(true);
 						}
-						Tools.logSh("selectContacts====" + selectContacts);
 					} else {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
-							Tools.logSh("selectContacts====" + selectContacts);
 						}
-						if (selectContacts.size() == 0) {
+						if (selectContacts.size() < phoneRecordCursor.getCount()) {
 							edit_checkbox.setChecked(false);
 						}
 					}
+					editPhoneAdapter.notifyChange(selectContacts);
 				}
 			});
 			btn_delete_phone.setOnClickListener(new OnClickListener() {
@@ -542,11 +542,10 @@ public class PrivateCommActivity extends BaseActivity {
 								selectContacts.add(number);
 							}
 						}
-						editPhoneAdapter.notifyChange(true);
 					} else {
 						selectContacts.clear();
-						editPhoneAdapter.notifyChange(false);
 					}
+					editPhoneAdapter.notifyChange(selectContacts);
 				}
 			});
 
@@ -579,10 +578,12 @@ public class PrivateCommActivity extends BaseActivity {
 							selectContacts.remove(phone_number);
 						}
 
-						if (selectContacts.size() == 0) {
+						if (selectContacts.size() < contactCursor.getCount()) {
 							edit_checkbox.setChecked(false);
 						}
+
 					}
+					editContactAdapter.notifyChange(selectContacts);
 				}
 			});
 			btn_delete_contact.setOnClickListener(new OnClickListener() {
@@ -617,11 +618,10 @@ public class PrivateCommActivity extends BaseActivity {
 										+ selectContacts);
 							}
 						}
-						editContactAdapter.notifyChange(true);
 					} else {
 						selectContacts.clear();
-						editContactAdapter.notifyChange(false);
 					}
+					editContactAdapter.notifyChange(selectContacts);
 				}
 			});
 		}

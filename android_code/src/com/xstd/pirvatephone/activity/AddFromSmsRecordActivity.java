@@ -18,9 +18,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.CallLog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -83,6 +85,7 @@ public class AddFromSmsRecordActivity extends Activity implements
 	private AddFromSmsRecordAdapter recordAdapter;
 
 	private ArrayList<String> numbers = new ArrayList<String>();
+	private ArrayList<Integer> _ids = new ArrayList<Integer>();
 
 	private boolean flags_delete = false;
 
@@ -153,21 +156,22 @@ public class AddFromSmsRecordActivity extends Activity implements
 						.findViewById(R.id.checkbox);
 				checkbox.setChecked(!checkbox.isChecked());
 				if (checkbox.isChecked()) {
-					TextView tv_hidden = (TextView) view
-							.findViewById(R.id.tv_hidden);
-					String number = tv_hidden.getText().toString()
-							.trim();
+					TextView tv_id = (TextView) view
+							.findViewById(R.id.tv_id);
+					Integer _id = Integer.valueOf(tv_id.getText().toString()
+							.trim());
 					if (checkbox.isChecked()) {
-						if (!numbers.contains(number)) {
-							Tools.logSh("增加了number===" + number);
-							numbers.add(number);
+						if (!_ids.contains(_id)) {
+							Tools.logSh("增加了number===" + _id);
+							_ids.add(_id);
 						}
 					} else {
-						if (numbers.contains(number)) {
-							Tools.logSh("移除了number===" + number);
-							numbers.remove(number);
+						if (_ids.contains(_id)) {
+							Tools.logSh("移除了number===" + _id);
+							_ids.remove(_id);
 						}
 					}
+					recordAdapter.notifyChange(_ids);
 					Tools.logSh("numbers===" + numbers);
 				}
 			}
@@ -222,9 +226,10 @@ public class AddFromSmsRecordActivity extends Activity implements
 			finish();
 			break;
 		case R.id.bt_sure:
-			if (numbers != null && numbers.size() > 0) {
+			if (_ids != null && _ids.size() > 0) {
 				Tools.logSh("selectPhones中个数为：" + numbers.size());
 				// 显示选择对话框
+				numbers = getPhoneNumberById(_ids);
 				showRemoveDialog();
 			} else {
 				Toast.makeText(AddFromSmsRecordActivity.this, "选择联系人不能为空！！",
@@ -236,6 +241,31 @@ public class AddFromSmsRecordActivity extends Activity implements
 			finish();
 			break;
 		}
+
+	}
+	
+	private ArrayList<String> getPhoneNumberById(ArrayList<Integer> phoneIds) {
+		ArrayList<String> phoneNumbers = new ArrayList<String>();
+		if (phoneIds == null || phoneIds.size() == 0) {
+			return null;
+		}
+		for (int i = 0; i < phoneIds.size(); i++) {
+			Integer id = phoneIds.get(i);
+			// 获取详细通话记录
+			ContentResolver resolver = getContentResolver();
+			Cursor phoneCallCursor = resolver.query(Uri.parse("content://sms/"),
+					null,  "_id=?", new String[] { id + "" },
+					null);
+			if (phoneCallCursor != null && phoneCallCursor.getCount() > 0) {
+				while (phoneCallCursor.moveToNext()) {
+					String address = phoneCallCursor.getString(phoneCallCursor
+							.getColumnIndex("address"));
+					phoneNumbers.add(address);
+				}
+				phoneCallCursor.close();
+			}
+		}
+		return phoneNumbers;
 
 	}
 

@@ -18,11 +18,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
+import com.xstd.pirvatephone.utils.DateUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class EditPhoneAdapter extends CursorAdapter {
-	private final ArrayList<String> selectContacts = new ArrayList<String>();
-	private ArrayList<CheckBox> checkBoxs = new ArrayList<CheckBox>();
+	private ArrayList<String> selectContacts = new ArrayList<String>();
+
 
 	private Context mContext;
 	private String phoneType;
@@ -40,7 +41,7 @@ public class EditPhoneAdapter extends CursorAdapter {
 		
 		int count = cursor.getInt(cursor.getColumnIndex(PhoneRecordDao.Properties.Contact_times.columnName));
 		int type = cursor.getInt(cursor.getColumnIndex(PhoneRecordDao.Properties.Type.columnName));
-		final String phone_number = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
+		String phone_number = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Phone_number.columnName));
 		Long date = cursor.getLong(cursor.getColumnIndex(PhoneRecordDao.Properties.Date.columnName));
 		String name = cursor.getString(cursor.getColumnIndex(PhoneRecordDao.Properties.Name.columnName));
 		Tools.logSh("name======================="+name);
@@ -72,26 +73,12 @@ public class EditPhoneAdapter extends CursorAdapter {
 		views.tv_type.setBackgroundResource(picId);
 		views.tv_phone_belong.setText("  北京");
 		
-		views.tv_date.setText(new Date(date).toLocaleString()+" )");
+		views.tv_date.setText(DateUtils.parseDate(date));
 		if(selectContacts.contains(phone_number)){
 			views.checkbox.setChecked(true);
+		}else{
+			views.checkbox.setChecked(false);
 		}
-		checkBoxs.add(views.checkbox);
-		views.checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-				if(isChecked){
-					selectContacts.add(phone_number);
-				}else{
-					if(selectContacts.contains(phone_number)){
-						selectContacts.remove(phone_number);
-					}
-				}
-			}
-		});
-		
 		
 	}
 
@@ -115,10 +102,9 @@ public class EditPhoneAdapter extends CursorAdapter {
 		return view;
 	}
 	
-	public void notifyChange(boolean flag) {
-		for (int i = 0; i < checkBoxs.size(); i++) {
-			checkBoxs.get(i).setChecked(flag);
-		}
+	public void notifyChange(ArrayList<String> numbers) {
+		selectContacts = numbers;
+		notifyDataSetChanged();
 	}
 	
 	static class ViewHold{

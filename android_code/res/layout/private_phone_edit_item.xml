@@ -81,13 +81,13 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+          android:layout_marginRight="20dip" >
 
         <ImageView
             android:id="@+id/iv_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="40dip"
             android:background="@drawable/private_comm_pic_incomming" />
 
         <TextView
