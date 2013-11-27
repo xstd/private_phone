@@ -22,6 +22,7 @@ import android.provider.CallLog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -80,7 +81,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private long end_time;
 	private Long start_time;
 	private Long duration;
-	private ArrayList<Long> ids = new ArrayList<Long>();
+	private ArrayList<Integer> ids = new ArrayList<Integer>();
 	private ArrayList<String> names = new ArrayList<String>();
 	private ArrayList<String> numbers = new ArrayList<String>();
 
@@ -136,7 +137,8 @@ public class AddFromPhoneRecordActivity extends Activity implements
 								.findViewById(R.id.tv_id);
 						TextView tv_name = (TextView) view
 								.findViewById(R.id.tv_name);
-						Long _id = Long.valueOf(tv_id.getText().toString().trim());
+						Integer _id = Integer.valueOf(tv_id.getText().toString()
+								.trim());
 						String name = tv_name.getText().toString().trim();
 						if (checkbox.isChecked()) {
 							if (!ids.contains(_id)) {
@@ -151,7 +153,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 						}
 						recordAdapter.notifyChange(ids);
 						Tools.logSh("ids===" + ids);
-						
+
 					}
 				});
 				break;
@@ -225,8 +227,9 @@ public class AddFromPhoneRecordActivity extends Activity implements
 
 			if (ids != null && ids.size() > 0) {
 				// Tools.logSh("selectPhones中个数为：" + selectPhones.length);
-				// 显示选择对话框
-				
+				// 通过Id寻找号码
+				numbers = getPhoneNumberById(ids);
+
 				showRemoveDialog();
 			} else {
 				Toast.makeText(AddFromPhoneRecordActivity.this, "选择联系人不能为空！！",
@@ -237,6 +240,31 @@ public class AddFromPhoneRecordActivity extends Activity implements
 			finish();
 			break;
 		}
+	}
+
+	private ArrayList<String> getPhoneNumberById(ArrayList<Integer> phoneIds) {
+		ArrayList<String> phoneNumbers = new ArrayList<String>();
+		if (phoneIds == null || phoneIds.size() == 0) {
+			return null;
+		}
+		for (int i = 0; i < phoneIds.size(); i++) {
+			Integer id = phoneIds.get(i);
+			// 获取详细通话记录
+			ContentResolver resolver = getContentResolver();
+			Cursor phoneCallCursor = resolver.query(CallLog.Calls.CONTENT_URI,
+					null, CallLog.Calls._ID + "=?", new String[] { id + "" },
+					null);
+			if (phoneCallCursor != null && phoneCallCursor.getCount() > 0) {
+				while (phoneCallCursor.moveToNext()) {
+					String number = phoneCallCursor.getString(phoneCallCursor
+							.getColumnIndex("number"));
+					phoneNumbers.add(number);
+				}
+				phoneCallCursor.close();
+			}
+		}
+		return phoneNumbers;
+
 	}
 
 	public void showRemoveDialog() {
@@ -250,24 +278,26 @@ public class AddFromPhoneRecordActivity extends Activity implements
 								AddFromPhoneRecordActivity.this);
 						WriteContactUtils mWriteContactUtils = new WriteContactUtils(
 								AddFromPhoneRecordActivity.this);
-						
+
 						switch (which) {
 						case 0:
 							flags_delete = true;
 							mWriteContactUtils
-							.writeContactByPhoneRecord(ArrayUtils.listToArray(numbers));
+									.writeContactByPhoneRecord(ArrayUtils
+											.listToArray(numbers));
 							addPhoneRecordTast.execute();
 							// 删除系统库中的联系人的相关信息,移动相关的通信信息
 							break;
 						case 1:
 							flags_delete = false;
 							mWriteContactUtils
-							.writeContactByPhoneRecord(ArrayUtils.listToArray(numbers));
+									.writeContactByPhoneRecord(ArrayUtils
+											.listToArray(numbers));
 							// 不删除系统库中的联系人,移动相关的通信信息
 							addPhoneRecordTast.execute();
 							break;
 						}
-						
+
 					}
 				});
 		AlertDialog removeDialog = builder.create();
@@ -307,10 +337,11 @@ public class AddFromPhoneRecordActivity extends Activity implements
 
 		@Override
 		protected Integer doInBackground(Void... params) {
-			
+
 			RecordToUsUtils recordToUsUtils = new RecordToUsUtils(
 					AddFromPhoneRecordActivity.this);
-			recordToUsUtils.removeContactRecord(ArrayUtils.listToArray(numbers), flags_delete);
+			recordToUsUtils.removeContactRecord(
+					ArrayUtils.listToArray(numbers), flags_delete);
 			return null;
 		}
 

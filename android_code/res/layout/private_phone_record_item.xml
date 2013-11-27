@@ -75,7 +75,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
        android:gravity="center_horizontal"
-       android:layout_marginRight="40dip"
+       android:layout_marginRight="20dip"
         android:orientation="vertical" >
 
         <ImageView

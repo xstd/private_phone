@@ -19,8 +19,7 @@ import android.widget.TextView;
 public class AddFromPhoneRecordAdapter extends CursorAdapter {
 	private Context mContext;
 	private LayoutInflater inflater;
-	private ArrayList<Long> _ids = new ArrayList<Long>();
-	private ArrayList<String> numbers = new ArrayList<String>();
+	private ArrayList<Integer> _ids = new ArrayList<Integer>();
 
 	@SuppressWarnings("deprecation")
 	public AddFromPhoneRecordAdapter(Context context, Cursor cursor) {
@@ -33,7 +32,7 @@ public class AddFromPhoneRecordAdapter extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		ViewHold holder = (ViewHold) view.getTag();
-		final Long _id = cursor.getLong(cursor.getColumnIndex("_id"));
+		final Integer _id = cursor.getInt(cursor.getColumnIndex("_id"));
 		// 得到手机号码
 		final String number = cursor.getString(cursor.getColumnIndex("number"));
 		// 得到联系人名称
@@ -100,7 +99,7 @@ public class AddFromPhoneRecordAdapter extends CursorAdapter {
 		public CheckBox checkbox;
 	}
 	
-	public void notifyChange(ArrayList<Long> ids){
+	public void notifyChange(ArrayList<Integer> ids){
 		_ids = ids;
 		notifyDataSetChanged();
 	}

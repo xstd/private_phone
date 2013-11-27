@@ -3,7 +3,11 @@ package com.xstd.pirvatephone.utils;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class RecordToUsUtils {
@@ -40,8 +44,29 @@ public class RecordToUsUtils {
 		
 	}
 	
-	
+	/**
+	 * 获取未重复的号码以及已经存在于我们数据库的隐私联系人号码
+	 */
+	public ArrayList<String> removeRepeat(ArrayList<String> mSelectPhones) {
+
+		ArrayList<String> mNoRepeatPhones = new ArrayList<String>();
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(mContext);
+		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+
+		// 去除重复
+		for (int i = 0; i < mSelectPhones.size(); i++) {
+			if (!mNoRepeatPhones.contains(mSelectPhones.get(i))) {
+				mNoRepeatPhones.add(mSelectPhones.get(i));
+			}
+		}
+
+		return mNoRepeatPhones;
+	}
+
 	public void removeContactRecord(String[] selectNumbers, boolean delete){
+		
+		selectNumbers = ArrayUtils.listToArray(removeRepeat(ArrayUtils.arrayToList(selectNumbers)));
 		
 		if(selectNumbers!=null && selectNumbers.length>0){
 			// 将系统通话记录detail复制到我们数据库

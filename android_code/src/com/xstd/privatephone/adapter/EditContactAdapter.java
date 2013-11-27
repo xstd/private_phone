@@ -20,8 +20,7 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 
 public class EditContactAdapter extends CursorAdapter {
 	private Context mContext;
-	private final ArrayList<String> selectContacts = new ArrayList<String>();
-	private ArrayList<CheckBox> checkBoxs = new ArrayList<CheckBox>();
+	private ArrayList<String> selectContacts = new ArrayList<String>();
 
 	@SuppressWarnings("deprecation")
 	public EditContactAdapter(Context context, Cursor cursor) {
@@ -51,7 +50,7 @@ public class EditContactAdapter extends CursorAdapter {
 			typeStr = "[" + "立即挂断" + "]";
 		}
 		
-		
+		//checkBoxs.add(views.checkbox);
 		views.iv_icon.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 		views.tv_name.setText(name);
 		views.tv_type.setText(typeStr);
@@ -60,26 +59,9 @@ public class EditContactAdapter extends CursorAdapter {
 
 		if (selectContacts.contains(phone_number)) {
 			views.checkbox.setChecked(true);
+		}else{
+			views.checkbox.setChecked(false);
 		}
-
-		checkBoxs.add(views.checkbox);
-
-		views.checkbox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						// TODO Auto-generated method stub
-						if (isChecked) {
-							selectContacts.add(phone_number);
-						} else {
-							if (selectContacts.contains(phone_number)) {
-								selectContacts.remove(phone_number);
-							}
-						}
-					}
-				});
 
 	}
 
@@ -102,11 +84,11 @@ public class EditContactAdapter extends CursorAdapter {
 		return view;
 	}
 
-	public void notifyChange(boolean flag) {
-		for (int i = 0; i < checkBoxs.size(); i++) {
-			checkBoxs.get(i).setChecked(flag);
-		}
+	public void notifyChange(ArrayList<String> numbers) {
+		selectContacts = numbers;
+		notifyDataSetChanged();
 	}
+	
 
 	static class ViewHold {
 		TextView tv_name;

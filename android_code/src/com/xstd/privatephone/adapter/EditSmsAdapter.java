@@ -18,10 +18,10 @@ import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.utils.DateUtils;
 
 public class EditSmsAdapter extends CursorAdapter {
-	private final ArrayList<String> selectContacts = new ArrayList<String>();
-	private ArrayList<CheckBox> checkBoxs = new ArrayList<CheckBox>();
+	private ArrayList<String> selectContacts = new ArrayList<String>();
 
 	private static Context mContext;
 	private String phoneType;
@@ -76,29 +76,14 @@ public class EditSmsAdapter extends CursorAdapter {
 		views.tv_hidden_number.setVisibility(View.GONE);
 		views.isopen.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
 
-		views.sms_tv_date.setText(new Date(lastedContact).toLocaleString());
+		views.sms_tv_date.setText(DateUtils.parseDate(lastedContact));
 		views.sms_tv_content.setText(lasted_data);
 
 		if (selectContacts.contains(phone_number)) {
 			views.checkbox.setChecked(true);
+		}else{
+			views.checkbox.setChecked(false);
 		}
-		checkBoxs.add(views.checkbox);
-		views.checkbox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						// TODO Auto-generated method stub
-						if (isChecked) {
-							selectContacts.add(phone_number);
-						} else {
-							if (selectContacts.contains(phone_number)) {
-								selectContacts.remove(phone_number);
-							}
-						}
-					}
-				});
 
 	}
 
@@ -123,10 +108,9 @@ public class EditSmsAdapter extends CursorAdapter {
 		return view;
 	}
 	
-	public void notifyChange(boolean flag) {
-		for (int i = 0; i < checkBoxs.size(); i++) {
-			checkBoxs.get(i).setChecked(flag);
-		}
+	public void notifyChange(ArrayList<String> numbers) {
+		selectContacts = numbers;
+		notifyDataSetChanged();
 	}
 
 	static class ViewHold {
