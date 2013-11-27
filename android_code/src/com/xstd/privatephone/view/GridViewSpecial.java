@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -64,6 +65,7 @@ public class GridViewSpecial extends View {
 	// The mLeftEdgePadding fields is filled in onLayout(). See the comments
 	// in onLayout() for details.
 	static class LayoutSpec {
+
 		LayoutSpec(int w, int h, int intercellSpacing, int leftEdgePadding,
 				DisplayMetrics metrics) {
 			mCellWidth = dpToPx(w, metrics);
@@ -84,8 +86,8 @@ public class GridViewSpecial extends View {
 		DisplayMetrics metrics = new DisplayMetrics();
 		a.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		mCellSizeChoices = new LayoutSpec[] {
-				new LayoutSpec(67, 67, 8, 0, metrics),
-				new LayoutSpec(102, 102, 8, 0, metrics), };
+				new LayoutSpec(67, 67, 5, 4, metrics),
+				new LayoutSpec(102, 102, 5, 4, metrics), };
 	}
 
 	// Converts dp to pixel.
@@ -115,7 +117,6 @@ public class GridViewSpecial extends View {
 
 	// Selection state
 	private int mCurrentSelection = INDEX_NONE;
-	private int mCurrentPressState = 0;
 	private static final int TAPPING_FLAG = 1;
 
 	// These are cached derived information.
@@ -238,9 +239,9 @@ public class GridViewSpecial extends View {
 	// drawing. The cache must be updated if the cell size is changed.
 	public static final int OUTLINE_EMPTY = 0;
 	public static final int OUTLINE_PRESSED = 1;
-	public static final int OUTLINE_SELECTED = 2;
+	// public static final int OUTLINE_SELECTED = 2;
 
-	public Bitmap mOutline[] = new Bitmap[3];
+	public Bitmap mOutline[] = new Bitmap[2];
 
 	private void generateOutlineBitmap() {
 		int w = mSpec.mCellWidth;
@@ -260,14 +261,14 @@ public class GridViewSpecial extends View {
 		cellOutline.setState(EMPTY_STATE_SET);
 		cellOutline.draw(canvas);
 
-		canvas.setBitmap(mOutline[OUTLINE_PRESSED]);
-		cellOutline
-				.setState(PRESSED_ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
-		cellOutline.draw(canvas);
-
-		// canvas.setBitmap(mOutline[OUTLINE_SELECTED]);
-		// cellOutline.setState(ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
+		// canvas.setBitmap(mOutline[OUTLINE_PRESSED]);
+		// cellOutline
+		// .setState(PRESSED_ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
 		// cellOutline.draw(canvas);
+
+		canvas.setBitmap(mOutline[OUTLINE_PRESSED]);
+		cellOutline.setState(ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET);
+		cellOutline.draw(canvas);
 	}
 
 	private void moveDataWindow() {
@@ -525,11 +526,7 @@ public class GridViewSpecial extends View {
 		}
 		switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			mCurrentPressState |= TAPPING_FLAG;
-			invalidate();
-			break;
 		case MotionEvent.ACTION_UP:
-			mCurrentPressState &= ~TAPPING_FLAG;
 			invalidate();
 			break;
 		}
@@ -610,11 +607,7 @@ public class GridViewSpecial extends View {
 		int xPos = leftSpacing + (col * (mSpec.mCellWidth + spacing));
 		int yTop = spacing + (row * mBlockHeight);
 
-		int type = OUTLINE_SELECTED;
-		if (mCurrentPressState != 0) {
-			type = OUTLINE_PRESSED;
-		}
-		canvas.drawBitmap(mOutline[type], xPos, yTop, null);
+		canvas.drawBitmap(mOutline[OUTLINE_PRESSED], xPos, yTop, null);
 	}
 }
 

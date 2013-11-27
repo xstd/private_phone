@@ -9,7 +9,10 @@
     <ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:divider="@null"
+        android:listSelector="@drawable/privacy_space_lv_item_selector" >
     </ListView>
-    
+
 </LinearLayout>

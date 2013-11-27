@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -38,6 +40,8 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 		AdapterView.OnItemLongClickListener {
 
 	private static final int REQUEST_CAMERA_CODE = 1;
+
+	private static final String TAG = "AddPrivacyPictureActivity";
 
 	@ViewMapping(ID = R.id.ll_return_btn)
 	public ImageButton ll_return_btn;
@@ -155,30 +159,38 @@ public class AddPrivacyPictureActivity extends BaseActivity implements
 	}
 
 	private void showAddDialog() {
-		final EditText et = new EditText(this);
-		AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.rs_create_album)
-				.setView(et)
-				.setPositiveButton(R.string.rs_create,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								String name = et.getText().toString().trim();
-								if (TextUtils.isEmpty(name)) {
-									Toasts.getInstance(
-											AddPrivacyPictureActivity.this)
-											.show(R.string.rs_error_empty_thumb,
-													0);
-									return;
-								}
-								PrivacyDaoUtils.geThumbDao(
-										AddPrivacyPictureActivity.this).insert(
-										new PrivacyPic(null, name));
-								refershFolderCount(adapter.getCursor());
-							}
-						}).setNegativeButton(android.R.string.cancel, null)
-				.create();
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View
+				.inflate(this, R.layout.dialog_add_picture_folder, null);
+		final EditText et_name = (EditText) view.findViewById(R.id.name);
+		final TextView btn_cancle = (TextView) view
+				.findViewById(R.id.btn_cancle);
+		final TextView btn_ok = (TextView) view.findViewById(R.id.btn_ok);
+		btn_cancle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		btn_ok.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String name = et_name.getText().toString().trim();
+				if (TextUtils.isEmpty(name)) {
+					Toasts.getInstance(AddPrivacyPictureActivity.this).show(
+							R.string.rs_error_empty_thumb, 0);
+					return;
+				}
+				PrivacyDaoUtils.geThumbDao(AddPrivacyPictureActivity.this)
+						.insert(new PrivacyPic(null, name));
+				refershFolderCount(adapter.getCursor());
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
 	}
 

@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -81,6 +82,8 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 	private static final float INVALID_POSITION = -1f;
 
+	private static final String TAG = "ShowFolderMediaActivity";
+
 	private Uri mCropResultUri;
 
 	private boolean mConfigurationChanged = false;
@@ -93,7 +96,7 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 
 		privacy_type = getIntent().getIntExtra("privacy_type", 0);
 		ref_id = getIntent().getLongExtra("ref_id", -1);
-
+		Log.i(TAG, privacy_type + "---" + ref_id);
 		initUI();
 	}
 
@@ -117,7 +120,6 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 	protected void onResume() {
 		super.onResume();
 
-		gv.setSizeChoice(1);
 		gv.requestFocus();
 
 		// install an intent filter to receive SD card related events.
@@ -303,6 +305,7 @@ public class ShowFolderMediaActivity extends BaseActivity implements
 					FileUtils.DeleteFile(info);
 					SystemClock.sleep(500);
 				}
+				FileUtils.updateSystemFile(getApplicationContext());
 				return null;
 			}
 

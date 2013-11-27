@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.util.Log;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.activity.ShowFolderMediaActivity;
@@ -20,6 +21,7 @@ public class Item {
 	public static final int TYPE_CAMERA_VIDEOS = 3;
 	public static final int TYPE_CAMERA_MEDIAS = 4;
 	public static final int TYPE_NORMAL_FOLDERS = 5;
+	private static final String TAG = "Item";
 
 	public final int mType;
 	public final String mBucketId;
@@ -64,10 +66,10 @@ public class Item {
 		// intent.putExtra("windowTitle", mName);
 		// intent.putExtra("mediaTypes", getIncludeMediaTypes());
 		Intent intent = new Intent(activity, ShowFolderMediaActivity.class);
-		intent.putExtra("privacy_type",
-				activity.getIntent().getIntExtra("privacy_type", 0));
-		intent.putExtra("ref_id",
-				activity.getIntent().getLongExtra("ref_id", -1));
+		int privacy_type = activity.getIntent().getIntExtra("privacy_type", 0);
+		long ref_id = activity.getIntent().getLongExtra("ref_id", -1);
+		intent.putExtra("privacy_type", privacy_type);
+		intent.putExtra("ref_id", ref_id);
 		intent.setData(uri);
 		activity.startActivityForResult(intent,
 				ShowSDCardMediaActivity.REQUEST_FINISH_CODE);

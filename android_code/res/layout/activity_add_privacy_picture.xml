@@ -16,7 +16,6 @@
             android:id="@+id/inbox_divider"
             style="@style/activity_divider"
             android:paddingLeft="10.0dip"
-            android:text="@string/strongbox_image_inbox_divider"
             android:textSize="16.0sp" />
 
         <GridView

@@ -6,33 +6,42 @@
 
     <include layout="@layout/ll_title_bar" />
 
-    <com.xstd.privatephone.view.GridViewSpecial
-        android:id="@+id/gv"
-        android:numColumns="3"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/move"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/rs_privacy_move" />
+        <com.xstd.privatephone.view.GridViewSpecial
+            android:id="@+id/gv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/all"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/private_comm_select_all" />
+            android:background="@drawable/privacy_background_edit" >
+
+            <Button
+                android:id="@+id/move"
+                android:layout_width="138dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/private_comm_sms_send_selector"
+                android:text="@string/privacy_selectfile_move" />
+
+            <Button
+                android:id="@+id/all"
+                android:layout_width="138dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/private_comm_sms_send_selector"
+                android:text="@string/privacy_selectfile_add" />
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

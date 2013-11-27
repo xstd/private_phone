@@ -13,17 +13,16 @@
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/album_default_icon" />
+        android:contentDescription="@string/app_name" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="13dp"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
         android:background="#22000000"

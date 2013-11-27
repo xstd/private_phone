@@ -139,6 +139,12 @@ public class PrivacyShowActivity extends BaseActivity {
 	public void add(View view) {
 		Intent intent;
 		switch (privacy_type) {
+		case 0:
+			intent = new Intent(this, ShowSDCardMediaActivity.class);
+			intent.putExtra("privacy_type", privacy_type);
+			intent.putExtra("ref_id", ref_id);
+			startActivity(intent);
+			break;
 		case 1:
 			showAudioSelectDialog();
 			break;
