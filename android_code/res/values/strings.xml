@@ -344,8 +344,8 @@
     <string name="s_export_progress_title">正在恢复隐私内容</string>
     <string name="s_calllog_all">公开记录</string>
     <string name="s_calllog_privacy">隐私记录</string>
-    <string name="s_calllog_header">通话</string>
-    <string name="s_sms_header">短信</string>
+    <string name="s_calllog_header">系统电话</string>
+    <string name="s_sms_header">系统短信</string>
     <string name="s_stranger">陌生人</string>
     <string name="s_sms_all">公开短信</string>
     <string name="s_sms_privacy">隐私短信</string>
@@ -867,10 +867,10 @@ QQ:903372666
 
     <!-- 模拟通讯 -->
     <string name="simula_comm_sms_title">模拟短信</string>
-    <string name="simula_comm_phone_title">模拟通话</string>
-    <string name="simula_add_sms">新增模拟短信</string>
-    <string name="simula_add_phone">新增模拟通话</string>
-    <string name="simula_add_advance_phone">新增人工模拟通话</string>
+    <string name="simula_comm_phone_title">模拟电话</string>
+    <string name="simula_add_sms">创建模拟短信</string>
+    <string name="simula_add_phone">创建模拟电话</string>
+    <string name="simula_add_advance_phone">人工模拟电话</string>
     <string name="title_activity_phone_detail">PhoneDetailActivity</string>
     <string name="title_activity_context_model">ContextModelActivity</string>
     <string name="title_activity_new_context_model">NewContextModelActivity</string>
@@ -887,8 +887,8 @@ QQ:903372666
     <string name="title_activity_private_contact_edit">PrivateContactEditActivity</string>
     <string name="title_activity_call_forwarding">CallForwardingActivity</string>
     <string name="rs_cancle_all">取消全选</string>
-    <string name="add_common_sms">增加短信记录</string>
-    <string name="add_common_phone">增加电话记录</string>
+    <string name="add_common_sms">插入短信记录</string>
+    <string name="add_common_phone">插入电话记录</string>
     <string name="rs_input_sms_type">请选择短信类型</string>
     <string name="rs_input_sms_date">请选择短信日期</string>
     <string name="rs_input_sms_time">请选择短信时间</string>
