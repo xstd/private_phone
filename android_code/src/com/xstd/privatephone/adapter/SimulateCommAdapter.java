@@ -21,108 +21,88 @@ import com.xstd.pirvatephone.module.SimulaSms;
 
 public class SimulateCommAdapter extends BaseAdapter {
 
-    private static final String TAG = null;
-    private Context mCtx;
-    private List<SimulateComm> mDatas = new ArrayList<SimulateComm>();
-    private int type;
+	private static final String TAG = null;
+	private Context mCtx;
+	private List<SimulateComm> mDatas = new ArrayList<SimulateComm>();
+	private int type;
 
-    public SimulateCommAdapter(Context ctx, int type) {
-        mCtx = ctx;
-        this.type = type;
-    }
+	public SimulateCommAdapter(Context ctx, int type) {
+		mCtx = ctx;
+		this.type = type;
+	}
 
-    /**
-     * 通过类型来修改数据
-     */
-    public void changeDatas() {
-        if (type == SimulaCommActivity.SIMULATE_SMS) {
-            mDatas = SimulaSms.getInstance(mCtx).getSimulaCommByType();
-        } else if (type == SimulaCommActivity.SIMULATE_PHONE) {
-            mDatas = SimulaPhone.getInstance(mCtx).getSimulaCommByType();
-        }
-        notifyDataSetChanged();
-    }
+	/**
+	 * 通过类型来修改数据
+	 */
+	public void changeDatas() {
+		if (type == SimulaCommActivity.SIMULATE_SMS) {
+			mDatas = SimulaSms.getInstance(mCtx).getSimulaCommByType();
+		} else if (type == SimulaCommActivity.SIMULATE_PHONE) {
+			mDatas = SimulaPhone.getInstance(mCtx).getSimulaCommByType();
+		}
+		notifyDataSetChanged();
+	}
 
-    @Override
-    public int getCount() {
-        return mDatas.size();
-    }
+	@Override
+	public int getCount() {
+		return mDatas.size();
+	}
 
-    @Override
-    public Object getItem(int position) {
-        return mDatas.get(position);
-    }
+	@Override
+	public Object getItem(int position) {
+		return mDatas.get(position);
+	}
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
 
-    @SuppressLint("SimpleDateFormat")
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-            if (type == SimulaCommActivity.SIMULATE_PHONE) {
-                convertView = View.inflate(mCtx, R.layout.simulate_phone_item,
-                        null);
-                holder.time = (TextView) convertView.findViewById(R.id.time);
-                holder.displayName = (TextView) convertView
-                        .findViewById(R.id.displayName);
-                holder.phoneNumber = (TextView) convertView
-                        .findViewById(R.id.phoneNumber);
-            } else if (type == SimulaCommActivity.SIMULATE_SMS) {
-                convertView = View.inflate(mCtx, R.layout.simulate_sms_item,
-                        null);
-                holder.time = (TextView) convertView.findViewById(R.id.time);
-                holder.displayName = (TextView) convertView
-                        .findViewById(R.id.displayName);
-                holder.content = (TextView) convertView
-                        .findViewById(R.id.content);
-            }
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        SimulateComm comm = mDatas.get(position);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd kk:mm");
-        String futuretime = df.format(comm.getFuturetime());
-        holder.time.setText(futuretime);
-        if (type == SimulaCommActivity.SIMULATE_PHONE) {
-            holder.phoneNumber.setText(comm.getPhonenumber() + "");
-            if (TextUtils.isEmpty(comm.getName())) {
-                holder.displayName.setText(mCtx.getString(R.string.s_stranger));
-            } else {
-                holder.displayName.setText(comm.getName());
-            }
-        } else if (type == SimulaCommActivity.SIMULATE_SMS) {
-            holder.content.setText(comm.getContent());
-            if (TextUtils.isEmpty(comm.getName())) {
-                holder.displayName.setText(mCtx.getString(R.string.s_stranger)
-                        + "(" + comm.getPhonenumber() + ")");
-            } else {
-                holder.displayName.setText(comm.getName());
-            }
+	@SuppressLint("SimpleDateFormat")
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			holder = new ViewHolder();
+			convertView = View
+					.inflate(mCtx, R.layout.simulate_phone_item, null);
+			holder.main = (TextView) convertView.findViewById(R.id.main);
+			holder.mr = (TextView) convertView.findViewById(R.id.mr);
+			holder.mb = (TextView) convertView.findViewById(R.id.mb);
+			holder.pr = (TextView) convertView.findViewById(R.id.pr);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		SimulateComm comm = mDatas.get(position);
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd kk:mm");
+		String futuretime = df.format(comm.getFuturetime());
+		holder.main.setText(comm.getName());
+		if (type == SimulaCommActivity.SIMULATE_PHONE) {
+			holder.mr.setText("（" + comm.getPhonenumber() + "）");
+			holder.mb.setText(futuretime);
+			if (comm.getFuturetime().getTime() > System.currentTimeMillis()) {
+				holder.pr.setTextColor(0xff3e76a9);
+				holder.pr.setText("预约中...");
+			} else {
+				holder.pr.setTextColor(0xff3ea946);
+				holder.pr.setText("预约成功");
+			}
+		} else if (type == SimulaCommActivity.SIMULATE_SMS) {
+			holder.pr.setTextColor(0xff208ecd);
+			holder.mb.setText(comm.getContent());
+		}
+		return convertView;
+	}
 
-        }
-        return convertView;
-    }
-
-    /**
+	/**
      *
      */
-    class ViewHolder {
-        TextView time;
-        TextView displayName;
-        /**
-         * phone中的
-         */
-        TextView phoneNumber;
-        /**
-         * sms中的
-         */
-        TextView content;
-    }
+	class ViewHolder {
+		TextView main;
+		TextView mr;
+		TextView mb;
+		TextView pr;
+	}
 
 }

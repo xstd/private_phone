@@ -2,84 +2,172 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <include layout="@layout/ll_title_bar" />
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@drawable/simulate_background_titlebar"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/simulate_sms"
-            style="@style/btn_simulate"
-            android:onClick="simulateSms"
-            android:text="@string/simula_comm_sms_title" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp" >
 
-        <TextView
-            android:id="@+id/simulate_phone"
-            style="@style/btn_simulate"
-            android:onClick="simulatePhone"
-            android:text="@string/simula_comm_phone_title" />
+            <ImageButton
+                android:id="@+id/ll_return_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="24dip"
+                android:background="@drawable/private_comm_backbtn_selector"
+                android:contentDescription="@string/app_name" />
 
-        <TextView
-            android:id="@+id/common_sms"
-            style="@style/btn_simulate"
-            android:onClick="addSMS"
-            android:text="@string/s_sms_header" />
+            <TextView
+                android:id="@+id/ll_title_text"
+                style="@style/private_comm_title_style"
+                android:layout_centerInParent="true"
+                android:text="@string/s_menu_simulate" />
 
-        <TextView
-            android:id="@+id/common_phone"
-            style="@style/btn_simulate"
-            android:onClick="addPhone"
-            android:text="@string/s_calllog_header" />
+            <ImageButton
+                android:id="@+id/ll_toools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dip"
+                android:contentDescription="@string/app_name"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/simulate_background_titlebar_divider" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp" >
+
+            <ImageView
+                android:id="@+id/rdts"
+                android:layout_width="84dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/simulate_title_selected"
+                android:contentDescription="@string/app_name" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/simulate_sms"
+                    style="@style/btn_simulate"
+                    android:text="@string/simula_comm_sms_title" />
+
+                <TextView
+                    android:id="@+id/simulate_phone"
+                    style="@style/btn_simulate"
+                    android:text="@string/simula_comm_phone_title" />
+
+                <TextView
+                    android:id="@+id/common_sms"
+                    style="@style/btn_simulate"
+                    android:text="@string/s_sms_header" />
+
+                <TextView
+                    android:id="@+id/common_phone"
+                    style="@style/btn_simulate"
+                    android:text="@string/s_calllog_header" />
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_add"
+    <ListView
+        android:id="@+id/lv_sms"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
-        android:onClick="addSimulate"
-        android:text="@string/simula_add_phone" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:listSelector="@drawable/privacy_space_lv_item_selector" >
+    </ListView>
 
-    <Button
-        android:visibility="gone"
-        android:id="@+id/btn_add_advance"
+    <ListView
+        android:id="@+id/lv_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
-        android:onClick="addAdvanceSimulate"
-        android:text="@string/simula_add_advance_phone" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:listSelector="@drawable/privacy_space_lv_item_selector"
+        android:visibility="gone" >
+    </ListView>
+
+    <ListView
+        android:id="@+id/lv_common_sms"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:listSelector="@drawable/privacy_space_lv_item_selector"
+        android:visibility="gone" >
+    </ListView>
+
+    <ListView
+        android:id="@+id/lv_common_phone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:listSelector="@drawable/privacy_space_lv_item_selector"
+        android:visibility="gone" >
+    </ListView>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@drawable/privacy_background_edit" >
 
-        <ListView
-            android:id="@+id/lv_phone"
+        <RelativeLayout
+            android:id="@+id/btn_phone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"></ListView>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" >
 
-        <ListView
-            android:id="@+id/lv_sms"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"></ListView>
+            <Button
+                android:layout_width="138dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/private_comm_sms_send_selector"
+                android:onClick="addSimulate"
+                android:text="@string/simula_add_phone"
+                android:textColor="#6B6B6B"
+                android:textSize="18sp" />
 
-        <ListView
-            android:id="@+id/lv_com_phone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"></ListView>
+            <Button
+                android:layout_width="138dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/private_comm_sms_send_selector"
+                android:onClick="addAdvanceSimulate"
+                android:text="@string/simula_add_advance_phone"
+                android:textColor="#6B6B6B"
+                android:textSize="18sp" />
+        </RelativeLayout>
 
-        <ListView
-            android:id="@+id/lv_com_sms"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"></ListView>
+        <Button
+            android:id="@+id/btn_other"
+            android:layout_width="267dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/private_comm_sms_send_selector"
+            android:textColor="#6B6B6B"
+            android:textSize="18sp" />
     </FrameLayout>
 
 </LinearLayout>

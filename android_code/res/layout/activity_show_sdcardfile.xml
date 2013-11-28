@@ -35,7 +35,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/private_comm_sms_send_selector"
-                android:text="@string/privacy_selectfile_move" />
+                android:text="@string/privacy_selectfile_move"
+                android:textColor="#6B6B6B"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/btn_add"
@@ -45,7 +47,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/private_comm_sms_send_selector"
-                android:text="@string/privacy_selectfile_add" />
+                android:text="@string/privacy_selectfile_add"
+                android:textColor="#6B6B6B"
+                android:textSize="18sp" />
         </RelativeLayout>
     </LinearLayout>
 
