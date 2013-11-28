@@ -53,7 +53,7 @@ public class AddFromContactAdapter extends BaseAdapter {
 		if (convertView == null ) {
 			hold = new ViewHold();
 			convertView = View.inflate(mContext,
-					R.layout.private_comm_add_item, null);
+					R.layout.private_add_contact_item, null);
 
 			hold.name = (TextView) convertView.findViewById(R.id.tv_name);
 			hold.phone = (TextView) convertView.findViewById(R.id.tv_phone_num);

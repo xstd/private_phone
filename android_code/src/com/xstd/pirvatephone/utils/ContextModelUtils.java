@@ -251,7 +251,7 @@ public class ContextModelUtils {
 						Tools.logSh("address" + number + "::" + "message=="
 								+ jsonMassage);
 						try {
-							// {"home":1,"company":2}
+							// {"home":0,"company":1}
 							JSONObject json = new JSONObject(jsonMassage);
 							json.put(modelName, type);
 							jsonMassage = json.toString();
@@ -276,13 +276,13 @@ public class ContextModelUtils {
 							// 首先最外层是{}，是创建一个对象
 							JSONObject model = new JSONObject();
 
-							// 1，不拦截；2，拦截
+							// 0，不拦截；1，拦截
 							model.put(modelName, type);
 							msg = model.toString();
 							Tools.logSh("name=" + name + ":::" + "address"
 									+ number + "::" + "message==" + msg);
 							/*
-							 * { "家里"："1","公司":"2" }
+							 * { "家里"："0","公司":"1" }
 							 */
 
 						} catch (JSONException ex) {
@@ -311,13 +311,13 @@ public class ContextModelUtils {
 					// 首先最外层是{}，是创建一个对象
 					JSONObject model = new JSONObject();
 
-					// 1，不拦截；2，拦截
+					// 0，不拦截；1，拦截
 					model.put(modelName, type);
 					msg = model.toString();
 					Tools.logSh("name=" + name + ":::" + "address" + number
 							+ "::" + "message==" + msg);
 					/*
-					 * { "家里"："1","公司":"2" }
+					 * { "家里"："0","公司":"1" }
 					 */
 
 				} catch (JSONException ex) {

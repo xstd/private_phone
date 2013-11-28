@@ -8,101 +8,96 @@
         android:id="@+id/layout_title"
         layout="@layout/private_comm_title" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout_title"
         android:background="@color/private_comm_listview_bkg"
+        android:orientation="vertical"
         android:padding="10dip" >
 
-        <LinearLayout
-            android:id="@+id/rl_content"
+        <RelativeLayout
+            android:id="@+id/rl_add_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/rl_title"
-            android:layout_marginBottom="60dip"
-            android:orientation="vertical" >
+            android:layout_height="60dip" >
 
-            <RelativeLayout
-                android:id="@+id/rl_add_name"
+            <EditText
+                android:id="@+id/et_model_name"
                 android:layout_width="match_parent"
-                android:layout_height="60dip" >
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="60dip"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="名称:" />
-
-                <EditText
-                    android:id="@+id/et_model_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/tv_name" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_not_intercept"
-                android:layout_width="match_parent"
-                android:layout_height="60dip" >
-
-                <TextView
-                    android:id="@+id/tv_not_intercept"
-                    android:layout_width="60dip"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="不拦截" />
-
-                <Button
-                    android:id="@+id/btn_add_notinterept"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/tv_not_intercept"
-                    android:text="add" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_intercept"
-                android:layout_width="match_parent"
-                android:layout_height="60dip" >
-
-                <TextView
-                    android:id="@+id/tv_intercept"
-                    android:layout_width="60dip"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="拦截" />
-
-                <Button
-                    android:id="@+id/btn_add_interept"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/tv_intercept"
-                    android:text="add" />
-            </RelativeLayout>
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:hint="@string/private_comm_text_hint_modelname" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
             android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/btn_cancle"
+            <RelativeLayout
+                android:id="@+id/rl_intercept"
                 android:layout_width="0dip"
+                android:layout_height="60dip"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/btn_interept_names"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/private_comm_interept_names" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_not_intercept"
+                android:layout_width="0dip"
+                android:layout_height="60dip"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/btn_not_interept_names"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/private_comm_not_interept_names" />
+            </RelativeLayout>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="取消" />
+                />
+            
+            <TextView
+                android:id="@+id/tv_emptyview"
+                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+            
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            android:gravity="bottom" >
 
             <Button
-                android:id="@+id/btn_sure"
-                android:layout_width="0dip"
+                android:id="@+id/btn_add_interept"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="确定" />
-        </LinearLayout>
-    </RelativeLayout>
+                android:text="@string/private_comm_new_interept" />
+
+            <Button
+                android:id="@+id/btn_add_not_interept"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/private_comm_new_not_interept" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

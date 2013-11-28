@@ -268,7 +268,7 @@ public class NotIntereptActivity extends BaseActivity {
 					intent.putStringArrayListExtra("SelectContactsNames",
 							selectContactsNames);
 					intent.putExtra("delete", delete);
-					setResult(2, intent);
+					setResult(0, intent);
 				}
 				finish();
 			}

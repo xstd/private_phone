@@ -771,6 +771,13 @@ QQ:903372666
     <string name="private_comm_delete">删除</string>
     <string name="private_comm_add_from_phonerecord">从通话记录添加</string>
     <string name="private_comm_add_from_smsrecord">从短信记录添加</string>
+    
+    <string name="private_comm_btn_create">创建</string>
+    <string name="private_comm_text_hint_modelname">模式名称</string>
+    <string name="private_comm_interept_names">拦截名单</string>
+    <string name="private_comm_not_interept_names">不拦截名单</string>
+    <string name="private_comm_new_interept">添加拦截名单</string>
+    <string name="private_comm_new_not_interept">添加不拦截名单</string>
 
     <!-- 入口 -->
     <string name="enter_no_password_tips">提示</string>

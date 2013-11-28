@@ -157,7 +157,7 @@ public class ModelEditActivity extends BaseActivity {
 							NotIntereptActivity.class);
 					intent.putExtra("ModelName", modelName);
 					intent.putExtra("type", 0);
-					startActivityForResult(intent, 1);
+					startActivityForResult(intent, 0);
 				} else {
 					Intent intent = new Intent(ModelEditActivity.this,
 							IntereptActivity.class);

@@ -183,7 +183,7 @@ public class IntereptActivity extends BaseActivity {
 					intent.putStringArrayListExtra("SelectContactsNames",
 							selectContactsNames);
 					intent.putExtra("delete", delete);
-					setResult(2, intent);
+					setResult(1, intent);
 				}
 				finish();
 			}
