@@ -4,8 +4,22 @@ public class MyContactInfo {
 	
 	private String address;
 	private String name;
+	private Long photoId;
+	private Long contactId;
+	public Long getContactId() {
+		return contactId;
+	}
+	public void setContactId(Long contactId) {
+		this.contactId = contactId;
+	}
 	public boolean isChecked;
 	
+	public Long getPhotoId() {
+		return photoId;
+	}
+	public void setPhotoId(Long photoId) {
+		this.photoId = photoId;
+	}
 	public String getAddress() {
 		return address;
 	}
@@ -24,13 +38,14 @@ public class MyContactInfo {
 	public void setChecked(boolean isChecked) {
 		this.isChecked = isChecked;
 	}
-	public MyContactInfo(String address, String name, boolean isChecked) {
+	public MyContactInfo(String address, String name, boolean isChecked, Long photoId,Long contactId) {
 		super();
 		this.address = address;
 		this.name = name;
+		this.photoId = photoId;
+		this.contactId = contactId;
 		this.isChecked = isChecked;
 	}
-	
 	public MyContactInfo(){
 		super();
 	}

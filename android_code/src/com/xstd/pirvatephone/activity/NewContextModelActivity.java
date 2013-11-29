@@ -315,12 +315,12 @@ public class NewContextModelActivity extends BaseActivity {
 
 		if (intereptNumbers != null && intereptNumbers.size() > 0) {
 			ContextModelUtils.saveModelDetail(this, modelName,
-					intereptNames, intereptNumbers, type, delete);
+					intereptNames, intereptNumbers, 1, delete);
 		}
 		
 		if (notIntereptNumbers != null && notIntereptNumbers.size() > 0) {
 			ContextModelUtils.saveModelDetail(this, modelName,
-					notIntereptNames, notIntereptNumbers, type, delete);
+					notIntereptNames, notIntereptNumbers, 0, delete);
 		}
 	}
 
@@ -330,7 +330,7 @@ public class NewContextModelActivity extends BaseActivity {
 		getMenuInflater().inflate(R.menu.new_context_model, menu);
 		return true;
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (data != null) {
@@ -340,11 +340,25 @@ public class NewContextModelActivity extends BaseActivity {
 						.getStringArrayListExtra("SelectContactsNumbers");
 				notIntereptNames = data
 						.getStringArrayListExtra("SelectContactsNames");
+				
+				for (int i = 0; i < notIntereptNumbers.size(); i++) {
+					if(intereptNumbers!=null && intereptNumbers.contains(notIntereptNumbers.get(i))){
+						intereptNumbers.remove(notIntereptNumbers.get(i));
+						intereptNames.remove(notIntereptNames.get(i));
+					}
+				}
 			} else {
 				intereptNumbers = data
 						.getStringArrayListExtra("SelectContactsNumbers");
 				intereptNames = data
 						.getStringArrayListExtra("SelectContactsNames");
+				
+				for (int i = 0; i < intereptNumbers.size(); i++) {
+					if(notIntereptNumbers!=null && notIntereptNumbers.contains(intereptNumbers.get(i))){
+						notIntereptNumbers.remove(intereptNumbers.get(i));
+						notIntereptNames.remove(intereptNames.get(i));
+					}
+				}
 			}
 
 			delete = data.getBooleanExtra("delete", false);

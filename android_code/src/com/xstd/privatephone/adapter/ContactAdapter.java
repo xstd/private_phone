@@ -1,33 +1,33 @@
 package com.xstd.privatephone.adapter;
 
+import java.io.IOException;
 import java.io.InputStream;
 
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.support.v4.widget.CursorAdapter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.plugin.common.utils.image.ImageUtils;
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.utils.MakeCallUtils;
 
 public class ContactAdapter extends CursorAdapter {
 	private Context mContext;
 
+	@SuppressWarnings("deprecation")
 	public ContactAdapter(Context context, Cursor c) {
 		super(context, c);
 		mContext = context;
@@ -35,7 +35,7 @@ public class ContactAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(View view, Context arg1, Cursor cursor) {
-		ViewHold views = (ViewHold) view.getTag();
+		ViewHold hold = (ViewHold) view.getTag();
 
 		int id = cursor.getInt(cursor.getColumnIndex("_id"));
 		final String phone_number = cursor.getString(cursor
@@ -55,37 +55,24 @@ public class ContactAdapter extends CursorAdapter {
 			typeStr = "[" + "立即挂断" + "]";
 		}
 
-		// 得到联系人头像Bitamp
-
-		Bitmap contactPhoto = null;
+		hold.tv_name.setText(name);
+		hold.tv_type.setText(typeStr);
+		hold.tv_phone_num.setText(phone_number.replace(" ", "")
+				.replace("-", ""));
+		hold.tv_phone_belong.setText("   北京");
+		hold.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 
 		// photoid 大于0 表示联系人有头像 如果没有给此人设置头像则给他一个默认的
+		Log.e("PhotoId  else ==", icon_id + "");
 		if (icon_id > 0) {
-			Uri uri = ContentUris.withAppendedId(
-					ContactsContract.Contacts.CONTENT_URI, icon_id);
-
-			ContentResolver resolver = mContext.getContentResolver();
-			InputStream input = ContactsContract.Contacts
-					.openContactPhotoInputStream(resolver, uri);
-
-			contactPhoto = BitmapFactory.decodeStream(input);
+			AsyncBitmapLoader asyncLoader = new AsyncBitmapLoader(mContext,
+					icon_id, hold.iv_pic);
+			asyncLoader.execute();
 
 		} else {
-
-			contactPhoto = BitmapFactory.decodeResource(
-					mContext.getResources(),
-					R.drawable.private_comm_contact_icon_default);
-
+			hold.iv_pic
+					.setImageResource(R.drawable.private_comm_contact_icon_default);
 		}
-
-		views.iv_pic.setImageBitmap(contactPhoto);
-
-		views.tv_name.setText(name);
-		views.tv_type.setText(typeStr);
-		views.tv_phone_num.setText(phone_number.replace(" ", "").replace("-",
-				""));
-		views.tv_phone_belong.setText("   北京");
-		views.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 
 	}
 
@@ -115,6 +102,56 @@ public class ContactAdapter extends CursorAdapter {
 		TextView tv_phone_belong;
 		TextView tv_type;
 		Button btn_dail;
+	}
+
+	private class AsyncBitmapLoader extends AsyncTask<Void, Void, Bitmap> {
+
+		private Context mContext;
+		private Long mContactId;
+		private ImageView bm;
+
+		public AsyncBitmapLoader(Context context, Long contactId, ImageView bm) {
+			this.mContext = context;
+			this.mContactId = contactId;
+			this.bm = bm;
+		}
+
+		@Override
+		public void onPreExecute() {
+		}
+
+		@Override
+		protected Bitmap doInBackground(Void... params) {
+			return loadPicture(mContactId);
+		}
+
+		@Override
+		public void onPostExecute(Bitmap integer) {
+			this.bm.setImageBitmap(integer);
+		}
+
+	}
+
+	private Bitmap loadPicture(Long contactId) {
+		Bitmap contactPhoto = null;
+		if (contactId == null) {
+			return null;
+		}
+		Uri uri = ContentUris.withAppendedId(
+				ContactsContract.Contacts.CONTENT_URI, contactId);
+
+		InputStream input = ContactsContract.Contacts
+				.openContactPhotoInputStream(mContext.getContentResolver(), uri);
+
+		contactPhoto = BitmapFactory.decodeStream(input);
+		try {
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		contactPhoto = ImageUtils.createRoundedCornerBitmap(contactPhoto, 48,
+				48, 0.6f, true, true, true, true);
+		return contactPhoto;
 	}
 
 }
