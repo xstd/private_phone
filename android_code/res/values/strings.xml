@@ -277,7 +277,7 @@
     <string name="s_clear_sms_privacy">清空所有隐私短信</string>
     <string name="s_clear_calllog_privacy">清空所有隐私通话记录</string>
     <string name="s_hint_name">联系人姓名</string>
-    <string name="s_hint_phone">电话号码</string>
+    <string name="s_hint_phone">添加联系人</string>
     <string name="s_setting_incalling_title">来电处理模式</string>
     <string name="s_setting_incalling">来电处理模式：</string>
     <string name="s_save">保存</string>
@@ -437,7 +437,7 @@
     <string name="s_mms_unsupport">暂不支持彩信隐藏</string>
     <string name="s_endcall_sound_tip">温馨提示:可在\"更多\"-\"设置\"中修改\"立即挂断返回提示音\".</string>
     <string name="s_silent_lock_screen_tip">温馨提示：“来电静音并关闭屏幕”功能需要激活“设备管理器”，如果出现激活提示，请点击“激活”方可正常使用此功能。</string>
-    <string name="s_hint_sms_content">请输入短信内容</string>
+    <string name="s_hint_sms_content">输入短信内容</string>
     <string name="s_simulate_sms_notify">只模拟通知栏提示(如果某些机型无法正常模拟短信请勾选)</string>
     <string name="s_simulate_sms_notify_title_text">通知栏标题</string>
     <string name="s_simulate_sms_notify_content_text">通知栏内容</string>
@@ -896,7 +896,6 @@ QQ:903372666
     <string name="rs_input_phone_date">请选择通话日期</string>
     <string name="rs_input_phone_time">请选择通话时间</string>
     <string name="rs_calling_during">通话持续时长：</string>
-    <string name="rs_add_common_phone">新增通话记录</string>
     <string name="rs_error_type">请选择一种电话模式</string>
     <string name="rs_error_sms_type">请选择一种短信模式</string>
     <string name="rs_error_datetime">时间要小于当前时间</string>
@@ -953,5 +952,7 @@ QQ:903372666
     <string name="privacy_pop_see">查看</string>
     <string name="privacy_pop_destory">销毁</string>
     <string name="privacy_pop_restore">还原</string>
+    <string name="rs_create_system_sms">创建系统短信</string>
+    <string name="rs_create_system_phone">创建系统电话</string>
 
 </resources>

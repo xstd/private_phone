@@ -3,6 +3,7 @@ package com.xstd.pirvatephone.activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -24,8 +25,6 @@ import com.xstd.privatephone.adapter.SimulateCommAdapter;
 
 public class SimulaCommActivity extends BaseActivity implements
 		View.OnClickListener {
-
-	private static final String TAG = "SimulaCommActivity";
 
 	/**
 	 * 代表模拟类型
@@ -79,6 +78,7 @@ public class SimulaCommActivity extends BaseActivity implements
 	private AddCommonSMSAdapter adapter_common_sms;
 
 	private int tw;
+	private float cell;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +95,10 @@ public class SimulaCommActivity extends BaseActivity implements
 
 	private void initUI() {
 		ViewMapUtil.viewMapping(this, getWindow());
+
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+		cell = (tw - 84 * outMetrics.density) / 2;
 
 		ll_return_btn.setOnClickListener(this);
 		simulate_sms.setOnClickListener(this);
@@ -202,8 +206,8 @@ public class SimulaCommActivity extends BaseActivity implements
 	}
 
 	private void loadAnimation(final int simulateType) {
-		Animation animation = new TranslateAnimation(type * tw, simulateType
-				* tw, 0, 0);
+		Animation animation = new TranslateAnimation(type * tw + cell
+				* (type + 1), simulateType * tw + cell * (type + 1), 0, 0);
 		animation.setDuration(300);
 		animation.setFillAfter(true);
 		animation.setAnimationListener(new AnimationListener() {

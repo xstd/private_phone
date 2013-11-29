@@ -7,7 +7,6 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -21,14 +20,15 @@ import com.xstd.pirvatephone.module.SimulaSms;
 
 public class SimulateCommAdapter extends BaseAdapter {
 
-	private static final String TAG = null;
 	private Context mCtx;
 	private List<SimulateComm> mDatas = new ArrayList<SimulateComm>();
 	private int type;
+	private DateFormat df;
 
 	public SimulateCommAdapter(Context ctx, int type) {
 		mCtx = ctx;
 		this.type = type;
+		df = new SimpleDateFormat("yyyy-MM-dd kk:mm");
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class SimulateCommAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View
-					.inflate(mCtx, R.layout.simulate_phone_item, null);
+					.inflate(mCtx, R.layout.simulate_comm_item, null);
 			holder.main = (TextView) convertView.findViewById(R.id.main);
 			holder.mr = (TextView) convertView.findViewById(R.id.mr);
 			holder.mb = (TextView) convertView.findViewById(R.id.mb);
@@ -75,21 +75,22 @@ public class SimulateCommAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		SimulateComm comm = mDatas.get(position);
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd kk:mm");
 		String futuretime = df.format(comm.getFuturetime());
 		holder.main.setText(comm.getName());
 		if (type == SimulaCommActivity.SIMULATE_PHONE) {
-			holder.mr.setText("（" + comm.getPhonenumber() + "）");
+			holder.mr.setText("(" + comm.getPhonenumber() + ")");
 			holder.mb.setText(futuretime);
 			if (comm.getFuturetime().getTime() > System.currentTimeMillis()) {
-				holder.pr.setTextColor(0xff3e76a9);
+				holder.pr.setTextColor(0XFF3E76A9);
 				holder.pr.setText("预约中...");
 			} else {
-				holder.pr.setTextColor(0xff3ea946);
+				holder.pr.setTextColor(0XFF3EA946);
 				holder.pr.setText("预约成功");
 			}
 		} else if (type == SimulaCommActivity.SIMULATE_SMS) {
-			holder.pr.setTextColor(0xff208ecd);
+			// holder.mr.setText("(50)");
+			holder.pr.setTextColor(0XFF208ECD);
+			holder.pr.setText(futuretime);
 			holder.mb.setText(comm.getContent());
 		}
 		return convertView;

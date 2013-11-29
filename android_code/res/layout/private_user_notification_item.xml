@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="10.0dip"
     android:layout_marginRight="10.0dip"
-    android:background="@drawable/list_selector"
+    android:background="@drawable/privacy_space_lv_item_selector"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/d_padding_v2"
     android:paddingTop="@dimen/d_padding_v2" >

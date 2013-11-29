@@ -41,21 +41,19 @@
     </style>
 
     <style name="text_input">
-        <item name="android:textSize">15.0sp</item>
-        <item name="android:textColor">#ffffffff</item>
-        <item name="android:textColorHint">#ffb0b0b0</item>
-        <item name="android:background">@drawable/text_selector</item>
-        <item name="android:padding">5.0dip</item>
-        <item name="android:focusable">true</item>
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">#ff202020</item>
+        <item name="android:textColorHint">#ffD7D6D6</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/input_edittext_background</item>
     </style>
 
     <style name="text_input_full">
-        <item name="android:textSize">15.0sp</item>
-        <item name="android:textColor">#ffffffff</item>
-        <item name="android:textColorHint">#ffb0b0b0</item>
-        <item name="android:background">@drawable/text_full_selector</item>
-        <item name="android:padding">5.0dip</item>
-        <item name="android:focusable">true</item>
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">#ff202020</item>
+        <item name="android:textColorHint">#ffd7d6d6</item>
+        <item name="android:background">@drawable/input_edittext_background</item>
+        <item name="android:padding">10.0dip</item>
     </style>
 
     <style name="activity_dialog" parent="@android:style/Theme.Dialog">

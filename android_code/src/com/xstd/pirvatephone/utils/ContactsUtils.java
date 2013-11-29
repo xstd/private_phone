@@ -76,7 +76,7 @@ public class ContactsUtils {
     }
 
     public static Cursor getCallLogByPeople(Context ctx) {
-        String[] projection = new String[]{CallLog.Calls._ID,CallLog.Calls.NUMBER,CallLog.Calls.DATE,CallLog.Calls.CACHED_NAME};
+        String[] projection = new String[]{CallLog.Calls._ID,CallLog.Calls.NUMBER,CallLog.Calls.DATE,CallLog.Calls.CACHED_NAME,CallLog.Calls.TYPE};
         return ctx.getContentResolver().query(CallLog.Calls.CONTENT_URI,projection,null,null,CallLog.Calls.DEFAULT_SORT_ORDER);
     }
 }

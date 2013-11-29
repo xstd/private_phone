@@ -91,6 +91,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
+        android:divider="#D8D9DA"
+        android:dividerHeight="0.5dp"
         android:listSelector="@drawable/privacy_space_lv_item_selector" >
     </ListView>
 
@@ -100,6 +102,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
+        android:divider="#D8D9DA"
+        android:dividerHeight="0.5dp"
         android:listSelector="@drawable/privacy_space_lv_item_selector"
         android:visibility="gone" >
     </ListView>
@@ -110,6 +114,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
+        android:divider="#D8D9DA"
+        android:dividerHeight="0.5dp"
         android:listSelector="@drawable/privacy_space_lv_item_selector"
         android:visibility="gone" >
     </ListView>
@@ -120,6 +126,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#D8D9DA"
+        android:dividerHeight="0.5dp"
         android:listSelector="@drawable/privacy_space_lv_item_selector"
         android:visibility="gone" >
     </ListView>
