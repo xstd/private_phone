@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
@@ -17,23 +18,26 @@ import com.xstd.privatephone.tools.Tools;
 public class GetContactUtils {
 	private Context mContext;
 
-	/** 联系人显示名称 **/
-	private static final int PHONES_DISPLAY_NAME_INDEX = 0;
-	/** 电话号码 **/
-	private static final int PHONES_NUMBER_INDEX = 1;
-	/** 头像ID **/
-	private static final int PHONES_PHOTO_ID_INDEX = 2;
-	/** 联系人的ID **/
-	private static final int PHONES_CONTACT_ID_INDEX = 3;
 
-	/** 获取库Phon表字段 **/
-	private static final String[] PHONES_PROJECTION = new String[] {
-			Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID, Phone.CONTACT_ID };
+    /**联系人显示名称**/
+    private static final int PHONES_DISPLAY_NAME_INDEX = 0;
+    
+    /**电话号码**/
+    private static final int PHONES_NUMBER_INDEX = 1;
+    
+    /**头像ID**/
+    private static final int PHONES_PHOTO_ID_INDEX = 2;
+   
+    /**联系人的ID**/
+    private static final int PHONES_CONTACT_ID_INDEX = 3;
+    
 
-	/** 联系人名称 **/
+    /**获取库Phon表字段**/
+    private static final String[] PHONES_PROJECTION = new String[] {
+	    Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID,Phone.CONTACT_ID };
+
+	/** 联系人信息 **/
 	private ArrayList<MyContactInfo> mContactsInfos = new ArrayList<MyContactInfo>();
-	/** 联系人号码 **/
-	private ArrayList<String> mContactsNumbers = new ArrayList<String>();
 
 	public GetContactUtils(Context context) {
 		this.mContext = context;
@@ -48,8 +52,9 @@ public class GetContactUtils {
 		// new String[]{"%"+username+"%"});
 		// 获取手机联系人
 		Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,
-				PHONES_PROJECTION, Phone.DISPLAY_NAME + " like ? or "+Phone.NUMBER+" like ?", new String[] {
-						"%" + search + "%","%" + search + "%"}, null);
+				PHONES_PROJECTION, Phone.DISPLAY_NAME + " like ? or "
+						+ Phone.NUMBER + " like ?", new String[] {
+						"%" + search + "%", "%" + search + "%" }, null);
 
 		if (phoneCursor != null) {
 			while (phoneCursor.moveToNext()) {
@@ -65,21 +70,20 @@ public class GetContactUtils {
 						.getString(PHONES_DISPLAY_NAME_INDEX);
 
 				// 得到联系人ID
-				Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
+				Long contactid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
 
 				// 得到联系人头像ID
 				Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
 
-				mContactsNumbers.add(phoneNumber);
 				MyContactInfo contactInfo = new MyContactInfo(phoneNumber,
-						contactName, false);
+						contactName, false, photoid,contactid);
 				mContactsInfos.add(contactInfo);
 				// mContactsPhotos.add(contactPhoto);
 			}
 
 			phoneCursor.close();
 		}
-		
+
 		return mContactsInfos;
 	}
 
@@ -108,20 +112,20 @@ public class GetContactUtils {
 
 		if (phoneCursor != null) {
 			while (phoneCursor.moveToNext()) {
-
+				
 				// 得到手机号码
 				String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);
 				// 当手机号码为空的或者为空字段 跳过当前循环
 				if (TextUtils.isEmpty(phoneNumber))
-					continue;
+				    continue;
 				// 得到联系人名称
 				String contactName = phoneCursor
-						.getString(PHONES_DISPLAY_NAME_INDEX);
+					.getString(PHONES_DISPLAY_NAME_INDEX);
 
-				// Sim卡中没有联系人头像
-				mContactsNumbers.add(phoneNumber);
+				//Sim卡中没有联系人头像
+
 				MyContactInfo contactInfo = new MyContactInfo(phoneNumber,
-						contactName, false);
+						contactName, false, 0L,null);
 				mContactsInfos.add(contactInfo);
 			}
 
@@ -150,17 +154,16 @@ public class GetContactUtils {
 				String contactName = phoneCursor
 						.getString(PHONES_DISPLAY_NAME_INDEX);
 
-				// 得到联系人ID
+				//得到联系人ID
 				Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
 
-				// 得到联系人头像ID
+				//得到联系人头像ID
 				Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
-
-				mContactsNumbers.add(phoneNumber);
+				Log.e("contactid+photoid", contactid+":"+photoid);
+				
 				MyContactInfo contactInfo = new MyContactInfo(phoneNumber,
-						contactName, false);
+						contactName, false, photoid,contactid);
 				mContactsInfos.add(contactInfo);
-				// mContactsPhotos.add(contactPhoto);
 			}
 
 			phoneCursor.close();
