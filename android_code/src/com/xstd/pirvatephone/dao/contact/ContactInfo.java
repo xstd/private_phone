@@ -15,7 +15,8 @@ public class ContactInfo implements Serializable {
     private String phone_number;
     /** Not-null value. */
     private String display_name;
-    private Long icon_id;
+    private Long contact_id;
+    private Long photo_id;
     private int type;
 
     public ContactInfo() {
@@ -25,11 +26,12 @@ public class ContactInfo implements Serializable {
         this.id = id;
     }
 
-    public ContactInfo(Long id, String phone_number, String display_name, Long icon_id, int type) {
+    public ContactInfo(Long id, String phone_number, String display_name, Long contact_id, Long photo_id, int type) {
         this.id = id;
         this.phone_number = phone_number;
         this.display_name = display_name;
-        this.icon_id = icon_id;
+        this.contact_id = contact_id;
+        this.photo_id = photo_id;
         this.type = type;
     }
 
@@ -61,12 +63,20 @@ public class ContactInfo implements Serializable {
         this.display_name = display_name;
     }
 
-    public Long getIcon_id() {
-        return icon_id;
+    public Long getContact_id() {
+        return contact_id;
     }
 
-    public void setIcon_id(Long icon_id) {
-        this.icon_id = icon_id;
+    public void setContact_id(Long contact_id) {
+        this.contact_id = contact_id;
+    }
+
+    public Long getPhoto_id() {
+        return photo_id;
+    }
+
+    public void setPhoto_id(Long photo_id) {
+        this.photo_id = photo_id;
     }
 
     public int getType() {
@@ -79,7 +89,7 @@ public class ContactInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "[ContactInfo]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "display_name = " + display_name + ", " + "icon_id = " + icon_id + ", " + "type = " + type + "\r\n";
+        return "[ContactInfo]" + "id = " + id + ", " + "phone_number = " + phone_number + ", " + "display_name = " + display_name + ", " + "contact_id = " + contact_id + ", " + "photo_id = " + photo_id + ", " + "type = " + type + "\r\n";
     }
 
 }

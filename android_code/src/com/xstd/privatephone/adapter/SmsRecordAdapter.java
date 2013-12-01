@@ -1,11 +1,16 @@
 package com.xstd.privatephone.adapter;
 
-import java.util.Date;
+import java.io.InputStream;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.ContactsContract.PhoneLookup;
+import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +18,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.plugin.common.utils.image.ImageUtils;
 import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.utils.ContactUtils;
 import com.xstd.pirvatephone.utils.DateUtils;
 
 public class SmsRecordAdapter extends CursorAdapter {
-	private static Context mContext;
-	private String phoneType;
-	private int picId;
+	private Context mContext;
 
-	// 联系人字段
-	private String[] CONTACT_PROJECTION = new String[] { PhoneLookup._ID,
-			PhoneLookup.DISPLAY_NAME };
+	/** 联系人的ID **/
+	private static final int PHONES_CONTACT_ID_INDEX = 0;
 
-	private static final int DISPLAY_NAME_COLUMN_INDEX = 1;
+	/** 头像ID **/
+	private static final int PHONES_PHOTO_ID_INDEX = 1;
 
+	/** 获取库Phone表字段 **/
+	private static final String[] PHONES_ID = new String[] {
+			ContactInfoDao.Properties.Contact_id.columnName,
+			ContactInfoDao.Properties.Photo_id.columnName };
+
+	@SuppressWarnings("deprecation")
 	public SmsRecordAdapter(Context context, Cursor c) {
 		super(context, c);
 		mContext = context;
@@ -58,12 +70,12 @@ public class SmsRecordAdapter extends CursorAdapter {
 		views.tv_phone_name.setText(name);
 		views.tv_phone_number.setText(phone_number);
 		views.sms_tv_count.setText("(" + msg_count + ")");
-
-		views.sms_iv_pic.setBackgroundResource(R.drawable.private_comm_contact_icon_default);
-		
-
 		views.sms_tv_date.setText(DateUtils.parseDate(lastedContact));
 		views.sms_tv_content.setText(lasted_data);
+		
+		AsyncBitmapLoader asyncLoader = new AsyncBitmapLoader(mContext,
+				phone_number, views.sms_iv_pic);
+		asyncLoader.execute();
 
 	}
 
@@ -95,5 +107,77 @@ public class SmsRecordAdapter extends CursorAdapter {
 		TextView tv_phone_number;
 		TextView sms_tv_count;
 	}
+	
+	
+	private class AsyncBitmapLoader extends AsyncTask<Void, Void, Bitmap> {
 
+		private Context mContext;
+		private String mPhoneNumber;
+		private ImageView bm;
+
+		public AsyncBitmapLoader(Context context, String phoneNumber,
+				ImageView bm) {
+			this.mContext = context;
+			this.mPhoneNumber = phoneNumber;
+			this.bm = bm;
+		}
+
+		@Override
+		public void onPreExecute() {
+		}
+
+		@Override
+		protected Bitmap doInBackground(Void... params) {
+			return loadPicture(mPhoneNumber);
+		}
+
+		@Override
+		public void onPostExecute(Bitmap bitmap) {
+			this.bm.setImageBitmap(bitmap);
+		}
+
+	}
+
+	private Bitmap loadPicture(String phoneNumber) {
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(mContext);
+
+		SQLiteDatabase database = contactInfoDao.getDatabase();
+
+		Cursor cursor = database.query(ContactInfoDao.TABLENAME, PHONES_ID,
+				ContactInfoDao.Properties.Phone_number.columnName + "=?",
+				new String[] { phoneNumber }, null, null, null);
+		
+		if(cursor!=null && cursor.getCount()>0){
+			while(cursor.moveToNext()){
+				Long contactId = cursor.getLong(PHONES_CONTACT_ID_INDEX);
+				Long photoId = cursor.getLong(PHONES_PHOTO_ID_INDEX);
+				Bitmap contactPhoto = null;
+				
+				if(photoId==0){
+					contactPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.private_comm_contact_icon_default);
+					
+				}else{
+					if (contactId == null) {
+						return null;
+					}else{
+					Uri uri = ContentUris.withAppendedId(
+							ContactsContract.Contacts.CONTENT_URI, contactId);
+
+					InputStream input = ContactsContract.Contacts
+							.openContactPhotoInputStream(mContext.getContentResolver(), uri);
+
+					contactPhoto = BitmapFactory.decodeStream(input);
+
+					contactPhoto = ImageUtils.createRoundedCornerBitmap(contactPhoto, 48,
+							48, 0.6f, true, true, true, true);
+					}
+				}
+
+				return contactPhoto;
+			}
+			cursor.close();
+		}
+		return BitmapFactory.decodeResource(mContext.getResources(), R.drawable.private_comm_contact_icon_default);
+	}
 }

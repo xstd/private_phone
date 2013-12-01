@@ -50,7 +50,8 @@ public class PMDaoGenerator {
         contactInfo.addIdProperty();
         contactInfo.addStringProperty("phone_number").notNull();
         contactInfo.addStringProperty("display_name").notNull();
-        contactInfo.addLongProperty("icon_id");
+        contactInfo.addLongProperty("contact_id");
+        contactInfo.addLongProperty("photo_id");
         contactInfo.addIntProperty("type").notNull();
         
         try {

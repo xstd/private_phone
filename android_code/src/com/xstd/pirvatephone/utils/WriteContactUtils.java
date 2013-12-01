@@ -17,8 +17,22 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.privatephone.tools.Tools;
 
 public class WriteContactUtils {
-
+    
+    /**电话号码**/
+    private static final int PHONES_NUMBER_INDEX = 3;
+    
+    /**联系人显示名称**/
+    private static final int PHONES_DISPLAY_NAME_INDEX = 2;
+    
+    /**头像ID**/
+    private static final int PHONES_PHOTO_ID_INDEX = 1;
+   
+    /**联系人的ID**/
+    private static final int PHONES_CONTACT_ID_INDEX = 0;
+    
 	private Context mContext;
+	
+	
 
 	public WriteContactUtils(Context context) {
 		this.mContext = context;
@@ -231,7 +245,7 @@ public class WriteContactUtils {
 				String num = mSelectPhones.get(i);
 				// 获取手机联系人
 				Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,
-						new String[] { Phone.CONTACT_ID, Phone.DISPLAY_NAME,
+						new String[] { Phone.CONTACT_ID,Phone.PHOTO_ID, Phone.DISPLAY_NAME,
 								Phone.NUMBER }, Phone.NUMBER + "=?",
 						new String[] { num }, null);
 
@@ -239,7 +253,10 @@ public class WriteContactUtils {
 					while (phoneCursor.moveToNext()) {
 						ContactInfo contactInfo = new ContactInfo();
 						// 得到联系人名称
-						String contactName = phoneCursor.getString(1);
+						String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);
+						String contactName = phoneCursor.getString(PHONES_DISPLAY_NAME_INDEX);
+						Long photoId = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
+						Long contactId = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
 						// 判断该联系人（号码）是否已存在
 						Cursor query = contactDatabase
 								.query(ContactInfoDao.TABLENAME,
@@ -251,10 +268,11 @@ public class WriteContactUtils {
 							Tools.logSh("该联系人已经存在");
 							break;
 						} else {
-							String number = phoneCursor.getString(2);
 
-							contactInfo.setPhone_number(number);
+							contactInfo.setPhone_number(phoneNumber);
 							contactInfo.setDisplay_name(contactName);
+							contactInfo.setPhoto_id(photoId);
+							contactInfo.setContact_id(contactId);
 							contactInfo.setType(0);// 0不拦截
 							// 添加到我们数据库
 							contactInfoDao.insert(contactInfo);

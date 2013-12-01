@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/d_listitem_height"
-    android:background="@drawable/privacy_space_lv_item_selector"
     android:paddingBottom="@dimen/d_padding_v2"
     android:paddingTop="@dimen/d_padding_v2" >
+<!--     android:background="@drawable/privacy_space_lv_item_selector" -->
 
     <TextView
         android:id="@id/title"

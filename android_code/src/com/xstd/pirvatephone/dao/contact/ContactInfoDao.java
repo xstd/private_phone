@@ -26,8 +26,9 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Phone_number = new Property(1, String.class, "phone_number", false, "PHONE_NUMBER");
         public final static Property Display_name = new Property(2, String.class, "display_name", false, "DISPLAY_NAME");
-        public final static Property Icon_id = new Property(3, Long.class, "icon_id", false, "ICON_ID");
-        public final static Property Type = new Property(4, int.class, "type", false, "TYPE");
+        public final static Property Contact_id = new Property(3, Long.class, "contact_id", false, "CONTACT_ID");
+        public final static Property Photo_id = new Property(4, Long.class, "photo_id", false, "PHOTO_ID");
+        public final static Property Type = new Property(5, int.class, "type", false, "TYPE");
     };
 
 
@@ -46,8 +47,9 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'PHONE_NUMBER' TEXT NOT NULL ," + // 1: phone_number
                 "'DISPLAY_NAME' TEXT NOT NULL ," + // 2: display_name
-                "'ICON_ID' INTEGER," + // 3: icon_id
-                "'TYPE' INTEGER NOT NULL );"); // 4: type
+                "'CONTACT_ID' INTEGER," + // 3: contact_id
+                "'PHOTO_ID' INTEGER," + // 4: photo_id
+                "'TYPE' INTEGER NOT NULL );"); // 5: type
     }
 
     /** Drops the underlying database table. */
@@ -68,11 +70,16 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
         stmt.bindString(2, entity.getPhone_number());
         stmt.bindString(3, entity.getDisplay_name());
  
-        Long icon_id = entity.getIcon_id();
-        if (icon_id != null) {
-            stmt.bindLong(4, icon_id);
+        Long contact_id = entity.getContact_id();
+        if (contact_id != null) {
+            stmt.bindLong(4, contact_id);
         }
-        stmt.bindLong(5, entity.getType());
+ 
+        Long photo_id = entity.getPhoto_id();
+        if (photo_id != null) {
+            stmt.bindLong(5, photo_id);
+        }
+        stmt.bindLong(6, entity.getType());
     }
 
     /** @inheritdoc */
@@ -88,8 +95,9 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // phone_number
             cursor.getString(offset + 2), // display_name
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // icon_id
-            cursor.getInt(offset + 4) // type
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // contact_id
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // photo_id
+            cursor.getInt(offset + 5) // type
         );
         return entity;
     }
@@ -100,8 +108,9 @@ public class ContactInfoDao extends AbstractDao<ContactInfo, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPhone_number(cursor.getString(offset + 1));
         entity.setDisplay_name(cursor.getString(offset + 2));
-        entity.setIcon_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setType(cursor.getInt(offset + 4));
+        entity.setContact_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setPhoto_id(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setType(cursor.getInt(offset + 5));
      }
     
     /** @inheritdoc */

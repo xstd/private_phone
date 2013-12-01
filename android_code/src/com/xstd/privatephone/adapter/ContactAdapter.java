@@ -42,7 +42,8 @@ public class ContactAdapter extends CursorAdapter {
 				.getColumnIndex("PHONE_NUMBER"));
 		String name = cursor.getString(cursor.getColumnIndex("DISPLAY_NAME"));
 		int type = cursor.getInt(cursor.getColumnIndex("TYPE"));
-		Long icon_id = cursor.getLong(cursor.getColumnIndex("ICON_ID"));
+		Long contact_id = cursor.getLong(cursor.getColumnIndex("CONTACT_ID"));
+		Long photo_id = cursor.getLong(cursor.getColumnIndex("PHOTO_ID"));
 
 		if (TextUtils.isEmpty(name)) {
 			name = phone_number;
@@ -63,10 +64,10 @@ public class ContactAdapter extends CursorAdapter {
 		hold.btn_dail.setBackgroundResource(R.drawable.private_dial_normal);
 
 		// photoid 大于0 表示联系人有头像 如果没有给此人设置头像则给他一个默认的
-		Log.e("PhotoId  else ==", icon_id + "");
-		if (icon_id > 0) {
+		Log.e("PhotoId==", photo_id + "   ContactId=="+contact_id);
+		if (photo_id > 0) {
 			AsyncBitmapLoader asyncLoader = new AsyncBitmapLoader(mContext,
-					icon_id, hold.iv_pic);
+					contact_id, hold.iv_pic);
 			asyncLoader.execute();
 
 		} else {
@@ -144,13 +145,10 @@ public class ContactAdapter extends CursorAdapter {
 				.openContactPhotoInputStream(mContext.getContentResolver(), uri);
 
 		contactPhoto = BitmapFactory.decodeStream(input);
-		try {
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 		contactPhoto = ImageUtils.createRoundedCornerBitmap(contactPhoto, 48,
 				48, 0.6f, true, true, true, true);
+		
 		return contactPhoto;
 	}
 
