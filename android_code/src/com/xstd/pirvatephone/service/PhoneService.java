@@ -142,22 +142,20 @@ public class PhoneService extends Service {
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
 				Tools.logSh("来电了" + incomingNumber);
 				recevierTime = System.currentTimeMillis();
-				// 判断该号码的拦截状态
-				// 1、获取当前的情景模式-拦截号码
+				// 判断该号码的拦截状态：1，是否存在情景模式的拦截号码中，2，是否存在隐私联系人的拦截号码中
 				ContextModelUtils contextModelUtils = new ContextModelUtils();
 				ArrayList<String> numbers = contextModelUtils
 						.getIntereptNumbers(mContext, null);
-				Tools.logSh("拦截号码" + numbers);
-				ArrayList<String> intereptNumber = ContactUtils
+				ArrayList<String> intereptNumbers = ContactUtils
 						.queryIntereptNumber(mContext);
 
-				// 第2步:确认该号码是否满足过滤条件（在拦截中）
 				if (numbers != null && numbers.contains(incomingNumber)) {
+					Tools.logSh("情景模式拦截号码" + numbers);
 					endCall();
 					return;
-				} else if (intereptNumber != null
-						&& intereptNumber.contains(incomingNumber)) {
-					// get contact interept number
+				} else if (intereptNumbers != null
+						&& intereptNumbers.contains(incomingNumber)) {
+					Tools.logSh("隐私联系人拦截号码" + intereptNumbers);
 					endCall();
 					return;
 				}
