@@ -49,7 +49,7 @@ public class AddCommonPhoneAdapter extends CursorAdapter {
 	private void initPhoneStatusDrawable() {
 		incoming_type = ctx.getResources().getDrawable(android.R.drawable.sym_call_incoming);
 		outgoing_type = ctx.getResources().getDrawable(android.R.drawable.sym_call_outgoing);
-		missed_type = ctx.getResources().getDrawable(android.R.drawable.sym_call_outgoing);
+		missed_type = ctx.getResources().getDrawable(android.R.drawable.sym_call_missed);
 	}
 
 	@Override

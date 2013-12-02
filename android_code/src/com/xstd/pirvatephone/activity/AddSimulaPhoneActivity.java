@@ -15,10 +15,12 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,8 +44,14 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 
 	public static final int REQUES_REVEIVER_CODE = 3;
 
-	@ViewMapping(ID = R.id.back)
-	public ImageView back;
+	@ViewMapping(ID = R.id.ll_return_btn)
+	public ImageButton ll_return_btn;
+
+	@ViewMapping(ID = R.id.ll_title_text)
+	public TextView ll_title_text;
+
+	@ViewMapping(ID = R.id.ll_toools)
+	public ImageButton ll_toools;
 
 	@ViewMapping(ID = R.id.phoneNumber)
 	public EditText phoneNumber;
@@ -52,13 +60,16 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 	public ImageView chooseContact;
 
 	@ViewMapping(ID = R.id.phoneDate)
-	public Button phoneDate;
+	public ViewGroup phoneDate;
 
 	@ViewMapping(ID = R.id.phoneTime)
-	public Button phoneTime;
+	public ViewGroup phoneTime;
 
-	@ViewMapping(ID = R.id.save)
-	public Button save;
+	@ViewMapping(ID = R.id.tv_date)
+	public TextView tv_date;
+
+	@ViewMapping(ID = R.id.tv_time)
+	public TextView tv_time;
 
 	private Calendar calendar;
 
@@ -77,11 +88,14 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 	private void initUI() {
 		ViewMapUtil.viewMapping(this, getWindow());
 
-		back.setOnClickListener(this);
+		ll_title_text.setText(R.string.simula_add_phone);
+		ll_toools.setBackgroundResource(R.drawable.btn_simulate_create);
+		ll_toools.setVisibility(View.VISIBLE);
+		ll_return_btn.setOnClickListener(this);
+		ll_toools.setOnClickListener(this);
 		chooseContact.setOnClickListener(this);
 		phoneDate.setOnClickListener(this);
 		phoneTime.setOnClickListener(this);
-		save.setOnClickListener(this);
 
 		time = System.currentTimeMillis() + 60 * 1000;
 		calendar = Calendar.getInstance();
@@ -90,16 +104,16 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 	}
 
 	private void updateDateTime() {
-		phoneDate.setText(getString(R.string.s_simulate_date)
+		tv_date.setText(getString(R.string.s_simulate_date)
 				+ DateFormat.getDateInstance().format(calendar.getTime()));
-		phoneTime.setText(getString(R.string.s_simulate_time)
+		tv_time.setText(getString(R.string.s_simulate_time)
 				+ DateFormat.getTimeInstance(DateFormat.SHORT).format(
 						calendar.getTime()));
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (v == back) {
+		if (v == ll_return_btn) {
 			finish();
 		} else if (v == chooseContact) {
 			Intent intent = new Intent(Intent.ACTION_PICK,
@@ -109,7 +123,7 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 			showDatePicker();
 		} else if (v == phoneTime) {
 			showTimePicker();
-		} else if (v == save) {
+		} else if (v == ll_toools) {
 			checkData();
 		}
 
@@ -127,8 +141,8 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 			return;
 		}
 		SimulateComm entity = new SimulateComm(null, contact == null ? null
-				: contact.getName(), phone, calendar.getTime(),
-				null, SimulaCommActivity.SIMULATE_PHONE);
+				: contact.getName(), phone, calendar.getTime(), null,
+				SimulaCommActivity.SIMULATE_PHONE);
 		SimulateDaoUtils.getSimulateDao(this).insert(entity);
 
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -140,7 +154,8 @@ public class AddSimulaPhoneActivity extends BaseActivity implements
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		long triggerAtMillis = calendar.getTimeInMillis()
 				- System.currentTimeMillis() + SystemClock.elapsedRealtime();
-		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendIntent);
+		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis,
+				pendIntent);
 		finish();
 	}
 

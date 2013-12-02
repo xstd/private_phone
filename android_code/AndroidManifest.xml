@@ -84,12 +84,8 @@
             android:label="@string/title_activity_phone_detail" />
         <activity android:name="com.xstd.pirvatephone.activity.ServiceActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.SimulaCommActivity" />
-        <activity
-            android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity"
-            android:theme="@android:style/Theme.DeviceDefault" />
-        <activity
-            android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity"
-            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaSmsActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.AddSimulaPhoneActivity" />
         <activity android:name="com.xstd.pirvatephone.activity.ProxyTalkActivity" />
 
         <receiver android:name="com.xstd.pirvatephone.receiver.SimulateSendSMSReceiver" />

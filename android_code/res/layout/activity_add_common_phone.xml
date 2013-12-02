@@ -28,8 +28,9 @@
                 <EditText
                     android:id="@id/phoneNumber"
                     style="@style/text_input"
-                    android:layout_width="251dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:hint="@string/s_hint_phone"
                     android:inputType="phone" />
 

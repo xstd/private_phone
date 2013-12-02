@@ -16,10 +16,12 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -44,8 +46,14 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	private static final String TAG = "AddSimulaSmsActivity";
 	private static final int REQUES_REVEIVER_CODE = 3;
 
-	@ViewMapping(ID = R.id.back)
-	public ImageView back;
+	@ViewMapping(ID = R.id.ll_return_btn)
+	public ImageButton ll_return_btn;
+
+	@ViewMapping(ID = R.id.ll_title_text)
+	public TextView ll_title_text;
+
+	@ViewMapping(ID = R.id.ll_toools)
+	public ImageButton ll_toools;
 
 	@ViewMapping(ID = R.id.phoneNumber)
 	public EditText phoneNumber;
@@ -54,16 +62,20 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	public ImageView chooseContact;
 
 	@ViewMapping(ID = R.id.smsDate)
-	public Button smsDate;
+	public ViewGroup smsDate;
 
 	@ViewMapping(ID = R.id.smsTime)
-	public Button smsTime;
+	public ViewGroup smsTime;
 
 	@ViewMapping(ID = R.id.smsContent)
 	public EditText smsContent;
 
-	@ViewMapping(ID = R.id.save)
-	public Button save;
+	@ViewMapping(ID = R.id.tv_date)
+	public TextView tv_date;
+
+	@ViewMapping(ID = R.id.tv_time)
+	public TextView tv_time;
+
 	private long time;
 	private Calendar calendar;
 
@@ -78,11 +90,14 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	private void initUI() {
 		ViewMapUtil.viewMapping(this, getWindow());
 
-		back.setOnClickListener(this);
+		ll_title_text.setText(R.string.simula_add_sms);
+		ll_return_btn.setOnClickListener(this);
+		ll_toools.setBackgroundResource(R.drawable.btn_simulate_create);
+		ll_toools.setVisibility(View.VISIBLE);
+		ll_toools.setOnClickListener(this);
 		chooseContact.setOnClickListener(this);
 		smsDate.setOnClickListener(this);
 		smsTime.setOnClickListener(this);
-		save.setOnClickListener(this);
 
 		time = System.currentTimeMillis() + 60 * 1000;
 		calendar = Calendar.getInstance();
@@ -90,11 +105,10 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 		updateDateTime();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
+		case R.id.ll_return_btn:
 			finish();
 			break;
 		case R.id.chooseContact:
@@ -108,7 +122,7 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 		case R.id.smsTime:
 			showDialog(TIME_DIALOG_ID);
 			break;
-		case R.id.save:
+		case R.id.ll_toools:
 			checkDateTime();
 			break;
 		}
@@ -208,9 +222,9 @@ public class AddSimulaSmsActivity extends BaseActivity implements
 	private SimpleContact contact;
 
 	private void updateDateTime() {
-		smsDate.setText(getString(R.string.s_simulate_date)
+		tv_date.setText(getString(R.string.s_simulate_date)
 				+ DateFormat.getDateInstance().format(calendar.getTime()));
-		smsTime.setText(getString(R.string.s_simulate_time)
+		tv_time.setText(getString(R.string.s_simulate_time)
 				+ DateFormat.getTimeInstance(DateFormat.SHORT).format(
 						calendar.getTime()));
 	}

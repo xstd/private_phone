@@ -22,14 +22,15 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 android:layout_marginTop="20dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal" >
 
                 <EditText
                     android:id="@id/phoneNumber"
                     style="@style/text_input"
-                    android:layout_width="251dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:hint="@string/s_hint_phone"
                     android:inputType="phone" />
 
@@ -37,6 +38,7 @@
                     android:id="@id/chooseContact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:contentDescription="@string/s_image"
                     android:src="@drawable/btn_add_selector" />
             </LinearLayout>

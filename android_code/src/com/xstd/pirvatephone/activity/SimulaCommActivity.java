@@ -33,6 +33,7 @@ public class SimulaCommActivity extends BaseActivity implements
 	public final static int SIMULATE_PHONE = 1;
 	public static final int COMMON_SMS = 2;
 	public static final int COMMON_PHONE = 3;
+	private static final String TAG = "SimulaCommActivity";
 
 	@ViewMapping(ID = R.id.ll_return_btn)
 	public ImageButton ll_return_btn;
@@ -70,7 +71,7 @@ public class SimulaCommActivity extends BaseActivity implements
 	@ViewMapping(ID = R.id.common_phone)
 	public TextView common_phone;
 
-	private int type = SIMULATE_SMS;
+	private int type = -1;
 
 	private SimulateCommAdapter adapter_phone;
 	private SimulateCommAdapter adapter_sms;
@@ -90,7 +91,7 @@ public class SimulaCommActivity extends BaseActivity implements
 		tw = outSize.x / 4;
 
 		initUI();
-		displaySimulate(type);
+		displaySimulate(SIMULATE_SMS);
 	}
 
 	private void initUI() {
@@ -165,6 +166,8 @@ public class SimulaCommActivity extends BaseActivity implements
 	}
 
 	private void displaySimulate(int simulateType) {
+		if (type == simulateType)
+			return;
 		if (SIMULATE_PHONE == simulateType) {
 			adapter_phone.changeDatas();
 			btn_phone.setVisibility(View.VISIBLE);
@@ -202,12 +205,12 @@ public class SimulaCommActivity extends BaseActivity implements
 			}
 		}
 		loadAnimation(simulateType);
-		type = simulateType;
 	}
 
 	private void loadAnimation(final int simulateType) {
 		Animation animation = new TranslateAnimation(type * tw + cell
-				* (type + 1), simulateType * tw + cell * (type + 1), 0, 0);
+				* (type + 1), simulateType * tw + cell * (simulateType + 1), 0,
+				0);
 		animation.setDuration(300);
 		animation.setFillAfter(true);
 		animation.setAnimationListener(new AnimationListener() {
@@ -253,6 +256,7 @@ public class SimulaCommActivity extends BaseActivity implements
 			}
 		});
 		rdts.startAnimation(animation);
+		type = simulateType;
 	}
 
 	/**
