@@ -76,7 +76,7 @@ public class PrivateCommActivity extends BaseActivity {
 	private List<View> views;// Tab页面列表
 	private int offset = 0;// 动画图片偏移量
 	private int currIndex;// 当前页卡编号
-	private int bmpW;// 动画图片宽度
+	private int animationPicWidth;// 动画图片宽度
 	private View view1, view2, view3;// 各个页卡
 	private Button btn_sms, btn_phone, btn_contact;
 
@@ -293,13 +293,15 @@ public class PrivateCommActivity extends BaseActivity {
 	 */
 
 	private void InitImageView() {
-		imageView = (ImageView) findViewById(R.id.cursor);
-		bmpW = BitmapFactory.decodeResource(getResources(),
-				R.drawable.ic_launcher).getWidth();// 获取图片宽度
+		imageView = (ImageView) findViewById(R.id.animation_pic);
+	/*	animationPicWidth = BitmapFactory.decodeResource(getResources(),
+				R.id.animation_pic).getWidth();// 获取图片宽度*/
+		animationPicWidth = imageView.getWidth();
+		
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int screenW = dm.widthPixels;// 获取分辨率宽度
-		offset = (screenW / 3 - bmpW) / 2;// 计算偏移量
+		offset = (screenW / 3 - animationPicWidth) / 2;// 计算偏移量
 		Matrix matrix = new Matrix();
 		matrix.postTranslate(offset, 0);
 		imageView.setImageMatrix(matrix);// 设置动画初始位置
@@ -650,7 +652,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	public class MyOnPageChangeListener implements OnPageChangeListener {
 
-		int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量
+		int one = offset * 2 + animationPicWidth;// 页卡1 -> 页卡2 偏移量
 		int two = one * 2;// 页卡1 -> 页卡3 偏移量
 
 		public void onPageScrollStateChanged(int arg0) {
