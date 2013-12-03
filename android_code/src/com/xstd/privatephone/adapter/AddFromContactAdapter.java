@@ -1,10 +1,7 @@
 package com.xstd.privatephone.adapter;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -12,34 +9,30 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Message;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.plugin.common.utils.image.ImageUtils;
 import com.xstd.pirvatephone.R;
 import com.xstd.privatephone.bean.MyContactInfo;
-import com.xstd.privatephone.tools.Tools;
 
 public class AddFromContactAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private ArrayList<MyContactInfo> mContactsInfos = new ArrayList<MyContactInfo>();
-	private Map<Integer, Long> ids = new HashMap<Integer, Long>();
 
 	/** 选取转换为隐私联系人的号码 **/
 
 	public AddFromContactAdapter(Context context,
 			ArrayList<MyContactInfo> contactInfos) {
 		mContext = context;
+		mContactsInfos.clear();
 		mContactsInfos = contactInfos;
 	}
 
@@ -81,8 +74,9 @@ public class AddFromContactAdapter extends BaseAdapter {
 		} else {
 			hold = (ViewHold) convertView.getTag();
 		}
-
-		final MyContactInfo mContactInfo = mContactsInfos.get(position);
+		Log.e("position====", position+"");
+		MyContactInfo mContactInfo = new MyContactInfo();
+		mContactInfo = mContactsInfos.get(position);
 		// 绘制联系人名称
 		hold.name.setText(mContactInfo.getName());
 		// 绘制联系人号码
@@ -91,7 +85,8 @@ public class AddFromContactAdapter extends BaseAdapter {
 		// 得到联系人头像Bitamp
 
 		// photoid 大于0 表示联系人有头像 如果没有给此人设置头像则给他一个默认的
-		Log.e("PhotoId  else ==", mContactInfo.getPhotoId() + "");
+		Log.e("PhotoId  else ==", mContactInfo.getPhotoId() + "  contactId=="
+				+ mContactInfo.getContactId());
 		if (mContactInfo.getPhotoId() > 0) {
 			AsyncBitmapLoader asyncLoader = new AsyncBitmapLoader(mContext,
 					mContactInfo.getContactId(), hold.iv_photo);
@@ -148,15 +143,13 @@ public class AddFromContactAdapter extends BaseAdapter {
 		Uri uri = ContentUris.withAppendedId(
 				ContactsContract.Contacts.CONTENT_URI, contactId);
 
+		Log.e("uri===", uri.toString() + "");
+
 		InputStream input = ContactsContract.Contacts
 				.openContactPhotoInputStream(mContext.getContentResolver(), uri);
 
 		contactPhoto = BitmapFactory.decodeStream(input);
-		try {
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 		contactPhoto = ImageUtils.createRoundedCornerBitmap(contactPhoto, 48,
 				48, 0.6f, true, true, true, true);
 		return contactPhoto;

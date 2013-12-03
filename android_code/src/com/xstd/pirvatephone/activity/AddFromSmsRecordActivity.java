@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,10 +48,10 @@ public class AddFromSmsRecordActivity extends Activity implements
 		OnClickListener {
 
 	@ViewMapping(ID = R.id.bt_sure)
-	public Button bt_sure;
+	public RelativeLayout bt_sure;
 
 	@ViewMapping(ID = R.id.bt_cancle)
-	public Button bt_cancle;
+	public RelativeLayout bt_cancle;
 
 	@ViewMapping(ID = R.id.lv_contact)
 	public ListView lv_contact;

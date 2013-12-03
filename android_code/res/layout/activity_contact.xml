@@ -25,15 +25,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="60dip"
+                android:background="@drawable/private_comm_sms_send_edit_bkg"
                 android:hint="请输入联系人电话或者姓名" />
 
-            <Button
+            <RelativeLayout
                 android:id="@+id/btn_clear"
-                android:layout_width="wrap_content"
+                android:layout_width="60dip"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:text="清空"
-                android:textColor="@color/sms_text_content_unseleted" />
+                android:background="@drawable/private_comm_sms_send_selector"
+                android:clickable="true"
+                android:gravity="center" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="清空" />
+            </RelativeLayout>
         </RelativeLayout>
 
         <RelativeLayout
@@ -49,50 +57,76 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:padding="5dip" >
 
-                <Button
+                <RelativeLayout
                     android:id="@+id/bt_sure"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/private_comm_btn_sure"
-                    android:textColor="@color/sms_text_content_unseleted" />
+                    android:background="@drawable/private_comm_sms_send_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center" >
 
-                <Button
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/private_comm_btn_sure"
+                        android:textColor="@color/sms_text_content_unseleted" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/bt_cancle"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/private_comm_btn_cancle"
-                    android:textColor="@color/sms_text_content_unseleted" />
+                    android:background="@drawable/private_comm_sms_send_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/private_comm_btn_cancle"
+                        android:textColor="@color/sms_text_content_unseleted" />
+                </RelativeLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="65dip"
                 android:gravity="center"
                 android:orientation="vertical" >
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <ListView
+                        android:id="@+id/lv_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="@color/private_comm_listview_line"
+                        android:dividerHeight="1dip" />
+
+                    <ImageView
+                        android:id="@+id/iv_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_launcher"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
                 <ProgressBar
-                    android:id="@+id/pb_empty"
+                    android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <ListView
-                    android:id="@+id/lv_contact"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <ImageView
-                    android:id="@+id/iv_empty_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_launcher" />
-            </LinearLayout>
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 

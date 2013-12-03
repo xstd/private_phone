@@ -70,7 +70,7 @@ public class GetContactUtils {
 						.getString(PHONES_DISPLAY_NAME_INDEX);
 
 				// 得到联系人ID
-				Long contactid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
+				Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
 
 				// 得到联系人头像ID
 				Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);

@@ -18,7 +18,9 @@
             android:id="@+id/phone_detail_listview"
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:divider="@color/private_comm_listview_line"
+            android:dividerHeight="1dip" />
 
         <LinearLayout
             android:id="@+id/phone_ll_remove"

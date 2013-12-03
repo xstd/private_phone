@@ -113,8 +113,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="15dip"
                 android:background="@color/private_comm_tab_spac"
-                android:scaleType="matrix"
-                />
+                android:scaleType="matrix" />
         </RelativeLayout>
 
         <com.xstd.privatephone.view.MyViewPager
@@ -237,15 +236,15 @@
                 android:id="@+id/edit_btn_delete_phone"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
+                android:background="@drawable/private_comm_sms_send_selector"
                 android:clickable="true"
+                android:gravity="center"
                 android:orientation="horizontal" >
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:text="删除通话记录"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/private_comm_btn_recover"
                     android:textColor="@color/sms_text_content_unseleted" />
             </RelativeLayout>
 
@@ -253,15 +252,15 @@
                 android:id="@+id/edit_btn_delete_contact"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
+                android:background="@drawable/private_comm_sms_send_selector"
                 android:clickable="true"
+                android:gravity="center"
                 android:orientation="vertical" >
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:text="移出隐私空间"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/private_comm_btn_recover"
                     android:textColor="@color/sms_text_content_unseleted" />
             </RelativeLayout>
         </RelativeLayout>

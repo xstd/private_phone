@@ -1,13 +1,10 @@
 package com.xstd.pirvatephone.activity;
 
-import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +29,6 @@ import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
-import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 
 public class HandInputActivity extends BaseActivity {
@@ -39,15 +36,15 @@ public class HandInputActivity extends BaseActivity {
 	private static final int SHOW_TOAST = 0;
 	private static final int REMOVE_FINISH = 1;
 
-	private Button bt_cancle;
+	private RelativeLayout bt_cancle;
+	private RelativeLayout bt_sure;
 	private Button btn_back;
+	private Button btn_edit;
 	private EditText et_name;
 	private EditText et_phone;
-	private Button bt_sure;
 
 	/** 选取转换为隐私联系人的号码 **/
 	private ContactInfo contactInfo = new ContactInfo();
-	private Button btn_edit;
 	private TextView tv_title;
 	private RadioGroup myRadioGroup;
 	private RadioButton myRadioButton1;
@@ -107,8 +104,8 @@ public class HandInputActivity extends BaseActivity {
 		myRadioButton1 = (RadioButton) findViewById(R.id.myRadioButton1);
 		myRadioButton2 = (RadioButton) findViewById(R.id.myRadioButton2);
 		// bottom
-		bt_sure = (Button) findViewById(R.id.bt_sure);
-		bt_cancle = (Button) findViewById(R.id.bt_cancle);
+		bt_sure = (RelativeLayout) findViewById(R.id.bt_sure);
+		bt_cancle = (RelativeLayout) findViewById(R.id.bt_cancle);
 
 		btn_back.setOnClickListener(new OnClickListener() {
 

@@ -3,11 +3,9 @@ package com.xstd.pirvatephone.activity;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +14,7 @@ import android.os.Message;
 import android.provider.CallLog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -30,6 +29,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,13 +44,11 @@ import com.xstd.privatephone.tools.Tools;
 public class AddFromContactActivity extends BaseActivity {
 
 	private Button btn_back;
-	private Button bt_sure;
-	private Button bt_cancle;
-	private TextView tv_empty;
+	private RelativeLayout bt_sure;
+	private RelativeLayout bt_cancle;
 	private ListView mListView;
-	private ProgressBar pb_empty;
-	private ImageView iv_empty_bg;
-	private GetContactTast task;
+	private ProgressBar progressBar;
+	private ImageView iv_empty;
 
 	private Button btn_edit;
 	private TextView tv_title;
@@ -58,12 +56,12 @@ public class AddFromContactActivity extends BaseActivity {
 	private String[] selectPhones;
 
 	private static final int UPDATE = 1;
-	private static final int FINISH_GET_CONTACT = 2;
 	private static final int MSG_KEY = 3;
 	private static final int SHOW_TOAST = 5;
 	private static final int REMOVE_FINISH = 6;
 
 	private boolean flags_delete = false;
+	private boolean firstTime = true;
 	private String param;
 	
 	private TextView recover_tv_progress;
@@ -71,7 +69,8 @@ public class AddFromContactActivity extends BaseActivity {
 	private ProgressBar recover_progress;
 
 	private AlertDialog progressDialog;
-	private Button btn_clear;
+	private RelativeLayout btn_clear;
+	private AddFromContactAdapter mAdapter;
 	
 	/** 选取转换为隐私联系人的号码 **/
 	private ArrayList<MyContactInfo> mContactInfos = new ArrayList<MyContactInfo>();
@@ -94,11 +93,6 @@ public class AddFromContactActivity extends BaseActivity {
 				
 				break;
 
-			case FINISH_GET_CONTACT:
-				Tools.logSh("获取数据库联系人完成");
-				pb_empty.setVisibility(View.GONE);
-				break;
-
 			case MSG_KEY:
 				refreshListView(msg.getData().get("value").toString());
 				break;
@@ -114,12 +108,22 @@ public class AddFromContactActivity extends BaseActivity {
 		}
 	};
 	
-	
 	private void showUpdateUI() {
-		mListView.setEmptyView(iv_empty_bg);
-		pb_empty.setVisibility(View.GONE);
-		AddFromContactAdapter mAdapter = new AddFromContactAdapter(
+		if(!firstTime){
+			Log.e("mContactInfos size=", mContactInfos.size()+"");
+			
+			mAdapter = new AddFromContactAdapter(
+					getApplicationContext(), mContactInfos);
+			mListView.setAdapter(mAdapter);
+			return;
+		}
+		
+		mAdapter = new AddFromContactAdapter(
 				getApplicationContext(), mContactInfos);
+		if(mContactInfos.size()>0){
+			iv_empty.setVisibility(View.VISIBLE);
+		}
+		mListView.setEmptyView(iv_empty);
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -138,6 +142,8 @@ public class AddFromContactActivity extends BaseActivity {
 				Tools.logSh("选中了" + mContactInfos.get(position));
 			}
 		});
+		
+		firstTime = false;
 	};
 
 
@@ -149,7 +155,7 @@ public class AddFromContactActivity extends BaseActivity {
 
 		initView();
 
-		task = new GetContactTast(AddFromContactActivity.this);
+		GetContactTast task = new GetContactTast(AddFromContactActivity.this);
 		task.execute();
 
 	}
@@ -162,14 +168,14 @@ public class AddFromContactActivity extends BaseActivity {
 		tv_title.setText("从联系人添加");
 
 		// bottom
-		bt_sure = (Button) findViewById(R.id.bt_sure);
-		bt_cancle = (Button) findViewById(R.id.bt_cancle);
+		bt_sure = (RelativeLayout) findViewById(R.id.bt_sure);
+		bt_cancle = (RelativeLayout) findViewById(R.id.bt_cancle);
 		// content
 		et_search = (TextView) findViewById(R.id.et_search);
-		btn_clear = (Button) findViewById(R.id.btn_clear);
+		btn_clear = (RelativeLayout) findViewById(R.id.btn_clear);
 		mListView = (ListView) findViewById(R.id.lv_contact);
-		pb_empty = (ProgressBar) findViewById(R.id.pb_empty);
-		iv_empty_bg = (ImageView) findViewById(R.id.iv_empty_bg);
+		progressBar = (ProgressBar) findViewById(R.id.progressBar);
+		iv_empty = (ImageView) findViewById(R.id.iv_empty);
 
 		btn_edit.setVisibility(View.GONE);
 		
@@ -311,7 +317,10 @@ public class AddFromContactActivity extends BaseActivity {
 		param = value;
 		// 根据search条件查询
 		mContactInfos.clear();
-		task = new GetContactTast(AddFromContactActivity.this);
+		if(mContactInfos!=null){
+			Log.e("mContactInfos size======", mContactInfos.size()+"");
+		}
+		GetContactTast task = new GetContactTast(AddFromContactActivity.this);
 		task.execute();
 		
 	}
@@ -448,7 +457,7 @@ public class AddFromContactActivity extends BaseActivity {
 		@Override
 		public void onPreExecute() {
 			Toast.makeText(context, "开始执行", Toast.LENGTH_SHORT).show();
-			pb_empty.setVisibility(View.VISIBLE);
+			progressBar.setVisibility(View.VISIBLE);
 		}
 
 		/**
@@ -463,7 +472,6 @@ public class AddFromContactActivity extends BaseActivity {
 			}else{
 				mContactInfos = getContactUtils.getContacts(param);
 			}
-			
 			return null;
 		}
 
@@ -472,6 +480,7 @@ public class AddFromContactActivity extends BaseActivity {
 		 */
 		@Override
 		public void onPostExecute(Integer integer) {
+			progressBar.setVisibility(View.GONE);
 			if (mContactInfos != null) {
 				Toast.makeText(context,
 						"获取系统联系人完毕" + mContactInfos.size() + "个",

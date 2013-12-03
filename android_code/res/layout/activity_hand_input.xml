@@ -13,33 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/rl_title"
-       android:background="@color/private_comm_listview_bkg" >
+        android:background="@color/private_comm_listview_bkg" >
 
-        <LinearLayout
-            android:id="@+id/sms_ll_remove"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:padding="5dip" >
-
-            <Button
-                android:id="@+id/bt_sure"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/private_comm_btn_sure"
-                android:textColor="@color/sms_text_content_unseleted" />
-
-            <Button
-                android:id="@+id/bt_cancle"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/private_comm_btn_cancle"
-                android:textColor="@color/sms_text_content_unseleted" />
-        </LinearLayout>
+        <include layout="@layout/private_comm_bottom_sure_cancel" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,12 +26,14 @@
                 android:id="@+id/put_et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/private_comm_sms_send_edit_bkg"
                 android:hint="@string/private_comm_text_name" />
 
             <EditText
                 android:id="@+id/put_et_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                 android:background="@drawable/private_comm_sms_send_edit_bkg"
                 android:hint="@string/private_comm_text_phonenum"
                 android:inputType="phone" />
 
