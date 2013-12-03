@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
-        android:background="@drawable/private_comm_sms_send_selector"
+        android:background="@drawable/private_comm_btn_selector"
         android:text="@string/privacy_pop_restore" />
 
     <Button
@@ -22,7 +22,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_weight="1"
-        android:background="@drawable/private_comm_sms_send_selector"
+        android:background="@drawable/private_comm_btn_selector"
         android:text="@string/privacy_pop_destory" />
 
     <Button
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:background="@drawable/private_comm_sms_send_selector"
+        android:background="@drawable/private_comm_btn_selector"
         android:text="@string/privacy_pop_see" />
 
 </LinearLayout>

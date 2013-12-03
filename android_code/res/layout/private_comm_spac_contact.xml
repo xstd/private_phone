@@ -47,7 +47,7 @@
         android:id="@+id/contact_ll_add"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:background="@drawable/private_comm_sms_send_selector"
+        android:background="@drawable/private_comm_btn_selector"
         android:clickable="true"
         android:gravity="center"
         android:orientation="vertical" >

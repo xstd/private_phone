@@ -55,6 +55,7 @@ public class ContextModelActivity extends BaseActivity {
 	private TextView tv_title;
 	private Button btn_back;
 	private Button btn_edit;
+	private TextView tv_empty;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,10 +80,15 @@ public class ContextModelActivity extends BaseActivity {
 		modeUtils = new GetModelUtils(this);
 		models = modeUtils.getModels();
 		Tools.logSh(models.size() + ":::");
-
+		if(models!=null &&models.size()>0){
+			tv_empty.setVisibility(View.GONE);
+		}else{
+			tv_empty.setVisibility(View.VISIBLE);
+		}
+		
 		modelAdapter = new MyModelAdapter(ContextModelActivity.this, models);
 		model_lv.setAdapter(modelAdapter);
-
+		model_lv.setEmptyView(tv_empty);
 		model_lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -120,6 +126,7 @@ public class ContextModelActivity extends BaseActivity {
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		btn_back = (Button) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
+		tv_empty = (TextView) findViewById(R.id.tv_empty);
 		btn_edit.setVisibility(View.GONE);
 		
 		model_lv = (ListView) findViewById(R.id.model_lv);
@@ -371,6 +378,12 @@ public class ContextModelActivity extends BaseActivity {
 		models.clear();
 		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
+		
+		if(models!=null &&models.size()>0){
+			tv_empty.setVisibility(View.GONE);
+		}else{
+			tv_empty.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/*

@@ -44,6 +44,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +64,7 @@ public class ModelEditActivity extends BaseActivity {
 
 	private ArrayList<String> noIntereptNumbers = new ArrayList<String>();
 	private ArrayList<String> noIntereptNames = new ArrayList<String>();
-	private Button add_btn;
+	private RelativeLayout add_btn;
 	private int curIndex = 0;
 	private EditModelAdapter noIntereptAdapter;
 	private EditModelAdapter intereptAdapter;
@@ -102,6 +103,7 @@ public class ModelEditActivity extends BaseActivity {
 	private TextView tv_title;
 	private Button btn_back;
 	private Button btn_edit;
+	private TextView tv_add_text;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class ModelEditActivity extends BaseActivity {
 				tv_uninterept
 						.setBackgroundResource(R.drawable.tab_left_default);
 				tv_interept.setBackgroundResource(R.drawable.tab_right_pressed);
-
+				tv_add_text.setText("增加拦截联系人");
 				showInterept();
 			}
 		});
@@ -141,7 +143,7 @@ public class ModelEditActivity extends BaseActivity {
 				tv_uninterept
 						.setBackgroundResource(R.drawable.tab_left_pressed);
 				tv_interept.setBackgroundResource(R.drawable.tab_right_default);
-
+				tv_add_text.setText("增加不拦截联系人");
 				showNoInterept();
 
 			}
@@ -151,7 +153,6 @@ public class ModelEditActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if (curIndex == 0) {
 					Intent intent = new Intent(ModelEditActivity.this,
 							NotIntereptActivity.class);
@@ -189,7 +190,8 @@ public class ModelEditActivity extends BaseActivity {
 		ll_uninterept = (LinearLayout) findViewById(R.id.ll_uninterept);
 		lv_uninterept = (ListView) findViewById(R.id.lv_uninterept);
 
-		add_btn = (Button) findViewById(R.id.add_btn);
+		add_btn = (RelativeLayout) findViewById(R.id.add_not_interept_btn);
+		tv_add_text = (TextView) findViewById(R.id.tv_add_text);
 
 		btn_back.setOnClickListener(new OnClickListener() {
 

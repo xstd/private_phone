@@ -204,7 +204,7 @@
                     android:id="@+id/edit_btn_recover_sms"
                     android:layout_width="138dip"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/private_comm_sms_send_selector"
+                    android:background="@drawable/private_comm_btn_selector"
                     android:clickable="true"
                     android:gravity="center" >
 
@@ -220,7 +220,7 @@
                     android:layout_width="138dip"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/private_comm_sms_send_selector"
+                    android:background="@drawable/private_comm_btn_selector"
                     android:clickable="true"
                     android:gravity="center" >
 
@@ -236,7 +236,7 @@
                 android:id="@+id/edit_btn_delete_phone"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal" >
@@ -252,7 +252,7 @@
                 android:id="@+id/edit_btn_delete_contact"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical" >

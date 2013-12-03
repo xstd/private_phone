@@ -17,7 +17,7 @@
         <LinearLayout
             android:id="@+id/ll_intercept_tab"
             android:layout_width="match_parent"
-            android:layout_height="20dip"
+            android:layout_height="40dip"
             android:gravity="center_horizontal"
             android:orientation="horizontal" >
 
@@ -55,7 +55,8 @@
                 android:id="@+id/tv_unlock_count"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="已拦截隐私联系人:" />
+                android:text="@string/private_comm_model_interept_contact"
+                android:textColor="@color/private_comm_title_text" />
 
             <RelativeLayout
                 android:id="@+id/rl_add_all"
@@ -80,13 +81,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:text="全选2" />
+                    android:text="@string/private_comm_select_all" />
             </RelativeLayout>
 
             <ListView
                 android:id="@+id/lv_interept"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="fill_parent"
+                android:divider="@color/private_comm_listview_line"
+                android:dividerHeight="1dip" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +104,8 @@
                 android:id="@+id/tv_locked_count"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="未拦截隐私联系人:" />
+                android:text="@string/private_comm_model_not_interept_contact"
+                android:textColor="@color/private_comm_title_text" />
 
             <RelativeLayout
                 android:id="@+id/rl_uninterept_all"
@@ -126,31 +130,35 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:text="全选1" />
+                    android:text="@string/private_comm_select_all" />
             </RelativeLayout>
 
             <ListView
                 android:id="@+id/lv_uninterept"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="fill_parent"
+                android:divider="@color/private_comm_listview_line"
+                android:dividerHeight="1dip" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/add_contact"
+        <RelativeLayout
+            android:id="@+id/add_not_interept_btn"
             android:layout_width="match_parent"
             android:layout_height="55dip"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/private_comm_spac_sms_selector"
-            android:orientation="vertical"
-            android:padding="5dip" >
+            android:background="@drawable/private_comm_btn_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center" >
 
-            <Button
-                android:id="@+id/add_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="增加联系人"
+            <TextView
+                android:id="@+id/tv_add_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="增加不拦截联系人"
                 android:textColor="@color/sms_text_content_unseleted" />
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

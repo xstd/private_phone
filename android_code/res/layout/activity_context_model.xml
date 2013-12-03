@@ -20,7 +20,7 @@
             android:layout_marginBottom="60dip" >
 
             <TextView
-                android:id="@+id/empty_text"
+                android:id="@+id/tv_empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -29,7 +29,10 @@
             <ListView
                 android:id="@+id/model_lv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:divider="@color/private_comm_listview_line"
+                android:dividerHeight="1dip"
+                 />
         </RelativeLayout>
 
         <LinearLayout
@@ -45,7 +48,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center" >
@@ -62,7 +65,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center" >

@@ -13,7 +13,7 @@
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/private_comm_sms_send_selector"
+        android:background="@drawable/private_comm_btn_selector"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center" >
@@ -30,7 +30,7 @@
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/private_comm_sms_send_selector"
+        android:background="@drawable/private_comm_btn_selector"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center" >

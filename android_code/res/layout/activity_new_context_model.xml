@@ -39,7 +39,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true" >
 
@@ -56,7 +56,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true" >
 
@@ -95,7 +95,7 @@
                 android:id="@+id/btn_add_not_interept"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center" >
@@ -112,7 +112,7 @@
                 android:id="@+id/btn_add_interept"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center" >
