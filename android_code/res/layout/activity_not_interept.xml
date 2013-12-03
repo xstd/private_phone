@@ -81,26 +81,7 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btn_cancle"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="取消" />
-
-            <Button
-                android:id="@+id/btn_sure"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="确定" />
-        </LinearLayout>
+        <include layout="@layout/private_comm_bottom_sure_cancel"/>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.CallLog;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -151,7 +152,7 @@ public class AddFromContactActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_contact);
+		setContentView(R.layout.activity_add_from_contact);
 
 		initView();
 
@@ -183,6 +184,9 @@ public class AddFromContactActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
+				if(TextUtils.isEmpty(et_search.getText().toString())){
+					return ;
+				}
 				et_search.setText("");
 			}
 		});

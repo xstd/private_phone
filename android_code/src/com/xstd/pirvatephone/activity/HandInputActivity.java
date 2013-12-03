@@ -36,8 +36,8 @@ public class HandInputActivity extends BaseActivity {
 	private static final int SHOW_TOAST = 0;
 	private static final int REMOVE_FINISH = 1;
 
-	private RelativeLayout bt_cancle;
-	private RelativeLayout bt_sure;
+	private RelativeLayout btn_cancle;
+	private RelativeLayout btn_sure;
 	private Button btn_back;
 	private Button btn_edit;
 	private EditText et_name;
@@ -104,8 +104,8 @@ public class HandInputActivity extends BaseActivity {
 		myRadioButton1 = (RadioButton) findViewById(R.id.myRadioButton1);
 		myRadioButton2 = (RadioButton) findViewById(R.id.myRadioButton2);
 		// bottom
-		bt_sure = (RelativeLayout) findViewById(R.id.bt_sure);
-		bt_cancle = (RelativeLayout) findViewById(R.id.bt_cancle);
+		btn_sure = (RelativeLayout) findViewById(R.id.btn_sure);
+		btn_cancle = (RelativeLayout) findViewById(R.id.btn_cancle);
 
 		btn_back.setOnClickListener(new OnClickListener() {
 
@@ -115,7 +115,7 @@ public class HandInputActivity extends BaseActivity {
 			}
 		});
 
-		bt_sure.setOnClickListener(new OnClickListener() {
+		btn_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -161,7 +161,7 @@ public class HandInputActivity extends BaseActivity {
 			}
 		});
 
-		bt_cancle.setOnClickListener(new OnClickListener() {
+		btn_cancle.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

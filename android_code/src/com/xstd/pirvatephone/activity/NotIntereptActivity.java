@@ -37,8 +37,8 @@ public class NotIntereptActivity extends BaseActivity {
 	private CheckBox btn_check_all;
 	private ListView mListView;
 	private CheckBox btn_remove_record;
-	private Button btn_cancle;
-	private Button btn_sure;
+	private RelativeLayout btn_cancle;
+	private RelativeLayout btn_sure;
 	private String modelName;
 	private Cursor contactCursor;
 	private AddNotIntereptAdapter addNotIntereptAdapter;
@@ -158,8 +158,8 @@ public class NotIntereptActivity extends BaseActivity {
 		btn_remove_record = (CheckBox) findViewById(R.id.btn_remove_record);
 		rl_remove_record = (RelativeLayout) findViewById(R.id.rl_remove_record);
 		// bottom
-		btn_cancle = (Button) findViewById(R.id.btn_cancle);
-		btn_sure = (Button) findViewById(R.id.btn_sure);
+		btn_cancle = (RelativeLayout) findViewById(R.id.btn_cancle);
+		btn_sure = (RelativeLayout) findViewById(R.id.btn_sure);
 
 		tv_title.setText(":新增不拦截联系人");
 		

@@ -26,14 +26,14 @@
                 android:id="@+id/put_et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/private_comm_sms_send_edit_bkg"
+                android:background="@drawable/private_comm_text_edit_bkg"
                 android:hint="@string/private_comm_text_name" />
 
             <EditText
                 android:id="@+id/put_et_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 android:background="@drawable/private_comm_sms_send_edit_bkg"
+                 android:background="@drawable/private_comm_text_edit_bkg"
                 android:hint="@string/private_comm_text_phonenum"
                 android:inputType="phone" />
 

@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context=".NotIntereptActivity" >
 
+    
     <include
         android:id="@+id/layout_title"
         layout="@layout/private_comm_title" />
+    
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,27 +82,7 @@
                     android:text="转移联系人、短信、通话记录到私密通讯" />
             </RelativeLayout>
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btn_cancle"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="取消" />
-
-            <Button
-                android:id="@+id/btn_sure"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="确定" />
-        </LinearLayout>
-    </RelativeLayout>
+		<include layout="@layout/private_comm_bottom_sure_cancel"/>
+    </RelativeLayout> 
 
 </RelativeLayout>
