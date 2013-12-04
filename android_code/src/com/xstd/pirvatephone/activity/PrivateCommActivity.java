@@ -3,38 +3,6 @@ package com.xstd.pirvatephone.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
-import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
-import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
-import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
-import com.xstd.pirvatephone.utils.ArrayUtils;
-import com.xstd.pirvatephone.utils.ContactUtils;
-import com.xstd.pirvatephone.utils.ContextModelUtils;
-import com.xstd.pirvatephone.utils.DelectOurContactUtils;
-import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
-import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
-import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
-import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
-import com.xstd.pirvatephone.utils.MakeCallUtils;
-import com.xstd.pirvatephone.utils.PxParseUtils;
-import com.xstd.pirvatephone.utils.RecordToSysUtils;
-import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
-import com.xstd.privatephone.adapter.ContactAdapter;
-import com.xstd.privatephone.adapter.EditContactAdapter;
-import com.xstd.privatephone.adapter.EditPhoneAdapter;
-import com.xstd.privatephone.adapter.EditSmsAdapter;
-import com.xstd.privatephone.adapter.MyViewPagerAdapter;
-import com.xstd.privatephone.adapter.PhoneRecordAdapter;
-import com.xstd.privatephone.adapter.SmsRecordAdapter;
-import com.xstd.privatephone.tools.Tools;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -43,8 +11,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -67,6 +38,33 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.xstd.pirvatephone.R;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
+import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
+import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
+import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
+import com.xstd.pirvatephone.utils.ArrayUtils;
+import com.xstd.pirvatephone.utils.ContextModelUtils;
+import com.xstd.pirvatephone.utils.DelectOurContactUtils;
+import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
+import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
+import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
+import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
+import com.xstd.pirvatephone.utils.MakeCallUtils;
+import com.xstd.pirvatephone.utils.PxParseUtils;
+import com.xstd.pirvatephone.utils.RecordToSysUtils;
+import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
+import com.xstd.privatephone.adapter.ContactAdapter;
+import com.xstd.privatephone.adapter.EditContactAdapter;
+import com.xstd.privatephone.adapter.EditPhoneAdapter;
+import com.xstd.privatephone.adapter.EditSmsAdapter;
+import com.xstd.privatephone.adapter.MyViewPagerAdapter;
+import com.xstd.privatephone.adapter.PhoneRecordAdapter;
+import com.xstd.privatephone.adapter.SmsRecordAdapter;
+import com.xstd.privatephone.tools.Tools;
 
 public class PrivateCommActivity extends BaseActivity {
 
@@ -176,34 +174,35 @@ public class PrivateCommActivity extends BaseActivity {
 
 	@SuppressWarnings("deprecation")
 	private void reinitData() {
-		
+
 		isEditing = false;
 		edit_ll_body.setVisibility(View.GONE);
 		textView1.setClickable(true);
 		textView2.setClickable(true);
 		textView3.setClickable(true);
-		
-		if(recoverContactProgressdialog!=null && recoverContactProgressdialog.isShowing()){
+
+		if (recoverContactProgressdialog != null
+				&& recoverContactProgressdialog.isShowing()) {
 			recoverContactProgressdialog.dismiss();
 			recoverContactProgressdialog = null;
 		}
-		if(deleteContactDialog!=null && deleteContactDialog.isShowing()){
+		if (deleteContactDialog != null && deleteContactDialog.isShowing()) {
 			deleteContactDialog.dismiss();
-			deleteContactDialog= null;
+			deleteContactDialog = null;
 		}
-		
+
 		if (smsRecordCursor != null) {
 			smsRecordCursor.requery();
 		}
-		
+
 		if (phoneRecordCursor != null) {
 			phoneRecordCursor.requery();
 		}
 		if (contactCursor != null) {
 			contactCursor.requery();
-		}else{
+		} else {
 			contactCursor.requery();
-			
+
 		}
 
 		switch (currIndex) {
@@ -243,14 +242,14 @@ public class PrivateCommActivity extends BaseActivity {
 
 	@Override
 	public void onDestroy() {
-		
-		if(contactCursor!=null){
+
+		if (contactCursor != null) {
 			contactCursor.close();
 		}
-		if(phoneRecordCursor!=null){
+		if (phoneRecordCursor != null) {
 			phoneRecordCursor.close();
 		}
-		if(smsRecordCursor!=null){
+		if (smsRecordCursor != null) {
 			smsRecordCursor.close();
 		}
 		super.onDestroy();
@@ -294,10 +293,12 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private void InitImageView() {
 		imageView = (ImageView) findViewById(R.id.animation_pic);
-	/*	animationPicWidth = BitmapFactory.decodeResource(getResources(),
-				R.id.animation_pic).getWidth();// 获取图片宽度*/
+		/*
+		 * animationPicWidth = BitmapFactory.decodeResource(getResources(),
+		 * R.id.animation_pic).getWidth();// 获取图片宽度
+		 */
 		animationPicWidth = imageView.getWidth();
-		
+
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int screenW = dm.widthPixels;// 获取分辨率宽度
@@ -406,7 +407,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 					if (checkbox.isChecked()) {
 						selectContacts.add(phone_number);
-						if(selectContacts.size() == smsRecordCursor.getCount()){
+						if (selectContacts.size() == smsRecordCursor.getCount()) {
 							edit_checkbox.setChecked(true);
 						}
 						Tools.logSh("selectContacts==" + selectContacts);
@@ -418,7 +419,7 @@ public class PrivateCommActivity extends BaseActivity {
 						if (selectContacts.size() < smsRecordCursor.getCount()) {
 							edit_checkbox.setChecked(false);
 						}
-						
+
 						editSmsAdapter.notifyChange(selectContacts);
 					}
 				}
@@ -500,15 +501,17 @@ public class PrivateCommActivity extends BaseActivity {
 
 					if (checkbox.isChecked()) {
 						selectContacts.add(phone_number);
-						
-						if(selectContacts.size() == phoneRecordCursor.getCount()){
+
+						if (selectContacts.size() == phoneRecordCursor
+								.getCount()) {
 							edit_checkbox.setChecked(true);
 						}
 					} else {
 						if (selectContacts.contains(phone_number)) {
 							selectContacts.remove(phone_number);
 						}
-						if (selectContacts.size() < phoneRecordCursor.getCount()) {
+						if (selectContacts.size() < phoneRecordCursor
+								.getCount()) {
 							edit_checkbox.setChecked(false);
 						}
 					}
@@ -572,7 +575,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 					if (checkbox.isChecked()) {
 						selectContacts.add(phone_number);
-						if(selectContacts.size() == contactCursor.getCount()){
+						if (selectContacts.size() == contactCursor.getCount()) {
 							edit_checkbox.setChecked(true);
 						}
 					} else {
@@ -831,7 +834,7 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private void setPhoneRecordAdapter(ListView mListView) {
 
-		if (phoneRecordCursor==null || phoneRecordCursor.getCount() == 0) {
+		if (phoneRecordCursor == null || phoneRecordCursor.getCount() == 0) {
 			phone_empty.setVisibility(View.VISIBLE);
 			edit.setVisibility(View.GONE);
 
@@ -840,8 +843,8 @@ public class PrivateCommActivity extends BaseActivity {
 			edit.setVisibility(View.VISIBLE);
 			Tools.logSh("cursor的长度为：" + phoneRecordCursor.getCount());
 		}
-		phoneRecordAdapter = new PhoneRecordAdapter(
-				getApplicationContext(), phoneRecordCursor);
+		phoneRecordAdapter = new PhoneRecordAdapter(getApplicationContext(),
+				phoneRecordCursor);
 		mListView.setAdapter(phoneRecordAdapter);
 		mListView.setEmptyView(phone_empty);
 
@@ -886,7 +889,7 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void setSmsRecordAdapter(ListView mListView) {
-		if (smsRecordCursor==null ||smsRecordCursor.getCount() == 0) {
+		if (smsRecordCursor == null || smsRecordCursor.getCount() == 0) {
 			sms_empty.setVisibility(View.VISIBLE);
 			edit.setVisibility(View.GONE);
 
@@ -954,8 +957,7 @@ public class PrivateCommActivity extends BaseActivity {
 			contact_count.setVisibility(View.VISIBLE);
 			contact_empty.setVisibility(View.GONE);
 			edit.setVisibility(View.VISIBLE);
-			contact_count
-			.setText("全部 ( " + contactCursor.getCount() + " )");
+			contact_count.setText("全部 ( " + contactCursor.getCount() + " )");
 			Tools.logSh("cursor的长度为：" + contactCursor.getCount());
 		}
 
@@ -1169,7 +1171,7 @@ public class PrivateCommActivity extends BaseActivity {
 				DeletePhoneTast task = new DeletePhoneTast(
 						PrivateCommActivity.this, number);
 				task.execute();
-				
+
 			}
 		});
 		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
@@ -1453,7 +1455,8 @@ public class PrivateCommActivity extends BaseActivity {
 		@Override
 		public void onPreExecute() {
 			newRecoverDialogInstance(mContext);
-			Toast.makeText(mContext, "开始执行+number==="+number, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "开始执行+number===" + number,
+					Toast.LENGTH_SHORT).show();
 		}
 
 		/**
