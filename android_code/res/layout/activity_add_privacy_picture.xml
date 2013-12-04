@@ -41,7 +41,7 @@
                 android:id="@+id/add_pic"
                 android:layout_width="332dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:gravity="center"
                 android:orientation="horizontal" >
 

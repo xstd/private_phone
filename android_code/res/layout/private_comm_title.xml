@@ -33,8 +33,7 @@
         android:layout_marginRight="12dip"
         android:background="@drawable/private_comm_editbtn_selector"
         android:textColor="@color/text_title_style_select_color" />
-    
-    
+
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
@@ -42,10 +41,9 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="24dip"
-        android:visibility="gone"
-        android:text="@string/private_comm_btn_cancle"
-        />
-    
+        android:background="@drawable/private_comm_backbtn_selector"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/btn_create"
         android:layout_width="wrap_content"
@@ -54,8 +52,9 @@
         android:layout_alignBottom="@+id/tv_title"
         android:layout_alignParentRight="true"
         android:layout_marginRight="12dip"
-        android:visibility="gone"
+        android:background="@drawable/private_comm_btn_selector"
+        android:text="@string/private_comm_btn_create"
         android:textColor="@color/text_title_style_select_color"
-        android:text="@string/private_comm_btn_create" />
+        android:visibility="gone" />
 
 </RelativeLayout>

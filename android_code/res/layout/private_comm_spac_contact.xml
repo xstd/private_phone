@@ -33,8 +33,7 @@
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@color/private_comm_listview_line"
-            android:dividerHeight="1dip"
-             />
+            android:dividerHeight="1dip" />
 
         <TextView
             android:id="@+id/contact_tv_empty"
@@ -44,20 +43,20 @@
             android:textColor="@color/sms_text_content_unseleted" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/contact_ll_add"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:background="@drawable/private_comm_spac_sms_selector"
-        android:orientation="vertical"
-         >
+        android:background="@drawable/private_comm_btn_selector"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/contact_add_contacts"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/private_comm_select_contact"
             android:textColor="@color/sms_text_content_unseleted" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

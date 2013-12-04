@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +51,11 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private static final int FINISH = 2;
 	private static final int NULL = 5;
 
-	@ViewMapping(ID = R.id.bt_sure)
-	public Button bt_sure;
+	@ViewMapping(ID = R.id.btn_sure)
+	public RelativeLayout btn_sure;
 
-	@ViewMapping(ID = R.id.bt_cancle)
-	public Button bt_cancle;
+	@ViewMapping(ID = R.id.btn_cancle)
+	public RelativeLayout btn_cancle;
 
 	@ViewMapping(ID = R.id.lv_contact)
 	public ListView lv_contact;
@@ -196,8 +197,8 @@ public class AddFromPhoneRecordActivity extends Activity implements
 		ViewMapUtil.viewMapping(this, getWindow());
 
 		tv_title.setText(getString(R.string.private_comm_add_from_phonerecord));
-		bt_sure.setOnClickListener(this);
-		bt_cancle.setOnClickListener(this);
+		btn_sure.setOnClickListener(this);
+		btn_cancle.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
 		btn_edit.setVisibility(View.GONE);
 
@@ -223,7 +224,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.bt_sure:
+		case R.id.btn_sure:
 
 			if (ids != null && ids.size() > 0) {
 				// Tools.logSh("selectPhones中个数为：" + selectPhones.length);
@@ -236,7 +237,7 @@ public class AddFromPhoneRecordActivity extends Activity implements
 						Toast.LENGTH_SHORT).show();
 			}
 			break;
-		case R.id.bt_cancle:
+		case R.id.btn_cancle:
 			finish();
 			break;
 		}

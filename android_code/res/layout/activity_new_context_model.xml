@@ -25,78 +25,105 @@
                 android:id="@+id/et_model_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/private_comm_text_edit_bkg"
                 android:hint="@string/private_comm_text_hint_modelname" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dip"
+            android:layout_height="40dip"
             android:orientation="horizontal" >
 
             <RelativeLayout
                 android:id="@+id/rl_intercept"
                 android:layout_width="0dip"
-                android:layout_height="60dip"
-                android:layout_weight="1" >
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/private_comm_btn_selector"
+                android:clickable="true"
+                android:focusable="true" >
 
-                <Button
-                    android:id="@+id/btn_interept_names"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/private_comm_interept_names" />
+                    android:gravity="center"
+                    android:text="@string/private_comm_interept_names"
+                    android:textColor="@color/private_comm_title_bkg" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_not_intercept"
                 android:layout_width="0dip"
-                android:layout_height="60dip"
-                android:layout_weight="1" >
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/private_comm_btn_selector"
+                android:clickable="true"
+                android:focusable="true" >
 
-                <Button
-                    android:id="@+id/btn_not_interept_names"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/private_comm_not_interept_names" />
+                    android:gravity="center"
+                    android:text="@string/private_comm_not_interept_names"
+                    android:textColor="@color/private_comm_title_bkg" />
             </RelativeLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:orientation="vertical"
-            >
-            
+            android:orientation="vertical" >
+
             <ListView
                 android:id="@+id/listview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-            
+                android:layout_height="match_parent" />
+
             <TextView
                 android:id="@+id/tv_emptyview"
-                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-            
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dip"
+            android:layout_height="50dip"
             android:gravity="bottom" >
 
-            <Button
-                android:id="@+id/btn_add_interept"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/private_comm_new_interept" />
-
-            <Button
+            <RelativeLayout
                 android:id="@+id/btn_add_not_interept"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/private_comm_new_not_interept" />
+                android:background="@drawable/private_comm_btn_selector"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/private_comm_new_not_interept"
+                    android:textColor="@color/private_comm_title_bkg" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_add_interept"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/private_comm_btn_selector"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/private_comm_new_interept"
+                    android:textColor="@color/private_comm_title_bkg" />
+            </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
 

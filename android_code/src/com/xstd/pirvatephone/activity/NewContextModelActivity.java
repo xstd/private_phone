@@ -6,33 +6,15 @@ import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.model.Model;
 import com.xstd.pirvatephone.dao.model.ModelDao;
 import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
-import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
-import com.xstd.pirvatephone.utils.DelectOurContactUtils;
-import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
-import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
-import com.xstd.pirvatephone.utils.DelectOurSmsDetailsUtils;
-import com.xstd.pirvatephone.utils.DelectOurSmsRecordsUtils;
-import com.xstd.pirvatephone.utils.DelectSystemPhoneUtils;
-import com.xstd.pirvatephone.utils.DelectSystemSmsUtils;
 import com.xstd.pirvatephone.utils.RecordToSysUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
-import com.xstd.pirvatephone.utils.RestoreSystemPhoneUtils;
-import com.xstd.pirvatephone.utils.RestoreSystemSmsUtils;
-import com.xstd.pirvatephone.utils.WritePhoneDetailUtils;
-import com.xstd.pirvatephone.utils.WritePhoneRecordUtils;
-import com.xstd.pirvatephone.utils.WriteSmsDetailUtils;
-import com.xstd.pirvatephone.utils.WriteSmsRecordUtils;
 import com.xstd.privatephone.adapter.NewContextModelAdapter;
-import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,7 +24,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,8 +32,6 @@ import android.widget.Toast;
 public class NewContextModelActivity extends BaseActivity {
 
 	private EditText model_name;
-	private Button add_notinterept;
-	private Button add_interept;
 	private Button btn_sure;
 	private ModelDao modelDao;
 	private String modelName;
@@ -71,10 +50,10 @@ public class NewContextModelActivity extends BaseActivity {
 	private TextView tv_title;
 	private Button btn_cancel;
 
-	private Button btn_interept_names;
-	private Button btn_not_interept_names;
 	private RelativeLayout rl_intercept;
 	private RelativeLayout rl_not_intercept;
+	private RelativeLayout add_notinterept;
+	private RelativeLayout add_interept;
 
 	public static final int UPDATE = 0;
 
@@ -129,16 +108,14 @@ public class NewContextModelActivity extends BaseActivity {
 		model_name = (EditText) findViewById(R.id.et_model_name);
 		rl_intercept = (RelativeLayout) findViewById(R.id.rl_intercept);
 		rl_not_intercept = (RelativeLayout) findViewById(R.id.rl_not_intercept);
-		btn_interept_names = (Button) findViewById(R.id.btn_interept_names);
-		btn_not_interept_names = (Button) findViewById(R.id.btn_not_interept_names);
 		listview = (ListView) findViewById(R.id.listview);
 		emptyview = (TextView) findViewById(R.id.tv_emptyview);
 
 		// bottom
-		add_interept = (Button) findViewById(R.id.btn_add_interept);
-		add_notinterept = (Button) findViewById(R.id.btn_add_not_interept);
+		add_interept = (RelativeLayout) findViewById(R.id.btn_add_interept);
+		add_notinterept = (RelativeLayout) findViewById(R.id.btn_add_not_interept);
 
-		btn_interept_names.setOnClickListener(new OnClickListener() {
+		rl_intercept.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -152,7 +129,7 @@ public class NewContextModelActivity extends BaseActivity {
 			}
 		});
 
-		btn_not_interept_names.setOnClickListener(new OnClickListener() {
+		rl_not_intercept.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

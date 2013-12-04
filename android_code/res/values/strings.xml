@@ -762,7 +762,7 @@ QQ:903372666
     <string name="private_comm_contact">联系人</string>
     <string name="private_comm_btn_edit">编辑</string>
     <string name="private_comm_title_privatesms">隐私短信</string>
-    <string name="private_comm_select_all">全选</string>
+    <string name="private_comm_select_all">全选1</string>
     <string name="private_comm_select_contact">添加隐私联系人</string>
     <string name="private_comm_unselect_contact">删除隐私联系人</string>
     <string name="private_comm_select_privatecontact">选择隐私联系人</string>
@@ -955,5 +955,10 @@ QQ:903372666
     <string name="privacy_pop_restore">还原</string>
     <string name="rs_create_system_sms">创建系统短信</string>
     <string name="rs_create_system_phone">创建系统电话</string>
+    <string name="private_comm_model_not_exite">还没有情景模式，添加一种情景模式</string>
+    <string name="private_comm_model_call_forwding">呼叫转移设置</string>
+    <string name="private_comm_model_new_context">新建情景模式</string>
+    <string name="private_comm_model_interept_contact">已拦截隐私联系人:</string>
+    <string name="private_comm_model_not_interept_contact">未拦截隐私联系人:</string>
 
 </resources>

@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -46,11 +47,11 @@ import android.widget.AdapterView.OnItemClickListener;
 public class AddFromSmsRecordActivity extends Activity implements
 		OnClickListener {
 
-	@ViewMapping(ID = R.id.bt_sure)
-	public Button bt_sure;
+	@ViewMapping(ID = R.id.btn_sure)
+	public RelativeLayout btn_sure;
 
-	@ViewMapping(ID = R.id.bt_cancle)
-	public Button bt_cancle;
+	@ViewMapping(ID = R.id.btn_cancle)
+	public RelativeLayout btn_cancle;
 
 	@ViewMapping(ID = R.id.lv_contact)
 	public ListView lv_contact;
@@ -207,8 +208,8 @@ public class AddFromSmsRecordActivity extends Activity implements
 
 		tv_title.setText(getString(R.string.private_comm_add_from_smsrecord));
 
-		bt_sure.setOnClickListener(this);
-		bt_cancle.setOnClickListener(this);
+		btn_sure.setOnClickListener(this);
+		btn_cancle.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
 		btn_edit.setVisibility(View.GONE);
 	}
@@ -225,7 +226,7 @@ public class AddFromSmsRecordActivity extends Activity implements
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.bt_sure:
+		case R.id.btn_sure:
 			if (_ids != null && _ids.size() > 0) {
 				Tools.logSh("selectPhones中个数为：" + numbers.size());
 				// 显示选择对话框
@@ -237,7 +238,7 @@ public class AddFromSmsRecordActivity extends Activity implements
 			}
 
 			break;
-		case R.id.bt_cancle:
+		case R.id.btn_cancle:
 			finish();
 			break;
 		}

@@ -93,7 +93,7 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 		SQLiteDatabase smsRecordDatabase = smsRecordDao
 				.getDatabase();
 		Cursor smsRecordCursor = smsRecordDatabase.query(
-				SmsRecordDao.TABLENAME, null,
+				SmsRecordDao.TABLENAME, null, 
 				SmsRecordDao.Properties.Phone_number.columnName
 						+ "=?", new String[] { smsNumber }, null,
 				null, null);

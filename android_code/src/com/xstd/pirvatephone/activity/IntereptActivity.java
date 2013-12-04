@@ -31,8 +31,8 @@ public class IntereptActivity extends BaseActivity {
 
 	private Cursor contactCursor;
 	private AddIntereptAdapter addIntereptAdapter;
-	private Button btn_cancle;
-	private Button btn_sure;
+	private RelativeLayout btn_cancle;
+	private RelativeLayout btn_sure;
 	private TextView tv_title;
 	private RelativeLayout select_all;
 	private CheckBox btn_check_all;
@@ -72,8 +72,8 @@ public class IntereptActivity extends BaseActivity {
 		btn_check_all = (CheckBox) findViewById(R.id.btn_check_all);
 
 		// bottm
-		btn_cancle = (Button) findViewById(R.id.btn_cancle);
-		btn_sure = (Button) findViewById(R.id.btn_sure);
+		btn_cancle = (RelativeLayout) findViewById(R.id.btn_cancle);
+		btn_sure = (RelativeLayout) findViewById(R.id.btn_sure);
 
 		// content
 		mListView = (ListView) findViewById(R.id.listview);

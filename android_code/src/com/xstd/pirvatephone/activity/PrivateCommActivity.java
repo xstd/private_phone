@@ -84,7 +84,7 @@ public class PrivateCommActivity extends BaseActivity {
 	private static final int SMS_PAGE = 0;
 	private static final int DIAL_PAGE = 1;
 	private static final int CONTACT_PAGE = 2;
-	private Button contact_add_contacts;
+	private RelativeLayout contact_add_contacts;
 
 	private TextView contact_empty;
 
@@ -172,7 +172,6 @@ public class PrivateCommActivity extends BaseActivity {
 		getContact();
 	}
 
-	@SuppressWarnings("deprecation")
 	private void reinitData() {
 
 		isEditing = false;
@@ -272,9 +271,9 @@ public class PrivateCommActivity extends BaseActivity {
 		viewPager = (com.xstd.privatephone.view.MyViewPager) findViewById(R.id.vPager);
 		views = new ArrayList<View>();
 		LayoutInflater inflater = getLayoutInflater();
-		view1 = inflater.inflate(R.layout.spac_sms, null);
-		view2 = inflater.inflate(R.layout.spac_dial, null);
-		view3 = inflater.inflate(R.layout.spac_contact, null);
+		view1 = inflater.inflate(R.layout.private_comm_spac_sms, null);
+		view2 = inflater.inflate(R.layout.private_comm_spac_dial, null);
+		view3 = inflater.inflate(R.layout.private_comm_spac_contact, null);
 		views.add(view1);
 		views.add(view2);
 		views.add(view3);
@@ -744,7 +743,7 @@ public class PrivateCommActivity extends BaseActivity {
 			contact_count = (TextView) findViewById(R.id.contact_tv_count);
 			contact_listview = (ListView) findViewById(R.id.contact_listview);
 			contact_empty = (TextView) findViewById(R.id.contact_tv_empty);
-			contact_add_contacts = (Button) findViewById(R.id.contact_add_contacts);
+			contact_add_contacts = (RelativeLayout) findViewById(R.id.contact_ll_add);
 			contact_add_contacts.setOnClickListener(new OnClickListener() {
 
 				@Override

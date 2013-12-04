@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:text="@string/privacy_selectfile_move"
                 android:textColor="#6B6B6B"
                 android:textSize="18sp" />
@@ -46,7 +46,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:text="@string/privacy_selectfile_add"
                 android:textColor="#6B6B6B"
                 android:textSize="18sp" />

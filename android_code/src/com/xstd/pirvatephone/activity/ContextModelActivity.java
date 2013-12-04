@@ -38,22 +38,24 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ContextModelActivity extends BaseActivity {
 
 	private ListView model_lv;
-	private Button add_btn;
+	private RelativeLayout add_btn;
+	private RelativeLayout btn_callforwarding;
 	private MyModelAdapter modelAdapter;
 	private ModelBroadcastReciver recevier;
 	private IntentFilter intentFilter;
 	private ArrayList<Model> models;
 	private GetModelUtils modeUtils;
-	private Button btn_callforwarding;
 	private TextView tv_title;
 	private Button btn_back;
 	private Button btn_edit;
+	private TextView tv_empty;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,10 +80,15 @@ public class ContextModelActivity extends BaseActivity {
 		modeUtils = new GetModelUtils(this);
 		models = modeUtils.getModels();
 		Tools.logSh(models.size() + ":::");
-
+		if(models!=null &&models.size()>0){
+			tv_empty.setVisibility(View.GONE);
+		}else{
+			tv_empty.setVisibility(View.VISIBLE);
+		}
+		
 		modelAdapter = new MyModelAdapter(ContextModelActivity.this, models);
 		model_lv.setAdapter(modelAdapter);
-
+		model_lv.setEmptyView(tv_empty);
 		model_lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -119,11 +126,12 @@ public class ContextModelActivity extends BaseActivity {
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		btn_back = (Button) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
+		tv_empty = (TextView) findViewById(R.id.tv_empty);
 		btn_edit.setVisibility(View.GONE);
 		
 		model_lv = (ListView) findViewById(R.id.model_lv);
-		add_btn = (Button) findViewById(R.id.btn_add);
-		btn_callforwarding = (Button) findViewById(R.id.btn_callforwarding);
+		add_btn = (RelativeLayout) findViewById(R.id.btn_add);
+		btn_callforwarding = (RelativeLayout) findViewById(R.id.btn_callforwarding);
 		
 
 		tv_title.setText("情景模式");
@@ -370,6 +378,12 @@ public class ContextModelActivity extends BaseActivity {
 		models.clear();
 		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
+		
+		if(models!=null &&models.size()>0){
+			tv_empty.setVisibility(View.GONE);
+		}else{
+			tv_empty.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/*

@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:onClick="addSimulate"
                 android:text="@string/simula_add_phone"
                 android:textColor="#6B6B6B"
@@ -162,7 +162,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/private_comm_sms_send_selector"
+                android:background="@drawable/private_comm_btn_selector"
                 android:onClick="addAdvanceSimulate"
                 android:text="@string/simula_add_advance_phone"
                 android:textColor="#6B6B6B"
@@ -174,7 +174,7 @@
             android:layout_width="267dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/private_comm_sms_send_selector"
+            android:background="@drawable/private_comm_btn_selector"
             android:textColor="#6B6B6B"
             android:textSize="18sp" />
     </FrameLayout>
