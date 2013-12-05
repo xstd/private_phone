@@ -49,6 +49,7 @@
         android:layout_height="50dip"
         android:background="@drawable/private_comm_btn_selector"
         android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:orientation="vertical" >
 

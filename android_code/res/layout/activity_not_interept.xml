@@ -20,7 +20,18 @@
             android:layout_height="40dip"
             android:layout_below="@id/rl_title"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dip"
+                android:layout_toLeftOf="@+id/btn_check_all"
+                android:gravity="center_vertical"
+                android:text="@string/private_comm_select_all"
+                android:textSize="17sp" />
 
             <CheckBox
                 android:id="@+id/btn_check_all"
@@ -28,17 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/textView2"
                 android:clickable="false"
                 android:focusable="false" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:text="全选" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -81,7 +83,7 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <include layout="@layout/private_comm_bottom_sure_cancel"/>
+        <include layout="@layout/private_comm_bottom_sure_cancel" />
     </RelativeLayout>
 
 </RelativeLayout>

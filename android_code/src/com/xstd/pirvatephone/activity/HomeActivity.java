@@ -37,23 +37,11 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initService();
-
         initData();
-
         initView();
 
     }
 
-	private void initService() {
-		
-		Intent intent = new Intent(this, PhoneService.class);
-		startService(intent);
-		Intent intent2 = new Intent(this, SmsService.class);
-		startService(intent2);
-		
-	}
-	
 	private void initData() {
 		titles.add(getResources().getString(R.string.private_c_home_first));
 		titles.add(getResources().getString(R.string.private_c_home_two));
