@@ -27,6 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -44,7 +45,7 @@ import com.xstd.privatephone.tools.Tools;
 
 public class AddFromContactActivity extends BaseActivity {
 
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private RelativeLayout bt_sure;
 	private RelativeLayout bt_cancle;
 	private ListView mListView;
@@ -53,7 +54,7 @@ public class AddFromContactActivity extends BaseActivity {
 
 	private Button btn_edit;
 	private TextView tv_title;
-	private TextView et_search;
+	private EditText et_search;
 	private String[] selectPhones;
 
 	private static final int UPDATE = 1;
@@ -155,7 +156,6 @@ public class AddFromContactActivity extends BaseActivity {
 		setContentView(R.layout.activity_add_from_contact);
 
 		initView();
-
 		GetContactTast task = new GetContactTast(AddFromContactActivity.this);
 		task.execute();
 
@@ -163,7 +163,7 @@ public class AddFromContactActivity extends BaseActivity {
 
 	private void initView() {
 		// title
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("从联系人添加");
@@ -172,7 +172,7 @@ public class AddFromContactActivity extends BaseActivity {
 		bt_sure = (RelativeLayout) findViewById(R.id.bt_sure);
 		bt_cancle = (RelativeLayout) findViewById(R.id.bt_cancle);
 		// content
-		et_search = (TextView) findViewById(R.id.et_search);
+		et_search = (EditText) findViewById(R.id.et_search);
 		btn_clear = (RelativeLayout) findViewById(R.id.btn_clear);
 		mListView = (ListView) findViewById(R.id.lv_contact);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);

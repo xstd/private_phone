@@ -37,8 +37,10 @@ import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class PhoneService extends Service {
+	private static final String TAG = "PhoneService";
 
 	private long Ringtime;// 开始外拨电话的时间
 	private long Dtime;// 外拨电话通话时间
@@ -64,13 +66,14 @@ public class PhoneService extends Service {
 			// dosometing you want
 			boolean b = ContactUtils.isPrivateContactNumber(mContext, outingNumber);
 			if(b){
+				Log.e(TAG, "外拨电话--隐私联系人");
 				SharedPreferences sp = getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
 				Editor editor = sp.edit();
 				editor.putInt("flag", 2);
 				editor.commit();
+				return ;
 			}
-			
-			Tools.logSh("接收到外拨电话了");
+			Log.e(TAG, "外拨电话--非隐私联系人");
 		}
 	}
 
@@ -106,7 +109,7 @@ public class PhoneService extends Service {
 		receiver = new InnerReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.intent.action.NEW_OUTGOING_CALL");
-		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+		filter.setPriority(Integer.MAX_VALUE);
 		registerReceiver(receiver, filter);
 
 		super.onCreate();

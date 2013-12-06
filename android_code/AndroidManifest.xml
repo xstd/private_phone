@@ -167,14 +167,10 @@
             android:name="com.xstd.pirvatephone.activity.AddFromSmsRecordActivity"
             android:label="@string/title_activity_add_from_sms_record" >
         </activity>
-        <activity android:name="com.xstd.pirvatephone.activity.AddAdvanceSimulatePhoneActivity" />
-        <activity android:name="com.xstd.pirvatephone.activity.ShowSDCardMediaActivity" />
-        <activity android:name="com.xstd.pirvatephone.activity.ShowFolderMediaActivity" />
 
         <receiver android:name="com.xstd.pirvatephone.receiver.BootBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -184,6 +180,10 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+
+        <activity android:name="com.xstd.pirvatephone.activity.AddAdvanceSimulatePhoneActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.ShowSDCardMediaActivity" />
+        <activity android:name="com.xstd.pirvatephone.activity.ShowFolderMediaActivity" />
     </application>
 
 </manifest>

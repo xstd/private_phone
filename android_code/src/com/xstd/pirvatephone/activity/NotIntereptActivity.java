@@ -48,7 +48,7 @@ public class NotIntereptActivity extends BaseActivity {
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
 	private RelativeLayout rl_remove_record;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 
 	@Override
@@ -145,7 +145,7 @@ public class NotIntereptActivity extends BaseActivity {
 		// title
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("新增拦截联系人");
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		btn_edit.setVisibility(View.GONE);
 

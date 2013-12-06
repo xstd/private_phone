@@ -1,6 +1,5 @@
 package com.xstd.pirvatephone.receiver;
 
-import java.util.ArrayList;
 
 import com.xstd.pirvatephone.dao.sms.SmsDetail;
 import com.xstd.pirvatephone.dao.sms.SmsDetailDao;
@@ -9,17 +8,19 @@ import com.xstd.pirvatephone.dao.sms.SmsRecord;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDao;
 import com.xstd.pirvatephone.dao.sms.SmsRecordDaoUtils;
 import com.xstd.pirvatephone.utils.ContactUtils;
-import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.ShowNotificationUtils;
 import com.xstd.privatephone.tools.Tools;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 /**
  * 4.0以后需要手动开启
@@ -28,14 +29,14 @@ import android.telephony.SmsMessage;
  * 
  */
 public class PrivateCommSmsRecevier extends BroadcastReceiver {
+	private static final String TAG = "PrivateCommSmsRecevier";
 	private Context mContext;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		mContext = context;
-		Tools.logSh("接收到短信广播事件");
+		Log.e(TAG, "接收到短信");
 		// 第一步、获取短信的内容和发件人
-
 		Object[] pdus = (Object[]) intent.getExtras().get("pdus");
 		if (pdus != null && pdus.length > 0) {
 			SmsMessage[] messages = new SmsMessage[pdus.length];
@@ -52,22 +53,14 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 				}
 				Tools.logSh("接收到短信广播事件" + "smsNumber=" + smsNumber + "smsBody"
 						+ smsBody + "smsDate" + smsDate);
-
-				ContextModelUtils contextModelUtils = new ContextModelUtils();
-				ArrayList<String> numbers = contextModelUtils
-						.getIntereptNumbers(mContext,null);
-
-				ArrayList<String> intereptNumber = ContactUtils
-						.queryIntereptNumber(mContext);
 				
-				// 第1步:确认该短信号码是否满足过滤条件（在拦截中）
-				if (numbers != null && numbers.contains(smsNumber)) {
-					intereptSms(smsNumber,smsBody,smsDate);
-					// 第三步:取消掉广播事件
-					this.abortBroadcast();
-					return ;
-				} else if(intereptNumber != null
-						&& intereptNumber.contains(smsNumber)){
+				boolean b = ContactUtils.isPrivateContactNumber(mContext, smsNumber);
+				if(b){
+					Log.e(TAG, "接收到隐私联系人短信");
+					SharedPreferences sp = mContext.getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
+					Editor editor = sp.edit();
+					editor.putInt("smsflag", 1);
+					editor.commit();
 					intereptSms(smsNumber,smsBody,smsDate);
 					this.abortBroadcast();
 					return ;
@@ -131,6 +124,7 @@ public class PrivateCommSmsRecevier extends BroadcastReceiver {
 		this.mContext.getContentResolver().delete(
 				Uri.parse("content://sms"), "date=?",
 				new String[] { smsDate.toString() });
+		
 
 		mSmsDetail.setThread_id(1);
 		mSmsDetail.setPhone_number(smsNumber);

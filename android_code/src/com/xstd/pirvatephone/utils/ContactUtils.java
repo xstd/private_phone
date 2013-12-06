@@ -14,18 +14,18 @@ import android.database.sqlite.SQLiteDatabase;
 public class ContactUtils {
 
 	public static boolean isPrivateContactNumber(Context context, String number) {
-
+		Cursor contactQuery = null;
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(context);
 		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
-		Cursor contactQuery = contactDatabase.query(ContactInfoDao.TABLENAME,
+		contactQuery =  contactDatabase.query(ContactInfoDao.TABLENAME,
 				null, ContactInfoDao.Properties.Phone_number.columnName + "=?",
 				new String[] { number }, null, null, null);
 		if (contactQuery != null && contactQuery.getCount() > 0) {
 			return true;
+		}else{
+			return false;
 		}
-
-		return false;
 	}
 
 	public static ArrayList<String> queryPrivateNotIntereptNumber(

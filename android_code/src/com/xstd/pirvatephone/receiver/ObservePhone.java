@@ -1,7 +1,5 @@
 package com.xstd.pirvatephone.receiver;
 
-import java.util.ArrayList;
-
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneDetail;
@@ -11,7 +9,6 @@ import com.xstd.pirvatephone.dao.phone.PhoneRecord;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
 import com.xstd.pirvatephone.utils.ContactUtils;
-import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.privatephone.tools.Tools;
 
 import android.content.ContentResolver;
@@ -24,21 +21,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.CallLog;
+import android.util.Log;
 
 public class ObservePhone extends ContentObserver {
+	private static final String TAG = "ObservePhone";
+	private Context mContext;
+	private SharedPreferences sp;
 
 	public ObservePhone(Handler handler, Context context) {
 		super(handler);
 		this.mContext = context;
 	}
 
-	private Context mContext;
-	private SharedPreferences sp;
 
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
-		Tools.logSh("通话数据库变化了");
+		Log.e(TAG, "通话数据库变化了");
 
 		sp = mContext.getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
 		int flag = sp.getInt("flag", 0);
@@ -50,7 +49,7 @@ public class ObservePhone extends ContentObserver {
 			removeReceive();
 			break;
 		case 2:
-			removeDail();
+			removeReceive();
 			break;
 
 		default:
@@ -60,6 +59,7 @@ public class ObservePhone extends ContentObserver {
 	}
 
 	private void removeReceive() {
+		Log.e(TAG, "removeReceive()被调用");
 		Cursor phoneDetailCursor = null;
 		try {
 			// 第2步:查询系统通话记录(该号码的最近一次记录)
@@ -187,7 +187,7 @@ public class ObservePhone extends ContentObserver {
 	}
 
 	private void removeDail() {
-
+		Tools.logSh("removeDail()被调用");
 		// 第2步:查询系统通话记录(该号码的最近一次记录)
 		ContentResolver contentResolver = mContext.getContentResolver();
 		Cursor cursor = contentResolver.query(
@@ -198,8 +198,6 @@ public class ObservePhone extends ContentObserver {
 				String address = cursor.getString(cursor
 						.getColumnIndex("number"));
 
-				// String name =
-				// cursor.getString(cursor.getColumnIndex("name"));
 				int type = cursor.getInt(cursor.getColumnIndex("type"));
 				Long date = cursor.getLong(cursor.getColumnIndex("date"));
 				Long duration = cursor.getLong(cursor

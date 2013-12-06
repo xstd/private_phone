@@ -14,14 +14,24 @@
         android:layout_centerVertical="true"
         android:text="@string/private_comm_title_privatesms" />
 
-    <Button
+    <RelativeLayout
         android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="24dip"
+        android:layout_marginLeft="0dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        >
+         <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/private_comm_backbtn_selector" />
+        
+    </RelativeLayout>
+   
 
     <Button
         android:id="@+id/btn_edit"

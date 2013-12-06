@@ -45,7 +45,7 @@ public class NewContextModelActivity extends BaseActivity {
 	private ArrayList<String> intereptNames;
 	private ArrayList<String> notIntereptNames;
 	private boolean delete = false;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
 	private Button btn_cancel;
@@ -93,7 +93,7 @@ public class NewContextModelActivity extends BaseActivity {
 	private void initView() {
 
 		// title
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		btn_cancel = (Button) findViewById(R.id.btn_cancel);
 		btn_sure = (Button) findViewById(R.id.btn_create);

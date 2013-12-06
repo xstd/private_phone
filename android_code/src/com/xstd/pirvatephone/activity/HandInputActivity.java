@@ -38,7 +38,7 @@ public class HandInputActivity extends BaseActivity {
 
 	private RelativeLayout btn_cancle;
 	private RelativeLayout btn_sure;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private EditText et_name;
 	private EditText et_phone;
@@ -89,7 +89,7 @@ public class HandInputActivity extends BaseActivity {
 
 	private void initView() {
 		// title
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("新建隐私联系人");

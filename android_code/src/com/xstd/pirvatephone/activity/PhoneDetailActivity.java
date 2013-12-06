@@ -8,15 +8,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
-import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneDetailDao;
 import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.utils.MakeCallUtils;
@@ -25,12 +21,11 @@ import com.xstd.privatephone.tools.Tools;
 
 public class PhoneDetailActivity extends BaseActivity {
 
-	private Button back;
 	private ListView listview;
 	private String number;
 	private String name;
 	private RelativeLayout phone_detail_title;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
 	private Button btn_dial;
@@ -51,7 +46,7 @@ public class PhoneDetailActivity extends BaseActivity {
 	private void initView() {
 		//title
 		phone_detail_title = (RelativeLayout) findViewById(R.id.phone_detail_title);
-		btn_back = (Button) phone_detail_title.findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) phone_detail_title.findViewById(R.id.btn_back);
 		btn_edit = (Button) phone_detail_title.findViewById(R.id.btn_edit);
 		btn_edit.setVisibility(View.GONE);
 		tv_title = (TextView) phone_detail_title.findViewById(R.id.tv_title);

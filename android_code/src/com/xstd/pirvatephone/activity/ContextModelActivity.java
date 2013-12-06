@@ -53,7 +53,7 @@ public class ContextModelActivity extends BaseActivity {
 	private ArrayList<Model> models;
 	private GetModelUtils modeUtils;
 	private TextView tv_title;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_empty;
 
@@ -124,7 +124,7 @@ public class ContextModelActivity extends BaseActivity {
 	private void initView() {
 		
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_empty = (TextView) findViewById(R.id.tv_empty);
 		btn_edit.setVisibility(View.GONE);

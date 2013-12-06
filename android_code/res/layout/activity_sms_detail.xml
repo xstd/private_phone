@@ -27,7 +27,7 @@
         android:id="@+id/sms_detail_buttom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/private_comm_sms_send_bkg"
+        android:background="@drawable/privacy_background_edit"
         android:gravity="center_vertical" >
 
         <EditText
