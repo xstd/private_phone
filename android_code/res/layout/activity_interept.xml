@@ -4,46 +4,43 @@
     android:layout_height="match_parent"
     tools:context=".NotIntereptActivity" >
 
-    
     <include
         android:id="@+id/layout_title"
         layout="@layout/private_comm_title" />
-    
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout_title"
         android:background="@color/private_comm_listview_bkg" >
-        
-       
 
         <RelativeLayout
             android:id="@+id/rl_add_all"
             android:layout_width="match_parent"
-            android:layout_height="40dip"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center_vertical" >
-            
+            android:gravity="center_vertical" 
+            android:background="@drawable/scene_mode_select_all_bkg">
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dip"
+                android:layout_marginRight="4dip"
                 android:layout_toLeftOf="@+id/btn_check_all"
-                android:gravity="center_vertical"
-                android:text="@string/private_comm_select_all" />
+                android:text="@string/private_comm_select_all"
+                android:textColor="#6f6f6f" />
 
             <CheckBox
                 android:id="@+id/btn_check_all"
-                style="@style/private_comm_checkbox_style"
+                style="@style/scene_mode_checkbox_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:clickable="false"
-                android:focusable="false" />
-
+                android:focusable="false" 
+                android:layout_marginRight="23dip"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -85,16 +82,16 @@
                     android:text="转移联系人、短信、通话记录到私密通讯" />
             </RelativeLayout>
         </RelativeLayout>
-		<include layout="@layout/private_comm_bottom_sure_cancel"/>
-		
-		 <TextView
+
+        <include layout="@layout/private_comm_bottom_sure_cancel" />
+
+        <TextView
             android:id="@+id/tv_empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="还没有隐私联系人，请先添加隐私联系人"
             android:gravity="center"
-            android:visibility="gone"
-            />
-    </RelativeLayout> 
+            android:text="还没有隐私联系人，请先添加隐私联系人"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </RelativeLayout>

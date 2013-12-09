@@ -962,5 +962,12 @@ QQ:903372666
     <string name="title_activity_boot_broadcast_recevier">BootBroadcastRecevier</string>
     <string name="private_comm_not_interept">不拦截</string>
     <string name="private_comm_interept">拦截</string>
+    
+    <string name="scene_mode_eidt_dialog_title">选择操作</string>
+    <string name="scene_mode_eidt_dialog_delete">删除</string>
+    <string name="scene_mode_eidt_dialog_rename">重命名</string>
+    <string name="scene_mode_rename_dialog_text">请输入新情景模式名称：</string>
+    <string name="scene_mode_rename_dialog_sure">确定</string>
+    <string name="scene_mode_rename_dialog_cancel">取消</string>
 
 </resources>
