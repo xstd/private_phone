@@ -75,5 +75,8 @@
     <dimen name="private_comm_sms_input_margin_left">20.0dip</dimen>
     <dimen name="private_comm_sms_detail_right">58dip</dimen>
     <dimen name="private_comm_sms_send_bkg_width">64dip</dimen>
+    
+    <dimen name="scene_mode_add_interept_text">16dip</dimen>
+    <dimen name="scene_mode_item_text">16dip</dimen>
 
 </resources>

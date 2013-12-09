@@ -330,4 +330,7 @@
     <color name="private_comm_listview_bkg">#e5e7ec</color>
     <color name="item_press_color">#C3E4FF</color>
     
+    <color name="scene_mode_new_text1">#3b6f99</color>
+    <color name="scene_mode_new_text2">#a3a3a3</color>
+    
 </resources>

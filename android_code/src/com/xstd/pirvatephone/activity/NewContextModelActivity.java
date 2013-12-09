@@ -80,6 +80,8 @@ public class NewContextModelActivity extends BaseActivity {
 	};
 	private ListView listview;
 	private TextView emptyview;
+	private TextView tv_interept;
+	private TextView tv_not_interept;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,9 @@ public class NewContextModelActivity extends BaseActivity {
 		rl_not_intercept = (RelativeLayout) findViewById(R.id.rl_not_intercept);
 		listview = (ListView) findViewById(R.id.listview);
 		emptyview = (TextView) findViewById(R.id.tv_emptyview);
+		tv_interept = (TextView) findViewById(R.id.tv_interept);
+		tv_not_interept = (TextView) findViewById(R.id.tv_not_interept);
+		
 
 		// bottom
 		add_interept = (RelativeLayout) findViewById(R.id.btn_add_interept);
@@ -122,6 +127,9 @@ public class NewContextModelActivity extends BaseActivity {
 				type = 1;
 				add_interept.setVisibility(View.VISIBLE);
 				add_notinterept.setVisibility(View.GONE);
+				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
+				tv_not_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
+				
 				listview.setEmptyView(emptyview);
 				listview.setAdapter(new NewContextModelAdapter(
 						NewContextModelActivity.this, intereptNumbers,
@@ -136,6 +144,8 @@ public class NewContextModelActivity extends BaseActivity {
 				type = 0;
 				add_interept.setVisibility(View.GONE);
 				add_notinterept.setVisibility(View.VISIBLE);
+				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
+				tv_not_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
 				listview.setEmptyView(emptyview);
 				listview.setAdapter(new NewContextModelAdapter(
 						NewContextModelActivity.this, notIntereptNumbers,

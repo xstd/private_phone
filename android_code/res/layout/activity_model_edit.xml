@@ -50,6 +50,15 @@
             android:layout_marginBottom="55dip"
             android:orientation="vertical"
             android:visibility="gone" >
+            
+            <TextView
+                android:id="@+id/tv_empty_interept"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="还没有拦截联系人，请点击添加"
+                android:visibility="gone"
+                />
 
             <TextView
                 android:id="@+id/tv_unlock_count"
@@ -101,6 +110,15 @@
             android:layout_below="@id/ll_intercept_tab"
             android:layout_marginBottom="55dip"
             android:orientation="vertical" >
+            
+             <TextView
+                android:id="@+id/tv_empty_not_interept"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="还没有不拦截联系人，请点击添加"
+                android:visibility="gone"
+                />
 
             <TextView
                 android:id="@+id/tv_locked_count"

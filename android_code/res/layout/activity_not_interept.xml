@@ -9,6 +9,23 @@
         layout="@layout/private_comm_title" />
 
     <RelativeLayout
+        android:id="@+id/rl_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_title"
+        android:background="@color/private_comm_listview_bkg"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="还没有隐私联系人，请先添加隐私联系人"
+             />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout_title"

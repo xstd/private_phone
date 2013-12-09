@@ -2,28 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_contact"
     android:layout_width="match_parent"
-    android:layout_height="55dip"
+    android:layout_height="67dip"
     android:gravity="center_vertical"
-    android:padding="10dip" >
+     >
 
-    <CheckBox
+    <RadioButton
         android:id="@+id/btn_check"
-        style="@style/private_comm_checkbox_style"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:focusable="false"
+        android:layout_marginRight="21dip"
         android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/tv_modelname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dip"
-        android:gravity="center_vertical"
-        style="@style/private_comm_item_name_style"
-        android:text="hello"
+        android:layout_marginLeft="20dip"
+        android:layout_centerVertical="true"
+        style="@style/scene_mode_item_text_style"
         />
 
 </RelativeLayout>

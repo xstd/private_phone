@@ -12,19 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout_title"
-        android:background="@color/private_comm_listview_bkg"
+        android:background="@android:color/background_light"
         android:orientation="vertical"
-        android:padding="10dip" >
+        >
 
         <RelativeLayout
             android:id="@+id/rl_add_name"
             android:layout_width="match_parent"
-            android:layout_height="60dip" >
+            android:gravity="center"
+            android:layout_height="96dip" >
 
             <EditText
                 android:id="@+id/et_model_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="273dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dip"
+                android:layout_marginBottom="31dip"
                 android:background="@drawable/private_comm_text_edit_bkg"
                 android:hint="@string/private_comm_text_hint_modelname" />
         </RelativeLayout>
@@ -32,40 +35,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dip"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:gravity="center_horizontal" >
 
             <RelativeLayout
                 android:id="@+id/rl_intercept"
-                android:layout_width="0dip"
+                android:layout_width="151dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true" >
 
                 <TextView
+                    android:id="@+id/tv_interept"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/private_comm_interept_names"
-                    android:textColor="@color/private_comm_title_bkg" />
+                    style="@style/scene_mode_new_text1_style"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_not_intercept"
-                android:layout_width="0dip"
+                android:layout_width="151dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true" >
 
                 <TextView
+                    android:id="@+id/tv_not_interept"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/private_comm_not_interept_names"
-                    android:textColor="@color/private_comm_title_bkg" />
+                    style="@style/scene_mode_new_text2_style"/>
             </RelativeLayout>
         </LinearLayout>
 
@@ -73,6 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
+             android:background="@color/private_comm_listview_bkg"
             android:orientation="vertical" >
 
             <ListView
@@ -88,41 +93,43 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="bottom" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/privacy_background_edit"
+            android:gravity="center" >
 
             <RelativeLayout
                 android:id="@+id/btn_add_not_interept"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="236dip"
+                android:layout_height="wrap_content"
                 android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center" >
 
                 <TextView
+                    style="@style/scene_mode_add_interept_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/private_comm_new_not_interept"
-                    android:textColor="@color/private_comm_title_bkg" />
+                    android:text="@string/private_comm_new_not_interept" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/btn_add_interept"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="236dip"
+                android:layout_height="wrap_content"
                 android:background="@drawable/private_comm_btn_selector"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center" >
 
                 <TextView
+                    style="@style/scene_mode_add_interept_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/private_comm_new_interept"
-                    android:textColor="@color/private_comm_title_bkg" />
+                    />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

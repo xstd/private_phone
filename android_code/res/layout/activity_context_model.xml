@@ -38,7 +38,9 @@
         <LinearLayout
             android:id="@+id/add_model"
             android:layout_width="match_parent"
-            android:layout_height="55dip"
+            android:layout_height="wrap_content"
+            android:background="@drawable/privacy_background_edit"
+            android:gravity="center"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:padding="5dip" >
@@ -54,10 +56,11 @@
                 android:gravity="center" >
 
                 <TextView
+                    style="@style/scene_mode_add_interept_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/private_comm_model_new_context"
-                    android:textColor="@color/sms_text_content_unseleted" />
+                   />
             </RelativeLayout>
 
             <RelativeLayout
@@ -71,10 +74,11 @@
                 android:gravity="center" >
 
                 <TextView
+                    style="@style/scene_mode_add_interept_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/private_comm_model_call_forwding"
-                    android:textColor="@color/sms_text_content_unseleted" />
+                     />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
