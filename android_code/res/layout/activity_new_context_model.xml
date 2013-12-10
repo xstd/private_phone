@@ -42,7 +42,7 @@
                 android:id="@+id/rl_intercept"
                 android:layout_width="151dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/private_comm_btn_selector"
+                android:background="@drawable/scene_mode_interept_name"
                 android:clickable="true"
                 android:focusable="true" >
 
@@ -54,12 +54,18 @@
                     android:text="@string/private_comm_interept_names"
                     style="@style/scene_mode_new_text1_style"/>
             </RelativeLayout>
+            
+                  <View 
+                android:layout_width="5dip"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_light"
+                />
 
             <RelativeLayout
                 android:id="@+id/rl_not_intercept"
                 android:layout_width="151dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/private_comm_btn_selector"
+                android:background="@drawable/scene_mode_not_interept_name"
                 android:clickable="true"
                 android:focusable="true" >
 
@@ -83,7 +89,9 @@
             <ListView
                 android:id="@+id/listview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:dividerHeight="1dip"
+                android:divider="#D7D7D7" />
 
             <TextView
                 android:id="@+id/tv_emptyview"

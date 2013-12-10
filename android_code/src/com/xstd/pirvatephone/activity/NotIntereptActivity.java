@@ -141,7 +141,7 @@ public class NotIntereptActivity extends BaseActivity {
 						RelativeLayout layout = (RelativeLayout) mListView
 								.getChildAt(index);
 						CheckBox checkBox = (CheckBox) layout
-								.findViewById(R.id.checkbox);
+								.findViewById(R.id.not_interept_checkbox);
 						checkBox.setChecked(false);
 
 						// 清空选中号码
@@ -249,10 +249,17 @@ public class NotIntereptActivity extends BaseActivity {
 						// 判断当前情景模式下是否已经不拦截该号码
 						selectContactsNumbers.add(number);
 						selectContactsNames.add(name);
+						if(contactCursor!=null && selectContactsNumbers.size()==contactCursor.getCount()){
+							btn_check_all.setChecked(true);
+						}
+						
 					} else {
 						if (selectContactsNumbers.contains(number)) {
 							selectContactsNumbers.remove(number);
 							selectContactsNames.remove(name);
+							if(selectContactsNumbers.size()==0){
+								btn_check_all.setChecked(false);
+							}
 						}
 					}
 				}

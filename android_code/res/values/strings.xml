@@ -969,5 +969,7 @@ QQ:903372666
     <string name="scene_mode_rename_dialog_text">请输入新情景模式名称：</string>
     <string name="scene_mode_rename_dialog_sure">确定</string>
     <string name="scene_mode_rename_dialog_cancel">取消</string>
+    <string name="scene_mode_delete_dialog_content">确定删除此情景模式?</string>
+    <string name="scene_mode_remove_record">转移短信、通话记录到私密通讯</string>
 
 </resources>

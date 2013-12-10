@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_contact"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/private_comm_contact_item_height"
-     >
+    android:layout_height="70dip"
+    android:gravity="center_vertical" >
 
     <ImageView
         android:id="@+id/not_interept_iv_pic"
@@ -11,60 +11,65 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="6dip"
-        android:visibility="gone"
-        android:background="@drawable/private_comm_contact_icon_bkg" />
+        android:background="@drawable/private_comm_contact_icon_bkg"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/private_comm_pic_margin_right"
-        android:layout_toRightOf="@id/not_interept_iv_pic"
+        android:layout_toRightOf="@id/interept_iv_pic"
+        android:gravity="center_vertical"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/not_interept_tv_name"
-            style="@style/private_comm_item_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/private_comm_name_margin_top2"
-            android:text="110" />
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginTop="10dip"
+            android:textColor="#717171"
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/private_comm_item_margin_bottom"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/not_interept_tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="[正常接听]" />
+                 />
 
             <TextView
                 android:id="@+id/not_interept_tv_phone_num"
                 style="@style/private_comm_item_content_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="110" />
+                 />
 
             <TextView
                 android:id="@+id/not_interept_tv_phone_belong"
                 style="@style/private_comm_item_content_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="     北京" />
+                 />
         </LinearLayout>
     </LinearLayout>
 
     <CheckBox
         android:id="@+id/not_interept_checkbox"
-        style="@style/private_comm_checkbox_style"
+        style="@style/scene_mode_checkbox_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="23dip"
         android:clickable="false"
         android:focusable="false" />
 

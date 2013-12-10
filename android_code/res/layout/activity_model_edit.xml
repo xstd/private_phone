@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout_title"
-        android:background="@color/private_comm_listview_bkg" >
+        android:background="@android:color/background_light" >
 
         <LinearLayout
             android:id="@+id/ll_intercept_tab"
@@ -23,21 +23,27 @@
 
             <TextView
                 android:id="@+id/tv_uninterept"
-                android:layout_width="0dip"
+                 android:layout_width="151dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/tab_left_pressed"
+                android:background="@drawable/scene_mode_not_interept_name"
                 android:gravity="center"
                 android:text="@string/private_comm_not_interept"
+                style="@style/scene_mode_new_text1_style"
                 android:textColor="#ffffff" />
+            
+               <View 
+                android:layout_width="5dip"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_light"
+                />
 
             <TextView
                 android:id="@+id/tv_interept"
-                android:layout_width="0dip"
+                 android:layout_width="151dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/tab_right_default"
+                android:background="@drawable/scene_mode_interept_name"
                 android:gravity="center"
+                 style="@style/scene_mode_new_text2_style"
                 android:text="@string/private_comm_interept"
                 android:textColor="#ffffff" />
         </LinearLayout>
@@ -60,19 +66,12 @@
                 android:visibility="gone"
                 />
 
-            <TextView
-                android:id="@+id/tv_unlock_count"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/private_comm_model_interept_contact"
-                android:layout_marginLeft="18dip"
-                android:textColor="@color/private_comm_title_text" />
-
             <RelativeLayout
                 android:id="@+id/rl_add_all"
                 android:layout_width="match_parent"
                 android:layout_height="40dip"
                 android:clickable="true"
+                android:visibility="gone"
                 android:gravity="center_vertical" >
 
                 <CheckBox
@@ -120,20 +119,13 @@
                 android:visibility="gone"
                 />
 
-            <TextView
-                android:id="@+id/tv_locked_count"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/private_comm_model_not_interept_contact"
-                android:layout_marginLeft="18dip"
-                android:textColor="@color/private_comm_title_text" />
-
             <RelativeLayout
                 android:id="@+id/rl_uninterept_all"
                 android:layout_width="match_parent"
                 android:layout_height="40dip"
                 android:clickable="true"
-                android:gravity="center_vertical" >
+                android:gravity="center_vertical"
+                android:visibility="gone" >
 
                 <CheckBox
                     android:id="@+id/btn_uninterept"

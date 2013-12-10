@@ -55,11 +55,10 @@ public class NewContextModelAdapter extends BaseAdapter {
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
-			
 		}
 		
-		holder.tv_name.setText(mNumbers.get(position));
-		holder.tv_number.setText(mNames.get(position));
+		holder.tv_name.setText(mNames.get(position));
+		holder.tv_number.setText(mNumbers.get(position));
 		
 		return convertView;
 	}

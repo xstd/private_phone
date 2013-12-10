@@ -120,8 +120,8 @@ public class ModelEditActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				tv_uninterept
-						.setBackgroundResource(R.drawable.tab_left_default);
-				tv_interept.setBackgroundResource(R.drawable.tab_right_pressed);
+						.setBackgroundResource(R.drawable.scene_mode_interept_name);
+				tv_interept.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
 				tv_add_text.setText("增加拦截联系人");
 				showInterept();
 			}
@@ -133,8 +133,8 @@ public class ModelEditActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				tv_uninterept
-						.setBackgroundResource(R.drawable.tab_left_pressed);
-				tv_interept.setBackgroundResource(R.drawable.tab_right_default);
+						.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
+				tv_interept.setBackgroundResource(R.drawable.scene_mode_interept_name);
 				tv_add_text.setText("增加不拦截联系人");
 				showNoInterept();
 

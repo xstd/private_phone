@@ -116,7 +116,7 @@ public class IntereptActivity extends BaseActivity {
 						RelativeLayout layout = (RelativeLayout) mListView
 								.getChildAt(index);
 						CheckBox checkBox = (CheckBox) layout
-								.findViewById(R.id.checkbox);
+								.findViewById(R.id.interept_checkbox);
 						checkBox.setChecked(false);
 
 						// 清空选中号码
@@ -132,7 +132,7 @@ public class IntereptActivity extends BaseActivity {
 						CheckBox checkBox = (CheckBox) layout
 								.findViewById(R.id.interept_checkbox);
 						TextView tv_phone_num = (TextView) layout
-								.findViewById(R.id.tv_phone_num);
+								.findViewById(R.id.interept_tv_phone_num);
 						TextView tv_name = (TextView) layout
 								.findViewById(R.id.interept_tv_name);
 
@@ -225,10 +225,16 @@ public class IntereptActivity extends BaseActivity {
 				if (checkbox.isChecked()) {
 						selectContactsNumbers.add(number);
 						selectContactsNames.add(name);
+						if(contactCursor!=null && selectContactsNumbers.size()==contactCursor.getCount()){
+							btn_check_all.setChecked(true);
+						}
 				} else {
 					if(selectContactsNumbers.contains(number)){
 						selectContactsNumbers.remove(number);
 						selectContactsNames.remove(name);
+						if(selectContactsNumbers.size()==0){
+							btn_check_all.setChecked(false);
+						}
 					}
 				}
 			}

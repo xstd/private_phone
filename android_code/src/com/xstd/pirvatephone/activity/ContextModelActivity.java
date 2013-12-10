@@ -248,30 +248,33 @@ public class ContextModelActivity extends BaseActivity {
 	}
 
 	protected void showDeleteDialog(final String modelName) {
-		AlertDialog.Builder builder = new Builder(ContextModelActivity.this);
-
-		builder.setMessage("删除此情景模式？");
-
-		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+		
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Tools.logSh("选择了确认按钮，删除了情景模式");
+			public void onClick(View arg0) {
 				deleteModel(modelName);
 				deleteModelDetail(modelName);
 				dialog.dismiss();
 			}
 		});
-
-		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
 			}
 		});
-
-		builder.create().show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
 	}
 
 	private void updateModelDetail(final String oldModel, String newModel) {
