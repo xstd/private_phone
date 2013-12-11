@@ -131,8 +131,7 @@ public class SimulateCallActivity extends BaseActivity implements
 		}
 		if (v == pickup) {
 			Intent intent = new Intent();
-			intent.setClass(getApplicationContext(),
-					SimulateIncallActivity.class);
+			intent.setClass(getApplicationContext(), SimulateIncallActivity.class);
 			intent.putExtra("simu", simu);
 			startActivity(intent);
 			finish();

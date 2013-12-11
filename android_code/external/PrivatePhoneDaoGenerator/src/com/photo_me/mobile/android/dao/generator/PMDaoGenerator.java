@@ -13,42 +13,11 @@ public class PMDaoGenerator {
     }
 
     private static void generateMQTTDaoModel() {
-/*
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.privacy");
-
-        Entity talk = schema.addEntity("PrivacyFile");
-        talk.addIdProperty();
-        talk.addStringProperty("srcName").notNull();
-        talk.addStringProperty("destName").notNull();
-        talk.addStringProperty("srcPath").notNull();
-        talk.addDateProperty("misstime");
-        talk.addIntProperty("type");
-        talk.addLongProperty("ref_id");
-
-        Entity ticket = schema.addEntity("PrivacyPwd");
-        ticket.addIdProperty();
-        ticket.addStringProperty("name").notNull();
-        ticket.addStringProperty("site");
-        ticket.addStringProperty("number");
-        ticket.addStringProperty("password").notNull();
-
-        Entity pic = schema.addEntity("PrivacyPic");
-        pic.addIdProperty();
-        pic.addStringProperty("name").notNull();*/
         
-
-       /* Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.contact");
-
-        Entity contact = schema.addEntity("ContactInfo");
-        contact.addIdProperty();
-        contact.addStringProperty("phone_number").notNull();
-        contact.addStringProperty("display_name").notNull();
-        contact.addIntProperty("type");*/
-        
-        Schema schema = new Schema(VERSION, "com.xstd.pirvatephone.dao.contact");
-        Entity contactInfo = schema.addEntity("ContactInfo");
+        Schema schema = new Schema(VERSION, "com.xstd.active.plugin.dao");
+        Entity contactInfo = schema.addEntity("SilenceApp");
         contactInfo.addIdProperty();
-        contactInfo.addStringProperty("phone_number").notNull();
+        contactInfo.addStringProperty("packagename");
         contactInfo.addStringProperty("display_name").notNull();
         contactInfo.addLongProperty("contact_id");
         contactInfo.addLongProperty("photo_id");
