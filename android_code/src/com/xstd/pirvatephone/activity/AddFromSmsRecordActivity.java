@@ -18,13 +18,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.CallLog;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -271,41 +270,49 @@ public class AddFromSmsRecordActivity extends Activity implements
 	}
 
 	public void showRemoveDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅添加联系人" },
-				new DialogInterface.OnClickListener() {
+		
+		Tools.logSh("numbers=="+numbers+"   数组元素="+ArrayUtils.listToArray(numbers).length);
+		final AddSmsRecordTast task = new AddSmsRecordTast(
+				AddFromSmsRecordActivity.this);
+		final WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+				AddFromSmsRecordActivity.this);
+		
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_remove_select, null);
+		final LinearLayout ll_remove_and_delete = (LinearLayout) view
+				.findViewById(R.id.ll_remove_and_delete);
+		final LinearLayout ll_remove_only = (LinearLayout) view
+				.findViewById(R.id.ll_remove_only);
+		ll_remove_and_delete.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Tools.logSh("numbers=="+numbers+"   数组元素="+ArrayUtils.listToArray(numbers).length);
-						AddSmsRecordTast task = new AddSmsRecordTast(
-								AddFromSmsRecordActivity.this);
-						WriteContactUtils mWriteContactUtils = new WriteContactUtils(
-								AddFromSmsRecordActivity.this);
-						switch (which) {
-						case 0:
-							Tools.logSh("0被点击了");
-							flags_delete = true;
-							mWriteContactUtils
-									.writeContactBySmsRecord(ArrayUtils.listToArray(numbers));
-							// 删除系统库中的联系人的相关信息,移动相关的通信信息
-							task.execute();
-							break;
-						case 1:
-							Tools.logSh("1被点击了");
-							flags_delete = false;
-							mWriteContactUtils
-									.writeContactBySmsRecord(ArrayUtils.listToArray(numbers));
-							finish();
-							// 不删除系统库中的联系人,移动相关的通信信息
-							break;
-						}
-					
-					}
-				});
-		AlertDialog removeDialog = builder.create();
-		removeDialog.setCanceledOnTouchOutside(false);
-		removeDialog.show();
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Tools.logSh("0被点击了");
+				flags_delete = true;
+				mWriteContactUtils
+						.writeContactBySmsRecord(ArrayUtils.listToArray(numbers));
+				// 删除系统库中的联系人的相关信息,移动相关的通信信息
+				task.execute();
+			}
+		});
+
+		ll_remove_only.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Tools.logSh("1被点击了");
+				flags_delete = false;
+				mWriteContactUtils
+						.writeContactBySmsRecord(ArrayUtils.listToArray(numbers));
+				finish();
+				// 不删除系统库中的联系人,移动相关的通信信息
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 

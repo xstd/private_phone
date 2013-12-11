@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-             android:background="@color/private_comm_listview_bkg"
+             android:background="@color/scene_mode_listview_bkg"
             android:orientation="vertical" >
 
             <ListView

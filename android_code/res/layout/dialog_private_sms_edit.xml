@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="329dp"
+    android:layout_height="wrap_content"
+    android:background="@color/private_comm_listview_bkg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/sms_edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="40dip"
+        android:gravity="center_vertical"
+        android:textColor="#1D5A92"
+        android:textSize="20sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#1D5A92" />
+
+    <LinearLayout
+        android:id="@+id/ll_send_sms"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:background="@drawable/private_comm_item_bkg_selector1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_sms_edit_item1"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_dail_contact"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+         android:background="@drawable/private_comm_item_bkg_selector1" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_sms_edit_item2"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_recover"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+         android:background="@drawable/private_comm_item_bkg_selector1" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_sms_edit_item3"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_delete"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+         android:background="@drawable/private_comm_item_bkg_selector1" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_sms_edit_item4"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</LinearLayout>

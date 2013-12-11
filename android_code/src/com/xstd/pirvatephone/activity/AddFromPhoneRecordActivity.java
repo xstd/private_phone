@@ -11,7 +11,6 @@ import com.xstd.pirvatephone.utils.ArrayUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
 import com.xstd.privatephone.adapter.AddFromPhoneRecordAdapter;
-import com.xstd.privatephone.bean.MyContactInfo;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.AsyncTask;
@@ -21,14 +20,15 @@ import android.os.Message;
 import android.provider.CallLog;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -49,7 +49,6 @@ public class AddFromPhoneRecordActivity extends Activity implements
 	private static final int UPDATE = 0;
 	private static final int UPDATE_UI = 1;
 	private static final int FINISH = 2;
-	private static final int NULL = 5;
 
 	@ViewMapping(ID = R.id.btn_sure)
 	public RelativeLayout btn_sure;
@@ -265,48 +264,54 @@ public class AddFromPhoneRecordActivity extends Activity implements
 			}
 		}
 		return phoneNumbers;
-
 	}
 
 	public void showRemoveDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅添加联系人" },
-				new DialogInterface.OnClickListener() {
+		
+		final AddPhoneRecordTast addPhoneRecordTast = new AddPhoneRecordTast(
+				AddFromPhoneRecordActivity.this);
+		final WriteContactUtils mWriteContactUtils = new WriteContactUtils(
+				AddFromPhoneRecordActivity.this);
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						AddPhoneRecordTast addPhoneRecordTast = new AddPhoneRecordTast(
-								AddFromPhoneRecordActivity.this);
-						WriteContactUtils mWriteContactUtils = new WriteContactUtils(
-								AddFromPhoneRecordActivity.this);
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_remove_select, null);
+		final LinearLayout ll_remove_and_delete = (LinearLayout) view
+				.findViewById(R.id.ll_remove_and_delete);
+		final LinearLayout ll_remove_only = (LinearLayout) view
+				.findViewById(R.id.ll_remove_only);
+		ll_remove_and_delete.setOnClickListener(new OnClickListener() {
 
-						switch (which) {
-						case 0:
-							flags_delete = true;
-							mWriteContactUtils
-									.writeContactByPhoneRecord(ArrayUtils
-											.listToArray(numbers));
-							addPhoneRecordTast.execute();
-							// 删除系统库中的联系人的相关信息,移动相关的通信信息
-							break;
-						case 1:
-							flags_delete = false;
-							mWriteContactUtils
-									.writeContactByPhoneRecord(ArrayUtils
-											.listToArray(numbers));
-							// 不删除系统库中的联系人,移动相关的通信信息
-							addPhoneRecordTast.execute();
-							break;
-						}
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				flags_delete = true;
+				mWriteContactUtils
+						.writeContactByPhoneRecord(ArrayUtils
+								.listToArray(numbers));
+				addPhoneRecordTast.execute();
+				// 删除系统库中的联系人的相关信息,移动相关的通信信息
+			}
+		});
 
-					}
-				});
-		AlertDialog removeDialog = builder.create();
-		removeDialog.setCanceledOnTouchOutside(false);
-		removeDialog.show();
+		ll_remove_only.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				flags_delete = false;
+				mWriteContactUtils
+						.writeContactByPhoneRecord(ArrayUtils
+								.listToArray(numbers));
+				// 不删除系统库中的联系人,移动相关的通信信息
+				addPhoneRecordTast.execute();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
-
+	
 	public void newInstance(Context ctx) {
 		AlertDialog.Builder builder = new Builder(ctx);
 		View dialogView = LayoutInflater.from(ctx).inflate(

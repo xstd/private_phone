@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="329dp"
+    android:layout_height="wrap_content"
+    android:background="@color/private_comm_listview_bkg"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_make_call"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:background="@drawable/private_comm_item_bkg_selector1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_phone_edit_item1"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_send_sms"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:background="@drawable/private_comm_item_bkg_selector1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_phone_edit_item2"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_edit"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:background="@drawable/private_comm_item_bkg_selector1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_contact_edit_item1"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_out"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:background="@drawable/private_comm_item_bkg_selector1"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:text="@string/private_comm_contact_edit_item2"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</LinearLayout>

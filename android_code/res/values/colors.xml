@@ -332,5 +332,6 @@
     
     <color name="scene_mode_new_text1">#3b6f99</color>
     <color name="scene_mode_new_text2">#a3a3a3</color>
+    <color name="scene_mode_listview_bkg">#EDEDED</color>
     
 </resources>

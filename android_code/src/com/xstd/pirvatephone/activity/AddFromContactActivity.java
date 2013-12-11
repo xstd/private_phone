@@ -3,9 +3,11 @@ package com.xstd.pirvatephone.activity;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -37,6 +40,7 @@ import android.widget.Toast;
 
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.utils.GetContactUtils;
+import com.xstd.pirvatephone.utils.MakeCallUtils;
 import com.xstd.pirvatephone.utils.RecordToUsUtils;
 import com.xstd.pirvatephone.utils.WriteContactUtils;
 import com.xstd.privatephone.adapter.AddFromContactAdapter;
@@ -285,35 +289,40 @@ public class AddFromContactActivity extends BaseActivity {
 	}
 
 	public void showRemoveDialog(final String[] selectPhones) {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅移动联系人" },
-				new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+		final RemoveRecordTast tast = new RemoveRecordTast(
+				AddFromContactActivity.this);
+		
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_remove_select, null);
+		final LinearLayout ll_remove_and_delete = (LinearLayout) view
+				.findViewById(R.id.ll_remove_and_delete);
+		final LinearLayout ll_remove_only = (LinearLayout) view
+				.findViewById(R.id.ll_remove_only);
+		ll_remove_and_delete.setOnClickListener(new OnClickListener() {
 
-						RemoveRecordTast tast = new RemoveRecordTast(
-								AddFromContactActivity.this);
-						
-						switch (which) {
-						case 0:
-							flags_delete = true;
-							tast.execute();
-							// 删除系统库中的联系人的相关信息,移动相关的通信信息
-							
-							break;
-						case 1:
-							flags_delete = false;
-							tast.execute();
-							// 不删除系统库中的联系人,移动相关的通信信息
-							break;
-						}
-					
-					}
-				});
-		AlertDialog removeDialog = builder.create();
-		removeDialog.setCanceledOnTouchOutside(false);
-		removeDialog.show();
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				flags_delete = true;
+				tast.execute();
+				// 删除系统库中的联系人的相关信息,移动相关的通信信息
+			}
+		});
+
+		ll_remove_only.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				flags_delete = false;
+				tast.execute();
+				// 不删除系统库中的联系人,移动相关的通信信息
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 

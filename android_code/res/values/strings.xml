@@ -954,6 +954,29 @@ QQ:903372666
     <string name="privacy_pop_restore">还原</string>
     <string name="rs_create_system_sms">创建系统短信</string>
     <string name="rs_create_system_phone">创建系统电话</string>
+    
+    
+    <string name="private_comm_sms_edit_item1">回复短信</string>
+    <string name="private_comm_sms_edit_item2">呼叫联系人</string>
+    <string name="private_comm_sms_edit_item3">恢复到手机收件箱</string>
+    <string name="private_comm_sms_edit_item4">删除此会话</string>
+    
+    <string name="private_comm_phone_edit_item1">打电话</string>
+    <string name="private_comm_phone_edit_item2">发短信</string>
+    <string name="private_comm_phone_edit_item3">删除</string>
+    
+    <string name="private_comm_contact_edit_item1">编辑</string>
+    <string name="private_comm_contact_edit_item2">退出</string>
+    <string name="private_comm_remove_select_item1">移动联系人同时删除手机数据库</string>
+    <string name="private_comm_remove_select_item2">仅移动联系人</string>
+    <string name="private_comm_add_new_contact">添加新的联系人</string>
+    <string name="private_comm_add_contact_item1">从联系人添加</string>
+    <string name="private_comm_add_contact_item2">手工输入号码</string>
+    <string name="private_comm_add_contact_item3">从通话记录添加</string>
+    <string name="private_comm_add_contact_item4">从短信记录添加</string>
+   
+    <string name="private_comm_sms_confirm_title">确认恢复短信会话到手机收件箱？</string>
+    
     <string name="private_comm_model_not_exite">还没有情景模式，添加一种情景模式</string>
     <string name="private_comm_model_call_forwding">呼叫转移设置</string>
     <string name="private_comm_model_new_context">新建情景模式</string>
@@ -971,5 +994,9 @@ QQ:903372666
     <string name="scene_mode_rename_dialog_cancel">取消</string>
     <string name="scene_mode_delete_dialog_content">确定删除此情景模式?</string>
     <string name="scene_mode_remove_record">转移短信、通话记录到私密通讯</string>
+    <string name="scene_mode_add_interept">还没有拦截联系人，请点击添加</string>
+    <string name="scene_mode_add_not_interept">还没有拦截联系人，请点击添加</string>
+    <string name="scene_mode_btn_not_interept">增加不拦截联系人</string>
+    <string name="scene_mode_btn_interept">增加拦截联系人</string>
 
 </resources>

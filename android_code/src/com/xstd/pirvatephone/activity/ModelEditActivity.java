@@ -119,10 +119,13 @@ public class ModelEditActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
+				
+				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
+				tv_uninterept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
 				tv_uninterept
-						.setBackgroundResource(R.drawable.scene_mode_interept_name);
-				tv_interept.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
-				tv_add_text.setText("增加拦截联系人");
+						.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
+				tv_interept.setBackgroundResource(R.drawable.scene_mode_interept_name);
+				tv_add_text.setText(getResources().getString(R.string.scene_mode_btn_interept));
 				showInterept();
 			}
 		});
@@ -132,10 +135,13 @@ public class ModelEditActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				tv_uninterept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
+				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
+				
 				tv_uninterept
-						.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
-				tv_interept.setBackgroundResource(R.drawable.scene_mode_interept_name);
-				tv_add_text.setText("增加不拦截联系人");
+						.setBackgroundResource(R.drawable.scene_mode_interept_name);
+				tv_interept.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
+				tv_add_text.setText(getResources().getString(R.string.scene_mode_btn_not_interept));
 				showNoInterept();
 
 			}

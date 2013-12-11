@@ -3,7 +3,8 @@
     android:id="@+id/rl_contact"
     android:layout_width="match_parent"
     android:layout_height="@dimen/private_comm_phone_item_height"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical" 
+     android:background="@drawable/private_comm_item_bkg_selector">
 
     <CheckBox
         android:id="@+id/iv_check"

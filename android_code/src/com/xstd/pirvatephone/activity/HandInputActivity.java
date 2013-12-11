@@ -2,9 +2,9 @@ package com.xstd.pirvatephone.activity;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -169,40 +170,46 @@ public class HandInputActivity extends BaseActivity {
 			}
 		});
 	}
-
+	
 	public void showRemoveDialog(final String selectPhone) {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[] { "移动联系人同时删除手机数据库", "仅添加联系人" },
-				new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_remove_select, null);
+		final LinearLayout ll_remove_and_delete = (LinearLayout) view
+				.findViewById(R.id.ll_remove_and_delete);
+		final LinearLayout ll_remove_only = (LinearLayout) view
+				.findViewById(R.id.ll_remove_only);
+		ll_remove_and_delete.setOnClickListener(new OnClickListener() {
 
-						switch (which) {
-						case 0:
-							flags_delete = true;
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				flags_delete = true;
 
-							// 删除系统库中的联系人的相关信息,移动相关的通信信息
-							RemoveRecordTast tast = new RemoveRecordTast(
-									HandInputActivity.this, selectPhone);
+				// 删除系统库中的联系人的相关信息,移动相关的通信信息
+				RemoveRecordTast tast = new RemoveRecordTast(
+						HandInputActivity.this, selectPhone);
 
-							tast.execute();
+				tast.execute();
+			}
+		});
 
-							break;
-						case 1:
-							flags_delete = false;
+		ll_remove_only.setOnClickListener(new OnClickListener() {
 
-							// 不删除系统库中的联系人,移动相关的通信信息
-							RemoveRecordTast tast2 = new RemoveRecordTast(
-									HandInputActivity.this, selectPhone);
-							tast2.execute();
-							break;
-						}
-					}
-				});
-		AlertDialog removeDialog = builder.create();
-		removeDialog.setCanceledOnTouchOutside(false);
-		removeDialog.show();
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				flags_delete = false;
+
+				// 不删除系统库中的联系人,移动相关的通信信息
+				RemoveRecordTast tast2 = new RemoveRecordTast(
+						HandInputActivity.this, selectPhone);
+				tast2.execute();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 

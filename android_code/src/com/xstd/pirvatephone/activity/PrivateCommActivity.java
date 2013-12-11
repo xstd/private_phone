@@ -1031,131 +1031,214 @@ public class PrivateCommActivity extends BaseActivity {
 
 	public void showContactDialog(final String name, final String address,
 			final int type) {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[] { "打电话", "发短信", "编辑", "退出" },
-				new DialogInterface.OnClickListener() {
+		
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_contact_edit, null);
+		final LinearLayout ll_make_call = (LinearLayout) view
+				.findViewById(R.id.ll_make_call);
+		final LinearLayout ll_send_sms = (LinearLayout) view
+				.findViewById(R.id.ll_send_sms);
+		final LinearLayout ll_edit = (LinearLayout) view
+				.findViewById(R.id.ll_edit);
+		final LinearLayout ll_out = (LinearLayout) view
+				.findViewById(R.id.ll_out);
+		ll_make_call.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				MakeCallUtils.makeCall(PrivateCommActivity.this,
+						address);
+			}
+		});
 
-						switch (which) {
-						case 0:
-							MakeCallUtils.makeCall(PrivateCommActivity.this,
-									address);
-							break;
+		ll_send_sms.setOnClickListener(new OnClickListener() {
 
-						case 1:
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent smsDetailIntent = new Intent(
+						PrivateCommActivity.this,
+						SmsDetailActivity.class);
+				// 姓名带过去
+				Tools.logSh("Number==" + address);
+				smsDetailIntent.putExtra("Number", address);
+				startActivity(smsDetailIntent);
+			}
+		});
+		ll_edit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent intent = new Intent(
+						PrivateCommActivity.this,
+						PrivateContactEditActivity.class);
+				intent.putExtra("Display_Name", name);
+				intent.putExtra("Address", address);
+				intent.putExtra("Type", type);
 
-							Intent smsDetailIntent = new Intent(
-									PrivateCommActivity.this,
-									SmsDetailActivity.class);
-							// 姓名带过去
-							Tools.logSh("Number==" + address);
-							smsDetailIntent.putExtra("Number", address);
-							startActivity(smsDetailIntent);
-							break;
-						case 2:
-							Intent intent = new Intent(
-									PrivateCommActivity.this,
-									PrivateContactEditActivity.class);
-							intent.putExtra("Display_Name", name);
-							intent.putExtra("Address", address);
-							intent.putExtra("Type", type);
-
-							startActivity(intent);
-
-							break;
-						case 3:
-
-							break;
-						}
-					}
-				});
-		AlertDialog contactDialog = builder.create();
-		contactDialog.setCanceledOnTouchOutside(false);
-		contactDialog.show();
+				startActivity(intent);
+			}
+		});
+		ll_out.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 
 	public void showPhoneDialog(final String name, final String number) {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("" + name);
-		builder.setItems(new String[] { "打电话", "发短信", "删除" },
-				new DialogInterface.OnClickListener() {
+		
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_phone_edit, null);
+		TextView phone_edit_title = (TextView) view.findViewById(R.id.phone_edit_title);
+		phone_edit_title.setText(name);
+		final LinearLayout ll_make_call = (LinearLayout) view
+				.findViewById(R.id.ll_make_call);
+		final LinearLayout ll_send_sms = (LinearLayout) view
+				.findViewById(R.id.ll_send_sms);
+		final LinearLayout ll_delete = (LinearLayout) view
+				.findViewById(R.id.ll_delete);
+		ll_make_call.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				// 获取号码
+				MakeCallUtils.makeCall(PrivateCommActivity.this,
+						number);
+			}
+		});
 
-						switch (which) {
-						case 0:
-							// 获取号码
-							MakeCallUtils.makeCall(PrivateCommActivity.this,
-									number);
-							break;
+		ll_send_sms.setOnClickListener(new OnClickListener() {
 
-						case 1:
-							Intent smsDetailIntent = new Intent(
-									PrivateCommActivity.this,
-									SmsDetailActivity.class);
-							// 姓名带过去
-							Tools.logSh("Number==" + number);
-							smsDetailIntent.putExtra("Number", number);
-							startActivity(smsDetailIntent);
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent smsDetailIntent = new Intent(
+						PrivateCommActivity.this,
+						SmsDetailActivity.class);
+				// 姓名带过去
+				Tools.logSh("Number==" + number);
+				smsDetailIntent.putExtra("Number", number);
+				startActivity(smsDetailIntent);
+			}
+		});
+		ll_delete.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
 
-							break;
-						case 2:
-
-							showDeletePhoneDialog(number);
-
-							break;
-						}
-					}
-				});
-		AlertDialog phoneDialog = builder.create();
-		phoneDialog.setCanceledOnTouchOutside(false);
-		phoneDialog.show();
+				showDeletePhoneDialog(number);
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
 	}
 
 	public void showSmsDialog(final String name, final String number) {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("" + name);
-		builder.setItems(new String[] { "回复短信", "呼叫联系人", "恢复到手机收件箱", "删除此会话" },
-				new DialogInterface.OnClickListener() {
+		
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_sms_edit, null);
+		TextView sms_edit_title = (TextView) view.findViewById(R.id.sms_edit_title);
+		sms_edit_title.setText(name);
+		final LinearLayout ll_send_sms = (LinearLayout) view
+				.findViewById(R.id.ll_send_sms);
+		final LinearLayout ll_dail_contact = (LinearLayout) view
+				.findViewById(R.id.ll_dail_contact);
+		final LinearLayout ll_recover = (LinearLayout) view
+				.findViewById(R.id.ll_recover);
+		final LinearLayout ll_delete = (LinearLayout) view
+				.findViewById(R.id.ll_delete);
+		ll_send_sms.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent intent = new Intent(
+						PrivateCommActivity.this,
+						SmsDetailActivity.class);
+				intent.putExtra("Name", name);
+				intent.putExtra("Number", number);
+				startActivity(intent);
+			}
+		});
 
-						switch (which) {
-						case 0:
-							Intent intent = new Intent(
-									PrivateCommActivity.this,
-									SmsDetailActivity.class);
-							intent.putExtra("Name", name);
-							intent.putExtra("Number", number);
-							startActivity(intent);
-							break;
+		ll_dail_contact.setOnClickListener(new OnClickListener() {
 
-						case 1:
-							MakeCallUtils.makeCall(PrivateCommActivity.this,
-									number);
-							break;
-						case 2:
-							SmsTast task1 = new SmsTast(
-									PrivateCommActivity.this, true, number);
-							task1.execute();
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				MakeCallUtils.makeCall(PrivateCommActivity.this,
+						number);
+			}
+		});
+		ll_recover.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				showDeleteSmsDialog(number);
+				
+			}
+		});
+		ll_delete.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				SmsTast task2 = new SmsTast(
+						PrivateCommActivity.this, false, number);
+				task2.execute();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
+	}
+	
+	protected void showDeleteSmsDialog(final String number) {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getColor(R.string.private_comm_sms_confirm_title));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+		
+		rl_sure.setOnClickListener(new OnClickListener() {
 
-							break;
-						case 3:
-							SmsTast task2 = new SmsTast(
-									PrivateCommActivity.this, false, number);
-							task2.execute();
-							break;
-						}
-					}
-				});
-		AlertDialog smsDialog = builder.create();
-		smsDialog.setCanceledOnTouchOutside(false);
-		smsDialog.show();
+			@Override
+			public void onClick(View arg0) {
+				SmsTast task1 = new SmsTast(
+						PrivateCommActivity.this, true, number);
+				task1.execute();
+				dialog.dismiss();
+			}
+		});
+		rl_cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
 	}
 
 	private void showDeletePhoneDialog(final String number) {
@@ -1188,50 +1271,65 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	private void showAddContactDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(R.drawable.ic_launcher);
-		builder.setTitle("添加新的联系人");
-		builder.setItems(new String[] { "从联系人添加", "手工输入号码", "从通话记录添加",
-				"从短信记录添加" }, new DialogInterface.OnClickListener() {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_add_contact, null);
+		final LinearLayout ll_from_contact = (LinearLayout) view
+				.findViewById(R.id.ll_from_contact);
+		final LinearLayout ll_from_hand = (LinearLayout) view
+				.findViewById(R.id.ll_from_hand);
+		final LinearLayout ll_from_phone_record = (LinearLayout) view
+				.findViewById(R.id.ll_from_phone_record);
+		final LinearLayout ll_from_sms_record = (LinearLayout) view
+				.findViewById(R.id.ll_from_sms_record);
+		ll_from_contact.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-
-				switch (which) {
-				case 0:
-					Intent intent1 = new Intent(PrivateCommActivity.this,
-							AddFromContactActivity.class);
-					startActivity(intent1);
-					break;
-				case 1:
-					Intent intent2 = new Intent(PrivateCommActivity.this,
-							HandInputActivity.class);
-					startActivity(intent2);
-					break;
-
-				case 2:
-
-					Intent intent3 = new Intent(PrivateCommActivity.this,
-							AddFromPhoneRecordActivity.class);
-					startActivity(intent3);
-					Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。",
-							Toast.LENGTH_SHORT).show();
-					break;
-
-				case 3:
-					Intent intent4 = new Intent(PrivateCommActivity.this,
-							AddFromSmsRecordActivity.class);
-					startActivity(intent4);
-					Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。",
-							Toast.LENGTH_SHORT).show();
-					break;
-				}
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent intent1 = new Intent(PrivateCommActivity.this,
+						AddFromContactActivity.class);
+				startActivity(intent1);
 			}
 		});
-		AlertDialog addContactDialog = builder.create();
-		addContactDialog.setCanceledOnTouchOutside(false);
-		addContactDialog.show();
 
+		ll_from_hand.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent intent2 = new Intent(PrivateCommActivity.this,
+						HandInputActivity.class);
+				startActivity(intent2);
+			}
+		});
+		ll_from_phone_record.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent intent3 = new Intent(PrivateCommActivity.this,
+						AddFromPhoneRecordActivity.class);
+				startActivity(intent3);
+				Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+		ll_from_sms_record.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				Intent intent4 = new Intent(PrivateCommActivity.this,
+						AddFromSmsRecordActivity.class);
+				startActivity(intent4);
+				Toast.makeText(PrivateCommActivity.this, "别急，正在努力的完成。。。。",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
 	}
 
 	private void showDeleteContactDialog() {
