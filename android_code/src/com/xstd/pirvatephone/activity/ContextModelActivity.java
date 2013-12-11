@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -24,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +39,7 @@ import com.xstd.pirvatephone.utils.GetModelUtils;
 import com.xstd.privatephone.adapter.MyModelAdapter;
 import com.xstd.privatephone.tools.Tools;
 
+
 public class ContextModelActivity extends BaseActivity {
 
 	private ListView model_lv;
@@ -51,7 +51,7 @@ public class ContextModelActivity extends BaseActivity {
 	private ArrayList<Model> models;
 	private GetModelUtils modeUtils;
 	private TextView tv_title;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_empty;
 
@@ -70,7 +70,6 @@ public class ContextModelActivity extends BaseActivity {
 		this.registerReceiver(recevier, intentFilter);
 
 	}
-	
 
 	private void showModel() {
 		// 查询情景模式表。若不存在表，创建该表，存在则查询数据，展示数据
@@ -78,12 +77,12 @@ public class ContextModelActivity extends BaseActivity {
 		modeUtils = new GetModelUtils(this);
 		models = modeUtils.getModels();
 		Tools.logSh(models.size() + ":::");
-		if(models!=null &&models.size()>0){
+		if (models != null && models.size() > 0) {
 			tv_empty.setVisibility(View.GONE);
-		}else{
+		} else {
 			tv_empty.setVisibility(View.VISIBLE);
 		}
-		
+
 		modelAdapter = new MyModelAdapter(ContextModelActivity.this, models);
 		model_lv.setAdapter(modelAdapter);
 		model_lv.setEmptyView(tv_empty);
@@ -105,7 +104,7 @@ public class ContextModelActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
+
 				TextView tv_modelname = (TextView) view
 						.findViewById(R.id.tv_modelname);
 				String modelName = tv_modelname.getText().toString();
@@ -120,44 +119,41 @@ public class ContextModelActivity extends BaseActivity {
 	}
 
 	private void initView() {
-		
+
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_empty = (TextView) findViewById(R.id.tv_empty);
 		btn_edit.setVisibility(View.GONE);
-		
+
 		model_lv = (ListView) findViewById(R.id.model_lv);
 		add_btn = (RelativeLayout) findViewById(R.id.btn_add);
 		btn_callforwarding = (RelativeLayout) findViewById(R.id.btn_callforwarding);
-		
 
 		tv_title.setText("情景模式");
-		
+
 		btn_back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		
+
 		add_btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent intent = new Intent(ContextModelActivity.this,
 						NewContextModelActivity.class);
 				startActivity(intent);
 			}
 		});
-		
+
 		btn_callforwarding.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent intent = new Intent(ContextModelActivity.this,
 						CallForwardingActivity.class);
 				startActivity(intent);
@@ -181,91 +177,102 @@ public class ContextModelActivity extends BaseActivity {
 	}
 
 	private void showEditDialog(final String modelName) {
-		final Builder builder = new AlertDialog.Builder(
-				ContextModelActivity.this);
-		builder.setItems(new String[] { "重命名", "删除" },
-				new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_edit, null);
+		final LinearLayout ll_rename = (LinearLayout) view
+				.findViewById(R.id.ll_rename);
+		final LinearLayout ll_delete = (LinearLayout) view
+				.findViewById(R.id.ll_delete);
+		ll_rename.setOnClickListener(new OnClickListener() {
 
-						switch (which) {
-						case 0:
-							Tools.logSh("oldMOdel" + modelName);
-							showRenameDialog(modelName);
-							break;
-						case 1:
-							showDeleteDialog(modelName);
-							break;
-						}
-					}
-				});
-		builder.create().show();
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				showRenameDialog(modelName);
+			}
+		});
 
+		ll_delete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				showDeleteDialog(modelName);
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 
 	public void showRenameDialog(final String modelName) {
-		final Builder builder = new AlertDialog.Builder(
-				ContextModelActivity.this);
-		final EditText text = new EditText(getApplicationContext());
-		builder.setView(text);
-		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_rename, null);
+		final EditText et_model_name = (EditText) view
+				.findViewById(R.id.et_model_name);
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// 修改数据库中数据
-				String change_model = text.getText().toString();
-				if (!TextUtils.isEmpty(change_model)) {
-					Tools.logSh("开始修改modelName=" + modelName
-							+ ":::change_model=" + change_model);
+			public void onClick(View arg0) {
+				String change_model = et_model_name.getText().toString().trim();
+				if (TextUtils.isEmpty(modelName)) {
+					Toast.makeText(ContextModelActivity.this, "情景模式名称不能为空",
+							Toast.LENGTH_SHORT).show();
+				} else {
 					updateModel(modelName, change_model);
 					updateModelDetail(modelName, change_model);
 					dialog.dismiss();
-				} else {
-					Toast.makeText(ContextModelActivity.this, "情景模式不能为空",
-							Toast.LENGTH_SHORT).show();
 				}
 
 			}
 		});
-		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
+			public void onClick(View arg0) {
 				dialog.dismiss();
 			}
 		});
-
-		builder.create().show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 
 	protected void showDeleteDialog(final String modelName) {
-		AlertDialog.Builder builder = new Builder(ContextModelActivity.this);
-
-		builder.setMessage("删除此情景模式？");
-
-		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+		
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				Tools.logSh("选择了确认按钮，删除了情景模式");
+			public void onClick(View arg0) {
 				deleteModel(modelName);
 				deleteModelDetail(modelName);
 				dialog.dismiss();
 			}
 		});
-
-		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
 			}
 		});
-
-		builder.create().show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
 	}
 
 	private void updateModelDetail(final String oldModel, String newModel) {
@@ -278,8 +285,8 @@ public class ContextModelActivity extends BaseActivity {
 			while (modelDetailQuery.moveToNext()) {
 				ModelDetail modelDetail = new ModelDetail();
 				Long _id = modelDetailQuery
-				.getLong(modelDetailQuery
-						.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
+						.getLong(modelDetailQuery
+								.getColumnIndex(ModelDetailDao.Properties.Id.columnName));
 				String jsonMassage = modelDetailQuery
 						.getString(modelDetailQuery
 								.getColumnIndex(ModelDetailDao.Properties.Massage.columnName));
@@ -289,33 +296,33 @@ public class ContextModelActivity extends BaseActivity {
 				String name = modelDetailQuery
 						.getString(modelDetailQuery
 								.getColumnIndex(ModelDetailDao.Properties.Name.columnName));
-				Tools.logSh("修改前jsonMassage="+jsonMassage);
+				Tools.logSh("修改前jsonMassage=" + jsonMassage);
 				try {
 					JSONObject json = new JSONObject(jsonMassage);
 					Object object = json.get(oldModel);
-					
+
 					if (object != null) {
-						
+
 						String value = json.getString(oldModel);
-						
+
 						json.remove(oldModel);
-						json.put(newModel,value);
+						json.put(newModel, value);
 						jsonMassage = json.toString();
-						Tools.logSh("修改后jsonMassage="+jsonMassage);
+						Tools.logSh("修改后jsonMassage=" + jsonMassage);
 					} else {
 
 					}
 
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				modelDetail.setId(_id);
 				modelDetail.setAddress(address);
 				modelDetail.setName(name);
 				modelDetail.setMassage(jsonMassage);
-				Tools.logSh("修改了：：" + address + ":::" + oldModel + "___-to____"+newModel);
+				Tools.logSh("修改了：：" + address + ":::" + oldModel + "___-to____"
+						+ newModel);
 				modelDetailDao.update(modelDetail);
 			}
 			modelDetailQuery.close();
@@ -376,10 +383,10 @@ public class ContextModelActivity extends BaseActivity {
 		models.clear();
 		models = modeUtils.getModels();
 		modelAdapter.notifyDataSetChanged();
-		
-		if(models!=null &&models.size()>0){
+
+		if (models != null && models.size() > 0) {
 			tv_empty.setVisibility(View.GONE);
-		}else{
+		} else {
 			tv_empty.setVisibility(View.VISIBLE);
 		}
 	}
@@ -395,7 +402,7 @@ public class ContextModelActivity extends BaseActivity {
 				ModelDetailDao.TABLENAME, null, null, null, null, null, null);
 		if (modelDetailQuery != null && modelDetailQuery.getCount() > 0) {
 			while (modelDetailQuery.moveToNext()) {
-				
+
 				ModelDetail modelDetail = new ModelDetail();
 				Long _id = modelDetailQuery.getLong(modelDetailQuery
 						.getColumnIndex(ModelDao.Properties.Id.columnName));
@@ -423,7 +430,7 @@ public class ContextModelActivity extends BaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				modelDetail.setId(_id);
 				modelDetail.setAddress(address);
 				modelDetail.setName(name);

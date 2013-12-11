@@ -43,8 +43,9 @@ public class IntereptActivity extends BaseActivity {
 
 	private ArrayList<String> selectContactsNumbers = new ArrayList<String>();
 	private ArrayList<String> selectContactsNames = new ArrayList<String>();
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
+	private TextView tv_empty_view;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,11 @@ public class IntereptActivity extends BaseActivity {
 		//title
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("新增拦截联系人");
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		btn_edit.setVisibility(View.GONE);
+		
+		tv_empty_view = (TextView) findViewById(R.id.tv_empty_view);
 		
 		select_all = (RelativeLayout) findViewById(R.id.rl_add_all);
 		btn_check_all = (CheckBox) findViewById(R.id.btn_check_all);
@@ -113,7 +116,7 @@ public class IntereptActivity extends BaseActivity {
 						RelativeLayout layout = (RelativeLayout) mListView
 								.getChildAt(index);
 						CheckBox checkBox = (CheckBox) layout
-								.findViewById(R.id.checkbox);
+								.findViewById(R.id.interept_checkbox);
 						checkBox.setChecked(false);
 
 						// 清空选中号码
@@ -129,7 +132,7 @@ public class IntereptActivity extends BaseActivity {
 						CheckBox checkBox = (CheckBox) layout
 								.findViewById(R.id.interept_checkbox);
 						TextView tv_phone_num = (TextView) layout
-								.findViewById(R.id.tv_phone_num);
+								.findViewById(R.id.interept_tv_phone_num);
 						TextView tv_name = (TextView) layout
 								.findViewById(R.id.interept_tv_name);
 
@@ -193,44 +196,49 @@ public class IntereptActivity extends BaseActivity {
 	private void setData() {
 
 		if (contactCursor != null && contactCursor.getCount() > 0) {
-			addIntereptAdapter = new AddIntereptAdapter(getApplicationContext(),
-					contactCursor);
-			mListView.setAdapter(addIntereptAdapter);
+			tv_empty_view.setVisibility(View.GONE);
+		} else {
+			tv_empty_view.setVisibility(View.VISIBLE);
+		}
+		
+		addIntereptAdapter = new AddIntereptAdapter(getApplicationContext(),
+				contactCursor);
+		mListView.setAdapter(addIntereptAdapter);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 
-			mListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				CheckBox checkbox = (CheckBox) view
+						.findViewById(R.id.interept_checkbox);
+				TextView tv_phone_num = (TextView) view
+						.findViewById(R.id.interept_tv_phone_num);
+				TextView tv_name = (TextView) view
+						.findViewById(R.id.interept_tv_name);
 
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					// TODO Auto-generated method stub
-					CheckBox checkbox = (CheckBox) view
-							.findViewById(R.id.interept_checkbox);
-					TextView tv_phone_num = (TextView) view
-							.findViewById(R.id.interept_tv_phone_num);
-					TextView tv_name = (TextView) view
-							.findViewById(R.id.interept_tv_name);
+				String number = tv_phone_num.getText().toString();
+				String name = tv_name.getText().toString();
 
-					String number = tv_phone_num.getText().toString();
-					String name = tv_name.getText().toString();
+				checkbox.setChecked(!checkbox.isChecked());
 
-					checkbox.setChecked(!checkbox.isChecked());
-
-					if (checkbox.isChecked()) {
-							selectContactsNumbers.add(number);
-							selectContactsNames.add(name);
-					} else {
-						if(selectContactsNumbers.contains(number)){
-							selectContactsNumbers.remove(number);
-							selectContactsNames.remove(name);
+				if (checkbox.isChecked()) {
+						selectContactsNumbers.add(number);
+						selectContactsNames.add(name);
+						if(contactCursor!=null && selectContactsNumbers.size()==contactCursor.getCount()){
+							btn_check_all.setChecked(true);
+						}
+				} else {
+					if(selectContactsNumbers.contains(number)){
+						selectContactsNumbers.remove(number);
+						selectContactsNames.remove(name);
+						if(selectContactsNumbers.size()==0){
+							btn_check_all.setChecked(false);
 						}
 					}
 				}
-			});
-
-		} else {
-			Toast.makeText(IntereptActivity.this, "还没有隐私联系人，请先添加隐私联系人！",
-					Toast.LENGTH_SHORT).show();
-		}
+			}
+		});
 
 	}
 

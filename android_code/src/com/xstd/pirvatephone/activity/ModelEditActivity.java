@@ -5,28 +5,18 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.alibaba.fastjson.JSON;
 import com.xstd.pirvatephone.R;
-import com.xstd.pirvatephone.R.layout;
-import com.xstd.pirvatephone.R.menu;
-import com.xstd.pirvatephone.dao.model.ModelDao;
-import com.xstd.pirvatephone.dao.model.ModelDaoUtils;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetail;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDao;
 import com.xstd.pirvatephone.dao.modeldetail.ModelDetailDaoUtils;
-import com.xstd.pirvatephone.utils.ArrayUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
-import com.xstd.pirvatephone.utils.DelectOurPhoneDetailsUtils;
-import com.xstd.pirvatephone.utils.DelectOurPhoneRecordsUtils;
 import com.xstd.privatephone.adapter.EditModelAdapter;
-import com.xstd.privatephone.bean.ModelJson;
 import com.xstd.privatephone.tools.Tools;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -101,9 +91,11 @@ public class ModelEditActivity extends BaseActivity {
 		}
 	};
 	private TextView tv_title;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_add_text;
+	private TextView tv_empty_interept;
+	private TextView tv_empty_not_interept;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -128,8 +120,8 @@ public class ModelEditActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				tv_uninterept
-						.setBackgroundResource(R.drawable.tab_left_default);
-				tv_interept.setBackgroundResource(R.drawable.tab_right_pressed);
+						.setBackgroundResource(R.drawable.scene_mode_interept_name);
+				tv_interept.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
 				tv_add_text.setText("增加拦截联系人");
 				showInterept();
 			}
@@ -141,8 +133,8 @@ public class ModelEditActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				tv_uninterept
-						.setBackgroundResource(R.drawable.tab_left_pressed);
-				tv_interept.setBackgroundResource(R.drawable.tab_right_default);
+						.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
+				tv_interept.setBackgroundResource(R.drawable.scene_mode_interept_name);
 				tv_add_text.setText("增加不拦截联系人");
 				showNoInterept();
 
@@ -175,7 +167,7 @@ public class ModelEditActivity extends BaseActivity {
 
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("编辑");
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		btn_edit.setVisibility(View.GONE);
 
@@ -184,10 +176,12 @@ public class ModelEditActivity extends BaseActivity {
 
 		// 拦截
 		ll_interept = (LinearLayout) findViewById(R.id.ll_interept);
+		tv_empty_interept = (TextView) findViewById(R.id.tv_empty_interept);
 		lv_interept = (ListView) findViewById(R.id.lv_interept);
 
 		// 不拦截
 		ll_uninterept = (LinearLayout) findViewById(R.id.ll_uninterept);
+		tv_empty_not_interept = (TextView) findViewById(R.id.tv_empty_not_interept);
 		lv_uninterept = (ListView) findViewById(R.id.lv_uninterept);
 
 		add_btn = (RelativeLayout) findViewById(R.id.add_not_interept_btn);
@@ -209,13 +203,21 @@ public class ModelEditActivity extends BaseActivity {
 	 */
 	private void showInterept() {
 		curIndex = 1;
+		
 		ll_interept.setVisibility(View.VISIBLE);
 		ll_uninterept.setVisibility(View.GONE);
+		if(intereptNumbers!=null && intereptNumbers.size()>0){
+			tv_empty_interept.setVisibility(View.GONE);
+		}else{
+			tv_empty_interept.setVisibility(View.VISIBLE);
+		}
+	
 		Tools.logSh("intereptNumbers=" + intereptNumbers + ":::"
 				+ "intereptNames=" + intereptNames);
 		intereptAdapter = new EditModelAdapter(ModelEditActivity.this,
 				intereptNumbers, intereptNames);
 		lv_interept.setAdapter(intereptAdapter);
+		lv_interept.setEmptyView(tv_empty_interept);
 		lv_interept.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -235,9 +237,17 @@ public class ModelEditActivity extends BaseActivity {
 		curIndex = 0;
 		ll_interept.setVisibility(View.GONE);
 		ll_uninterept.setVisibility(View.VISIBLE);
+		
+		if(intereptNumbers!=null && intereptNumbers.size()>0){
+			tv_empty_not_interept.setVisibility(View.GONE);
+		}else{
+			tv_empty_not_interept.setVisibility(View.VISIBLE);
+		}
+		
 		noIntereptAdapter = new EditModelAdapter(ModelEditActivity.this,
 				noIntereptNumbers, noIntereptNames);
 		lv_uninterept.setAdapter(noIntereptAdapter);
+		lv_uninterept.setEmptyView(tv_empty_not_interept);
 		lv_uninterept.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

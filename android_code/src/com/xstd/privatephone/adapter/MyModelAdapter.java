@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
@@ -58,7 +59,7 @@ public class MyModelAdapter extends BaseAdapter {
 					null);
 			TextView modelName = (TextView) view
 					.findViewById(R.id.tv_modelname);
-			CheckBox modelType = (CheckBox) view
+			RadioButton modelType = (RadioButton) view
 					.findViewById(R.id.btn_check);
 
 		final Model mModel = mModels.get(position);

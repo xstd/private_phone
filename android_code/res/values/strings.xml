@@ -762,7 +762,7 @@ QQ:903372666
     <string name="private_comm_contact">联系人</string>
     <string name="private_comm_btn_edit">编辑</string>
     <string name="private_comm_title_privatesms">隐私短信</string>
-    <string name="private_comm_select_all">全选1</string>
+    <string name="private_comm_select_all">全选</string>
     <string name="private_comm_select_contact">添加隐私联系人</string>
     <string name="private_comm_unselect_contact">删除隐私联系人</string>
     <string name="private_comm_select_privatecontact">选择隐私联系人</string>
@@ -771,7 +771,6 @@ QQ:903372666
     <string name="private_comm_delete">删除</string>
     <string name="private_comm_add_from_phonerecord">从通话记录添加</string>
     <string name="private_comm_add_from_smsrecord">从短信记录添加</string>
-    
     <string name="private_comm_btn_create">创建</string>
     <string name="private_comm_text_hint_modelname">模式名称</string>
     <string name="private_comm_interept_names">拦截名单</string>
@@ -960,5 +959,17 @@ QQ:903372666
     <string name="private_comm_model_new_context">新建情景模式</string>
     <string name="private_comm_model_interept_contact">已拦截隐私联系人:</string>
     <string name="private_comm_model_not_interept_contact">未拦截隐私联系人:</string>
+    <string name="title_activity_boot_broadcast_recevier">BootBroadcastRecevier</string>
+    <string name="private_comm_not_interept">不拦截</string>
+    <string name="private_comm_interept">拦截</string>
+    
+    <string name="scene_mode_eidt_dialog_title">选择操作</string>
+    <string name="scene_mode_eidt_dialog_delete">删除</string>
+    <string name="scene_mode_eidt_dialog_rename">重命名</string>
+    <string name="scene_mode_rename_dialog_text">请输入新情景模式名称：</string>
+    <string name="scene_mode_rename_dialog_sure">确定</string>
+    <string name="scene_mode_rename_dialog_cancel">取消</string>
+    <string name="scene_mode_delete_dialog_content">确定删除此情景模式?</string>
+    <string name="scene_mode_remove_record">转移短信、通话记录到私密通讯</string>
 
 </resources>

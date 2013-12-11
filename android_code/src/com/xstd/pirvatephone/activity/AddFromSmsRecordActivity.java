@@ -63,7 +63,7 @@ public class AddFromSmsRecordActivity extends Activity implements
 	public Button btn_edit;
 
 	@ViewMapping(ID = R.id.btn_back)
-	public Button btn_back;
+	public RelativeLayout btn_back;
 
 	@ViewMapping(ID = R.id.img_inside)
 	public ImageView img_inside;

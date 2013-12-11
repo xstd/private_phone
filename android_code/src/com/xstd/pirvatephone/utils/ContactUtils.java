@@ -13,6 +13,56 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class ContactUtils {
 
+	public static boolean isPrivateContactNumber(Context context, String number) {
+		Cursor contactQuery = null;
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(context);
+		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+		contactQuery =  contactDatabase.query(ContactInfoDao.TABLENAME,
+				null, ContactInfoDao.Properties.Phone_number.columnName + "=?",
+				new String[] { number }, null, null, null);
+		if (contactQuery != null && contactQuery.getCount() > 0) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public static ArrayList<String> queryPrivateNotIntereptNumber(
+			Context context) {
+		ArrayList<String> notIntereptNumbers = null;
+		notIntereptNumbers = new ArrayList<String>();
+		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
+				.getContactInfoDao(context);
+		SQLiteDatabase contactDatabase = contactInfoDao.getDatabase();
+		Cursor contactQuery = contactDatabase.query(ContactInfoDao.TABLENAME,
+				null, null, null, null, null, null);
+
+		if (contactQuery != null && contactQuery.getCount() > 0) {
+			while (contactQuery.moveToNext()) {
+				String number = contactQuery
+						.getString(contactQuery
+								.getColumnIndex(ContactInfoDao.Properties.Phone_number.columnName));
+				int numbertype = contactQuery
+						.getInt(contactQuery
+								.getColumnIndex(ContactInfoDao.Properties.Type.columnName));
+
+				if (numbertype == 0) {
+					notIntereptNumbers.add(number);
+				}
+			}
+			contactQuery.close();
+		}
+		return notIntereptNumbers;
+	}
+
+	/**
+	 * query private contact number by private contact name
+	 * 
+	 * @param context
+	 * @param name
+	 * @return private contact number
+	 */
 	public static String queryContactNumber(Context context, String name) {
 		String phone = "";
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
@@ -33,6 +83,13 @@ public class ContactUtils {
 		return phone;
 	}
 
+	/**
+	 * query private contact name by private contact number
+	 * 
+	 * @param context
+	 * @param number
+	 * @return private contact number
+	 */
 	public static String queryContactName(Context context, String number) {
 		String name = "";
 		ContactInfoDao contactInfoDao = ContactInfoDaoUtils
@@ -55,6 +112,12 @@ public class ContactUtils {
 		return number;
 	}
 
+	/**
+	 * query private contact interept phoneNumbers
+	 * 
+	 * @param context
+	 * @return private contact interept phoneNumbers
+	 */
 	public static ArrayList<String> queryIntereptNumber(Context context) {
 
 		ArrayList<String> intereptNumbers = null;
@@ -83,6 +146,12 @@ public class ContactUtils {
 		return intereptNumbers;
 	}
 
+	/**
+	 * query private contact notInterept phoneNummbers
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static ArrayList<String> queryNotIntereptNumber(Context context) {
 		ArrayList<String> notIntereptNumbers = null;
 		notIntereptNumbers = new ArrayList<String>();
@@ -156,8 +225,9 @@ public class ContactUtils {
 						contactInfo.setPhone_number(number);
 						contactInfo.setDisplay_name(name);
 						// 若隐私联系人中该号码不是被拦截的，修改其模式为拦截
-						Tools.logSh("number==="+number+"   type=="+numbertype);
-						
+						Tools.logSh("number===" + number + "   type=="
+								+ numbertype);
+
 						if (numbertype != 1) {
 							contactInfo.setType(1);
 							Tools.logSh(number + "模式被更改====" + 1);
@@ -203,8 +273,9 @@ public class ContactUtils {
 						contactInfo.setId(id);
 						contactInfo.setPhone_number(number);
 						contactInfo.setDisplay_name(name);
-						Tools.logSh("number==="+number+"   type=="+numbertype);
-						
+						Tools.logSh("number===" + number + "   type=="
+								+ numbertype);
+
 						if (numbertype != 0) {
 							contactInfo.setType(0);
 							Tools.logSh(number + "模式被更改====" + 0);

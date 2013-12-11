@@ -1,14 +1,18 @@
 package com.xstd.pirvatephone.activity;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.text.BoringLayout.Metrics;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -23,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.internal.telephony.ITelephony;
 import com.xstd.pirvatephone.R;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDao;
 import com.xstd.pirvatephone.dao.contact.ContactInfoDaoUtils;
@@ -38,7 +43,7 @@ import com.xstd.privatephone.tools.Tools;
 public class SmsDetailActivity extends BaseActivity {
 
 	private ListView listview;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
 	private RelativeLayout btn_send;
@@ -63,11 +68,11 @@ public class SmsDetailActivity extends BaseActivity {
 		initView();
 	}
 
-
 	private void initView() {
 		// title
 		sms_detail_title = (RelativeLayout) findViewById(R.id.sms_detail_title);
-		btn_back = (Button) sms_detail_title.findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) sms_detail_title
+				.findViewById(R.id.btn_back);
 		btn_edit = (Button) sms_detail_title.findViewById(R.id.btn_edit);
 		tv_title = (TextView) sms_detail_title.findViewById(R.id.tv_title);
 		tv_title.setText(number);
@@ -81,7 +86,7 @@ public class SmsDetailActivity extends BaseActivity {
 		smsDetailAdapter = new SmsDetailAdapter(getApplicationContext(),
 				smsDetailCursor);
 		listview.setAdapter(smsDetailAdapter);
-
+		listview.setSelection(listview.getChildCount());
 		btn_back.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -120,7 +125,7 @@ public class SmsDetailActivity extends BaseActivity {
 		smsDetailDatabase = smsDetailDao.getDatabase();
 		smsDetailCursor = smsDetailDatabase.query(SmsDetailDao.TABLENAME, null,
 				SmsDetailDao.Properties.Phone_number.columnName + "=?",
-				new String[] { number }, null, null, "date desc");
+				new String[] { number }, null, null, "date");
 
 		smsRecordDao = SmsRecordDaoUtils.getSmsRecordDao(this);
 		smsRecordDatabase = smsRecordDao.getDatabase();
@@ -128,13 +133,13 @@ public class SmsDetailActivity extends BaseActivity {
 				SmsDetailDao.Properties.Phone_number.columnName + "=?",
 				new String[] { number }, null, null, null);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
-		if(smsDetailCursor!=null){
+		if (smsDetailCursor != null) {
 			smsDetailCursor.close();
 		}
-		if(smsRecordCursor!=null){
+		if (smsRecordCursor != null) {
 			smsRecordCursor.close();
 		}
 		super.onDestroy();
@@ -149,6 +154,7 @@ public class SmsDetailActivity extends BaseActivity {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void sendSms(String content) {
 		Tools.logSh("短信粉条发送::" + content + ":::" + number);
 		SmsManager smsManager = SmsManager.getDefault();
@@ -162,7 +168,6 @@ public class SmsDetailActivity extends BaseActivity {
 			for (String str : ms) {
 				// 短信发送
 				smsManager.sendTextMessage(number, null, str, sentIntent, null);
-
 				InsertMessage(number, str);
 
 				smsDetailCursor.requery();
@@ -183,6 +188,37 @@ public class SmsDetailActivity extends BaseActivity {
 		}
 	}
 
+	/*private void sendMessage(String phoneNumber, String msg) {
+		// 反射获取ITelephony对象
+		TelephonyManager telephonyManager = (TelephonyManager) this
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		Class<TelephonyManager> telephonyManagerClazz = TelephonyManager.class;
+		Method getITelephonyMethod = telephonyManagerClazz.getDeclaredMethod(
+				"getITelephony", (Class[]) null);
+		getITelephonyMethod.setAccessible(true);//
+		ITelephony iTelephony = (ITelephony) getITelephonyMethod.invoke(
+				telephonyManager, (Object[]) null);
+		//iTelephony.;// 1=GSM,2=CDMA
+
+		Class<?> smsManagerClass = null;
+		Class[] divideMessagePamas = { String.class };
+		Class[] sendMultipartTextMessagePamas = { String.class, String.class,
+				ArrayList.class, ArrayList.class, ArrayList.class, int.class };
+		Method divideMessage = null;
+		Method sendMultipartTextMessage = null;
+		smsManagerClass = Class.forName("android.telephony.SmsManager");
+		Method method = smsManagerClass.getMethod("getDefault", new Class[] {});
+		Object smsManager = method.invoke(smsManagerClass, new Object[] {});
+		divideMessage = smsManagerClass.getMethod("divideMessage",
+				divideMessagePamas);
+		sendMultipartTextMessage = smsManagerClass.getMethod(
+				"sendMultipartTextMessage", sendMultipartTextMessagePamas);
+		ArrayList<String> magArray = (ArrayList<String>) divideMessage.invoke(
+				smsManager, msg);
+		sendMultipartTextMessage.invoke(smsManager, phoneNumber, "", magArray,
+				null, null, Void);
+	}*/
+
 	private void InsertMessage(String number, String body) {
 		// 向我们的smsDetail数据库插入一条记录，
 		SmsDetail smsDetail = new SmsDetail();
@@ -193,31 +229,37 @@ public class SmsDetailActivity extends BaseActivity {
 		// 向我们的smsRecord数据库插入跟新记录，
 		smsDetailDao.insert(smsDetail);
 
-		//判断有该号码的记录没有
-		if(smsRecordCursor!=null && smsRecordCursor.getCount()>0){
-			while(smsRecordCursor.moveToNext()){
-				
-				Long _id = smsRecordCursor.getLong(smsRecordCursor.getColumnIndex(SmsRecordDao.Properties.Id.columnName));
-				String phone_number = smsRecordCursor.getString(smsRecordCursor
-						.getColumnIndex(SmsRecordDao.Properties.Phone_number.columnName));
-				int msg_count = smsRecordCursor.getInt(smsRecordCursor.getColumnIndex(SmsRecordDao.Properties.Count.columnName));
-				Long lastedContact = smsRecordCursor.getLong(smsRecordCursor
-						.getColumnIndex(SmsRecordDao.Properties.Lasted_contact.columnName));
-				String lasted_data = smsRecordCursor.getString(smsRecordCursor
-						.getColumnIndex(SmsRecordDao.Properties.Lasted_data.columnName));
-				
+		// 判断有该号码的记录没有
+		if (smsRecordCursor != null && smsRecordCursor.getCount() > 0) {
+			while (smsRecordCursor.moveToNext()) {
+
+				Long _id = smsRecordCursor.getLong(smsRecordCursor
+						.getColumnIndex(SmsRecordDao.Properties.Id.columnName));
+				String phone_number = smsRecordCursor
+						.getString(smsRecordCursor
+								.getColumnIndex(SmsRecordDao.Properties.Phone_number.columnName));
+				int msg_count = smsRecordCursor
+						.getInt(smsRecordCursor
+								.getColumnIndex(SmsRecordDao.Properties.Count.columnName));
+				Long lastedContact = smsRecordCursor
+						.getLong(smsRecordCursor
+								.getColumnIndex(SmsRecordDao.Properties.Lasted_contact.columnName));
+				String lasted_data = smsRecordCursor
+						.getString(smsRecordCursor
+								.getColumnIndex(SmsRecordDao.Properties.Lasted_data.columnName));
+
 				SmsRecord smsRecord = new SmsRecord();
 				smsRecord.setId(_id);
 				smsRecord.setPhone_number(phone_number);
-				smsRecord.setCount(msg_count+1);
+				smsRecord.setCount(msg_count + 1);
 				smsRecord.setLasted_data(lasted_data);
 				smsRecord.setLasted_contact(System.currentTimeMillis());
 				smsRecordDao.update(smsRecord);
 			}
 			smsRecordCursor.close();
-			return ;
-			
-		}else{
+			return;
+
+		} else {
 			SmsRecord smsRecord = new SmsRecord();
 			smsRecord.setPhone_number(number);
 			smsRecord.setCount(1);
@@ -225,7 +267,7 @@ public class SmsDetailActivity extends BaseActivity {
 			smsRecord.setLasted_contact(System.currentTimeMillis());
 			smsRecordDao.insert(smsRecord);
 			smsRecordCursor.close();
-			return ;
+			return;
 		}
 	}
 }

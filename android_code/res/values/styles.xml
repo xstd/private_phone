@@ -71,6 +71,39 @@
     </style>
 
     <!-- swj -->
+    
+     <style name="scene_mode_checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/scene_mode_checkbox_selector</item>
+    </style>
+    
+    <style name="scene_mode_new_text1_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/scene_mode_new_text1</item>
+        <item name="android:textSize">@dimen/scene_mode_item_text</item>
+    </style>
+
+    <style name="scene_mode_new_text2_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/scene_mode_new_text2</item>
+        <item name="android:textSize">@dimen/scene_mode_item_text</item>
+    </style>
+
+    <style name="scene_mode_item_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#212121</item>
+        <item name="android:textSize">@dimen/scene_mode_item_text</item>
+    </style>
+
+    <style name="scene_mode_add_interept_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#7f7f7f</item>
+        <item name="android:textSize">@dimen/scene_mode_add_interept_text</item>
+    </style>
+
     <style name="private_comm_item_name_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

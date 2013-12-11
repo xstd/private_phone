@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dip"
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
     android:baselineAligned="false"
-    android:orientation="horizontal"
     android:padding="5dip" >
 
     <RelativeLayout
         android:id="@+id/btn_cancle"
-        android:layout_width="0dip"
+        android:layout_width="150dip"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:background="@drawable/private_comm_btn_selector"
         android:clickable="true"
         android:focusable="true"
@@ -22,14 +20,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/private_comm_btn_cancle"
-            android:textColor="@color/sms_text_content_unseleted" />
+            android:textColor="#777777"
+            android:textSize="16sp" />
     </RelativeLayout>
-    
+
     <RelativeLayout
         android:id="@+id/btn_sure"
-        android:layout_width="0dip"
+        android:layout_width="150dip"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_alignParentRight="true"
         android:background="@drawable/private_comm_btn_selector"
         android:clickable="true"
         android:focusable="true"
@@ -39,7 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/private_comm_btn_sure"
-            android:textColor="@color/sms_text_content_unseleted" />
+            android:textColor="#777777"
+            android:textSize="16sp" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -40,12 +40,12 @@ public class NewContextModelActivity extends BaseActivity {
 	 * type==0,不拦截，type==1,拦截。
 	 */
 	private int type = 0;
-	private ArrayList<String> intereptNumbers;
-	private ArrayList<String> notIntereptNumbers;
-	private ArrayList<String> intereptNames;
-	private ArrayList<String> notIntereptNames;
+	private ArrayList<String> intereptNumbers = new ArrayList<String>();
+	private ArrayList<String> notIntereptNumbers = new ArrayList<String>();
+	private ArrayList<String> intereptNames= new ArrayList<String>();
+	private ArrayList<String> notIntereptNames= new ArrayList<String>();
 	private boolean delete = false;
-	private Button btn_back;
+	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
 	private Button btn_cancel;
@@ -54,32 +54,47 @@ public class NewContextModelActivity extends BaseActivity {
 	private RelativeLayout rl_not_intercept;
 	private RelativeLayout add_notinterept;
 	private RelativeLayout add_interept;
+	
+	private ListView listview;
+	private TextView emptyview;
+	private TextView tv_interept;
+	private TextView tv_not_interept;
 
 	public static final int UPDATE = 0;
 
 	public Handler handler = new Handler() {
+		private NewContextModelAdapter notIntereptAdapter;
+		private NewContextModelAdapter intereptAdapter;
+
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case UPDATE:
 				if (type == 0) {
 					listview.setEmptyView(emptyview);
-					listview.setAdapter(new NewContextModelAdapter(
-							NewContextModelActivity.this, notIntereptNumbers,
-							notIntereptNames));
+					if(notIntereptAdapter==null){
+						notIntereptAdapter = new NewContextModelAdapter(
+								NewContextModelActivity.this, notIntereptNumbers,
+								notIntereptNames);
+						listview.setAdapter(notIntereptAdapter);
+					}else{
+						notIntereptAdapter.notifyDataSetChanged();
+					}
 				} 
 				if(type == 1){
-					listview.setEmptyView(emptyview);
-					listview.setAdapter(new NewContextModelAdapter(
-							NewContextModelActivity.this, intereptNumbers,
-							intereptNames));
+					if(notIntereptAdapter==null){
+						listview.setEmptyView(emptyview);
+						intereptAdapter = new NewContextModelAdapter(
+								NewContextModelActivity.this, intereptNumbers,
+								intereptNames);
+						listview.setAdapter(intereptAdapter);
+					}else{
+						intereptAdapter.notifyDataSetChanged();
+					}
 				}
-
 				break;
 			}
 		};
 	};
-	private ListView listview;
-	private TextView emptyview;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +108,7 @@ public class NewContextModelActivity extends BaseActivity {
 	private void initView() {
 
 		// title
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		btn_cancel = (Button) findViewById(R.id.btn_cancel);
 		btn_sure = (Button) findViewById(R.id.btn_create);
@@ -110,7 +125,9 @@ public class NewContextModelActivity extends BaseActivity {
 		rl_not_intercept = (RelativeLayout) findViewById(R.id.rl_not_intercept);
 		listview = (ListView) findViewById(R.id.listview);
 		emptyview = (TextView) findViewById(R.id.tv_emptyview);
-
+		tv_interept = (TextView) findViewById(R.id.tv_interept);
+		tv_not_interept = (TextView) findViewById(R.id.tv_not_interept);
+		
 		// bottom
 		add_interept = (RelativeLayout) findViewById(R.id.btn_add_interept);
 		add_notinterept = (RelativeLayout) findViewById(R.id.btn_add_not_interept);
@@ -122,6 +139,12 @@ public class NewContextModelActivity extends BaseActivity {
 				type = 1;
 				add_interept.setVisibility(View.VISIBLE);
 				add_notinterept.setVisibility(View.GONE);
+				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
+				tv_not_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
+				
+				rl_intercept.setBackgroundResource(R.drawable.scene_mode_interept_name);
+				rl_not_intercept.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
+				
 				listview.setEmptyView(emptyview);
 				listview.setAdapter(new NewContextModelAdapter(
 						NewContextModelActivity.this, intereptNumbers,
@@ -136,6 +159,12 @@ public class NewContextModelActivity extends BaseActivity {
 				type = 0;
 				add_interept.setVisibility(View.GONE);
 				add_notinterept.setVisibility(View.VISIBLE);
+				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
+				tv_not_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
+				
+				rl_intercept.setBackgroundResource(R.drawable.scene_mode_not_interept_name);
+				rl_not_intercept.setBackgroundResource(R.drawable.scene_mode_interept_name);
+				
 				listview.setEmptyView(emptyview);
 				listview.setAdapter(new NewContextModelAdapter(
 						NewContextModelActivity.this, notIntereptNumbers,
@@ -339,14 +368,12 @@ public class NewContextModelActivity extends BaseActivity {
 			}
 
 			delete = data.getBooleanExtra("delete", false);
-
 			Tools.logSh("type=" + type + ":::selectContactsNumbers="
 					+ intereptNumbers);
 
 			Message msg = new Message();
 			msg.what = UPDATE;
 			handler.sendMessage(msg);
-
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);

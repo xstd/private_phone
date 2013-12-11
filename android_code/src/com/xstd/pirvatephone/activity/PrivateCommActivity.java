@@ -78,7 +78,7 @@ public class PrivateCommActivity extends BaseActivity {
 	private View view1, view2, view3;// 各个页卡
 	private Button btn_sms, btn_phone, btn_contact;
 
-	private Button ib_back;
+	private RelativeLayout ib_back;
 	private Button edit;
 
 	private static final int SMS_PAGE = 0;
@@ -172,6 +172,7 @@ public class PrivateCommActivity extends BaseActivity {
 		getContact();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void reinitData() {
 
 		isEditing = false;
@@ -345,7 +346,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 
-		ib_back = (Button) findViewById(R.id.btn_back);
+		ib_back = (RelativeLayout) findViewById(R.id.btn_back);
 		ib_back.setOnClickListener(new OnClickListener() {
 
 			@Override

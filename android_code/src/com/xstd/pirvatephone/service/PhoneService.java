@@ -14,6 +14,7 @@ import com.xstd.pirvatephone.dao.phone.PhoneDetailDaoUtils;
 import com.xstd.pirvatephone.dao.phone.PhoneRecord;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDao;
 import com.xstd.pirvatephone.dao.phone.PhoneRecordDaoUtils;
+import com.xstd.pirvatephone.receiver.ObservePhone;
 import com.xstd.pirvatephone.utils.ContactUtils;
 import com.xstd.pirvatephone.utils.ContextModelUtils;
 import com.xstd.pirvatephone.utils.ShowNotificationUtils;
@@ -25,17 +26,21 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.provider.CallLog;
+import android.provider.CallLog.Calls;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class PhoneService extends Service {
+	private static final String TAG = "PhoneService";
 
 	private long Ringtime;// 开始外拨电话的时间
 	private long Dtime;// 外拨电话通话时间
@@ -47,6 +52,8 @@ public class PhoneService extends Service {
 	private Mylistener listener;
 	private String outingNumber = "";
 	private Context mContext;
+	private ContentResolver resolver;
+	private ObservePhone observePhone;
 
 	private class InnerReceiver extends BroadcastReceiver {
 
@@ -57,9 +64,17 @@ public class PhoneService extends Service {
 			Ringtime = System.currentTimeMillis();
 			outingNumber = getResultData();
 			// dosometing you want
-			Tools.logSh("接收到外拨电话了");
+			boolean b = ContactUtils.isPrivateContactNumber(mContext, outingNumber);
+			if(b){
+				Log.e(TAG, "外拨电话--隐私联系人");
+				SharedPreferences sp = getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
+				Editor editor = sp.edit();
+				editor.putInt("flag", 2);
+				editor.commit();
+				return ;
+			}
+			Log.e(TAG, "外拨电话--非隐私联系人");
 		}
-
 	}
 
 	@Override
@@ -76,13 +91,15 @@ public class PhoneService extends Service {
 			receiver = null;
 			super.onDestroy();
 		}
+		
+		unRegistObserver();
 	}
 
 	@Override
 	public void onCreate() {
-
 		Tools.logSh("PhoneService被创建了");
 		mContext = getApplicationContext();
+		registObserver();
 		// 监听来电
 		tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		listener = new Mylistener();
@@ -92,7 +109,7 @@ public class PhoneService extends Service {
 		receiver = new InnerReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.intent.action.NEW_OUTGOING_CALL");
-		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+		filter.setPriority(Integer.MAX_VALUE);
 		registerReceiver(receiver, filter);
 
 		super.onCreate();
@@ -114,7 +131,7 @@ public class PhoneService extends Service {
 				if (Ringtime != 0) {// 避免记录来电时的时间
 					Dtime = System.currentTimeMillis() - Ringtime;// 获得通话时间
 					Tools.logSh("通话持续时间为：" + Dtime);
-					removeDail(outingNumber);
+					//removeDail(outingNumber);
 
 				}
 
@@ -122,19 +139,10 @@ public class PhoneService extends Service {
 
 				if (recevierTime != 0) {
 
-					// 由于系统产生通话记录需要一会，所以有延时任务
-					TimerTask task = new TimerTask() {
-						public void run() {
-
-							durationTime = System.currentTimeMillis()
-									- recevierTime;
-							Tools.logSh("接电通话持续时间为：" + durationTime);
-							removeReceive(incomingNumber);
-						}
-					};
-					Timer timer = new Timer();
-					timer.schedule(task, 3000);
-
+					durationTime = System.currentTimeMillis() - recevierTime;
+					Tools.logSh("接电通话持续时间为：" + durationTime);
+					//removeReceive(incomingNumber);
+					
 				}
 				recevierTime = 0;
 				break;
@@ -142,23 +150,45 @@ public class PhoneService extends Service {
 			case TelephonyManager.CALL_STATE_RINGING: // 响铃状态
 				Tools.logSh("来电了" + incomingNumber);
 				recevierTime = System.currentTimeMillis();
-				// 判断该号码的拦截状态：1，是否存在情景模式的拦截号码中，2，是否存在隐私联系人的拦截号码中
-				ContextModelUtils contextModelUtils = new ContextModelUtils();
-				ArrayList<String> numbers = contextModelUtils
-						.getIntereptNumbers(mContext, null);
-				ArrayList<String> intereptNumbers = ContactUtils
-						.queryIntereptNumber(mContext);
 
-				if (numbers != null && numbers.contains(incomingNumber)) {
-					Tools.logSh("情景模式拦截号码" + numbers);
+				// 判断该号码的拦截状态：1，是否存在情景模式的拦截号码中，2，是否存在隐私联系人的号码中(分为直接挂断与正常接听)
+				ContextModelUtils contextModelUtils = new ContextModelUtils();
+				ArrayList<String> modelIntereptnumbers = contextModelUtils
+						.getIntereptNumbers(mContext, null);
+				ArrayList<String> privateIntereptNumbers = ContactUtils
+						.queryIntereptNumber(mContext);
+				ArrayList<String> privateNotIntereptNumbers = ContactUtils
+						.queryPrivateNotIntereptNumber(mContext);
+
+				if (modelIntereptnumbers != null && modelIntereptnumbers.contains(incomingNumber)) {
+					Tools.logSh("情景模式拦截号码" + modelIntereptnumbers);
+					SharedPreferences sp = getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
+					Editor editor = sp.edit();
+					editor.putInt("flag", 1);
+					editor.commit();
 					endCall();
 					return;
-				} else if (intereptNumbers != null
-						&& intereptNumbers.contains(incomingNumber)) {
-					Tools.logSh("隐私联系人拦截号码" + intereptNumbers);
+				} 
+				
+				if (privateIntereptNumbers != null
+						&& privateIntereptNumbers.contains(incomingNumber)) {
+					Tools.logSh("隐私联系人拦截号码" + privateIntereptNumbers);
+					SharedPreferences sp = getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
+					Editor editor = sp.edit();
+					editor.putInt("flag", 1);
+					editor.commit();
 					endCall();
 					return;
 				}
+				
+				if(privateNotIntereptNumbers!=null && privateNotIntereptNumbers.contains(incomingNumber)){
+					Tools.logSh("隐私联系人不拦截号码" + privateIntereptNumbers);
+					SharedPreferences sp = getSharedPreferences("IntereptNumberFlag", Context.MODE_PRIVATE);
+					Editor editor = sp.edit();
+					editor.putInt("flag", 1);
+					editor.commit();
+				}
+				
 				break;
 			}
 			super.onCallStateChanged(state, incomingNumber);
@@ -185,14 +215,25 @@ public class PhoneService extends Service {
 			Tools.logSh("iTelephony不为空");
 			iTelephony.endCall();
 
-			// 关闭屏幕(暂未生效)
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			WakeLock mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-					"WhatEver");
-			mWakeLock.acquire();
-			mWakeLock.release();
-
 		} catch (Exception e) {
+		}
+	}
+	
+	
+	private void registObserver() {
+		Tools.logSh("registObserver()被调用了");
+		
+		observePhone = new ObservePhone(new Handler(), mContext);
+		resolver = getContentResolver();
+		resolver.registerContentObserver(Calls.CONTENT_URI, true,
+				observePhone);
+	}
+	
+	private void unRegistObserver() {
+		
+		Tools.logSh("unRegistObserver()被调用了");
+		if(resolver!=null){
+			resolver.unregisterContentObserver(observePhone);
 		}
 	}
 
@@ -225,8 +266,10 @@ public class PhoneService extends Service {
 						.getColumnIndex("type"));
 				// 通化人姓名
 
-				/*String name = phoneDetailCursor.getString(phoneDetailCursor
-						.getColumnIndex("name"));*/
+				/*
+				 * String name = phoneDetailCursor.getString(phoneDetailCursor
+				 * .getColumnIndex("name"));
+				 */
 
 				String name = ContactUtils.queryContactName(mContext, number);
 

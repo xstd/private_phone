@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.xstd.pirvatephone.R;
@@ -75,7 +76,7 @@ public class ModelAdapter extends CursorAdapter {
 		ViewHold views = new ViewHold();
 
 		views.modelname = (TextView) view.findViewById(R.id.tv_modelname);
-		views.btn_check = (CheckBox) view.findViewById(R.id.btn_check);
+		views.btn_check = (RadioButton) view.findViewById(R.id.btn_check);
 
 		view.setTag(views);
 		return view;
@@ -83,7 +84,7 @@ public class ModelAdapter extends CursorAdapter {
 
 	static class ViewHold {
 		TextView modelname;
-		CheckBox btn_check;
+		RadioButton btn_check;
 	}
 
 	private void updateModel(String model, int type) {
