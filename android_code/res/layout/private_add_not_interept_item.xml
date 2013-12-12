@@ -3,7 +3,8 @@
     android:id="@+id/rl_contact"
     android:layout_width="match_parent"
     android:layout_height="70dip"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical"
+    android:background="@drawable/private_comm_item_bkg_selector1" >
 
     <ImageView
         android:id="@+id/not_interept_iv_pic"

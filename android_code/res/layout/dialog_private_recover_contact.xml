@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="329dp"
+    android:layout_height="wrap_content"
+    android:background="@color/private_comm_listview_bkg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:text="@string/scene_mode_delete_dialog_content"
+        android:textColor="#1D5A92"
+        android:textSize="20sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#1D5A92" />
+
+    <LinearLayout
+        android:id="@+id/ll_delete"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:background="@drawable/private_comm_item_bkg_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+        
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:clickable="false"
+            android:focusable="false"
+            style="@style/private_comm_checkbox_style"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dip"
+            android:text="@string/private_comm_contact_remove_record"
+            android:textColor="#5a5a5b"
+            android:textSize="17sp"
+            android:layout_marginRight="30dip" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#acacac" />
+
+    <LinearLayout
+        android:id="@+id/ll_rename"
+        android:layout_width="match_parent"
+        android:layout_height="67dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/rl_sure"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scene_mode_rename_dialog_sure"
+                android:textColor="#5a5a5b"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#ACACAC" />
+
+        <RelativeLayout
+            android:id="@+id/rl_cancel"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scene_mode_rename_dialog_cancel"
+                android:textColor="#5a5a5b"
+                android:textSize="17sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

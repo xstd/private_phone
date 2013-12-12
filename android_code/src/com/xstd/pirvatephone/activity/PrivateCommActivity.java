@@ -132,7 +132,7 @@ public class PrivateCommActivity extends BaseActivity {
 	private PhoneRecordAdapter phoneRecordAdapter;
 
 	private AlertDialog deleteContactDialog;
-	private AlertDialog recoverContactProgressdialog;
+	private Dialog recoverContactProgressdialog;
 	private TextView tv_dialog_show;
 	private TextView recover_tv_progress;
 	private TextView recover_tv_progress_detail;
@@ -599,7 +599,7 @@ public class PrivateCommActivity extends BaseActivity {
 						Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
 								Toast.LENGTH_SHORT).show();
 					} else {
-						showDeleteContactDialog();
+						showRecoverContactDialog();
 					}
 				}
 			});
@@ -728,14 +728,14 @@ public class PrivateCommActivity extends BaseActivity {
 			sms_listview = (ListView) view1.findViewById(R.id.sms_lv_cont);
 			sms_empty = (TextView) view1.findViewById(R.id.sms_tv_empty);
 			Tools.logSh("接收到增加联系人点击" + currIndex);
-			updateContact(sms_listview, sms_empty);
+			updateNormalUI(sms_listview, sms_empty);
 
 			return;
 		}
 		if (currIndex == DIAL_PAGE) {
 			phone_listview = (ListView) findViewById(R.id.dial_lv_cont);
 			phone_empty = (TextView) findViewById(R.id.dial_tv_empty);
-			updateContact(phone_listview, phone_empty);
+			updateNormalUI(phone_listview, phone_empty);
 
 			return;
 		}
@@ -756,7 +756,7 @@ public class PrivateCommActivity extends BaseActivity {
 			});
 
 			// 从我们的数据库读取隐私联系人，展示到页面上
-			updateContact(contact_listview, contact_empty);
+			updateNormalUI(contact_listview, contact_empty);
 		}
 	}
 
@@ -774,48 +774,53 @@ public class PrivateCommActivity extends BaseActivity {
 		ContextModelUtils.deleteModelDetail(this, selectNumbers);
 	}
 
+	/**
+	 * 获取我们数据库短信会话
+	 * 
+	 * @return our sms record cursor
+	 * @author Jimmy
+	 */
 	private Cursor getSmsRecord() {
 		smsRecordDao = SmsRecordDaoUtils
 				.getSmsRecordDao(getApplicationContext());
 		SQLiteDatabase database = smsRecordDao.getDatabase();
-		Tools.logSh("getSmsRecord()执行了");
 		smsRecordCursor = database.query("SMS_RECORD", null, null, null, null,
 				null, null);
-
 		Tools.logSh("getSmsRecord()执行了+" + smsRecordCursor.getCount());
 		return smsRecordCursor;
 	}
 
 	/**
 	 * 获取我们数据库联系人
+	 * 
+	 * @return our contact record cursor
+	 * @author Jimmy
 	 */
 	private Cursor getContact() {
-
 		contactInfoDao = ContactInfoDaoUtils
 				.getContactInfoDao(getApplicationContext());
 		SQLiteDatabase database = contactInfoDao.getDatabase();
-
 		contactCursor = database.query(ContactInfoDao.TABLENAME, null, null,
 				null, null, null, null);
 		return contactCursor;
 	}
 
 	/**
-	 * 获取我们数据库联系人
+	 * 获取我们数据库通话记录
+	 * 
+	 * @return our phone record cursor
+	 * @author Jimmy
 	 */
 	private Cursor getPhoneRecord() {
-
 		phoneRecordDao = PhoneRecordDaoUtils
 				.getPhoneRecordDao(getApplicationContext());
 		SQLiteDatabase database = phoneRecordDao.getDatabase();
-
 		phoneRecordCursor = database.query("PHONE_RECORD", null, null, null,
 				null, null, null);
-
 		return phoneRecordCursor;
 	}
 
-	public void updateContact(ListView mListView, TextView tv) {
+	public void updateNormalUI(ListView mListView, TextView tv) {
 
 		switch (currIndex) {
 		case 0:
@@ -1007,33 +1012,43 @@ public class PrivateCommActivity extends BaseActivity {
 
 	private void showMakeDailDialog(final String number) {
 
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("提示:呼叫联系人");
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_phone_title_dail));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
 
-		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
+				dialog.dismiss();
 				MakeCallUtils.makeCall(PrivateCommActivity.this, number);
-				dialog.dismiss();
 			}
 		});
-		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
 			}
 		});
-		builder.create().show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 
 	public void showContactDialog(final String name, final String address,
 			final int type) {
-		
+
 		final Dialog dialog = new Dialog(this, R.style.MyDialog);
-		View view = View.inflate(this, R.layout.dialog_private_contact_edit, null);
+		View view = View.inflate(this, R.layout.dialog_private_contact_edit,
+				null);
 		final LinearLayout ll_make_call = (LinearLayout) view
 				.findViewById(R.id.ll_make_call);
 		final LinearLayout ll_send_sms = (LinearLayout) view
@@ -1047,8 +1062,7 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				MakeCallUtils.makeCall(PrivateCommActivity.this,
-						address);
+				MakeCallUtils.makeCall(PrivateCommActivity.this, address);
 			}
 		});
 
@@ -1057,8 +1071,7 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				Intent smsDetailIntent = new Intent(
-						PrivateCommActivity.this,
+				Intent smsDetailIntent = new Intent(PrivateCommActivity.this,
 						SmsDetailActivity.class);
 				// 姓名带过去
 				Tools.logSh("Number==" + address);
@@ -1067,12 +1080,11 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 		ll_edit.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				Intent intent = new Intent(
-						PrivateCommActivity.this,
+				Intent intent = new Intent(PrivateCommActivity.this,
 						PrivateContactEditActivity.class);
 				intent.putExtra("Display_Name", name);
 				intent.putExtra("Address", address);
@@ -1082,7 +1094,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 		ll_out.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
@@ -1095,10 +1107,12 @@ public class PrivateCommActivity extends BaseActivity {
 	}
 
 	public void showPhoneDialog(final String name, final String number) {
-		
+
 		final Dialog dialog = new Dialog(this, R.style.MyDialog);
-		View view = View.inflate(this, R.layout.dialog_private_phone_edit, null);
-		TextView phone_edit_title = (TextView) view.findViewById(R.id.phone_edit_title);
+		View view = View
+				.inflate(this, R.layout.dialog_private_phone_edit, null);
+		TextView phone_edit_title = (TextView) view
+				.findViewById(R.id.phone_edit_title);
 		phone_edit_title.setText(name);
 		final LinearLayout ll_make_call = (LinearLayout) view
 				.findViewById(R.id.ll_make_call);
@@ -1112,8 +1126,7 @@ public class PrivateCommActivity extends BaseActivity {
 			public void onClick(View arg0) {
 				dialog.dismiss();
 				// 获取号码
-				MakeCallUtils.makeCall(PrivateCommActivity.this,
-						number);
+				MakeCallUtils.makeCall(PrivateCommActivity.this, number);
 			}
 		});
 
@@ -1122,8 +1135,7 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				Intent smsDetailIntent = new Intent(
-						PrivateCommActivity.this,
+				Intent smsDetailIntent = new Intent(PrivateCommActivity.this,
 						SmsDetailActivity.class);
 				// 姓名带过去
 				Tools.logSh("Number==" + number);
@@ -1132,7 +1144,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 		ll_delete.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
@@ -1143,14 +1155,15 @@ public class PrivateCommActivity extends BaseActivity {
 		dialog.setContentView(view);
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
-		
+
 	}
 
 	public void showSmsDialog(final String name, final String number) {
-		
+
 		final Dialog dialog = new Dialog(this, R.style.MyDialog);
 		View view = View.inflate(this, R.layout.dialog_private_sms_edit, null);
-		TextView sms_edit_title = (TextView) view.findViewById(R.id.sms_edit_title);
+		TextView sms_edit_title = (TextView) view
+				.findViewById(R.id.sms_edit_title);
 		sms_edit_title.setText(name);
 		final LinearLayout ll_send_sms = (LinearLayout) view
 				.findViewById(R.id.ll_send_sms);
@@ -1165,8 +1178,7 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				Intent intent = new Intent(
-						PrivateCommActivity.this,
+				Intent intent = new Intent(PrivateCommActivity.this,
 						SmsDetailActivity.class);
 				intent.putExtra("Name", name);
 				intent.putExtra("Number", number);
@@ -1179,51 +1191,84 @@ public class PrivateCommActivity extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				MakeCallUtils.makeCall(PrivateCommActivity.this,
-						number);
+				MakeCallUtils.makeCall(PrivateCommActivity.this, number);
 			}
 		});
 		ll_recover.setOnClickListener(new OnClickListener() {
-			
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				showRecoverSmsDialog(number);
+
+			}
+		});
+		ll_delete.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
 				showDeleteSmsDialog(number);
-				
-			}
-		});
-		ll_delete.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-				SmsTast task2 = new SmsTast(
-						PrivateCommActivity.this, false, number);
-				task2.execute();
+
 			}
 		});
 		dialog.setContentView(view);
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
-		
+
 	}
-	
+
 	protected void showDeleteSmsDialog(final String number) {
 		final Dialog dialog = new Dialog(this, R.style.MyDialog);
 		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
 		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
-		tv_content.setText(getResources().getColor(R.string.private_comm_sms_confirm_title));
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_sms_confirm_title2));
 		RelativeLayout rl_sure = (RelativeLayout) view
 				.findViewById(R.id.rl_sure);
 		RelativeLayout rl_cancel = (RelativeLayout) view
 				.findViewById(R.id.rl_cancel);
-		
+
 		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				SmsTast task1 = new SmsTast(
-						PrivateCommActivity.this, true, number);
+				dialog.dismiss();
+				SmsTast task2 = new SmsTast(PrivateCommActivity.this, false,
+						number);
+				task2.execute();
+			}
+		});
+		rl_cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+
+	}
+
+	protected void showRecoverSmsDialog(final String number) {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_sms_confirm_title1));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+
+		rl_sure.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				SmsTast task1 = new SmsTast(PrivateCommActivity.this, true,
+						number);
 				task1.execute();
 				dialog.dismiss();
 			}
@@ -1238,41 +1283,48 @@ public class PrivateCommActivity extends BaseActivity {
 		dialog.setContentView(view);
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
-		
+
 	}
 
 	private void showDeletePhoneDialog(final String number) {
 
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("提示:确定删除此条通话记录?");
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_sms_confirm_title3));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
 
-		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
 				DeletePhoneTast task = new DeletePhoneTast(
 						PrivateCommActivity.this, number);
 				task.execute();
-
 			}
 		});
-		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
 			}
 		});
-		AlertDialog deletePhoneDialog = builder.create();
-		deletePhoneDialog.setCanceledOnTouchOutside(false);
-		deletePhoneDialog.show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 
 	private void showAddContactDialog() {
 		final Dialog dialog = new Dialog(this, R.style.MyDialog);
-		View view = View.inflate(this, R.layout.dialog_private_add_contact, null);
+		View view = View.inflate(this, R.layout.dialog_private_add_contact,
+				null);
 		final LinearLayout ll_from_contact = (LinearLayout) view
 				.findViewById(R.id.ll_from_contact);
 		final LinearLayout ll_from_hand = (LinearLayout) view
@@ -1303,7 +1355,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 		ll_from_phone_record.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
@@ -1315,7 +1367,7 @@ public class PrivateCommActivity extends BaseActivity {
 			}
 		});
 		ll_from_sms_record.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
@@ -1329,22 +1381,82 @@ public class PrivateCommActivity extends BaseActivity {
 		dialog.setContentView(view);
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
-		
+
 	}
 
-	private void showDeleteContactDialog() {
-		new DeleteContactDialog(this);
+	private void showRecoverContactDialog() {
+
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_private_recover_contact,
+				null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(R.string.private_comm_contact_recover_title));
+		
+		LinearLayout ll_delete = (LinearLayout) view
+				.findViewById(R.id.ll_delete);
+		final CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+
+		ll_delete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				checkbox.setChecked(!checkbox.isChecked());
+			}
+		});
+
+		rl_sure.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				boolean flag = false;
+				if (checkbox.isChecked()) {
+					// recover to system
+					flag = true;
+				} else {
+					flag = false;
+				}
+				RestoreContactTast tast = new RestoreContactTast(
+						PrivateCommActivity.this, flag);
+				tast.execute();
+				return;
+			}
+		});
+		rl_cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 
 	private void isEditingPhoneDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(R.drawable.ic_launcher);
-		builder.setTitle("提示:确定删除此条通话记录");
-		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_phone_title_delete));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
+				dialog.dismiss();
 				if (selectContacts == null || selectContacts.size() == 0) {
 
 					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
@@ -1356,28 +1468,36 @@ public class PrivateCommActivity extends BaseActivity {
 				}
 			}
 		});
-		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
-
 			}
 		});
-		AlertDialog editingPhoneDialog = builder.create();
-		editingPhoneDialog.setCanceledOnTouchOutside(false);
-		editingPhoneDialog.show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 
 	private void isEditingDeleteSmsDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(R.drawable.ic_launcher);
-		builder.setTitle("提示:确定删除整个短信会话");
-		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_sms_title_delete));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
+				dialog.dismiss();
 				if (selectContacts == null || selectContacts.size() == 0) {
 
 					Toast.makeText(PrivateCommActivity.this, "请选择要删除的条目",
@@ -1387,31 +1507,37 @@ public class PrivateCommActivity extends BaseActivity {
 							null);
 					task.execute();
 				}
-				dialog.dismiss();
 			}
 		});
-		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
 			}
 		});
-		AlertDialog editingDeleteSmsDialog = builder.create();
-		editingDeleteSmsDialog.setCanceledOnTouchOutside(false);
-		editingDeleteSmsDialog.show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
 	}
 
 	private void isEditingRecoverSmsDialog() {
-		final Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(R.drawable.ic_launcher);
-		builder.setTitle("提示:是否将隐私短信恢复到系统");
-		builder.setPositiveButton("确定", new Dialog.OnClickListener() {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.dialog_model_sure_delete, null);
+		TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
+		tv_content.setText(getResources().getString(
+				R.string.private_comm_sms_title_recover));
+		RelativeLayout rl_sure = (RelativeLayout) view
+				.findViewById(R.id.rl_sure);
+		RelativeLayout rl_cancel = (RelativeLayout) view
+				.findViewById(R.id.rl_cancel);
+
+		rl_sure.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Tools.logSh("selectContacts=======" + selectContacts);
+			public void onClick(View arg0) {
+				dialog.dismiss();
 				if (selectContacts == null || selectContacts.size() == 0) {
 
 					Toast.makeText(PrivateCommActivity.this, "请选择要恢复的条目",
@@ -1423,88 +1549,28 @@ public class PrivateCommActivity extends BaseActivity {
 				}
 			}
 		});
-		builder.setNegativeButton("取消", new Dialog.OnClickListener() {
+		rl_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View arg0) {
 				dialog.dismiss();
-
 			}
 		});
-		AlertDialog editingRecoverSmsDialog = builder.create();
-		editingRecoverSmsDialog.setCanceledOnTouchOutside(false);
-		editingRecoverSmsDialog.show();
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 
-	}
-
-	private class DeleteContactDialog extends Dialog implements
-			View.OnClickListener {
-
-		private CheckBox dialog_contact_checkbox;
-		private Button dialog_contact_btn_cancel;
-		private Button dialog_contact_btn_sure;
-
-		public DeleteContactDialog(Context context) {
-			super(context);
-			AlertDialog.Builder builder = new Builder(context);
-
-			View dialogView = LayoutInflater.from(context).inflate(
-					R.layout.private_comm_delete_contact_dialog, null, true);
-			builder.setView(dialogView);
-			dialog_contact_checkbox = (CheckBox) dialogView
-					.findViewById(R.id.dialog_contact_checkbox);
-			dialog_contact_checkbox.setOnClickListener(this);
-			dialog_contact_btn_cancel = (Button) dialogView
-					.findViewById(R.id.dialog_contact_btn_cancel);
-			dialog_contact_btn_cancel.setOnClickListener(this);
-			dialog_contact_btn_sure = (Button) dialogView
-					.findViewById(R.id.dialog_contact_btn_sure);
-			dialog_contact_btn_sure.setOnClickListener(this);
-			deleteContactDialog = builder.create();
-			deleteContactDialog.setCanceledOnTouchOutside(false);
-			deleteContactDialog.show();
-		}
-
-		@Override
-		public void onClick(View paramView) {
-			if (paramView == dialog_contact_btn_cancel) {
-				deleteContactDialog.dismiss();
-				return;
-			}
-			if (paramView == dialog_contact_btn_sure) {
-
-				deleteContactDialog.dismiss();
-
-				boolean flag = false;
-				if (dialog_contact_checkbox.isChecked()) {
-					// recover to system
-					flag = true;
-				} else {
-					flag = false;
-				}
-				RestoreContactTast tast = new RestoreContactTast(
-						PrivateCommActivity.this, flag);
-				tast.execute();
-				return;
-			}
-		}
 	}
 
 	public void newRecoverDialogInstance(Context ctx) {
-		AlertDialog.Builder builder = new Builder(ctx);
-		View dialogView = LayoutInflater.from(ctx).inflate(
-				R.layout.private_comm_recover_progress_dialog, null, true);
-		tv_dialog_show = (TextView) dialogView
-				.findViewById(R.id.tv_dialog_show);
-		recover_tv_progress = (TextView) dialogView
-				.findViewById(R.id.recover_tv_progress);
-		recover_tv_progress_detail = (TextView) dialogView
-				.findViewById(R.id.recover_tv_progress_detail);
-		recover_progress = (ProgressBar) findViewById(R.id.recover_progress);
-		builder.setView(dialogView);
-		recoverContactProgressdialog = builder.create();
+		recoverContactProgressdialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this,
+				R.layout.private_comm_recover_progress_dialog, null);
+
+		recoverContactProgressdialog.setContentView(view);
 		recoverContactProgressdialog.setCanceledOnTouchOutside(false);
 		recoverContactProgressdialog.show();
+
 	}
 
 	@Override
