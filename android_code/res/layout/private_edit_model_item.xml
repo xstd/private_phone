@@ -39,7 +39,8 @@
                 android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="[正常接听]" />
+                android:hint="[正常接听]"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_phone_num"

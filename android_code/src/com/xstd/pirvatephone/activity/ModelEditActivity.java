@@ -41,13 +41,10 @@ import android.widget.Toast;
 public class ModelEditActivity extends BaseActivity {
 
 	private int tag = 0;
+	private int curIndex = 1;
+	private String modelName;
 	private TextView tv_uninterept;
 	private TextView tv_interept;
-	private LinearLayout ll_interept;
-	private ListView lv_interept;
-	private LinearLayout ll_uninterept;
-	private ListView lv_uninterept;
-	private String modelName;
 
 	private ArrayList<String> intereptNumbers = new ArrayList<String>();
 	private ArrayList<String> intereptNames = new ArrayList<String>();
@@ -55,9 +52,16 @@ public class ModelEditActivity extends BaseActivity {
 	private ArrayList<String> noIntereptNumbers = new ArrayList<String>();
 	private ArrayList<String> noIntereptNames = new ArrayList<String>();
 	private RelativeLayout add_btn;
-	private int curIndex = 0;
-	private EditModelAdapter noIntereptAdapter;
-	private EditModelAdapter intereptAdapter;
+	
+	private ListView listview;
+	private TextView tv_empty;
+	
+	private TextView tv_title;
+	private RelativeLayout btn_back;
+	private Button btn_edit;
+	private TextView tv_add_text;
+	private TextView tv_empty_interept;
+	private TextView tv_empty_not_interept;
 
 	private static final int UPDATE = 0;
 	public Handler handler = new Handler() {
@@ -90,12 +94,7 @@ public class ModelEditActivity extends BaseActivity {
 			}
 		}
 	};
-	private TextView tv_title;
-	private RelativeLayout btn_back;
-	private Button btn_edit;
-	private TextView tv_add_text;
-	private TextView tv_empty_interept;
-	private TextView tv_empty_not_interept;
+	private EditModelAdapter editAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -112,7 +111,7 @@ public class ModelEditActivity extends BaseActivity {
 	 */
 	private void setData() {
 		if (tag == 1) {
-			showNoInterept();
+			showInterept();
 		}
 
 		tv_interept.setOnClickListener(new OnClickListener() {
@@ -134,7 +133,6 @@ public class ModelEditActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				tv_uninterept.setTextColor(getResources().getColor(R.color.scene_mode_new_text1));
 				tv_interept.setTextColor(getResources().getColor(R.color.scene_mode_new_text2));
 				
@@ -170,26 +168,20 @@ public class ModelEditActivity extends BaseActivity {
 	}
 
 	private void initView() {
-
+		// title
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("编辑");
 		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		btn_edit.setVisibility(View.GONE);
 
+		//tab
 		tv_uninterept = (TextView) findViewById(R.id.tv_uninterept);
 		tv_interept = (TextView) findViewById(R.id.tv_interept);
 
-		// 拦截
-		ll_interept = (LinearLayout) findViewById(R.id.ll_interept);
-		tv_empty_interept = (TextView) findViewById(R.id.tv_empty_interept);
-		lv_interept = (ListView) findViewById(R.id.lv_interept);
-
-		// 不拦截
-		ll_uninterept = (LinearLayout) findViewById(R.id.ll_uninterept);
-		tv_empty_not_interept = (TextView) findViewById(R.id.tv_empty_not_interept);
-		lv_uninterept = (ListView) findViewById(R.id.lv_uninterept);
-
+		listview = (ListView) findViewById(R.id.listview);
+		tv_empty = (TextView) findViewById(R.id.tv_empty);
+		
 		add_btn = (RelativeLayout) findViewById(R.id.add_not_interept_btn);
 		tv_add_text = (TextView) findViewById(R.id.tv_add_text);
 
@@ -197,7 +189,6 @@ public class ModelEditActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});
@@ -210,21 +201,22 @@ public class ModelEditActivity extends BaseActivity {
 	private void showInterept() {
 		curIndex = 1;
 		
-		ll_interept.setVisibility(View.VISIBLE);
-		ll_uninterept.setVisibility(View.GONE);
 		if(intereptNumbers!=null && intereptNumbers.size()>0){
-			tv_empty_interept.setVisibility(View.GONE);
+			tv_empty.setVisibility(View.GONE);
 		}else{
-			tv_empty_interept.setVisibility(View.VISIBLE);
+			tv_empty.setVisibility(View.VISIBLE);
 		}
 	
-		Tools.logSh("intereptNumbers=" + intereptNumbers + ":::"
-				+ "intereptNames=" + intereptNames);
-		intereptAdapter = new EditModelAdapter(ModelEditActivity.this,
-				intereptNumbers, intereptNames);
-		lv_interept.setAdapter(intereptAdapter);
-		lv_interept.setEmptyView(tv_empty_interept);
-		lv_interept.setOnItemClickListener(new OnItemClickListener() {
+		setAdapter(intereptNumbers,intereptNames);
+		
+	}
+
+	private void setAdapter( ArrayList<String> numbers, ArrayList<String> names) {
+		editAdapter = new EditModelAdapter(ModelEditActivity.this,
+				numbers, names);
+		listview.setAdapter(editAdapter);
+		listview.setEmptyView(tv_empty);
+		listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -241,45 +233,14 @@ public class ModelEditActivity extends BaseActivity {
 	private void showNoInterept() {
 
 		curIndex = 0;
-		ll_interept.setVisibility(View.GONE);
-		ll_uninterept.setVisibility(View.VISIBLE);
 		
 		if(intereptNumbers!=null && intereptNumbers.size()>0){
-			tv_empty_not_interept.setVisibility(View.GONE);
+			tv_empty.setVisibility(View.GONE);
 		}else{
-			tv_empty_not_interept.setVisibility(View.VISIBLE);
+			tv_empty.setVisibility(View.VISIBLE);
 		}
 		
-		noIntereptAdapter = new EditModelAdapter(ModelEditActivity.this,
-				noIntereptNumbers, noIntereptNames);
-		lv_uninterept.setAdapter(noIntereptAdapter);
-		lv_uninterept.setEmptyView(tv_empty_not_interept);
-		lv_uninterept.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Tools.logSh("条目被点击了");
-				CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
-				checkbox.setChecked(!checkbox.isChecked());
-			}
-		});
-
-		lv_uninterept.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-
-				Tools.logSh("不拦截item长按了");
-				// 获取该号码
-				TextView tv_phone_num = (TextView) v
-						.findViewById(R.id.tv_phone_num);
-				String number = tv_phone_num.getText().toString();
-
-				showDeleteDialog(modelName, number);
-				return false;
-			}
-		});
+		setAdapter(noIntereptNumbers,noIntereptNames);
 
 	}
 
@@ -299,7 +260,6 @@ public class ModelEditActivity extends BaseActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				Tools.logSh("选择了确认按钮，删除了情景模式");
 				deleteModelNumber(modelName, address);
 				dialog.dismiss();
@@ -354,7 +314,6 @@ public class ModelEditActivity extends BaseActivity {
 					modelDetail.setMassage(message);
 					Tools.logSh("message====" + message);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				modelDetailDao.update(modelDetail);
@@ -372,6 +331,7 @@ public class ModelEditActivity extends BaseActivity {
 
 	@Override
 	protected void onResume() {
+		clearAll();
 		tag++;
 		GetInfoTask task = new GetInfoTask(ModelEditActivity.this);
 		task.execute();

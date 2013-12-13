@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +22,7 @@ import com.xstd.privatephone.tools.Tools;
 
 public class PhoneDetailActivity extends BaseActivity {
 
+	private static final String TAG = "PhoneDetailActivity";
 	private ListView listview;
 	private String number;
 	private String name;
@@ -28,8 +30,8 @@ public class PhoneDetailActivity extends BaseActivity {
 	private RelativeLayout btn_back;
 	private Button btn_edit;
 	private TextView tv_title;
-	private Button btn_dial;
-	private Button btn_send_sms;
+	private RelativeLayout btn_dial;
+	private RelativeLayout btn_send_sms;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class PhoneDetailActivity extends BaseActivity {
 
 		name = getIntent().getStringExtra("Name");
 		number = getIntent().getStringExtra("Number");
-		Tools.logSh("number==="+number);
+		Log.e(TAG,"number==="+number+"   name=="+name);
 
 		initView();
 	}
@@ -53,8 +55,8 @@ public class PhoneDetailActivity extends BaseActivity {
 		tv_title.setText(number);
 		
 		//bottom
-		btn_dial = (Button) findViewById(R.id.btn_dial);
-		btn_send_sms = (Button) findViewById(R.id.btn_send_sms);
+		btn_dial = (RelativeLayout) findViewById(R.id.btn_dial);
+		btn_send_sms = (RelativeLayout) findViewById(R.id.btn_send_sms);
 
 		btn_back.setOnClickListener(new OnClickListener() {
 

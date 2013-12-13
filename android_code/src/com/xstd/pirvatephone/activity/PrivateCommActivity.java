@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -887,6 +885,7 @@ public class PrivateCommActivity extends BaseActivity {
 				String name = sms_tv_name.getText().toString().trim();
 				String number = sms_tv_number.getText().toString()
 						.replace("( ", "").replace(" )", "").trim();
+				Log.e(TAG, "name="+name+"   number="+number);
 				showPhoneDialog(name, number);
 				return false;
 			}

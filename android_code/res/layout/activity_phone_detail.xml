@@ -25,24 +25,43 @@
         <LinearLayout
             android:id="@+id/phone_ll_remove"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dip"
+            android:background="@drawable/private_comm_sms_send_bkg"
             android:orientation="horizontal" >
 
-            <Button
+            <RelativeLayout
                 android:id="@+id/btn_dial"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="拨打电话"
-                android:textColor="@color/sms_text_content_unseleted" />
+                android:background="@drawable/private_comm_btn_selector"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center" >
 
-            <Button
+                <TextView
+                    style="@style/private_comm_item_name_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_comm_phone_detail_dail" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/btn_send_sms"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="发送短信"
-                android:textColor="@color/sms_text_content_unseleted" />
+                android:background="@drawable/private_comm_btn_selector"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center" >
+
+                <TextView
+                    style="@style/private_comm_item_name_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_comm_phone_detail_send" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

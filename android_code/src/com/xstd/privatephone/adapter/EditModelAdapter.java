@@ -64,6 +64,7 @@ public class EditModelAdapter extends BaseAdapter {
 
 			hold.name = (TextView) convertView.findViewById(R.id.tv_name);
 			hold.phone = (TextView) convertView.findViewById(R.id.tv_phone_num);
+			hold.type = (TextView) convertView.findViewById(R.id.tv_type);
 			hold.check = (CheckBox) convertView.findViewById(R.id.checkbox);
 
 			convertView.setTag(hold);
@@ -81,6 +82,7 @@ public class EditModelAdapter extends BaseAdapter {
 	static class ViewHold {
 		TextView name;
 		TextView phone;
+		TextView type;
 		CheckBox check;
 	}
 

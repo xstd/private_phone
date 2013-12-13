@@ -90,7 +90,7 @@ public class WritePhoneRecordUtils {
 						while(phoneRecordCursor.moveToNext()){
 							// _id
 							mPhoneRecord
-									.setId(phoneRecordCursor.getLong(phoneCursor
+									.setId(phoneRecordCursor.getLong(phoneRecordCursor
 											.getColumnIndex(PhoneRecordDao.Properties.Id.columnName)));
 							// number
 							mPhoneRecord.setPhone_number(phone);

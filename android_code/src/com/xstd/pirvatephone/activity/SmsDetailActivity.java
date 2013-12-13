@@ -15,6 +15,7 @@ import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.BoringLayout.Metrics;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +43,7 @@ import com.xstd.privatephone.tools.Tools;
 
 public class SmsDetailActivity extends BaseActivity {
 
+	private static final String TAG = "SmsDetailActivity";
 	private ListView listview;
 	private RelativeLayout btn_back;
 	private Button btn_edit;
@@ -64,6 +66,7 @@ public class SmsDetailActivity extends BaseActivity {
 		setContentView(R.layout.activity_sms_detail);
 
 		number = getIntent().getStringExtra("Number");
+		Log.e(TAG, "   number="+number);
 		initData();
 		initView();
 	}

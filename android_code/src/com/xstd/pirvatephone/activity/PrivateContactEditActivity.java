@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +29,13 @@ import com.xstd.privatephone.tools.Tools;
 
 public class PrivateContactEditActivity extends BaseActivity {
 	private Button bt_cancle;
-	private Button btn_back;
+	private Button bt_sure;
+	private RelativeLayout btn_back;
+	private Button btn_edit;
 	private EditText et_name;
 	private EditText et_phone;
-	private Button bt_sure;
 
 	private ContactInfo contactInfo = new ContactInfo();
-	private Button btn_edit;
 	private TextView tv_title;
 	private RadioGroup myRadioGroup;
 	private RadioButton myRadioButton1;
@@ -58,7 +59,7 @@ public class PrivateContactEditActivity extends BaseActivity {
 
 	private void initView() {
 		// title
-		btn_back = (Button) findViewById(R.id.btn_back);
+		btn_back = (RelativeLayout) findViewById(R.id.btn_back);
 		btn_edit = (Button) findViewById(R.id.btn_edit);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("编辑隐私联系人");

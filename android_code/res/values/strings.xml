@@ -966,6 +966,8 @@ QQ:903372666
     <string name="private_comm_phone_edit_item3">删除</string>
     <string name="private_comm_phone_title_delete">提示:确定删除此条通话记录</string>
     <string name="private_comm_phone_title_dail">提示:呼叫联系人</string>
+    <string name="private_comm_phone_detail_dail">拨打电话</string>
+    <string name="private_comm_phone_detail_send">发送短信</string>
     
     <string name="private_comm_contact_edit_item1">编辑</string>
     <string name="private_comm_contact_edit_item2">退出</string>

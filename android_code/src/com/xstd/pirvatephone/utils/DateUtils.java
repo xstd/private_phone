@@ -2,9 +2,11 @@ package com.xstd.pirvatephone.utils;
 
 import android.annotation.SuppressLint;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SuppressLint("SimpleDateFormat")
 public class DateUtils {
+	@SuppressWarnings("deprecation")
 	public static String parseDate(Long date) {
 		String time = "";
 		String time1 = "";
@@ -15,11 +17,7 @@ public class DateUtils {
 		time = dateformat.format(date);
 		time1 = time.substring(6, 8);
 		int time2 = Integer.valueOf(time1);
-		if (time2 < 12) {
-			time3 = "上午";
-		} else {
-			time3 = "下午";
-		}
+		time3 = new Date(date).toLocaleString().substring(10, 13);
 
 		String[] time4 = time.split(" ");
 		for (int i = 0; i < time4.length; i++) {
